@@ -477,7 +477,7 @@ function getDeptChipClass(dept) {
 
 // 2026年9月技術會議實際排程 (對照 Google 日曆實體活動動態)
 const ACTUAL_SEPT_2026_SCHEDULE = {
-  5:  [{ title: "月會-立行倉儲物流", site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "宜蘭技術組", cycle: "排定會議 (週六 10:00)" }],
+  4:  [{ title: "月會-立行倉儲物流", site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "宜蘭技術組", cycle: "排定會議 (週五 10:00)" }],
   9:  [{ title: "月會-中油綠能", site: "中油綠能", time: "14:00", dept: "高屏工程處", contact: "高屏技術組", cycle: "排定會議 (週三 14:00)" }],
   10: [{ title: "月會-朴子技術會議", site: "朴子安居", time: "10:00", dept: "中區工程處", contact: "中區技術組", cycle: "第二週 (週四 10:00)" }],
   11: [{ title: "9月-坤門技術會議", site: "坤門安居", time: "10:00", dept: "宜蘭工程處", contact: "宜蘭技術組", cycle: "第二週 (週五 10:00)" }],
@@ -495,17 +495,15 @@ function renderGoogleCalendar(year, month) {
   const daysGrid = document.getElementById("gcal-days-grid");
   if (!monthLabel || !daysGrid || !appData || !appData.schedule) return;
 
-  monthLabel.textContent = `${year} 年 ${month} 月`;
+  monthLabel.textContent = `${year} 年 ${month} 月 (週一至週五)`;
 
-  // 整理該月份所有技術會議 (只顯示技術會議，其餘隱藏)
+  // 整理該月份所有技術會議 (只顯示技術會議，六、日不顯示)
   const monthMeetings = {};
   if (year === 2026 && month === 9) {
-    // 2026 年 9 月使用精準對照實際 Google 日曆排程
     Object.keys(ACTUAL_SEPT_2026_SCHEDULE).forEach(day => {
       monthMeetings[day] = ACTUAL_SEPT_2026_SCHEDULE[day];
     });
   } else {
-    // 其他月份依原則週期計算
     appData.schedule.forEach(s => {
       const dayNum = getNthWeekdayOfMonth(year, month, s.week, s.weekday);
       if (dayNum) {
@@ -522,28 +520,44 @@ function renderGoogleCalendar(year, month) {
     });
   }
 
-  const firstDayIndex = new Date(year, month - 1, 1).getDay(); // 0=Sun
+  // 1 號是星期幾 (0=日, 1=一, 2=二, 3=三, 4=四, 5=五, 6=六)
+  const firstDay = new Date(year, month - 1, 1);
+  const firstDayOfWeek = firstDay.getDay();
   const totalDays = new Date(year, month, 0).getDate();
-  const prevMonthTotalDays = new Date(year, month - 1, 0).getDate();
 
   let cellsHtml = "";
+  let renderedCount = 0;
 
-  // 1. 上個月墊底天數
-  for (let i = firstDayIndex - 1; i >= 0; i--) {
-    const d = prevMonthTotalDays - i;
+  // 1. 上個月墊底工作日 (週一至週五)
+  // 若 1 號為週一(1)，墊底 0 天；週二(2) 墊底 1 天(週一)；週三(3) 墊底 2 天；週四(4) 墊底 3 天；週五(5) 墊底 4 天
+  let leadingPadDays = 0;
+  if (firstDayOfWeek >= 1 && firstDayOfWeek <= 5) {
+    leadingPadDays = firstDayOfWeek - 1;
+  }
+
+  for (let i = leadingPadDays; i >= 1; i--) {
+    const prevDate = new Date(year, month - 1, 1 - i);
+    const d = prevDate.getDate();
     cellsHtml += `
       <div class="gcal-day-cell other-month">
         <div class="day-header"><span class="day-num">${d}</span></div>
         <div class="day-events"></div>
       </div>
     `;
+    renderedCount++;
   }
 
-  // 2. 本月天數
+  // 2. 本月工作日 (週一至週五，六日隱藏不顯示)
   const today = new Date();
   const isCurrentRealMonth = (today.getFullYear() === year && (today.getMonth() + 1) === month);
 
   for (let d = 1; d <= totalDays; d++) {
+    const curDate = new Date(year, month - 1, d);
+    const dayOfWeek = curDate.getDay();
+    if (dayOfWeek === 0 || dayOfWeek === 6) {
+      continue; // 六、日不顯示！
+    }
+
     const isToday = isCurrentRealMonth && (today.getDate() === d);
     const dayEvents = monthMeetings[d] || [];
 
@@ -559,7 +573,6 @@ function renderGoogleCalendar(year, month) {
             const matchedProj = (appData.projects || []).find(p => p.shortName.includes(evt.site) || evt.site.includes(p.shortName));
             const projId = matchedProj ? matchedProj.id : "";
             
-            // 安全字串傳遞
             const safeEvt = encodeURIComponent(JSON.stringify({
               title: evt.title,
               site: evt.site,
@@ -584,17 +597,15 @@ function renderGoogleCalendar(year, month) {
         </div>
       </div>
     `;
+    renderedCount++;
   }
 
-  // 3. 下個月補齊天數 (達到 35 或 42 格)
-  const currentTotalCells = firstDayIndex + totalDays;
-  const targetTotal = currentTotalCells > 35 ? 42 : 35;
-  const remainingCells = targetTotal - currentTotalCells;
-
-  for (let d = 1; d <= remainingCells; d++) {
+  // 3. 下個月墊底工作日補齊為 5 的倍數
+  const trailingPadDays = (renderedCount % 5 === 0) ? 0 : (5 - (renderedCount % 5));
+  for (let i = 1; i <= trailingPadDays; i++) {
     cellsHtml += `
       <div class="gcal-day-cell other-month">
-        <div class="day-header"><span class="day-num">${d}</span></div>
+        <div class="day-header"><span class="day-num">${i}</span></div>
         <div class="day-events"></div>
       </div>
     `;
