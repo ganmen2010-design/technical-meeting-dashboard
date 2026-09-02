@@ -475,11 +475,17 @@ function getDeptChipClass(dept) {
   return { chip: "chip-leisure", dot: "dot-leisure" };
 }
 
-// 2026年9月技術會議實際排程 (嚴格對照 Google 日曆實體活動，常態原則排程已刪除，完全以動態日曆為主)
+// 2026年9月技術會議實際排程 (對照 Google 日曆實體活動動態)
 const ACTUAL_SEPT_2026_SCHEDULE = {
+  5:  [{ title: "月會-立行倉儲物流", site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "宜蘭技術組", cycle: "排定會議 (週六 10:00)" }],
+  9:  [{ title: "月會-中油綠能", site: "中油綠能", time: "14:00", dept: "高屏工程處", contact: "高屏技術組", cycle: "排定會議 (週三 14:00)" }],
   10: [{ title: "月會-朴子技術會議", site: "朴子安居", time: "10:00", dept: "中區工程處", contact: "中區技術組", cycle: "第二週 (週四 10:00)" }],
   11: [{ title: "9月-坤門技術會議", site: "坤門安居", time: "10:00", dept: "宜蘭工程處", contact: "宜蘭技術組", cycle: "第二週 (週五 10:00)" }],
+  14: [{ title: "月會-平實安居", site: "平實安居", time: "14:00", dept: "台南工程處", contact: "台南技術組", cycle: "排定會議 (週一 14:00)" }],
+  15: [{ title: "月會-台南崇明商場", site: "台南崇明商場", time: "10:00", dept: "台南工程處", contact: "台南技術組", cycle: "排定會議 (週二 10:00)" }],
+  17: [{ title: "月會-立行倉儲物流", site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "宜蘭技術組", cycle: "排定會議 (週四 10:00)" }],
   22: [{ title: "BIM-新纖BIM整合會", site: "新光合纖南港", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第四週 (週二 14:00)" }],
+  23: [{ title: "月會-CDC防疫中心", site: "CDC防疫中心", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "排定會議 (週三 14:00)" }],
   24: [{ title: "月會-新纖技術會議", site: "新光合纖南港", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第四週 (週四 14:00)" }],
   29: [{ title: "月會-公西檔案庫房技", site: "公西檔案庫房", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第五週 (週二 14:00)" }]
 };
@@ -915,10 +921,18 @@ function renderMonthlyReportAnalysis(viewType) {
   // 4. 議題與待辦排程覆蓋度比對 (P13)
   else if (viewType === "coverage") {
     const data = analysis.p13_coverage || { headers: [], rows: [], analysis: [] };
+    const cutoffParts = (window.currentCutoffDate || "2026-08-24").split("-");
+    const cutoffMMDD = cutoffParts.length >= 3 ? `${cutoffParts[1]}/${cutoffParts[2]}` : "08/24";
+    
+    // 同步更新 headers 第 4 欄
+    if (data.headers && data.headers.length >= 4) {
+      data.headers[3] = `${cutoffMMDD}前預定`;
+    }
+
     container.innerHTML = `
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-        <span class="cal-filter-tag"><i class="fa-solid fa-calendar-check text-cyan"></i> <b>統計基準日：2026/08/24</b> (依最新技術月報基準)</span>
-        <span style="font-size: 13px; color: var(--text-muted);"><i class="fa-solid fa-circle-info text-amber"></i> 本表「08/24前預定」與各項比對數據均以此統計基準日截切計算</span>
+        <span class="cal-filter-tag"><i class="fa-solid fa-calendar-check text-cyan"></i> <b>統計基準日：${window.currentCutoffDate || '2026-08-24'}</b> (依最新技術月報基準)</span>
+        <span style="font-size: 13px; color: var(--text-muted);"><i class="fa-solid fa-circle-info text-amber"></i> 本表「${cutoffMMDD}前預定」與各項比對數據均以此統計基準日截切計算</span>
       </div>
       <div class="table-responsive">
         <table class="modern-table">
@@ -1246,33 +1260,56 @@ function renderDrawerTabContent(tabType) {
       return;
     }
 
-    content.innerHTML = meetings.map((m, idx) => `
-      <div class="meeting-accordion-card">
-        <div class="meeting-header-toggle">
-          <span class="m-title-text"><i class="fa-solid fa-calendar-day text-cyan"></i> ${m.meetingName}</span>
-          <span class="files-badge">${m.fileCount} 份會議檔案</span>
-        </div>
-        <div class="m-files-grid">
-          ${(m.files || []).map(f => {
-            const safeF = encodeURIComponent(JSON.stringify(f));
-            return `
-              <div class="file-row-item">
-                <div class="file-left-info" title="${f.name}">
-                  <i class="fa-solid ${getFileIcon(f.ext)}"></i>
-                  <span class="file-name-text">${f.name}</span>
-                  <small class="text-dim">(${(f.size / 1024).toFixed(0)} KB)</small>
-                </div>
-                <div class="file-actions">
-                  <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
-                    <i class="fa-solid fa-file-powerpoint"></i> 查看簡報/紀錄
-                  </button>
-                </div>
-              </div>
-            `;
-          }).join("")}
-        </div>
+    content.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+        <span style="font-size: 13px; color: var(--text-muted);">
+          <i class="fa-solid fa-folder-tree text-cyan"></i> 共 ${meetings.length} 場會議紀錄，點擊會議標題可展開/收合
+        </span>
+        <button type="button" class="btn-table-action" onclick="toggleAllMeetingCards()">
+          <i class="fa-solid fa-arrows-up-down"></i> 全部展開 / 收合
+        </button>
       </div>
-    `).join("");
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        ${meetings.map((m, idx) => `
+          <div class="meeting-accordion-card" id="meeting-card-${idx}">
+            <div class="meeting-header-toggle" onclick="toggleMeetingCard(this)">
+              <span class="m-title-text"><i class="fa-solid fa-calendar-day text-cyan"></i> ${m.meetingName}</span>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="files-badge">${m.fileCount} 份會議檔案</span>
+                <i class="fa-solid fa-chevron-down meeting-toggle-arrow"></i>
+              </div>
+            </div>
+            <div class="m-files-grid">
+              ${(m.files || []).map(f => {
+                const safeF = encodeURIComponent(JSON.stringify(f));
+                const fullPath = f.fullPath || '';
+                return `
+                  <div class="file-row-item">
+                    <div class="file-left-info" title="${f.name}">
+                      <i class="fa-solid ${getFileIcon(f.ext)}"></i>
+                      <span class="file-name-text">${f.name}</span>
+                      <small class="text-dim">(${(f.size / 1024).toFixed(0)} KB)</small>
+                    </div>
+                    <div class="file-actions">
+                      <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
+                        <i class="fa-solid fa-file-powerpoint"></i> 查看/開啟
+                      </button>
+                      <button type="button" class="btn-table-action" style="padding: 6px 10px; font-size: 12px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')" title="複製 NAS 實體路徑">
+                        <i class="fa-regular fa-copy"></i> 複製路徑
+                      </button>
+                      <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 6px 10px; font-size: 12px;" title="下載檔案">
+                        <i class="fa-solid fa-download"></i> 下載
+                      </a>
+                    </div>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    `;
   }
 
   // 頁籤 2: 技術議題管控表
@@ -1492,6 +1529,81 @@ window.openFileLocally = function(encodedPath) {
   }).catch(err => {
     alert("⚠️ 連線本機伺服器失敗，請確認於 http://localhost:8090 存取");
   });
+};
+window.toggleMeetingCard = function(headerEl) {
+  const card = headerEl.closest('.meeting-accordion-card');
+  if (card) {
+    card.classList.toggle('collapsed');
+  }
+};
+
+window.toggleAllMeetingCards = function() {
+  const cards = document.querySelectorAll('.meeting-accordion-card');
+  const anyOpen = Array.from(cards).some(c => !c.classList.contains('collapsed'));
+  cards.forEach(c => {
+    if (anyOpen) {
+      c.classList.add('collapsed');
+    } else {
+      c.classList.remove('collapsed');
+    }
+  });
+};
+
+// 機動更新統計基準日
+window.currentCutoffDate = "2026-08-24";
+window.applyCutoffDate = async function() {
+  const input = document.getElementById("cutoff-date-input");
+  const statusEl = document.getElementById("cutoff-update-status");
+  const btn = document.getElementById("btn-update-cutoff-date");
+  if (!input) return;
+
+  const dateVal = input.value || "2026-08-24";
+  window.currentCutoffDate = dateVal;
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> 更新計算中...`;
+  }
+
+  const isLocalServer = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  if (isLocalServer) {
+    try {
+      const res = await fetch("/api/update-cutoff-date", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cutoffDate: dateVal })
+      });
+      const resJson = await res.json();
+      if (resJson.status === "success" && resJson.data) {
+        appData = resJson.data;
+      }
+    } catch (e) {
+      console.warn("Local update cutoff failed, fallback to frontend dynamic calculation", e);
+    }
+  }
+
+  // 同步更新 P13 標題
+  if (appData && appData.monthlyReportAnalysis && appData.monthlyReportAnalysis.p13_coverage) {
+    const parts = dateVal.split("-");
+    const mmdd = parts.length >= 3 ? `${parts[1]}/${parts[2]}` : "08/24";
+    const headers = appData.monthlyReportAnalysis.p13_coverage.headers || [];
+    if (headers.length >= 4) {
+      headers[3] = `${mmdd}前預定`;
+    }
+  }
+
+  renderMonthlyReportAnalysis(currentReportView || "coverage");
+
+  if (statusEl) {
+    statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald"></i> 已成功更新至基準日：${dateVal}`;
+    statusEl.style.display = "inline-block";
+    setTimeout(() => { statusEl.style.display = "none"; }, 4000);
+  }
+
+  if (btn) {
+    btn.disabled = false;
+    btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> 更新計算數據`;
+  }
 };
 
 // ==============================================================================

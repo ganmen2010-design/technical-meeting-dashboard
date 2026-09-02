@@ -269,6 +269,18 @@
               </div>
             </div>
 
+            <!-- 統計基準日機動設定與即時更新工具列 -->
+            <div class="cutoff-date-selector-bar">
+              <div class="cutoff-input-group">
+                <label for="cutoff-date-input"><i class="fa-solid fa-calendar-check text-cyan"></i> <b>統計基準日：</b></label>
+                <input type="date" id="cutoff-date-input" value="2026-08-24" class="custom-date-input">
+                <button type="button" class="btn-table-action" id="btn-update-cutoff-date" onclick="applyCutoffDate()">
+                  <i class="fa-solid fa-arrows-rotate"></i> 更新計算數據
+                </button>
+              </div>
+              <span id="cutoff-update-status" class="text-emerald font-bold" style="display: none;"><i class="fa-solid fa-circle-check"></i> 數據已更新至所選基準日！</span>
+            </div>
+
             <!-- 月報分析內容動態展示容器 -->
             <div id="monthly-report-content">
               <!-- JS Dynamic Render P10~P13 Content -->
