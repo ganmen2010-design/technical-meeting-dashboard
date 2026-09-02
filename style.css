@@ -1598,3 +1598,342 @@ body {
     border-radius: 0;
   }
 }
+
+/* ==========================================================================
+   Google 日曆月檢視樣式 (Google Calendar Style Component)
+   ========================================================================== */
+.cal-toolbar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.cal-filter-tag {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #34d399;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cal-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-gcal-open {
+  background: rgba(0, 242, 254, 0.12);
+  border: 1px solid rgba(0, 242, 254, 0.35);
+  color: var(--text-main);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+
+.btn-gcal-open:hover {
+  background: rgba(0, 242, 254, 0.25);
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+}
+
+.cal-month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16px 0 14px;
+  padding: 10px 16px;
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-nav-arrow {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+}
+
+.btn-nav-arrow:hover {
+  background: rgba(0, 242, 254, 0.2);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-nav-today {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-nav-today:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.current-month-display {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-left: 8px;
+}
+
+.cal-legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dept-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-north { background-color: #38bdf8; box-shadow: 0 0 6px rgba(56, 189, 248, 0.6); }
+.dot-central { background-color: #fbbf24; box-shadow: 0 0 6px rgba(251, 191, 36, 0.6); }
+.dot-tainan { background-color: #34d399; box-shadow: 0 0 6px rgba(52, 211, 153, 0.6); }
+.dot-kaohsiung { background-color: #f472b6; box-shadow: 0 0 6px rgba(244, 114, 182, 0.6); }
+.dot-yilan { background-color: #a78bfa; box-shadow: 0 0 6px rgba(167, 139, 250, 0.6); }
+.dot-leisure { background-color: #fb923c; box-shadow: 0 0 6px rgba(251, 146, 60, 0.6); }
+
+/* Google 日曆網格主體 */
+.gcal-grid-container {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: rgba(10, 15, 28, 0.6);
+}
+
+.gcal-weekdays-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: rgba(15, 23, 42, 0.9);
+  border-bottom: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.gcal-weekday {
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.gcal-weekday.sun, .gcal-weekday.sat {
+  color: #94a3b8;
+}
+
+.gcal-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.gcal-day-cell {
+  min-height: 110px;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.gcal-day-cell:nth-child(7n) {
+  border-right: none;
+}
+
+.gcal-day-cell:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.gcal-day-cell.other-month {
+  opacity: 0.28;
+}
+
+.gcal-day-cell.is-today {
+  background: rgba(0, 242, 254, 0.05);
+  border-color: rgba(0, 242, 254, 0.3);
+}
+
+.day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.day-num {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.gcal-day-cell.is-today .day-num {
+  background: var(--primary);
+  color: #080c14;
+  font-weight: 700;
+  box-shadow: 0 0 8px var(--primary-glow);
+}
+
+.day-events {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.gcal-event-chip {
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: var(--transition-fast);
+}
+
+.gcal-event-chip:hover {
+  transform: scale(1.02);
+  filter: brightness(1.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.chip-north { background: rgba(56, 189, 248, 0.2); border-left: 3px solid #38bdf8; color: #bae6fd; }
+.chip-central { background: rgba(251, 191, 36, 0.2); border-left: 3px solid #fbbf24; color: #fef08a; }
+.chip-tainan { background: rgba(52, 211, 153, 0.2); border-left: 3px solid #34d399; color: #a7f3d0; }
+.chip-kaohsiung { background: rgba(244, 114, 182, 0.2); border-left: 3px solid #f472b6; color: #fbcfe8; }
+.chip-yilan { background: rgba(167, 139, 250, 0.2); border-left: 3px solid #a78bfa; color: #ddd6fe; }
+.chip-leisure { background: rgba(251, 146, 60, 0.2); border-left: 3px solid #fb923c; color: #fed7aa; }
+
+.chip-time {
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   每月技術會議運作概況 (P10~P13) 樣式
+   ========================================================================== */
+.report-tab-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.report-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-fast);
+}
+
+.report-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+}
+
+.report-chip.active {
+  background: rgba(0, 242, 254, 0.15);
+  color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.2);
+}
+
+.report-analysis-callout {
+  background: rgba(0, 242, 254, 0.05);
+  border: 1px solid rgba(0, 242, 254, 0.25);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-top: 18px;
+}
+
+.callout-header {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.callout-body {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-main);
+  white-space: pre-line;
+}
+

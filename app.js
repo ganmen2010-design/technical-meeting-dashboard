@@ -381,10 +381,13 @@ async function loadDashboardData() {
     console.log("NAS Data Loaded successfully:", appData);
 
     // 渲染各模組
+    initCalendarControls();
+    initMonthlyReportControls();
+    renderGoogleCalendar(currentCalYear, currentCalMonth);
     renderScheduleTable();
     renderOperationsKPIs();
     renderOperationsChart();
-    renderOperationsDocs();
+    renderMonthlyReportAnalysis(activeReportView);
     renderGuidelines();
     renderTemplates();
     renderOthers();
@@ -395,13 +398,304 @@ async function loadDashboardData() {
   }
 }
 
-// 4.1 渲染每月技術會議行程表
+// ==============================================================================
+// 4.1 每月技術會議行程表 (Google 日曆月檢視模式)
+// ==============================================================================
+let currentCalYear = 2026;
+let currentCalMonth = 9; // 預設 2026 年 9 月 (對應使用者 https://calendar.google.com/calendar/u/0/r/month/2026/9/1)
+let activeReportView = "dept";
+
+function initCalendarControls() {
+  const prevBtn = document.getElementById("cal-prev-month");
+  const nextBtn = document.getElementById("cal-next-month");
+  const todayBtn = document.getElementById("cal-today");
+  const toggleViewBtn = document.getElementById("btn-toggle-cal-view");
+  const exportIcsBtn = document.getElementById("btn-export-ics");
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      currentCalMonth--;
+      if (currentCalMonth < 1) {
+        currentCalMonth = 12;
+        currentCalYear--;
+      }
+      renderGoogleCalendar(currentCalYear, currentCalMonth);
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      currentCalMonth++;
+      if (currentCalMonth > 12) {
+        currentCalMonth = 1;
+        currentCalYear++;
+      }
+      renderGoogleCalendar(currentCalYear, currentCalMonth);
+    });
+  }
+
+  if (todayBtn) {
+    todayBtn.addEventListener("click", () => {
+      currentCalYear = 2026;
+      currentCalMonth = 9;
+      renderGoogleCalendar(currentCalYear, currentCalMonth);
+    });
+  }
+
+  if (toggleViewBtn) {
+    toggleViewBtn.addEventListener("click", () => {
+      const gridView = document.getElementById("gcal-grid-view");
+      const listView = document.getElementById("cal-list-view");
+      if (listView.classList.contains("hidden")) {
+        listView.classList.remove("hidden");
+        toggleViewBtn.innerHTML = `<i class="fa-solid fa-calendar-days"></i> 切換月曆視圖`;
+      } else {
+        listView.classList.add("hidden");
+        toggleViewBtn.innerHTML = `<i class="fa-solid fa-list-ul"></i> 切換清單對照`;
+      }
+    });
+  }
+
+  if (exportIcsBtn) {
+    exportIcsBtn.addEventListener("click", exportTechnicalMeetingsICS);
+  }
+}
+
+/**
+ * 計算某年某月第 N 個指定星期幾的日期
+ * @param {number} year 
+ * @param {number} month (1~12)
+ * @param {number} weekNum (1~5)
+ * @param {number} weekday (0=日, 1=一, 2=二, 3=三, 4=四, 5=五, 6=六)
+ */
+function getNthWeekdayOfMonth(year, month, weekNum, weekday) {
+  let count = 0;
+  const daysInMonth = new Date(year, month, 0).getDate();
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(year, month - 1, d);
+    if (date.getDay() === weekday) {
+      count++;
+      if (count === weekNum) return d;
+    }
+  }
+  return null;
+}
+
+function getDeptChipClass(dept) {
+  if (dept.includes("北區")) return { chip: "chip-north", dot: "dot-north" };
+  if (dept.includes("中區")) return { chip: "chip-central", dot: "dot-central" };
+  if (dept.includes("台南")) return { chip: "chip-tainan", dot: "dot-tainan" };
+  if (dept.includes("高屏")) return { chip: "chip-kaohsiung", dot: "dot-kaohsiung" };
+  if (dept.includes("宜蘭")) return { chip: "chip-yilan", dot: "dot-yilan" };
+  return { chip: "chip-leisure", dot: "dot-leisure" };
+}
+
+function renderGoogleCalendar(year, month) {
+  const monthLabel = document.getElementById("cal-current-month-label");
+  const daysGrid = document.getElementById("gcal-days-grid");
+  if (!monthLabel || !daysGrid || !appData || !appData.schedule) return;
+
+  monthLabel.textContent = `${year} 年 ${month} 月`;
+
+  // 整理該月份所有技術會議 (只顯示技術會議，其餘隱藏)
+  const monthMeetings = {};
+  appData.schedule.forEach(s => {
+    const dayNum = getNthWeekdayOfMonth(year, month, s.week, s.weekday);
+    if (dayNum) {
+      if (!monthMeetings[dayNum]) monthMeetings[dayNum] = [];
+      monthMeetings[dayNum].push(s);
+    }
+  });
+
+  const firstDayIndex = new Date(year, month - 1, 1).getDay(); // 0=Sun
+  const totalDays = new Date(year, month, 0).getDate();
+  const prevMonthTotalDays = new Date(year, month - 1, 0).getDate();
+
+  let cellsHtml = "";
+
+  // 1. 上個月墊底天數
+  for (let i = firstDayIndex - 1; i >= 0; i--) {
+    const d = prevMonthTotalDays - i;
+    cellsHtml += `
+      <div class="gcal-day-cell other-month">
+        <div class="day-header"><span class="day-num">${d}</span></div>
+        <div class="day-events"></div>
+      </div>
+    `;
+  }
+
+  // 2. 本月天數
+  const today = new Date();
+  const isCurrentRealMonth = (today.getFullYear() === year && (today.getMonth() + 1) === month);
+
+  for (let d = 1; d <= totalDays; d++) {
+    const isToday = isCurrentRealMonth && (today.getDate() === d);
+    const dayEvents = monthMeetings[d] || [];
+
+    cellsHtml += `
+      <div class="gcal-day-cell ${isToday ? 'is-today' : ''}">
+        <div class="day-header">
+          <span class="day-num">${d}</span>
+          ${isToday ? '<small class="text-cyan font-bold">今天</small>' : ''}
+        </div>
+        <div class="day-events">
+          ${dayEvents.map(evt => {
+            const colors = getDeptChipClass(evt.dept);
+            const matchedProj = (appData.projects || []).find(p => p.shortName.includes(evt.site) || evt.site.includes(p.shortName));
+            const projId = matchedProj ? matchedProj.id : "";
+            
+            // 安全字串傳遞
+            const safeEvt = encodeURIComponent(JSON.stringify({
+              site: evt.site,
+              dept: evt.dept,
+              time: evt.time,
+              cycle: evt.cycle,
+              contact: evt.contact,
+              dateStr: `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
+              projId: projId
+            }));
+
+            return `
+              <div class="gcal-event-chip ${colors.chip}" onclick="showMeetingQuickCard('${safeEvt}')" title="${evt.time} ${evt.site} (${evt.dept}) - 點擊查看">
+                <span class="chip-time">${evt.time}</span>
+                <span>${evt.site}</span>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      </div>
+    `;
+  }
+
+  // 3. 下個月補齊天數 (達到 35 或 42 格)
+  const currentTotalCells = firstDayIndex + totalDays;
+  const targetTotal = currentTotalCells > 35 ? 42 : 35;
+  const remainingCells = targetTotal - currentTotalCells;
+
+  for (let d = 1; d <= remainingCells; d++) {
+    cellsHtml += `
+      <div class="gcal-day-cell other-month">
+        <div class="day-header"><span class="day-num">${d}</span></div>
+        <div class="day-events"></div>
+      </div>
+    `;
+  }
+
+  daysGrid.innerHTML = cellsHtml;
+}
+
+// 點擊事件彈出技術會議資訊卡片
+window.showMeetingQuickCard = function(encodedData) {
+  try {
+    const evt = JSON.parse(decodeURIComponent(encodedData));
+    
+    // 構造 Google Calendar 一鍵加入連結
+    const startTimeStr = evt.dateStr.replace(/-/g, '') + 'T' + evt.time.replace(':', '') + '00';
+    const endHour = String(parseInt(evt.time.split(':')[0]) + 2).padStart(2, '0');
+    const endTimeStr = evt.dateStr.replace(/-/g, '') + 'T' + endHour + evt.time.split(':')[1] + '00';
+    const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(evt.site + ' 技術會議')}&dates=${startTimeStr}/${endTimeStr}&details=${encodeURIComponent('主辦單位：' + evt.dept + '\\n承辦窗口：' + evt.contact + '\\n週期：' + evt.cycle)}&location=${encodeURIComponent('專案工務所 / 視訊會議')}`;
+
+    const bodyHtml = `
+      <div style="padding: 10px 0; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="proj-dept-tag">${evt.dept}</span>
+          <span class="cal-filter-tag"><i class="fa-solid fa-circle-check"></i> 定期技術會議</span>
+        </div>
+
+        <h3 style="font-size: 20px; color: var(--primary);"><i class="fa-solid fa-calendar-check"></i> ${evt.site} 技術會議</h3>
+
+        <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; font-size: 14px; line-height: 1.8;">
+          <div><i class="fa-regular fa-clock text-cyan"></i> <b>會議日期與時間：</b>${evt.dateStr} ${evt.time} (${evt.cycle})</div>
+          <div><i class="fa-solid fa-location-dot text-rose"></i> <b>會議常態地點：</b>專案工務所 / 視訊會議</div>
+          <div><i class="fa-solid fa-user-gear text-amber"></i> <b>承辦業務窗口：</b>${evt.contact}</div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap;">
+          ${evt.projId ? `
+            <button type="button" class="btn-table-action" style="padding: 10px 18px; font-size: 14px;" onclick="openProjectDrawer('${evt.projId}'); document.getElementById('file-viewer-modal').classList.add('hidden');">
+              <i class="fa-solid fa-folder-open"></i> 進入專案作業區查看簡報與待辦
+            </button>
+          ` : ''}
+          <a href="${gcalUrl}" target="_blank" rel="noopener noreferrer" class="btn-gcal-open" style="padding: 10px 18px; font-size: 14px;">
+            <i class="fa-brands fa-google text-cyan"></i> ＋加入我的 Google 日曆
+          </a>
+        </div>
+      </div>
+    `;
+
+    const viewerModal = document.getElementById("file-viewer-modal");
+    const viewerTitle = document.getElementById("viewer-file-title");
+    const viewerBody = document.getElementById("viewer-body");
+    const closeBtn = document.getElementById("viewer-close-btn");
+
+    if (viewerModal && viewerTitle && viewerBody) {
+      viewerTitle.innerHTML = `<i class="fa-solid fa-handshake text-cyan"></i> 技術會議行程詳情`;
+      viewerBody.innerHTML = bodyHtml;
+      viewerModal.classList.remove("hidden");
+
+      closeBtn.onclick = () => viewerModal.classList.add("hidden");
+      viewerModal.onclick = (e) => { if (e.target === viewerModal) viewerModal.classList.add("hidden"); };
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+// 匯出 2026 技術會議日曆檔 (.ics)
+function exportTechnicalMeetingsICS() {
+  if (!appData || !appData.schedule) return;
+
+  let ics = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//FengYu//Technical Meeting Cloud Dashboard//TW",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "X-WR-CALNAME:豐譽企業 2026技術會議排程",
+    "X-WR-TIMEZONE:Asia/Taipei"
+  ];
+
+  for (let m = 1; m <= 12; m++) {
+    appData.schedule.forEach(s => {
+      const d = getNthWeekdayOfMonth(2026, m, s.week, s.weekday);
+      if (d) {
+        const dateStr = `2026${String(m).padStart(2, '0')}${String(d).padStart(2, '0')}`;
+        const startHour = s.time.split(':')[0];
+        const startMin = s.time.split(':')[1];
+        const endHour = String(parseInt(startHour) + 2).padStart(2, '0');
+        const dtstart = `${dateStr}T${startHour}${startMin}00`;
+        const dtend = `${dateStr}T${endHour}${startMin}00`;
+
+        ics.push("BEGIN:VEVENT");
+        ics.push(`UID:tm-2026-${m}-${s.site}@fengyu.com.tw`);
+        ics.push(`SUMMARY:${s.site} 技術會議`);
+        ics.push(`DESCRIPTION:工程處：${s.dept}\\n週期：${s.cycle}\\n窗口：${s.contact}`);
+        ics.push(`LOCATION:專案工務所 / 視訊會議`);
+        ics.push(`DTSTART;TZID=Asia/Taipei:${dtstart}`);
+        ics.push(`DTEND;TZID=Asia/Taipei:${dtend}`);
+        ics.push("STATUS:CONFIRMED");
+        ics.push("END:VEVENT");
+      }
+    });
+  }
+
+  ics.push("END:VCALENDAR");
+
+  const blob = new Blob([ics.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "2026_豐譽技術會議排程.ics";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// 4.1.1 渲染備援清單表格
 function renderScheduleTable() {
   const tbody = document.getElementById("schedule-table-body");
   if (!tbody || !appData || !appData.schedule) return;
 
   tbody.innerHTML = appData.schedule.map(s => {
-    // 找出對應專案 ID
     const matchedProj = (appData.projects || []).find(p => p.shortName.includes(s.site) || s.site.includes(p.shortName));
     const projId = matchedProj ? matchedProj.id : "";
 
@@ -425,7 +719,214 @@ function renderScheduleTable() {
   }).join("");
 }
 
-// 4.2 渲染運作概況 KPI
+// ==============================================================================
+// 4.2 每月技術會議運作概況 (依 PPTX P10-P13 自動抽取呈現)
+// ==============================================================================
+function initMonthlyReportControls() {
+  document.querySelectorAll(".report-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".report-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      activeReportView = chip.dataset.reportView;
+      renderMonthlyReportAnalysis(activeReportView);
+    });
+  });
+}
+
+function renderMonthlyReportAnalysis(viewType) {
+  const container = document.getElementById("monthly-report-content");
+  if (!container || !appData) return;
+
+  const analysis = appData.monthlyReportAnalysis;
+  const sourceLabel = document.getElementById("report-source-label");
+  if (sourceLabel && analysis && analysis.reportFile) {
+    sourceLabel.innerHTML = `<i class="fa-solid fa-file-powerpoint text-orange"></i> 自動同步自 NAS 最新月報 PPTX：<b>${analysis.reportFile}</b> (P10~P13)`;
+  }
+
+  if (!analysis) {
+    container.innerHTML = `
+      <div class="search-empty-prompt">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <p>月報運作概況數據讀取中...</p>
+      </div>
+    `;
+    return;
+  }
+
+  // 1. 分工處統計 (P12)
+  if (viewType === "dept") {
+    const data = analysis.p12_dept_perf || { headers: [], rows: [], analysis: [] };
+    container.innerHTML = `
+      <div class="table-responsive">
+        <table class="modern-table">
+          <thead>
+            <tr>
+              ${(data.headers || []).map(h => `<th>${h}</th>`).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${(data.rows || []).map(row => `
+              <tr style="${row[0] === '合計' ? 'font-weight: 700; background: rgba(0, 242, 254, 0.08);' : ''}">
+                ${row.map((cell, idx) => {
+                  let badge = cell;
+                  if (cell.includes("🟢")) badge = `<span class="proj-light-pill light-green">${cell}</span>`;
+                  else if (cell.includes("🟡")) badge = `<span class="proj-light-pill light-yellow">${cell}</span>`;
+                  else if (cell.includes("🟠")) badge = `<span class="proj-light-pill light-orange">${cell}</span>`;
+                  else if (cell.includes("🔴")) badge = `<span class="proj-light-pill light-red">${cell}</span>`;
+                  return `<td>${badge}</td>`;
+                }).join("")}
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+
+      ${(data.analysis || []).length > 0 ? `
+        <div class="report-analysis-callout">
+          <div class="callout-header"><i class="fa-solid fa-clipboard-check text-cyan"></i> 工程處別績效評析 (月報 P12 官方摘要)</div>
+          <div class="callout-body">${data.analysis.join("\n\n")}</div>
+        </div>
+      ` : ''}
+    `;
+  }
+
+  // 2. 分工地績效 (P11)
+  else if (viewType === "site") {
+    const data = analysis.p11_site_perf || { headers: [], rows: [], analysis: [] };
+    container.innerHTML = `
+      <div class="table-responsive">
+        <table class="modern-table">
+          <thead>
+            <tr>
+              ${(data.headers || []).map(h => `<th>${h}</th>`).join("")}
+              <th>作業區跳轉</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(data.rows || []).map(row => {
+              const siteName = row[1] || "";
+              const matchedProj = (appData.projects || []).find(p => p.shortName.includes(siteName) || siteName.includes(p.shortName));
+              const projId = matchedProj ? matchedProj.id : "";
+
+              return `
+                <tr>
+                  ${row.map((cell, idx) => {
+                    let badge = cell;
+                    if (idx === 0) badge = `<b class="text-cyan">#${cell}</b>`;
+                    else if (idx === 1) badge = `<b>${cell}</b>`;
+                    else if (cell.includes("🟢")) badge = `<span class="proj-light-pill light-green">${cell}</span>`;
+                    else if (cell.includes("🟡")) badge = `<span class="proj-light-pill light-yellow">${cell}</span>`;
+                    else if (cell.includes("🟠")) badge = `<span class="proj-light-pill light-orange">${cell}</span>`;
+                    else if (cell.includes("⬜")) badge = `<span class="proj-light-pill light-white">${cell}</span>`;
+                    return `<td>${badge}</td>`;
+                  }).join("")}
+                  <td>
+                    ${projId ? `
+                      <button type="button" class="btn-table-action" onclick="openProjectDrawer('${projId}')">
+                        <i class="fa-solid fa-folder-open"></i> 查看
+                      </button>
+                    ` : '-'}
+                  </td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>
+
+      ${(data.analysis || []).length > 0 ? `
+        <div class="report-analysis-callout">
+          <div class="callout-header"><i class="fa-solid fa-chart-pie text-emerald"></i> 各工地績效評估 (月報 P11 官方摘要)</div>
+          <div class="callout-body">${data.analysis.join("\n\n")}</div>
+        </div>
+      ` : ''}
+    `;
+  }
+
+  // 3. 近3月開會與共同議題 (P10)
+  else if (viewType === "meetings") {
+    const meetData = analysis.p10_meetings || { headers: [], rows: [] };
+    const issueData = analysis.p10_common_issues || { headers: [], rows: [] };
+
+    container.innerHTML = `
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px;">
+        <div class="table-responsive">
+          <div style="padding: 10px 14px; font-weight: 700; color: var(--primary); background: rgba(0,242,254,0.08); border-bottom: 1px solid var(--border-color);">
+            <i class="fa-solid fa-calendar-check"></i> 各工地近三個月開會辦理概況 (P10 表1)
+          </div>
+          <table class="modern-table">
+            <thead>
+              <tr>
+                ${(meetData.headers || []).map(h => `<th>${h}</th>`).join("")}
+              </tr>
+            </thead>
+            <tbody>
+              ${(meetData.rows || []).map(row => `
+                <tr style="${row[0] === '合計' ? 'font-weight: 700; background: rgba(0, 242, 254, 0.08);' : ''}">
+                  ${row.map((cell, idx) => `<td>${idx === 0 ? '<b>' + cell + '</b>' : cell}</td>`).join("")}
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-responsive">
+          <div style="padding: 10px 14px; font-weight: 700; color: var(--emerald); background: rgba(16,185,129,0.08); border-bottom: 1px solid var(--border-color);">
+            <i class="fa-solid fa-comments"></i> 跨工地技術共同議題類別 (P10 表2)
+          </div>
+          <table class="modern-table">
+            <thead>
+              <tr>
+                ${(issueData.headers || []).map(h => `<th>${h}</th>`).join("")}
+              </tr>
+            </thead>
+            <tbody>
+              ${(issueData.rows || []).map(row => `
+                <tr>
+                  <td><span class="proj-dept-tag">${row[0]}</span></td>
+                  <td><b class="text-cyan">${row[1]}</b></td>
+                  <td><small>${row[2]}</small></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  // 4. 議題與待辦排程覆蓋度比對 (P13)
+  else if (viewType === "coverage") {
+    const data = analysis.p13_coverage || { headers: [], rows: [], analysis: [] };
+    container.innerHTML = `
+      <div class="table-responsive">
+        <table class="modern-table">
+          <thead>
+            <tr>
+              ${(data.headers || []).map(h => `<th>${h}</th>`).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${(data.rows || []).map(row => `
+              <tr style="${row[0] === '合計' ? 'font-weight: 700; background: rgba(0, 242, 254, 0.08);' : ''}">
+                ${row.map((cell, idx) => `<td>${idx === 0 ? '<b>' + cell + '</b>' : cell}</td>`).join("")}
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+
+      ${(data.analysis || []).length > 0 ? `
+        <div class="report-analysis-callout">
+          <div class="callout-header"><i class="fa-solid fa-magnifying-glass-chart text-amber"></i> 排程覆蓋與管理聚焦度分析 (月報 P13 官方摘要)</div>
+          <div class="callout-body">${data.analysis.join("\n\n")}</div>
+        </div>
+      ` : ''}
+    `;
+  }
+}
+
+// 4.3 渲染運作概況 KPI
 function renderOperationsKPIs() {
   if (!appData) return;
   const kpiProjects = document.getElementById("kpi-projects-count");
@@ -438,7 +939,6 @@ function renderOperationsKPIs() {
   if (kpiTodos) kpiTodos.textContent = `${appData.totalTodos || 335} 筆`;
   if (kpiIssues) kpiIssues.textContent = `${appData.totalTechnicalIssues || 155} 案`;
 
-  // 計算全公司總完成率
   let totCompleted = 0;
   let totAll = 0;
   if (appData.deptStats) {
@@ -461,7 +961,7 @@ function renderOperationsKPIs() {
   }
 }
 
-// 4.3 渲染運作概況各處完成率長條圖 (Chart.js)
+// 4.4 渲染運作概況各處完成率長條圖 (Chart.js)
 function renderOperationsChart() {
   const ctx = document.getElementById("dept-rate-chart");
   if (!ctx || !appData || !appData.deptStats) return;
@@ -507,35 +1007,6 @@ function renderOperationsChart() {
       }
     }
   });
-}
-
-// 4.4 渲染運作規範說明文件
-function renderOperationsDocs() {
-  const list = document.getElementById("operations-docs-list");
-  if (!list || !appData || !appData.operations) return;
-
-  let allFiles = [];
-  appData.operations.forEach(op => {
-    if (op.files) allFiles = allFiles.concat(op.files);
-  });
-
-  list.innerHTML = allFiles.map(f => {
-    const iconClass = getFileIcon(f.ext);
-    return `
-      <div class="doc-item-row">
-        <div class="doc-info-group">
-          <i class="fa-solid ${iconClass}"></i>
-          <div>
-            <div class="doc-name" title="${f.name}">${f.name}</div>
-            <div class="doc-meta"><i class="fa-regular fa-clock"></i> ${f.lastModified} ‧ ${(f.size / 1024).toFixed(0)} KB</div>
-          </div>
-        </div>
-        <button type="button" class="btn-table-action" onclick="alert('檔案路徑: \\\\192.168.1.221\\\\s5\\\\1003技術會議資料專區\\\\2.技術會議運作指引\\\\${f.relPath}')">
-          <i class="fa-solid fa-eye"></i> 查看檔案
-        </button>
-      </div>
-    `;
-  }).join("");
 }
 
 // 4.5 渲染發布技術指引

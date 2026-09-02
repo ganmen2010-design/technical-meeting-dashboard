@@ -140,14 +140,63 @@
           </button>
         </div>
 
-        <!-- 1.1 行程表 -->
+        <!-- 1.1 行程表 (Google 日曆月檢視模式) -->
         <div id="sub-schedule" class="subpane active">
           <div class="glass-card section-card">
-            <div class="card-header">
-              <h3><i class="fa-solid fa-calendar-check text-cyan"></i> 2026 年度各工程處每月技術會議固定排程表</h3>
-              <span class="header-note">※ 依據技術會議運作規範，原則採固定週次召開</span>
+            <div class="card-header cal-toolbar-header">
+              <div class="cal-title-group">
+                <h3><i class="fa-solid fa-calendar-days text-cyan"></i> 每月技術會議排程 (Google 日曆模式)</h3>
+                <span class="cal-filter-tag"><i class="fa-solid fa-filter text-emerald"></i> 顯示模式：<b>只顯示技術會議，其餘隱藏</b></span>
+              </div>
+              <div class="cal-actions-group">
+                <a href="https://calendar.google.com/calendar/u/0/r/month/2026/9/1" target="_blank" rel="noopener noreferrer" class="btn-gcal-open" title="在 Google 日曆分頁中檢視">
+                  <i class="fa-brands fa-google text-cyan"></i> 在 Google 日曆中開啟
+                </a>
+                <button type="button" class="btn-table-action" id="btn-toggle-cal-view">
+                  <i class="fa-solid fa-list-ul"></i> 切換清單對照
+                </button>
+                <button type="button" class="btn-table-action" id="btn-export-ics" title="匯出 2026 技術會議日曆檔">
+                  <i class="fa-solid fa-calendar-plus"></i> 匯出日曆檔 (.ics)
+                </button>
+              </div>
             </div>
-            <div class="table-responsive">
+
+            <!-- 月曆導覽列 (Month Navigator) -->
+            <div class="cal-month-nav">
+              <div class="nav-controls">
+                <button type="button" class="btn-nav-arrow" id="cal-prev-month" title="上個月"><i class="fa-solid fa-chevron-left"></i></button>
+                <button type="button" class="btn-nav-today" id="cal-today">今天</button>
+                <button type="button" class="btn-nav-arrow" id="cal-next-month" title="下個月"><i class="fa-solid fa-chevron-right"></i></button>
+                <span class="current-month-display" id="cal-current-month-label">2026 年 9 月</span>
+              </div>
+              <div class="cal-legend">
+                <span class="legend-item"><span class="dept-dot dot-north"></span>北區工程處</span>
+                <span class="legend-item"><span class="dept-dot dot-central"></span>中區工程處</span>
+                <span class="legend-item"><span class="dept-dot dot-tainan"></span>台南工程處</span>
+                <span class="legend-item"><span class="dept-dot dot-kaohsiung"></span>高屏工程處</span>
+                <span class="legend-item"><span class="dept-dot dot-yilan"></span>宜蘭工程處</span>
+                <span class="legend-item"><span class="dept-dot dot-leisure"></span>休閒事業處</span>
+              </div>
+            </div>
+
+            <!-- Google 日曆 7 欄網格主體 (Calendar Grid) -->
+            <div class="gcal-grid-container" id="gcal-grid-view">
+              <div class="gcal-weekdays-row">
+                <div class="gcal-weekday sun">週日</div>
+                <div class="gcal-weekday">週一</div>
+                <div class="gcal-weekday">週二</div>
+                <div class="gcal-weekday">週三</div>
+                <div class="gcal-weekday">週四</div>
+                <div class="gcal-weekday">週五</div>
+                <div class="gcal-weekday sat">週六</div>
+              </div>
+              <div class="gcal-days-grid" id="gcal-days-grid">
+                <!-- JS Dynamic Render Month Days -->
+              </div>
+            </div>
+
+            <!-- 固定清單對照表 (預設隱藏，點擊按鈕切換) -->
+            <div class="table-responsive hidden" id="cal-list-view" style="margin-top: 20px;">
               <table class="modern-table">
                 <thead>
                   <tr>
@@ -168,7 +217,7 @@
           </div>
         </div>
 
-        <!-- 1.2 運作概況 -->
+        <!-- 1.2 運作概況 (依 PPTX P10-P13 自動更新，不顯示運作規範簡報清單) -->
         <div id="sub-operations" class="subpane hidden">
           <!-- 統計 KPI 指標卡片 -->
           <div class="kpi-grid">
@@ -209,24 +258,43 @@
             </div>
           </div>
 
-          <!-- 各工程處待辦完成率圖表與簡報 -->
-          <div class="dashboard-dual-grid">
-            <div class="glass-card chart-card">
-              <div class="card-header">
-                <h3><i class="fa-solid fa-chart-column text-cyan"></i> 各工程處待辦事項完成率與健康燈號統計</h3>
+          <!-- 各工程處待辦完成率圖表 (全寬寬幅呈現) -->
+          <div class="glass-card chart-card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-chart-column text-cyan"></i> 各工程處待辦事項完成率與健康燈號統計</h3>
+              <span class="header-note">※ 綠色達標 (≥90%)、黃色良好 (75~89%)、橙色偏低 (50~74%)、紅色待改善 (<50%)</span>
+            </div>
+            <div class="chart-container" style="height: 260px;">
+              <canvas id="dept-rate-chart"></canvas>
+            </div>
+          </div>
+
+          <!-- 每月技術會議運作概況 (依 PPTX P10~13 自動抽取呈現) -->
+          <div class="glass-card section-card" id="monthly-report-analysis-card">
+            <div class="card-header">
+              <div>
+                <h3><i class="fa-solid fa-chart-line text-cyan"></i> 每月技術會議運作概況分析</h3>
+                <span class="header-note" id="report-source-label"><i class="fa-solid fa-file-powerpoint text-orange"></i> 自動同步自 NAS 最新月報 PPTX (P10~P13)</span>
               </div>
-              <div class="chart-container">
-                <canvas id="dept-rate-chart"></canvas>
+              <div class="report-tab-chips">
+                <button type="button" class="report-chip active" data-report-view="dept">
+                  <i class="fa-solid fa-building"></i> 分工處統計 (P12)
+                </button>
+                <button type="button" class="report-chip" data-report-view="site">
+                  <i class="fa-solid fa-helmet-safety"></i> 分工地績效 (P11)
+                </button>
+                <button type="button" class="report-chip" data-report-view="meetings">
+                  <i class="fa-solid fa-handshake"></i> 近3月開會與共同議題 (P10)
+                </button>
+                <button type="button" class="report-chip" data-report-view="coverage">
+                  <i class="fa-solid fa-diagram-next"></i> 議題排程覆蓋度比對 (P13)
+                </button>
               </div>
             </div>
 
-            <div class="glass-card operations-docs-card">
-              <div class="card-header">
-                <h3><i class="fa-solid fa-file-powerpoint text-orange"></i> 技術會議運作規範簡報與說明文件</h3>
-              </div>
-              <div class="docs-list" id="operations-docs-list">
-                <!-- JS Dynamic Render -->
-              </div>
+            <!-- 月報分析內容動態展示容器 -->
+            <div id="monthly-report-content">
+              <!-- JS Dynamic Render P10~P13 Content -->
             </div>
           </div>
         </div>
