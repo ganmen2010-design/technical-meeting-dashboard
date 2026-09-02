@@ -409,7 +409,6 @@ function initCalendarControls() {
   const prevBtn = document.getElementById("cal-prev-month");
   const nextBtn = document.getElementById("cal-next-month");
   const todayBtn = document.getElementById("cal-today");
-  const toggleViewBtn = document.getElementById("btn-toggle-cal-view");
   const exportIcsBtn = document.getElementById("btn-export-ics");
 
   if (prevBtn) {
@@ -439,20 +438,6 @@ function initCalendarControls() {
       currentCalYear = 2026;
       currentCalMonth = 9;
       renderGoogleCalendar(currentCalYear, currentCalMonth);
-    });
-  }
-
-  if (toggleViewBtn) {
-    toggleViewBtn.addEventListener("click", () => {
-      const gridView = document.getElementById("gcal-grid-view");
-      const listView = document.getElementById("cal-list-view");
-      if (listView.classList.contains("hidden")) {
-        listView.classList.remove("hidden");
-        toggleViewBtn.innerHTML = `<i class="fa-solid fa-calendar-days"></i> 切換月曆視圖`;
-      } else {
-        listView.classList.add("hidden");
-        toggleViewBtn.innerHTML = `<i class="fa-solid fa-list-ul"></i> 切換清單對照`;
-      }
     });
   }
 
@@ -490,6 +475,24 @@ function getDeptChipClass(dept) {
   return { chip: "chip-leisure", dot: "dot-leisure" };
 }
 
+// 2026年9月技術會議實際排程 (對照 Google 日曆實體事件，其餘個人/雜項隱藏)
+const ACTUAL_SEPT_2026_SCHEDULE = {
+  1:  [{ title: "月會-Wuma宿舍", site: "Wuma宿舍", time: "14:00", dept: "休閒事業處", contact: "休閒技術組", cycle: "第一週 (週二 14:00)" }],
+  4:  [{ title: "月會-立行倉儲物流", site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "宜蘭技術組", cycle: "第一週 (週五 10:00)" }],
+  8:  [{ title: "月會-東仁安居", site: "東仁安居", time: "14:00", dept: "中區工程處", contact: "中區技術組", cycle: "第二週 (週二 14:00)" }],
+  9:  [{ title: "月會-佛教堂", site: "佛教堂", time: "10:00", dept: "高屏工程處", contact: "高屏技術組", cycle: "第二週 (週三 10:00)" }],
+  10: [{ title: "月會-朴子技術會議", site: "朴子安居", time: "10:00", dept: "中區工程處", contact: "中區技術組", cycle: "第二週 (週四 10:00)" }],
+  11: [{ title: "9月-坤門技術會議", site: "坤門安居", time: "10:00", dept: "宜蘭工程處", contact: "宜蘭技術組", cycle: "第二週 (週五 10:00)" }],
+  15: [{ title: "月會-億載安居", site: "億載安居", time: "10:00", dept: "台南工程處", contact: "台南技術組", cycle: "第三週 (週二 10:00)" }],
+  16: [{ title: "月會-CDC防疫中心", site: "CDC防疫中心", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第三週 (週三 14:00)" }],
+  17: [{ title: "月會-平實安居", site: "平實安居", time: "14:00", dept: "台南工程處", contact: "台南技術組", cycle: "第三週 (週四 14:00)" }],
+  18: [{ title: "月會-中油綠能", site: "中油綠能", time: "14:00", dept: "高屏工程處", contact: "高屏技術組", cycle: "第三週 (週五 14:00)" }],
+  22: [{ title: "BIM-新纖BIM整合會", site: "新光合纖南港", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第四週 (週二 14:00)" }],
+  24: [{ title: "月會-新纖技術會議", site: "新光合纖南港", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第四週 (週四 14:00)" }],
+  29: [{ title: "月會-公西檔案庫房技", site: "公西檔案庫房", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第五週 (週二 14:00)" }],
+  30: [{ title: "月會-台南崇明商場", site: "台南崇明商場", time: "10:00", dept: "台南工程處", contact: "台南技術組", cycle: "第五週 (週三 10:00)" }]
+};
+
 function renderGoogleCalendar(year, month) {
   const monthLabel = document.getElementById("cal-current-month-label");
   const daysGrid = document.getElementById("gcal-days-grid");
@@ -499,13 +502,28 @@ function renderGoogleCalendar(year, month) {
 
   // 整理該月份所有技術會議 (只顯示技術會議，其餘隱藏)
   const monthMeetings = {};
-  appData.schedule.forEach(s => {
-    const dayNum = getNthWeekdayOfMonth(year, month, s.week, s.weekday);
-    if (dayNum) {
-      if (!monthMeetings[dayNum]) monthMeetings[dayNum] = [];
-      monthMeetings[dayNum].push(s);
-    }
-  });
+  if (year === 2026 && month === 9) {
+    // 2026 年 9 月使用精準對照實際 Google 日曆排程
+    Object.keys(ACTUAL_SEPT_2026_SCHEDULE).forEach(day => {
+      monthMeetings[day] = ACTUAL_SEPT_2026_SCHEDULE[day];
+    });
+  } else {
+    // 其他月份依原則週期計算
+    appData.schedule.forEach(s => {
+      const dayNum = getNthWeekdayOfMonth(year, month, s.week, s.weekday);
+      if (dayNum) {
+        if (!monthMeetings[dayNum]) monthMeetings[dayNum] = [];
+        monthMeetings[dayNum].push({
+          title: `月會-${s.site}`,
+          site: s.site,
+          time: s.time,
+          dept: s.dept,
+          contact: s.contact,
+          cycle: s.cycle
+        });
+      }
+    });
+  }
 
   const firstDayIndex = new Date(year, month - 1, 1).getDay(); // 0=Sun
   const totalDays = new Date(year, month, 0).getDate();
@@ -546,19 +564,23 @@ function renderGoogleCalendar(year, month) {
             
             // 安全字串傳遞
             const safeEvt = encodeURIComponent(JSON.stringify({
+              title: evt.title,
               site: evt.site,
               dept: evt.dept,
               time: evt.time,
               cycle: evt.cycle,
               contact: evt.contact,
+              year: year,
+              month: month,
+              day: d,
               dateStr: `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
               projId: projId
             }));
 
             return `
-              <div class="gcal-event-chip ${colors.chip}" onclick="showMeetingQuickCard('${safeEvt}')" title="${evt.time} ${evt.site} (${evt.dept}) - 點擊查看">
+              <div class="gcal-event-chip ${colors.chip}" onclick="showMeetingQuickCard('${safeEvt}')" title="${evt.time} ${evt.title} (${evt.dept}) - 點擊查看">
                 <span class="chip-time">${evt.time}</span>
-                <span>${evt.site}</span>
+                <span>${evt.title}</span>
               </div>
             `;
           }).join("")}
@@ -593,7 +615,8 @@ window.showMeetingQuickCard = function(encodedData) {
     const startTimeStr = evt.dateStr.replace(/-/g, '') + 'T' + evt.time.replace(':', '') + '00';
     const endHour = String(parseInt(evt.time.split(':')[0]) + 2).padStart(2, '0');
     const endTimeStr = evt.dateStr.replace(/-/g, '') + 'T' + endHour + evt.time.split(':')[1] + '00';
-    const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(evt.site + ' 技術會議')}&dates=${startTimeStr}/${endTimeStr}&details=${encodeURIComponent('主辦單位：' + evt.dept + '\\n承辦窗口：' + evt.contact + '\\n週期：' + evt.cycle)}&location=${encodeURIComponent('專案工務所 / 視訊會議')}`;
+    const gcalAddUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(evt.title || (evt.site + ' 技術會議'))}&dates=${startTimeStr}/${endTimeStr}&details=${encodeURIComponent('主辦單位：' + evt.dept + '\\n承辦窗口：' + evt.contact + '\\n週期：' + evt.cycle)}&location=${encodeURIComponent('專案工務所 / 視訊會議')}`;
+    const gcalDayUrl = `https://calendar.google.com/calendar/u/0/r/day/${evt.year}/${evt.month}/${evt.day}`;
 
     const bodyHtml = `
       <div style="padding: 10px 0; display: flex; flex-direction: column; gap: 14px;">
@@ -602,7 +625,7 @@ window.showMeetingQuickCard = function(encodedData) {
           <span class="cal-filter-tag"><i class="fa-solid fa-circle-check"></i> 定期技術會議</span>
         </div>
 
-        <h3 style="font-size: 20px; color: var(--primary);"><i class="fa-solid fa-calendar-check"></i> ${evt.site} 技術會議</h3>
+        <h3 style="font-size: 20px; color: var(--primary);"><i class="fa-solid fa-calendar-check"></i> ${evt.title}</h3>
 
         <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; font-size: 14px; line-height: 1.8;">
           <div><i class="fa-regular fa-clock text-cyan"></i> <b>會議日期與時間：</b>${evt.dateStr} ${evt.time} (${evt.cycle})</div>
@@ -616,8 +639,11 @@ window.showMeetingQuickCard = function(encodedData) {
               <i class="fa-solid fa-folder-open"></i> 進入專案作業區查看簡報與待辦
             </button>
           ` : ''}
-          <a href="${gcalUrl}" target="_blank" rel="noopener noreferrer" class="btn-gcal-open" style="padding: 10px 18px; font-size: 14px;">
+          <a href="${gcalAddUrl}" target="_blank" rel="noopener noreferrer" class="btn-gcal-open" style="padding: 10px 18px; font-size: 14px;">
             <i class="fa-brands fa-google text-cyan"></i> ＋加入我的 Google 日曆
+          </a>
+          <a href="${gcalDayUrl}" target="_blank" rel="noopener noreferrer" class="btn-table-action" style="padding: 10px 18px; font-size: 14px;">
+            <i class="fa-solid fa-up-right-from-square"></i> 在 Google 日曆中開啟當日
           </a>
         </div>
       </div>
@@ -964,11 +990,12 @@ function renderOperationsKPIs() {
 // 4.4 渲染運作概況各處完成率長條圖 (Chart.js)
 function renderOperationsChart() {
   const ctx = document.getElementById("dept-rate-chart");
-  if (!ctx || !appData || !appData.deptStats) return;
-
-  const depts = Object.keys(appData.deptStats);
+  // 依待辦完成率排名高低由左至右排列 (宜蘭 76.0% > 中區 75.0% > 北區 68.3% > 高屏 59.3% > 台南 55.2%)
+  const depts = Object.keys(appData.deptStats).sort((a, b) => {
+    return (appData.deptStats[b].completionRate || 0) - (appData.deptStats[a].completionRate || 0);
+  });
   const rates = depts.map(d => appData.deptStats[d].completionRate || 0);
-  const colors = rates.map(r => r >= 90 ? '#10b981' : (r >= 75 ? '#f59e0b' : '#f43f5e'));
+  const colors = rates.map(r => r >= 90 ? '#10b981' : (r >= 70 ? '#fbbf24' : (r >= 50 ? '#fb923c' : '#f43f5e')));
 
   new Chart(ctx, {
     type: 'bar',

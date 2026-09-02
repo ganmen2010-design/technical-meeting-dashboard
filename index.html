@@ -152,9 +152,6 @@
                 <a href="https://calendar.google.com/calendar/u/0/r/month/2026/9/1" target="_blank" rel="noopener noreferrer" class="btn-gcal-open" title="在 Google 日曆分頁中檢視">
                   <i class="fa-brands fa-google text-cyan"></i> 在 Google 日曆中開啟
                 </a>
-                <button type="button" class="btn-table-action" id="btn-toggle-cal-view">
-                  <i class="fa-solid fa-list-ul"></i> 切換清單對照
-                </button>
                 <button type="button" class="btn-table-action" id="btn-export-ics" title="匯出 2026 技術會議日曆檔">
                   <i class="fa-solid fa-calendar-plus"></i> 匯出日曆檔 (.ics)
                 </button>
@@ -193,26 +190,6 @@
               <div class="gcal-days-grid" id="gcal-days-grid">
                 <!-- JS Dynamic Render Month Days -->
               </div>
-            </div>
-
-            <!-- 固定清單對照表 (預設隱藏，點擊按鈕切換) -->
-            <div class="table-responsive hidden" id="cal-list-view" style="margin-top: 20px;">
-              <table class="modern-table">
-                <thead>
-                  <tr>
-                    <th>工程處別</th>
-                    <th>專案工程名稱</th>
-                    <th>會議召開週期與時段</th>
-                    <th>常態會議地點</th>
-                    <th>運作狀態</th>
-                    <th>承辦窗口</th>
-                    <th>快速跳轉</th>
-                  </tr>
-                </thead>
-                <tbody id="schedule-table-body">
-                  <!-- JS Dynamic Render -->
-                </tbody>
-              </table>
             </div>
           </div>
         </div>
