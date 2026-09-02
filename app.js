@@ -475,22 +475,13 @@ function getDeptChipClass(dept) {
   return { chip: "chip-leisure", dot: "dot-leisure" };
 }
 
-// 2026年9月技術會議實際排程 (對照 Google 日曆實體事件，其餘個人/雜項隱藏)
+// 2026年9月技術會議實際排程 (嚴格對照 Google 日曆實體活動，常態原則排程已刪除，完全以動態日曆為主)
 const ACTUAL_SEPT_2026_SCHEDULE = {
-  1:  [{ title: "月會-Wuma宿舍", site: "Wuma宿舍", time: "14:00", dept: "休閒事業處", contact: "休閒技術組", cycle: "第一週 (週二 14:00)" }],
-  4:  [{ title: "月會-立行倉儲物流", site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "宜蘭技術組", cycle: "第一週 (週五 10:00)" }],
-  8:  [{ title: "月會-東仁安居", site: "東仁安居", time: "14:00", dept: "中區工程處", contact: "中區技術組", cycle: "第二週 (週二 14:00)" }],
-  9:  [{ title: "月會-佛教堂", site: "佛教堂", time: "10:00", dept: "高屏工程處", contact: "高屏技術組", cycle: "第二週 (週三 10:00)" }],
   10: [{ title: "月會-朴子技術會議", site: "朴子安居", time: "10:00", dept: "中區工程處", contact: "中區技術組", cycle: "第二週 (週四 10:00)" }],
   11: [{ title: "9月-坤門技術會議", site: "坤門安居", time: "10:00", dept: "宜蘭工程處", contact: "宜蘭技術組", cycle: "第二週 (週五 10:00)" }],
-  15: [{ title: "月會-億載安居", site: "億載安居", time: "10:00", dept: "台南工程處", contact: "台南技術組", cycle: "第三週 (週二 10:00)" }],
-  16: [{ title: "月會-CDC防疫中心", site: "CDC防疫中心", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第三週 (週三 14:00)" }],
-  17: [{ title: "月會-平實安居", site: "平實安居", time: "14:00", dept: "台南工程處", contact: "台南技術組", cycle: "第三週 (週四 14:00)" }],
-  18: [{ title: "月會-中油綠能", site: "中油綠能", time: "14:00", dept: "高屏工程處", contact: "高屏技術組", cycle: "第三週 (週五 14:00)" }],
   22: [{ title: "BIM-新纖BIM整合會", site: "新光合纖南港", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第四週 (週二 14:00)" }],
   24: [{ title: "月會-新纖技術會議", site: "新光合纖南港", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第四週 (週四 14:00)" }],
-  29: [{ title: "月會-公西檔案庫房技", site: "公西檔案庫房", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第五週 (週二 14:00)" }],
-  30: [{ title: "月會-台南崇明商場", site: "台南崇明商場", time: "10:00", dept: "台南工程處", contact: "台南技術組", cycle: "第五週 (週三 10:00)" }]
+  29: [{ title: "月會-公西檔案庫房技", site: "公西檔案庫房", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第五週 (週二 14:00)" }]
 };
 
 function renderGoogleCalendar(year, month) {
@@ -925,6 +916,10 @@ function renderMonthlyReportAnalysis(viewType) {
   else if (viewType === "coverage") {
     const data = analysis.p13_coverage || { headers: [], rows: [], analysis: [] };
     container.innerHTML = `
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+        <span class="cal-filter-tag"><i class="fa-solid fa-calendar-check text-cyan"></i> <b>統計基準日：2026/08/24</b> (依最新技術月報基準)</span>
+        <span style="font-size: 13px; color: var(--text-muted);"><i class="fa-solid fa-circle-info text-amber"></i> 本表「08/24前預定」與各項比對數據均以此統計基準日截切計算</span>
+      </div>
       <div class="table-responsive">
         <table class="modern-table">
           <thead>
@@ -961,8 +956,22 @@ function renderOperationsKPIs() {
   const kpiAvgRate = document.getElementById("kpi-avg-rate");
   const kpiLightStatus = document.getElementById("kpi-light-status");
 
+  // 累計追蹤待辦事項筆數與「待辦追蹤事項 (B)」完全連動 (268 筆)
+  let sumB = 268;
+  if (appData.monthlyReportAnalysis && appData.monthlyReportAnalysis.p13_coverage) {
+    const p13Rows = appData.monthlyReportAnalysis.p13_coverage.rows || [];
+    const totalRow = p13Rows.find(r => r[0] === '合計');
+    if (totalRow && totalRow[2]) {
+      sumB = parseInt(totalRow[2]) || 268;
+    }
+  }
+
   if (kpiProjects) kpiProjects.textContent = `${appData.totalProjects || 13} 案`;
-  if (kpiTodos) kpiTodos.textContent = `${appData.totalTodos || 335} 筆`;
+  if (kpiTodos) {
+    kpiTodos.textContent = `${sumB} 筆`;
+    const sub = kpiTodos.parentElement ? kpiTodos.parentElement.querySelector(".kpi-sub") : null;
+    if (sub) sub.innerHTML = `<i class="fa-solid fa-link text-cyan"></i> 與待辦追蹤事項 (B) 連動`;
+  }
   if (kpiIssues) kpiIssues.textContent = `${appData.totalTechnicalIssues || 155} 案`;
 
   let totCompleted = 0;
@@ -1244,20 +1253,23 @@ function renderDrawerTabContent(tabType) {
           <span class="files-badge">${m.fileCount} 份會議檔案</span>
         </div>
         <div class="m-files-grid">
-          ${(m.files || []).map(f => `
-            <div class="file-row-item">
-              <div class="file-left-info" title="${f.name}">
-                <i class="fa-solid ${getFileIcon(f.ext)}"></i>
-                <span class="file-name-text">${f.name}</span>
-                <small class="text-dim">(${(f.size / 1024).toFixed(0)} KB)</small>
+          ${(m.files || []).map(f => {
+            const safeF = encodeURIComponent(JSON.stringify(f));
+            return `
+              <div class="file-row-item">
+                <div class="file-left-info" title="${f.name}">
+                  <i class="fa-solid ${getFileIcon(f.ext)}"></i>
+                  <span class="file-name-text">${f.name}</span>
+                  <small class="text-dim">(${(f.size / 1024).toFixed(0)} KB)</small>
+                </div>
+                <div class="file-actions">
+                  <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
+                    <i class="fa-solid fa-file-powerpoint"></i> 查看簡報/紀錄
+                  </button>
+                </div>
               </div>
-              <div class="file-actions">
-                <button type="button" class="btn-file-view" onclick="alert('開啟會議檔案: ${f.name}\\n實體路徑位在 NAS 中。')">
-                  <i class="fa-solid fa-file-powerpoint"></i> 查看簡報/紀錄
-                </button>
-              </div>
-            </div>
-          `).join("")}
+            `;
+          }).join("")}
         </div>
       </div>
     `).join("");
@@ -1275,18 +1287,21 @@ function renderDrawerTabContent(tabType) {
       <div class="glass-card section-card">
         <h4><i class="fa-solid fa-table-list text-emerald"></i> 本專案技術議題管控表 (每月更新)</h4>
         <div class="category-files-list" style="margin-top: 14px;">
-          ${controlFiles.map(f => `
-            <div class="file-row-item">
-              <div class="file-left-info">
-                <i class="fa-solid ${getFileIcon(f.ext)}"></i>
-                <span class="file-name-text">${f.name}</span>
-                <small class="text-dim">最後更新：${f.lastModified}</small>
+          ${controlFiles.map(f => {
+            const safeF = encodeURIComponent(JSON.stringify(f));
+            return `
+              <div class="file-row-item">
+                <div class="file-left-info">
+                  <i class="fa-solid ${getFileIcon(f.ext)}"></i>
+                  <span class="file-name-text">${f.name}</span>
+                  <small class="text-dim">最後更新：${f.lastModified}</small>
+                </div>
+                <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
+                  <i class="fa-solid fa-file-excel"></i> 開啟試算表
+                </button>
               </div>
-              <button type="button" class="btn-file-view" onclick="alert('開啟管控表: ${f.name}')">
-                <i class="fa-solid fa-file-excel"></i> 開啟試算表
-              </button>
-            </div>
-          `).join("")}
+            `;
+          }).join("")}
         </div>
       </div>
     `;
@@ -1304,18 +1319,21 @@ function renderDrawerTabContent(tabType) {
       <div class="glass-card section-card">
         <h4><i class="fa-solid fa-compass-drafting text-purple"></i> 圖說契約進度表</h4>
         <div class="category-files-list" style="margin-top: 14px;">
-          ${drawFiles.map(f => `
-            <div class="file-row-item">
-              <div class="file-left-info">
-                <i class="fa-solid ${getFileIcon(f.ext)}"></i>
-                <span class="file-name-text">${f.name}</span>
-                <small class="text-dim">最後更新：${f.lastModified}</small>
+          ${drawFiles.map(f => {
+            const safeF = encodeURIComponent(JSON.stringify(f));
+            return `
+              <div class="file-row-item">
+                <div class="file-left-info">
+                  <i class="fa-solid ${getFileIcon(f.ext)}"></i>
+                  <span class="file-name-text">${f.name}</span>
+                  <small class="text-dim">最後更新：${f.lastModified}</small>
+                </div>
+                <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
+                  <i class="fa-solid fa-eye"></i> 查看進度表
+                </button>
               </div>
-              <button type="button" class="btn-file-view" onclick="alert('開啟圖說契約表: ${f.name}')">
-                <i class="fa-solid fa-eye"></i> 查看進度表
-              </button>
-            </div>
-          `).join("")}
+            `;
+          }).join("")}
         </div>
       </div>
     `;
@@ -1334,29 +1352,29 @@ function renderDrawerTabContent(tabType) {
         <table class="modern-table">
           <thead>
             <tr>
-              <th>項次</th>
-              <th>會議日期</th>
-              <th>提議者</th>
+              <th style="width: 50px;">項次</th>
+              <th style="width: 110px;">會議日期</th>
+              <th style="width: 100px;">提議者</th>
               <th>討論事項與決議內容</th>
-              <th>預定完成日</th>
-              <th>辦理情形</th>
-              <th>成果說明</th>
+              <th style="width: 110px;">預定完成日</th>
+              <th style="width: 95px;">辦理情形</th>
+              <th style="width: 220px;">成果說明</th>
             </tr>
           </thead>
           <tbody>
             ${projTodos.map((td, idx) => `
               <tr>
-                <td>${idx + 1}</td>
-                <td><small class="text-cyan">${td.meetDate || '-'}</small></td>
+                <td style="text-align: center;">${idx + 1}</td>
+                <td><small class="text-cyan font-bold">${formatWesternDate(td.meetDate)}</small></td>
                 <td>${td.proposer || '-'}</td>
-                <td style="max-width: 320px;">${td.desc || '-'}</td>
-                <td>${td.dueDate || '-'}</td>
+                <td style="line-height: 1.6; word-break: break-all;">${td.desc || '-'}</td>
+                <td><small class="text-muted">${formatWesternDate(td.dueDate)}</small></td>
                 <td>
                   <span class="proj-light-pill ${td.status === '已完成' ? 'light-green' : (td.status === '後續辦理' ? 'light-orange' : 'light-yellow')}">
                     ${td.status || '辦理中'}
                   </span>
                 </td>
-                <td><small class="text-dim">${td.result || '-'}</small></td>
+                <td><small class="text-dim" style="word-break: break-all; line-height: 1.4;">${td.result || '-'}</small></td>
               </tr>
             `).join("")}
           </tbody>
@@ -1365,6 +1383,116 @@ function renderDrawerTabContent(tabType) {
     `;
   }
 }
+
+// 格式化為標準西曆 (YYYY/MM/DD)
+function formatWesternDate(val) {
+  if (!val) return '-';
+  const s = String(val).trim();
+  if (!s || s === '-' || s === '0') return '-';
+  if (/^\d{5}$/.test(s)) {
+    const excelEpoch = new Date(1899, 11, 30);
+    const d = new Date(excelEpoch.getTime() + parseInt(s) * 86400000);
+    return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
+  }
+  return s.replace(/-/g, '/');
+}
+
+// 開啟會議檔案詳情彈窗
+window.openMeetingFileModal = function(encodedData) {
+  try {
+    const file = JSON.parse(decodeURIComponent(encodedData));
+    const viewerModal = document.getElementById("file-viewer-modal");
+    const viewerTitle = document.getElementById("viewer-file-title");
+    const viewerBody = document.getElementById("viewer-body");
+    const closeBtn = document.getElementById("viewer-close-btn");
+
+    if (!viewerModal || !viewerTitle || !viewerBody) return;
+
+    const fullPath = file.fullPath || `\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\${file.relPath || file.name}`;
+    const isLocalServer = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+    viewerTitle.innerHTML = `<i class="fa-solid ${getFileIcon(file.ext)} text-cyan"></i> 會議檔案檢視與開啟`;
+    viewerBody.innerHTML = `
+      <div style="padding: 6px 0; display: flex; flex-direction: column; gap: 16px;">
+        <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
+          <h4 style="font-size: 16px; color: var(--text-main); margin-bottom: 8px; word-break: break-all; line-height: 1.4;">
+            <i class="fa-solid ${getFileIcon(file.ext)} text-cyan"></i> ${file.name}
+          </h4>
+          <div style="font-size: 13px; color: var(--text-muted); display: flex; gap: 16px; flex-wrap: wrap;">
+            <span><i class="fa-regular fa-hard-drive"></i> 大小：${file.size ? (file.size / 1024).toFixed(1) + ' KB' : '未知'}</span>
+            <span><i class="fa-regular fa-clock"></i> 更新時間：${file.lastModified || '未知'}</span>
+          </div>
+        </div>
+
+        <div style="background: rgba(10,15,28,0.7); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+          <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+            <span><i class="fa-solid fa-server text-cyan"></i> 企業 NAS 實體路徑 (請在內網或 VPN 環境存取)：</span>
+          </div>
+          <div id="nas-path-box" style="font-family: monospace; font-size: 12px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 6px; word-break: break-all; user-select: all; color: #a5f3fc; border: 1px solid rgba(0,242,254,0.2);">
+            ${fullPath}
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px;">
+          <button type="button" class="btn-primary" id="btn-copy-nas-path" style="padding: 10px 18px; font-size: 14px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
+            <i class="fa-regular fa-copy"></i> 複製 NAS 實體路徑
+          </button>
+          ${isLocalServer ? `
+            <button type="button" class="btn-table-action" style="padding: 10px 18px; font-size: 14px; background: rgba(16,185,129,0.2); border-color: rgba(16,185,129,0.4); color: #6ee7b7;" onclick="openFileLocally('${encodeURIComponent(fullPath)}')">
+              <i class="fa-solid fa-bolt"></i> 直接在電腦開啟 (PowerPoint)
+            </button>
+          ` : ''}
+          <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-gcal-open" style="padding: 10px 18px; font-size: 14px;">
+            <i class="fa-solid fa-download"></i> 下載檔案
+          </a>
+        </div>
+
+        <div style="font-size: 12px; color: var(--text-dim); line-height: 1.6; background: rgba(255,255,255,0.02); padding: 10px 12px; border-radius: 6px;">
+          <i class="fa-solid fa-circle-question text-amber"></i> <b>開啟指引：</b>
+          點擊「複製 NAS 實體路徑」後，在 Windows 鍵盤按下 <code>Win + R</code> 鍵，貼上路徑並按確定，即可直接在電腦上由本機 Office 開啟簡報或試算表。若於公司內網執行本儀表板伺服器，可直接點擊「直接在電腦開啟」。
+        </div>
+      </div>
+    `;
+
+    viewerModal.classList.remove("hidden");
+    closeBtn.onclick = () => viewerModal.classList.add("hidden");
+    viewerModal.onclick = (e) => { if (e.target === viewerModal) viewerModal.classList.add("hidden"); };
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+window.copyNasPath = function(encodedPath) {
+  const p = decodeURIComponent(encodedPath);
+  navigator.clipboard.writeText(p).then(() => {
+    const btn = document.getElementById("btn-copy-nas-path");
+    if (btn) {
+      btn.innerHTML = `<i class="fa-solid fa-check text-emerald"></i> 已複製 NAS 路徑！`;
+      setTimeout(() => {
+        btn.innerHTML = `<i class="fa-regular fa-copy"></i> 複製 NAS 實體路徑`;
+      }, 3000);
+    }
+  }).catch(() => {
+    prompt("請按 Ctrl+C 複製路徑：", p);
+  });
+};
+
+window.openFileLocally = function(encodedPath) {
+  const p = decodeURIComponent(encodedPath);
+  fetch("/api/open-file", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ filePath: p })
+  }).then(r => r.json()).then(res => {
+    if (res.status === "success") {
+      alert("✅ 已在您的電腦上啟動開啟檔案！");
+    } else {
+      alert("⚠️ 開啟失敗: " + (res.message || "未知錯誤"));
+    }
+  }).catch(err => {
+    alert("⚠️ 連線本機伺服器失敗，請確認於 http://localhost:8090 存取");
+  });
+};
 
 // ==============================================================================
 // 6. 模組 3：全域資料搜尋引擎 (Global Search Engine)

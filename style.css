@@ -1493,10 +1493,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px;
+  padding: 10px 14px;
   background: rgba(255, 255, 255, 0.02);
   border-radius: 6px;
   font-size: 13px;
+  gap: 12px;
   transition: var(--transition-fast);
 }
 
@@ -1507,18 +1508,22 @@ body {
 .file-left-info {
   display: flex;
   align-items: center;
-  gap: 10px;
-  overflow: hidden;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
 }
 
 .file-left-info i {
-  font-size: 16px;
+  font-size: 18px;
+  flex-shrink: 0;
 }
 
 .file-name-text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-all;
+  line-height: 1.45;
+  font-weight: 500;
+  color: var(--text-main);
 }
 
 .file-actions {
@@ -1532,11 +1537,38 @@ body {
   background: rgba(0, 242, 254, 0.12);
   border: 1px solid rgba(0, 242, 254, 0.3);
   color: var(--primary);
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
   transition: var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-file-view:hover {
+  background: var(--primary);
+  color: #080c14;
+}
+
+/* 抽屜內待辦事項表格固定標題 (Sticky Header) */
+.drawer-body .table-responsive {
+  max-height: 60vh;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: rgba(10, 15, 28, 0.7);
+}
+
+.drawer-body .modern-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #0e1526;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
 }
 
 .btn-file-view:hover {
