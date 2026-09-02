@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>技術會議雲端儀表板 | 企業工程技術決策中心</title>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css?v=1.0">
+</head>
+<body>
+  <!-- 背景發光粒子球體 (玻璃擬態質感) -->
+  <div class="background-decorations">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+  </div>
+
+  <!-- NAS 登入門禁彈窗 (有 NAS 權限者始可登入) -->
+  <div id="login-modal" class="modal-overlay">
+    <div class="modal-card login-card glass-card">
+      <div class="login-header">
+        <div class="login-icon">
+          <i class="fa-solid fa-server"></i>
+        </div>
+        <h2>技術會議雲端儀表板</h2>
+        <p class="subtitle">企業內部技術會議決策系統 ‧ 需具備 NAS 存取權限</p>
+      </div>
+
+      <form id="login-form" class="login-form">
+        <div class="form-group">
+          <label for="login-username"><i class="fa-solid fa-user"></i> NAS 帳號 / 工號</label>
+          <input type="text" id="login-username" placeholder="請輸入 NAS 使用者帳號" autocomplete="username" required>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password"><i class="fa-solid fa-key"></i> 密碼</label>
+          <input type="password" id="login-password" placeholder="請輸入密碼" autocomplete="current-password" required>
+        </div>
+
+        <div class="login-quick-select">
+          <span class="quick-title"><i class="fa-solid fa-bolt"></i> 常用帳號快速登入：</span>
+          <div class="quick-pills">
+            <button type="button" class="quick-pill" data-user="admin" data-pwd="admin888">總部管理員</button>
+            <button type="button" class="quick-pill" data-user="north_dir" data-pwd="north123">北區處長</button>
+            <button type="button" class="quick-pill" data-user="central_dir" data-pwd="central123">中區處長</button>
+            <button type="button" class="quick-pill" data-user="tainan_dir" data-pwd="tainan123">台南處長</button>
+            <button type="button" class="quick-pill" data-user="engineer" data-pwd="nas2026">工程師</button>
+          </div>
+        </div>
+
+        <div id="login-error-msg" class="login-error hidden"></div>
+
+        <button type="submit" class="btn-login" id="btn-login">
+          <i class="fa-solid fa-right-to-bracket"></i> 驗證權限並登入儀表板
+        </button>
+      </form>
+
+      <div class="login-footer">
+        <small><i class="fa-solid fa-shield-halved text-emerald"></i> 本系統連線至內部 NAS (<code>\\192.168.1.221\s5\1003技術會議資料專區</code>)，資料傳輸經內部金鑰加密保護。</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主應用介面容器 (登入後解鎖顯示) -->
+  <div id="app-container" class="app-container blur-locked">
+    <!-- 頂部導覽列 (Header Bar) -->
+    <header class="glass-card header-bar">
+      <div class="header-brand">
+        <div class="logo-badge">
+          <i class="fa-solid fa-network-wired"></i>
+        </div>
+        <div class="brand-text">
+          <h1>技術會議雲端儀表板</h1>
+          <span class="brand-sub"><i class="fa-solid fa-folder-tree"></i> 1003技術會議資料專區 ‧ 13大工程處專案即時戰情</span>
+        </div>
+      </div>
+
+      <!-- 即時上線狀況指標 (不斷線 Heartbeat Monitor) -->
+      <div class="header-presence">
+        <div class="live-status-badge" id="btn-open-presence" title="點擊查看目前在線同仁名單">
+          <span class="pulse-dot"></span>
+          <span class="status-label">即時連線中 (不斷線)</span>
+          <span class="online-counter"><i class="fa-solid fa-users"></i> 在線 <b id="header-online-count">1</b> 人</span>
+        </div>
+
+        <div class="user-profile-widget" id="user-profile-widget">
+          <div class="user-avatar" id="user-avatar-icon">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <div class="user-info">
+            <span class="user-name" id="display-user-name">訪客同仁</span>
+            <span class="user-dept" id="display-user-dept">工程技術部</span>
+          </div>
+          <button type="button" class="btn-logout" id="btn-logout" title="登出系統">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 主頁籤導覽列 (Main Tabs Navigation) -->
+    <nav class="glass-card main-nav">
+      <button type="button" class="nav-tab active" data-tab="announcements">
+        <i class="fa-solid fa-bullhorn"></i> 1. 公告與指引中心
+      </button>
+      <button type="button" class="nav-tab" data-tab="workspaces">
+        <i class="fa-solid fa-diagram-project"></i> 2. 各專案作業區 <span class="badge-count" id="badge-proj-count">13</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="search">
+        <i class="fa-solid fa-magnifying-glass-chart"></i> 3. 全域資料搜尋
+      </button>
+      <button type="button" class="nav-tab" data-tab="presence">
+        <i class="fa-solid fa-satellite-dish"></i> 4. 上線即時狀況 <span class="badge-live">LIVE</span>
+      </button>
+    </nav>
+
+    <!-- 內容區域 (Content Area) -->
+    <main class="main-content">
+      <!-- 模組 1：公告欄 (Announcements & Guidelines) -->
+      <section id="tab-announcements" class="tab-pane active">
+        <!-- 公告欄子選單 -->
+        <div class="subnav-bar">
+          <button type="button" class="subnav-btn active" data-sub="schedule">
+            <i class="fa-solid fa-calendar-days"></i> 每月技術會議行程表
+          </button>
+          <button type="button" class="subnav-btn" data-sub="operations">
+            <i class="fa-solid fa-chart-pie"></i> 每月技術會議運作概況
+          </button>
+          <button type="button" class="subnav-btn" data-sub="guidelines">
+            <i class="fa-solid fa-book-bookmark"></i> 發布技術指引
+          </button>
+          <button type="button" class="subnav-btn" data-sub="templates">
+            <i class="fa-solid fa-file-contract"></i> 作業模板
+          </button>
+          <button type="button" class="subnav-btn" data-sub="others">
+            <i class="fa-solid fa-folder-open"></i> 其他文件及法規
+          </button>
+        </div>
+
+        <!-- 1.1 行程表 -->
+        <div id="sub-schedule" class="subpane active">
+          <div class="glass-card section-card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-calendar-check text-cyan"></i> 2026 年度各工程處每月技術會議固定排程表</h3>
+              <span class="header-note">※ 依據技術會議運作規範，原則採固定週次召開</span>
+            </div>
+            <div class="table-responsive">
+              <table class="modern-table">
+                <thead>
+                  <tr>
+                    <th>工程處別</th>
+                    <th>專案工程名稱</th>
+                    <th>會議召開週期與時段</th>
+                    <th>常態會議地點</th>
+                    <th>運作狀態</th>
+                    <th>承辦窗口</th>
+                    <th>快速跳轉</th>
+                  </tr>
+                </thead>
+                <tbody id="schedule-table-body">
+                  <!-- JS Dynamic Render -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1.2 運作概況 -->
+        <div id="sub-operations" class="subpane hidden">
+          <!-- 統計 KPI 指標卡片 -->
+          <div class="kpi-grid">
+            <div class="glass-card kpi-card">
+              <div class="kpi-icon text-cyan"><i class="fa-solid fa-city"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-title">納管專案工地</span>
+                <span class="kpi-val" id="kpi-projects-count">13 案</span>
+                <span class="kpi-sub">涵蓋 6 大工程處</span>
+              </div>
+            </div>
+
+            <div class="glass-card kpi-card">
+              <div class="kpi-icon text-emerald"><i class="fa-solid fa-list-check"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-title">累計追蹤待辦事項</span>
+                <span class="kpi-val" id="kpi-todos-count">335 筆</span>
+                <span class="kpi-sub">定期更新追蹤</span>
+              </div>
+            </div>
+
+            <div class="glass-card kpi-card">
+              <div class="kpi-icon text-purple"><i class="fa-solid fa-lightbulb"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-title">歷次會議技術議題庫</span>
+                <span class="kpi-val" id="kpi-issues-count">155 案</span>
+                <span class="kpi-sub">跨專案技術結晶</span>
+              </div>
+            </div>
+
+            <div class="glass-card kpi-card">
+              <div class="kpi-icon text-amber"><i class="fa-solid fa-trophy"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-title">全公司待辦完成率</span>
+                <span class="kpi-val" id="kpi-avg-rate">--%</span>
+                <span class="kpi-sub" id="kpi-light-status">🟢 運作良好</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 各工程處待辦完成率圖表與簡報 -->
+          <div class="dashboard-dual-grid">
+            <div class="glass-card chart-card">
+              <div class="card-header">
+                <h3><i class="fa-solid fa-chart-column text-cyan"></i> 各工程處待辦事項完成率與健康燈號統計</h3>
+              </div>
+              <div class="chart-container">
+                <canvas id="dept-rate-chart"></canvas>
+              </div>
+            </div>
+
+            <div class="glass-card operations-docs-card">
+              <div class="card-header">
+                <h3><i class="fa-solid fa-file-powerpoint text-orange"></i> 技術會議運作規範簡報與說明文件</h3>
+              </div>
+              <div class="docs-list" id="operations-docs-list">
+                <!-- JS Dynamic Render -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1.3 發布技術指引 -->
+        <div id="sub-guidelines" class="subpane hidden">
+          <div class="category-grid" id="guidelines-grid">
+            <!-- JS Dynamic Render -->
+          </div>
+        </div>
+
+        <!-- 1.4 作業模板 -->
+        <div id="sub-templates" class="subpane hidden">
+          <div class="category-grid" id="templates-grid">
+            <!-- JS Dynamic Render -->
+          </div>
+        </div>
+
+        <!-- 1.5 其他文件 -->
+        <div id="sub-others" class="subpane hidden">
+          <div class="category-grid" id="others-grid">
+            <!-- JS Dynamic Render -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 模組 2：各專案作業區 (Workspaces) -->
+      <section id="tab-workspaces" class="tab-pane hidden">
+        <div class="workspaces-toolbar">
+          <div class="dept-filters" id="dept-filter-buttons">
+            <button type="button" class="filter-chip active" data-dept="all">全部工程處 (13)</button>
+            <button type="button" class="filter-chip" data-dept="北區工程處">北區 (3)</button>
+            <button type="button" class="filter-chip" data-dept="中區工程處">中區 (2)</button>
+            <button type="button" class="filter-chip" data-dept="台南工程處">台南 (3)</button>
+            <button type="button" class="filter-chip" data-dept="宜蘭工程處">宜蘭 (2)</button>
+            <button type="button" class="filter-chip" data-dept="高屏工程處">高屏 (2)</button>
+            <button type="button" class="filter-chip" data-dept="休閒事業處">休閒 (1)</button>
+          </div>
+          <div class="search-box-compact">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="project-quick-search" placeholder="篩選專案名稱…">
+          </div>
+        </div>
+
+        <!-- 13 個專案卡片矩陣 -->
+        <div class="projects-grid" id="projects-grid">
+          <!-- JS Dynamic Render -->
+        </div>
+      </section>
+
+      <!-- 模組 3：全域資料搜尋 (Global Search) -->
+      <section id="tab-search" class="tab-pane hidden">
+        <div class="glass-card search-hero-card">
+          <h2><i class="fa-solid fa-magnifying-glass-chart text-cyan"></i> 全域技術資料與議題搜尋引擎</h2>
+          <p class="search-desc">即時跨 13 大專案作業區、335 筆待辦事項、155 筆技術議題庫與各類技術指引搜尋，點擊可直接點入查看！</p>
+          
+          <div class="search-input-wrapper">
+            <i class="fa-solid fa-search search-main-icon"></i>
+            <input type="text" id="global-search-input" placeholder="請輸入技術關鍵字 (例如：連續壁、地質改良、FS版、防水、BIM、安全支撐、鋼筋…)">
+            <button type="button" class="btn-clear-search" id="btn-clear-search">&times;</button>
+          </div>
+
+          <div class="search-type-chips">
+            <span class="type-label">搜尋範疇：</span>
+            <button type="button" class="type-chip active" data-type="all">全部範疇</button>
+            <button type="button" class="type-chip" data-type="issues">技術議題庫 (155)</button>
+            <button type="button" class="type-chip" data-type="todos">待辦追蹤項目 (335)</button>
+            <button type="button" class="type-chip" data-type="guides">技術指引與樣板</button>
+            <button type="button" class="type-chip" data-type="files">專案會議檔案</button>
+          </div>
+        </div>
+
+        <!-- 搜尋結果展示區 -->
+        <div class="search-results-container">
+          <div class="results-header">
+            <h4>搜尋結果 (<span id="search-result-count">0</span> 筆)</h4>
+            <span class="results-tip">※ 點擊卡片可直接展開所屬專案作業區與會議紀錄</span>
+          </div>
+          <div class="results-list" id="search-results-list">
+            <div class="search-empty-prompt">
+              <i class="fa-solid fa-keyboard"></i>
+              <p>請於上方搜尋框輸入關鍵字開始查詢</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 模組 4：上線即時狀況 (Live Presence) -->
+      <section id="tab-presence" class="tab-pane hidden">
+        <div class="glass-card presence-dashboard-card">
+          <div class="presence-header-row">
+            <div>
+              <h2><i class="fa-solid fa-satellite-dish text-emerald"></i> 即時上線狀況監測中心 (不斷線保活架構)</h2>
+              <p class="presence-sub">系統採用雙向心跳維持機制 (Heartbeat Loop)，確保多位同仁同時上線討論會議不中斷！</p>
+            </div>
+            <div class="presence-stat-box">
+              <span class="stat-num" id="presence-online-num">1</span>
+              <span class="stat-lbl">目前在線人數</span>
+            </div>
+          </div>
+
+          <div class="connection-health-bar">
+            <div class="health-item">
+              <i class="fa-solid fa-circle-check text-emerald"></i> 連線狀態：<b class="text-emerald">穩定連線中</b>
+            </div>
+            <div class="health-item">
+              <i class="fa-solid fa-heart-pulse text-rose pulse-anim"></i> 心跳保活：<b>每 15 秒同步</b>
+            </div>
+            <div class="health-item">
+              <i class="fa-solid fa-clock text-cyan"></i> 伺服器時間：<b id="presence-server-time">--:--:--</b>
+            </div>
+            <div class="health-item">
+              <i class="fa-solid fa-shield-halved text-amber"></i> 權限級別：<b id="presence-my-role">總部管理員</b>
+            </div>
+          </div>
+
+          <div class="online-users-section">
+            <h3><i class="fa-solid fa-users text-cyan"></i> 當前在線同仁名冊</h3>
+            <div class="online-users-grid" id="online-users-grid">
+              <!-- JS Dynamic Render -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 專案作業區詳細資料檢視抽屜 / 彈窗 (Project Details Drawer) -->
+  <div id="project-modal" class="modal-overlay hidden">
+    <div class="modal-card project-drawer-card glass-card">
+      <div class="drawer-header">
+        <div class="drawer-title-group">
+          <span class="dept-badge" id="drawer-project-dept">工程處</span>
+          <h2 id="drawer-project-name">專案名稱</h2>
+          <span class="drawer-stat-badge" id="drawer-project-light">🟢 待辦完成率: 100%</span>
+        </div>
+        <button type="button" class="drawer-close-btn" id="drawer-close-btn">&times;</button>
+      </div>
+
+      <div class="drawer-tabs-bar">
+        <button type="button" class="drawer-tab-btn active" data-drawer-tab="meetings">
+          <i class="fa-solid fa-handshake"></i> 歷次會議資料 (簡報與紀錄)
+        </button>
+        <button type="button" class="drawer-tab-btn" data-drawer-tab="control">
+          <i class="fa-solid fa-table-list"></i> 技術議題管控表
+        </button>
+        <button type="button" class="drawer-tab-btn" data-drawer-tab="drawings">
+          <i class="fa-solid fa-compass-drafting"></i> 圖說契約進度表
+        </button>
+        <button type="button" class="drawer-tab-btn" data-drawer-tab="todos">
+          <i class="fa-solid fa-list-check"></i> 專案待辦事項 (<span id="drawer-todo-count">0</span>)
+        </button>
+      </div>
+
+      <div class="drawer-body" id="drawer-body-content">
+        <!-- JS Dynamic Content -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 檔案詳細資料檢視彈窗 -->
+  <div id="file-viewer-modal" class="modal-overlay hidden">
+    <div class="modal-card file-viewer-card glass-card">
+      <div class="modal-header">
+        <h3 id="viewer-file-title"><i class="fa-solid fa-file-lines"></i> 檔案檢視</h3>
+        <button type="button" class="close-btn" id="viewer-close-btn">&times;</button>
+      </div>
+      <div class="file-viewer-body" id="viewer-body">
+        <!-- Content -->
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=1.0"></script>
+</body>
+</html>
