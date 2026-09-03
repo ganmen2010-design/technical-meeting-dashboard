@@ -2408,3 +2408,22 @@ h5 { font-size: 17px !important; }
   font-size: 15px !important;
   padding: 6px 10px !important;
 }
+
+/* 指引卡片摺疊與展開動畫 */
+.guideline-folder-card {
+  transition: var(--transition-fast);
+}
+
+.guideline-folder-card.collapsed .category-files-list {
+  display: none !important;
+}
+
+.guideline-toggle-icon {
+  display: inline-block;
+  transition: transform 0.2s ease;
+  margin-right: 4px;
+}
+
+.guideline-folder-card.collapsed .guideline-toggle-icon {
+  transform: rotate(-90deg);
+}
