@@ -2166,3 +2166,41 @@ body {
   color: #fda4af;
   background: rgba(244, 63, 94, 0.06);
 }
+
+/* 抽屜頂部標籤區 */
+.control-header-ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.guideline-folder-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+
+.guideline-folder-header {
+  padding: 12px 18px;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.guideline-folder-header:hover {
+  background: rgba(0, 242, 254, 0.05);
+}
+
+.guideline-folder-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #a5f3fc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

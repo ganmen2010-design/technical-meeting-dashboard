@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=4.0">
+  <link rel="stylesheet" href="style.css?v=6.0">
 </head>
 <body>
   <!-- 背景發光粒子球體 (玻璃擬態質感) -->
@@ -280,7 +280,7 @@
             </div>
 
             <!-- 月報分析內容動態展示容器 -->
-            <div id="monthly-report-content">
+            <div id="monthly-report-dynamic-content">
               <!-- JS Dynamic Render P10~P13 Content -->
             </div>
           </div>
@@ -288,21 +288,21 @@
 
         <!-- 1.3 發布技術指引 -->
         <div id="sub-guidelines" class="subpane hidden">
-          <div class="category-grid" id="guidelines-grid">
+          <div id="guidelines-list">
             <!-- JS Dynamic Render -->
           </div>
         </div>
 
         <!-- 1.4 作業模板 -->
         <div id="sub-templates" class="subpane hidden">
-          <div class="category-grid" id="templates-grid">
+          <div id="templates-list">
             <!-- JS Dynamic Render -->
           </div>
         </div>
 
         <!-- 1.5 其他文件 -->
         <div id="sub-others" class="subpane hidden">
-          <div class="category-grid" id="others-grid">
+          <div id="others-list">
             <!-- JS Dynamic Render -->
           </div>
         </div>
@@ -416,7 +416,7 @@
         <div class="drawer-title-group">
           <span class="dept-badge" id="drawer-project-dept">工程處</span>
           <h2 id="drawer-project-name">專案名稱</h2>
-          <span class="drawer-stat-badge" id="drawer-project-light">🟢 待辦完成率: 100%</span>
+          <div id="drawer-header-stats-container"><span class="drawer-stat-badge" id="drawer-project-light">待辦完成率: 100%</span></div>
         </div>
         <button type="button" class="drawer-close-btn" id="drawer-close-btn">&times;</button>
       </div>
@@ -455,6 +455,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=5.0"></script>
+  <script src="app.js?v=6.0"></script>
 </body>
 </html>
