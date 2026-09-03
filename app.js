@@ -1691,7 +1691,7 @@ window.openTechnicalIssueModal = function(encodedIssue, encodedFile) {
     const matchedProj = (appData.projects || []).find(p => normalizeSiteName(p.shortName) === normalizeSiteName(issue.site));
     const projId = matchedProj ? matchedProj.id : "";
 
-    const fullPath = file ? file.fullPath : `\\192.168.1.221\s5\1003技術會議資料專區\1.各專案作業區\目錄-各工地歷次會議技術議題查詢.xlsx`;
+    const fullPath = file ? file.fullPath : "\\\\\\\\192.168.1.221\\\\s5\\\\1003技術會議資料專區\\\\1.各專案作業區\\\\目錄-各工地歷次會議技術議題查詢.xlsx";
 
     const bodyHtml = `
       <div style="padding: 6px 0; display: flex; flex-direction: column; gap: 14px;">
