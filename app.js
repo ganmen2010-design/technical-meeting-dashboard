@@ -1,3 +1,4 @@
+const FENGYU_NEXTCLOUD_BASE = "https://ncaio.fengyu.com.tw/f/8988";
 /**
  * 技術會議雲端儀表板 (Technical Meeting Cloud Dashboard) - 前端核心邏輯
  * 具備：
@@ -1636,6 +1637,9 @@ function performGlobalSearch() {
         <span class="search-summary-pill"><i class="fa-solid fa-lightbulb text-amber"></i> 技術議題庫：<b>${issueMatches.length}</b> 筆</span>
         <span class="search-summary-pill"><i class="fa-solid fa-file-powerpoint text-rose"></i> 專案會議簡報：<b>${fileMatches.filter(f => f.type === 'file').length}</b> 份</span>
         <span class="search-summary-pill"><i class="fa-solid fa-book text-cyan"></i> 技術指引與模板：<b>${fileMatches.filter(f => f.type === 'guide').length}</b> 份</span>
+        <a href="https://ncaio.fengyu.com.tw/f/8988" target="_blank" rel="noopener noreferrer" class="search-summary-pill" style="background: rgba(0,242,254,0.12); border-color: var(--primary); color: #a5f3fc; text-decoration: none;">
+          <i class="fa-solid fa-cloud text-cyan"></i> 豊譽雲端分享專區：<b>/f/8988 (點擊開啟)</b> <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px;"></i>
+        </a>
       </div>
     </div>
   `;
@@ -1657,16 +1661,19 @@ function performGlobalSearch() {
           <h4 class="res-title">${highlightKeyword(item.title, rawQuery)}</h4>
           <p class="res-desc">${highlightKeyword(item.desc, rawQuery)}</p>
         </div>
-        <div class="res-actions">
+        <div class="res-actions" style="display: flex; gap: 8px; flex-wrap: wrap;">
           ${item.actionType === "viewIssueFile" ? `
             <button type="button" class="btn-file-view" style="white-space: nowrap;" onclick="openTechnicalIssueModal('${safeIssue}', '${safeFile}')">
-              <i class="fa-solid fa-file-powerpoint"></i> 檢視/開啟議題來源檔案
+              <i class="fa-solid fa-file-powerpoint"></i> 檢視/開啟議題檔案
             </button>
           ` : (safeFile ? `
             <button type="button" class="btn-file-view" style="white-space: nowrap;" onclick="openMeetingFileModal('${safeFile}')">
               <i class="fa-solid fa-eye"></i> 查看檔案
             </button>
           ` : '')}
+          <a href="https://ncaio.fengyu.com.tw/f/8988" target="_blank" rel="noopener noreferrer" class="btn-table-action" style="white-space: nowrap; padding: 6px 10px; font-size: 12px;" title="在豊譽企業雲端 (/f/8988) 中存取">
+            <i class="fa-solid fa-cloud text-cyan"></i> 雲端專區 (/f/8988)
+          </a>
         </div>
       </div>
     `;
@@ -1780,6 +1787,9 @@ window.openMeetingFileModal = function(encodedFile) {
         </button>
         <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 10px 18px; font-size: 14px;">
           <i class="fa-solid fa-download"></i> 串流下載此檔案
+        </a>
+        <a href="https://ncaio.fengyu.com.tw/f/8988" target="_blank" rel="noopener noreferrer" class="btn-table-action" style="padding: 10px 18px; font-size: 14px; background: rgba(0,242,254,0.12); border-color: var(--primary); color: #a5f3fc;">
+          <i class="fa-solid fa-cloud"></i> 豊譽雲端專區 (/f/8988) 開啟
         </a>
       </div>
     `;
