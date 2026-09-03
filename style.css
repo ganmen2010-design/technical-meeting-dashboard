@@ -2204,3 +2204,75 @@ body {
   align-items: center;
   gap: 8px;
 }
+
+/* 全域表格數據置中與字體放大 (>14pt) */
+.report-table th,
+.report-table td,
+.data-table th,
+.data-table td,
+.todo-table th,
+.todo-table td,
+.control-table th,
+.control-table td {
+  font-size: 15px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 10px 12px !important;
+}
+
+/* 文字說明類欄位維持靠左對齊以利閱讀 */
+.data-table td.text-left,
+.todo-table td.col-desc,
+.control-table td.col-topic,
+.control-table td.col-result,
+.report-table td.text-left,
+.res-content,
+.file-name-text {
+  text-align: left !important;
+}
+
+/* 數字、指標、狀態標籤全面嚴格置中 */
+.report-table td:not(:first-child),
+.data-table td:not(.col-desc):not(.col-topic):not(.col-result),
+.kpi-val,
+.stat-val,
+.pill,
+.badge,
+.tag,
+.kpi-mini-pill {
+  text-align: center !important;
+}
+
+/* 導覽列與按鈕字體放大 */
+.nav-tab,
+.subnav-btn,
+.filter-chip,
+.report-chip,
+.type-chip,
+.btn-table-action,
+.btn-file-view {
+  font-size: 15px !important;
+}
+
+.kpi-title {
+  font-size: 14px !important;
+}
+
+.kpi-val {
+  font-size: 26px !important;
+}
+
+.current-month-display {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+.gcal-weekday {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+}
+
+.gcal-event-chip {
+  font-size: 13.5px !important;
+}

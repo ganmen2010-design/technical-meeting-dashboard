@@ -382,7 +382,7 @@ function initNavigations() {
         } else if (subType === "operations") {
           renderHeaderOverview(appData);
           renderMonthlyReportAnalysis(currentReportView || "coverage");
-          renderDeptChart(appData.deptStats);
+          // renderDeptChart removed
         } else if (subType === "guidelines") {
           renderGuidelines(appData.guidelines || []);
         } else if (subType === "templates") {
@@ -491,7 +491,7 @@ async function loadDashboardData() {
     renderHeaderOverview(appData);
     renderGoogleCalendar(currentCalYear, currentCalMonth);
     renderMonthlyReportAnalysis("coverage");
-    renderDeptChart(appData.deptStats);
+    // renderDeptChart removed
     renderGuidelines(appData.guidelines || []);
     renderTemplates(appData.templates || []);
     renderOthers(appData.others || []);
@@ -608,7 +608,7 @@ function renderDeptChart(deptStats) {
 function initCalendarNavigation() {
   const btnPrev = document.getElementById("cal-prev-month");
   const btnNext = document.getElementById("cal-next-month");
-  const btnToday = document.getElementById("cal-today-btn");
+  const btnToday = document.getElementById("cal-today") || document.getElementById("cal-today-btn");
   const btnExportIcs = document.getElementById("btn-export-ics");
 
   if (btnPrev) {
@@ -663,7 +663,7 @@ const ACTUAL_SEPT_2026_SCHEDULE = [
 ];
 
 function renderGoogleCalendar(year, month) {
-  const titleEl = document.getElementById("cal-current-month-title");
+  const titleEl = document.getElementById("cal-current-month-label") || document.getElementById("cal-current-month-title");
   const daysGrid = document.getElementById("gcal-days-grid");
   if (!titleEl || !daysGrid) return;
 
