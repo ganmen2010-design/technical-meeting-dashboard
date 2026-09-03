@@ -2030,15 +2030,15 @@ function performGlobalSearch() {
 
         <div style="padding: 14px 18px; background: rgba(0,0,0,0.35); border-radius: 10px; border: 1px solid rgba(0,242,254,0.22); margin-bottom: 14px;">
           <div style="font-size: 16px; color: #94a3b8; margin-bottom: 10px; font-weight: 700;">
-            <i class="fa-solid fa-quote-left text-amber"></i> <b>技術出處引述 (點擊直達檔案/議題)：</b>
+            <i class="fa-solid fa-quote-left text-amber"></i> <b>技術出處引述 (點擊直達檔案/議題/外部資料庫)：</b>
           </div>
           <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             ${allCitedSources}
-            <a href="https://ncaio.fengyu.com.tw/f/8988" target="_blank" rel="noopener noreferrer" class="ai-cite-pill" style="border-color: rgba(0,242,254,0.45); background: rgba(0,242,254,0.15); color: #a5f3fc; text-decoration: none;">
-              <i class="fa-solid fa-cloud text-cyan"></i> 豊譽雲端專區 (/f/8988) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i>
+            <a href="https://ncaio.fengyu.com.tw/f/8988" target="_blank" rel="noopener noreferrer" class="ai-cite-pill" style="border-color: rgba(0,242,254,0.55); background: rgba(0,242,254,0.18); color: #a5f3fc; text-decoration: none;" title="前往豊譽企業雲端分享專區">
+              <i class="fa-solid fa-cloud text-cyan"></i> 企業雲 (/f/8988) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i>
             </a>
-            <a href="https://app.notion.com/p/3aa1a56b88108148bf83e40fc03dad3b?v=3aa1a56b88108190916e000c1bb69a93" target="_blank" rel="noopener noreferrer" class="ai-cite-pill" style="border-color: rgba(245,158,11,0.45); background: rgba(245,158,11,0.15); color: #fde68a; text-decoration: none;">
-              <i class="fa-solid fa-note-sticky text-amber"></i> Notion 技術知識庫筆記 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i>
+            <a href="https://app.notion.com/p/3aa1a56b88108148bf83e40fc03dad3b?v=3aa1a56b88108190916e000c1bb69a93${rawQuery ? `&query=${encodeURIComponent(rawQuery)}` : ''}" target="_blank" rel="noopener noreferrer" class="ai-cite-pill" style="border-color: rgba(245,158,11,0.55); background: rgba(245,158,11,0.2); color: #fde68a; text-decoration: none;" title="前往 Notion 知識庫搜尋">
+              <i class="fa-solid fa-note-sticky text-amber"></i> Notion 資料庫 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i>
             </a>
           </div>
         </div>
@@ -2048,9 +2048,6 @@ function performGlobalSearch() {
         <span class="search-summary-pill"><i class="fa-solid fa-lightbulb text-amber"></i> 技術議題庫：<b>${issueMatches.length}</b> 筆</span>
         <span class="search-summary-pill"><i class="fa-solid fa-file-powerpoint text-rose"></i> 專案會議簡報：<b>${fileMatches.filter(f => f.type === 'file').length}</b> 份</span>
         <span class="search-summary-pill"><i class="fa-solid fa-book text-cyan"></i> 技術指引與模板：<b>${fileMatches.filter(f => f.type === 'guide').length}</b> 份</span>
-        <a href="https://app.notion.com/p/3aa1a56b88108148bf83e40fc03dad3b?v=3aa1a56b88108190916e000c1bb69a93" target="_blank" rel="noopener noreferrer" class="search-summary-pill" style="background: rgba(245,158,11,0.12); border-color: #f59e0b; color: #fde68a; text-decoration: none;">
-          <i class="fa-solid fa-note-sticky text-amber"></i> Notion 知識庫：<b>已串聯</b> <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px;"></i>
-        </a>
       </div>
     </div>
   `;
