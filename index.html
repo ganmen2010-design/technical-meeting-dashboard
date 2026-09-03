@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=14.0">
+  <link rel="stylesheet" href="style.css?v=15.0">
 </head>
 <body>
   <!-- 背景發光粒子球體 (玻璃擬態質感) -->
@@ -332,7 +332,10 @@
           <div class="search-input-wrapper">
             <i class="fa-solid fa-search search-main-icon"></i>
             <input type="text" id="global-search-input" placeholder="請輸入技術關鍵字 (例如：連續壁、地質改良、FS版、防水、BIM、安全支撐、鋼筋…)">
-            <button type="button" class="btn-clear-search" id="btn-clear-search">&times;</button>
+            <button type="button" class="btn-clear-search" id="btn-clear-search" title="清除關鍵字">&times;</button>
+            <button type="button" class="btn-notion-quick-search" id="btn-search-notion" onclick="searchInNotionDirect()" title="以當前關鍵字開啟 Notion 知識庫進行搜尋">
+              <i class="fa-solid fa-note-sticky text-amber"></i> 在 Notion 搜尋
+            </button>
           </div>
 
           <div class="search-type-chips">
@@ -447,6 +450,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=14.0"></script>
+  <script src="app.js?v=15.0"></script>
 </body>
 </html>

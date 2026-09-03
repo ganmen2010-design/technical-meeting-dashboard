@@ -2242,3 +2242,16 @@ function getFileIcon(ext) {
   if (e.includes("pdf")) return "fa-file-pdf text-rose";
   return "fa-file-lines text-muted";
 }
+
+// 在對話框輸入關鍵字後一鍵進入 Notion 知識庫搜尋
+window.searchInNotionDirect = function() {
+  const input = document.getElementById("global-search-input");
+  const query = input ? input.value.trim() : "";
+  const targetUrl = `https://app.notion.com/p/3aa1a56b88108148bf83e40fc03dad3b?v=3aa1a56b88108190916e000c1bb69a93${query ? `&query=${encodeURIComponent(query)}` : ''}`;
+
+  if (query && navigator.clipboard) {
+    navigator.clipboard.writeText(query).catch(() => {});
+  }
+
+  window.open(targetUrl, "_blank");
+};

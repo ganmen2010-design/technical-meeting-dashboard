@@ -2501,3 +2501,28 @@ h5 { font-size: 17px !important; }
   color: #a5f3fc;
   transform: translateY(-1px);
 }
+
+/* 搜尋框內 Notion 快捷搜尋按鈕 */
+.btn-notion-quick-search {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: #fde68a;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-fast);
+  white-space: nowrap;
+  margin-right: 6px;
+}
+
+.btn-notion-quick-search:hover {
+  background: rgba(245, 158, 11, 0.3);
+  border-color: #f59e0b;
+  color: #fff;
+  transform: translateY(-1px);
+}
