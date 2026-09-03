@@ -1996,11 +1996,11 @@ function performGlobalSearch() {
 
   // 2. Google AI 模式重點敘述與出處引述 (Google AI Overview Synthesis)
   const uniqueSites = Array.from(new Set(allHits.map(h => h.site).filter(Boolean)));
-  const sampleTopics = Array.from(new Set(allHits.map(h => h.title).filter(Boolean))).slice(0, 4);
+  const sampleTopics = Array.from(new Set(allHits.map(h => h.title).filter(Boolean))).slice(0, 5);
   const synthesizedNotes = sampleTopics.length > 0 ? sampleTopics.join("、") : rawQuery;
 
-  // 出處引述膠囊 (Cited Source Pills)
-  const topCitedSources = allHits.slice(0, 6).map(h => {
+  // 出處引述膠囊 (涵蓋所有檢索出之技術來源檔案與議題)
+  const allCitedSources = allHits.map(h => {
     const site = h.site || h.dept;
     const safeFile = h.fileObj ? encodeURIComponent(JSON.stringify(h.fileObj)) : "";
     const safeIssue = h.issueObj ? encodeURIComponent(JSON.stringify(h.issueObj)) : "";
@@ -2013,27 +2013,27 @@ function performGlobalSearch() {
 
   const summaryHtml = `
     <div class="search-summary-card google-ai-card">
-      <div class="search-summary-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <div class="search-summary-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
         <div style="display: flex; align-items: center; gap: 10px;">
-          <i class="fa-solid fa-sparkles text-cyan" style="font-size: 22px;"></i>
-          <span style="font-size: 18px; font-weight: 700; color: #a5f3fc;">Google AI 模式 ‧ 技術重點綜整 (AI Overview)</span>
+          <i class="fa-solid fa-sparkles text-cyan" style="font-size: 24px;"></i>
+          <span style="font-size: 19px; font-weight: 700; color: #a5f3fc;">Google AI 模式 ‧ 技術重點綜整 (AI Overview)</span>
         </div>
         <span class="ai-mode-badge"><i class="fa-solid fa-microchip"></i> 企業技術結晶提純</span>
       </div>
 
       <div class="ai-overview-body">
-        <p style="margin-bottom: 12px; line-height: 1.75; font-size: 16.5px; color: #f1f5f9;">
+        <p style="margin-bottom: 14px; line-height: 1.8; font-size: 17px; color: #f1f5f9;">
           在各工程處技術會議與施工檢討中，針對「<b class="text-cyan">${rawQuery}</b>」，核心技術檢討要點涵蓋 <b>${synthesizedNotes}</b> 等關鍵項目，以確保施工圖面精確度、結構安全與施工進度。系統已自歷次會議與指引中提純出 <b>${allHits.length}</b> 筆技術結晶，主要分佈於 <b>${uniqueSites.join('、')}</b> 等工區。
         </p>
 
-        <div style="padding: 12px 16px; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid rgba(0,242,254,0.18); margin-bottom: 12px;">
-          <div style="font-size: 15px; color: #94a3b8; margin-bottom: 8px; font-weight: 700;">
+        <div style="padding: 14px 18px; background: rgba(0,0,0,0.35); border-radius: 10px; border: 1px solid rgba(0,242,254,0.22); margin-bottom: 14px;">
+          <div style="font-size: 16px; color: #94a3b8; margin-bottom: 10px; font-weight: 700;">
             <i class="fa-solid fa-quote-left text-amber"></i> <b>技術出處引述 (點擊直達檔案/議題)：</b>
           </div>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            ${topCitedSources}
-            <a href="https://ncaio.fengyu.com.tw/f/8988" target="_blank" rel="noopener noreferrer" class="ai-cite-pill" style="border-color: rgba(0,242,254,0.4); background: rgba(0,242,254,0.12); color: #a5f3fc; text-decoration: none;">
-              <i class="fa-solid fa-cloud text-cyan"></i> 豊譽雲端專區 (/f/8988) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px;"></i>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            ${allCitedSources}
+            <a href="https://ncaio.fengyu.com.tw/f/8988" target="_blank" rel="noopener noreferrer" class="ai-cite-pill" style="border-color: rgba(0,242,254,0.45); background: rgba(0,242,254,0.15); color: #a5f3fc; text-decoration: none;">
+              <i class="fa-solid fa-cloud text-cyan"></i> 豊譽雲端專區 (/f/8988) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i>
             </a>
           </div>
         </div>
@@ -2047,42 +2047,8 @@ function performGlobalSearch() {
     </div>
   `;
 
-  // 3. 總結下方改以兩欄顯示 (2-Column Grid)
-  const hitsHtml = allHits.slice(0, 80).map(item => {
-    const safeFile = item.fileObj ? encodeURIComponent(JSON.stringify(item.fileObj)) : "";
-    const safeIssue = item.issueObj ? encodeURIComponent(JSON.stringify(item.issueObj)) : "";
-
-    return `
-      <div class="search-result-item" style="margin-bottom: 0;">
-        <div class="res-type-badge ${item.tagClass}">${item.typeLabel}</div>
-        <div class="res-content">
-          <div class="res-header-info">
-            <span class="res-dept">${item.dept}</span>
-            <span class="res-site">${item.site}</span>
-            <span class="res-date">${formatWesternDate(item.date)}</span>
-          </div>
-          <h4 class="res-title">${highlightKeyword(item.title, rawQuery)}</h4>
-          <p class="res-desc">${highlightKeyword(item.desc, rawQuery)}</p>
-        </div>
-        <div class="res-actions" style="display: flex; gap: 8px; flex-wrap: wrap;">
-          ${item.actionType === "viewIssueFile" ? `
-            <button type="button" class="btn-file-view" style="white-space: nowrap;" onclick="openTechnicalIssueModal('${safeIssue}', '${safeFile}')">
-              <i class="fa-solid fa-file-powerpoint"></i> 檢視/開啟議題檔案
-            </button>
-          ` : (safeFile ? `
-            <button type="button" class="btn-file-view" style="white-space: nowrap;" onclick="openMeetingFileModal('${safeFile}')">
-              <i class="fa-solid fa-eye"></i> 查看檔案
-            </button>
-          ` : '')}
-          <a href="https://ncaio.fengyu.com.tw/f/8988" target="_blank" rel="noopener noreferrer" class="btn-table-action" style="white-space: nowrap; padding: 6px 10px; font-size: 12px;" title="在豊譽企業雲端 (/f/8988) 中存取">
-            <i class="fa-solid fa-cloud text-cyan"></i> 雲端專區 (/f/8988)
-          </a>
-        </div>
-      </div>
-    `;
-  }).join("");
-
-  resultsList.innerHTML = summaryHtml + `<div class="search-results-grid">${hitsHtml}</div>`;
+  // 總結下方刪除兩欄列表，聚焦以純粹 Google AI Overview 綜整與出處引述呈現
+  resultsList.innerHTML = summaryHtml;
 }
 
 // 點擊技術議題直接連結與開啟來源檔案
