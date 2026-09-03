@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=15.0">
+  <link rel="stylesheet" href="style.css?v=16.0">
 </head>
 <body>
   <!-- 背景發光粒子球體 (玻璃擬態質感) -->
@@ -323,15 +323,17 @@
         </div>
       </section>
 
-      <!-- 模組 3：全域資料搜尋 (Global Search) -->
+      <!-- 模組 3：全域資料搜尋 (Global Search - Google AI 對話框一體化) -->
       <section id="tab-search" class="tab-pane hidden">
-        <div class="glass-card search-hero-card">
-          <h2><i class="fa-solid fa-magnifying-glass-chart text-cyan"></i> 全域技術資料與議題搜尋引擎</h2>
-          <p class="search-desc">即時跨 9 大專案作業區、155 筆技術議題庫、專案簡報、技術指引、<a href="https://ncaio.fengyu.com.tw/f/8988" target="_blank" class="text-cyan font-bold" style="text-decoration: underline;"><i class="fa-solid fa-cloud"></i> 豊譽企業雲端 (/f/8988)</a> 與 <a href="https://app.notion.com/p/3aa1a56b88108148bf83e40fc03dad3b?v=3aa1a56b88108190916e000c1bb69a93" target="_blank" class="text-amber font-bold" style="text-decoration: underline;"><i class="fa-solid fa-note-sticky"></i> Notion 知識庫</a> 進行全域檢索與直連存取！</p>
+        <div class="glass-card search-hero-card google-ai-dialog-panel" style="padding: 24px 28px;">
+          <div class="search-dialog-top">
+            <h2><i class="fa-solid fa-sparkles text-cyan"></i> Google AI 企業技術對話與全域搜尋中心</h2>
+            <p class="search-desc">即時跨 9 大專案作業區、155 筆技術議題庫、專案簡報、技術指引、<a href="https://ncaio.fengyu.com.tw/f/8988" target="_blank" class="text-cyan font-bold" style="text-decoration: underline;"><i class="fa-solid fa-cloud"></i> 豊譽企業雲端 (/f/8988)</a> 與 <a href="https://app.notion.com/p/3aa1a56b88108148bf83e40fc03dad3b?v=3aa1a56b88108190916e000c1bb69a93" target="_blank" class="text-amber font-bold" style="text-decoration: underline;"><i class="fa-solid fa-note-sticky"></i> Notion 知識庫</a> 進行即時 AI 對話綜整！</p>
+          </div>
           
           <div class="search-input-wrapper">
             <i class="fa-solid fa-search search-main-icon"></i>
-            <input type="text" id="global-search-input" placeholder="請輸入技術關鍵字 (例如：連續壁、地質改良、FS版、防水、BIM、安全支撐、鋼筋…)">
+            <input type="text" id="global-search-input" placeholder="請輸入技術關鍵字 (例如：模板、連續壁、地質改良、FS版、防水、BIM、安全支撐、鋼筋…)">
             <button type="button" class="btn-clear-search" id="btn-clear-search" title="清除關鍵字">&times;</button>
             <button type="button" class="btn-notion-quick-search" id="btn-search-notion" onclick="searchInNotionDirect()" title="以當前關鍵字開啟 Notion 知識庫進行搜尋">
               <i class="fa-solid fa-note-sticky text-amber"></i> 在 Notion 搜尋
@@ -347,18 +349,12 @@
             <button type="button" class="type-chip" data-type="cloud"><i class="fa-solid fa-cloud text-cyan"></i> 豊譽雲端專區 (/f/8988)</button>
             <button type="button" class="type-chip" data-type="notion"><i class="fa-solid fa-note-sticky text-amber"></i> Notion 知識庫</button>
           </div>
-        </div>
 
-        <!-- 搜尋結果展示區 -->
-        <div class="search-results-container">
-          <div class="results-header">
-            <h4>搜尋結果 (<span id="search-result-count">0</span> 筆)</h4>
-            <span class="results-tip">※ 點擊卡片可直接展開所屬專案作業區與會議紀錄</span>
-          </div>
-          <div class="results-list" id="search-results-list">
-            <div class="search-empty-prompt">
-              <i class="fa-solid fa-keyboard"></i>
-              <p>請於上方搜尋框輸入關鍵字開始查詢</p>
+          <!-- 對話框內直接呈現 AI 模式綜整與出處引述 -->
+          <div class="ai-dialog-response-area" id="search-results-list" style="margin-top: 20px;">
+            <div class="search-empty-prompt" style="padding: 20px 0 10px;">
+              <i class="fa-solid fa-sparkles text-cyan" style="font-size: 28px;"></i>
+              <p style="font-size: 16.5px; color: var(--text-dim); margin-top: 10px;">請於上方輸入框輸入關鍵字，Google AI 即刻在對話框內為您綜整技術重點並引述出處。</p>
             </div>
           </div>
         </div>
@@ -450,6 +446,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=15.0"></script>
+  <script src="app.js?v=16.0"></script>
 </body>
 </html>

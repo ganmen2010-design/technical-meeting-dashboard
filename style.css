@@ -2526,3 +2526,34 @@ h5 { font-size: 17px !important; }
   color: #fff;
   transform: translateY(-1px);
 }
+
+/* 對話框一體化樣式 */
+.google-ai-dialog-panel {
+  border: 1px solid rgba(0, 242, 254, 0.35);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  transition: var(--transition-normal);
+}
+
+.ai-dialog-response-area {
+  width: 100%;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.google-ai-card-inline {
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(0, 242, 254, 0.28);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+.google-ai-card-inline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00f2fe, #4facfe, #a855f7, #ec4899);
+}

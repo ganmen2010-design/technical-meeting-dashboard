@@ -1987,9 +1987,10 @@ function performGlobalSearch() {
 
   if (allHits.length === 0) {
     resultsList.innerHTML = `
-      <div class="search-empty-prompt">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <p>查無符合關鍵字「<b class="text-cyan">${rawQuery}</b>」之相關技術議題或會議文件</p>
+      <div class="google-ai-card-inline" style="padding: 20px; text-align: center;">
+        <i class="fa-solid fa-magnifying-glass text-amber" style="font-size: 26px;"></i>
+        <p style="font-size: 16.5px; color: #f1f5f9; margin-top: 10px;">查無符合關鍵字「<b class="text-cyan">${rawQuery}</b>」之相關技術議題或會議簡報</p>
+        <p style="font-size: 14px; color: var(--text-muted); margin-top: 6px;">您可以嘗試縮短關鍵字，或點擊上方「<a href="javascript:void(0)" onclick="searchInNotionDirect()" class="text-amber font-bold">在 Notion 搜尋</a>」進行更廣泛的筆記查找。</p>
       </div>
     `;
     return;
@@ -2013,7 +2014,7 @@ function performGlobalSearch() {
   }).join("");
 
   const summaryHtml = `
-    <div class="search-summary-card google-ai-card">
+    <div class="google-ai-card-inline">
       <div class="search-summary-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
         <div style="display: flex; align-items: center; gap: 10px;">
           <i class="fa-solid fa-sparkles text-cyan" style="font-size: 24px;"></i>
