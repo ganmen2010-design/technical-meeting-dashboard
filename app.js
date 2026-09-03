@@ -1,3 +1,4 @@
+const NOTION_KNOWLEDGE_URL = "https://app.notion.com/p/3aa1a56b88108148bf83e40fc03dad3b?v=3aa1a56b88108190916e000c1bb69a93";
 function isScheduledItem(it) {
   if (!it || !it.dueDate) return false;
   const s = String(it.dueDate).trim();
@@ -2035,6 +2036,9 @@ function performGlobalSearch() {
             <a href="https://ncaio.fengyu.com.tw/f/8988" target="_blank" rel="noopener noreferrer" class="ai-cite-pill" style="border-color: rgba(0,242,254,0.45); background: rgba(0,242,254,0.15); color: #a5f3fc; text-decoration: none;">
               <i class="fa-solid fa-cloud text-cyan"></i> 豊譽雲端專區 (/f/8988) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i>
             </a>
+            <a href="https://app.notion.com/p/3aa1a56b88108148bf83e40fc03dad3b?v=3aa1a56b88108190916e000c1bb69a93" target="_blank" rel="noopener noreferrer" class="ai-cite-pill" style="border-color: rgba(245,158,11,0.45); background: rgba(245,158,11,0.15); color: #fde68a; text-decoration: none;">
+              <i class="fa-solid fa-note-sticky text-amber"></i> Notion 技術知識庫筆記 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -2043,6 +2047,9 @@ function performGlobalSearch() {
         <span class="search-summary-pill"><i class="fa-solid fa-lightbulb text-amber"></i> 技術議題庫：<b>${issueMatches.length}</b> 筆</span>
         <span class="search-summary-pill"><i class="fa-solid fa-file-powerpoint text-rose"></i> 專案會議簡報：<b>${fileMatches.filter(f => f.type === 'file').length}</b> 份</span>
         <span class="search-summary-pill"><i class="fa-solid fa-book text-cyan"></i> 技術指引與模板：<b>${fileMatches.filter(f => f.type === 'guide').length}</b> 份</span>
+        <a href="https://app.notion.com/p/3aa1a56b88108148bf83e40fc03dad3b?v=3aa1a56b88108190916e000c1bb69a93" target="_blank" rel="noopener noreferrer" class="search-summary-pill" style="background: rgba(245,158,11,0.12); border-color: #f59e0b; color: #fde68a; text-decoration: none;">
+          <i class="fa-solid fa-note-sticky text-amber"></i> Notion 知識庫：<b>已串聯</b> <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px;"></i>
+        </a>
       </div>
     </div>
   `;
@@ -2158,7 +2165,10 @@ window.openMeetingFileModal = function(encodedFile) {
           <i class="fa-solid fa-download"></i> 串流下載此檔案
         </a>
         <a href="https://ncaio.fengyu.com.tw/f/8988" target="_blank" rel="noopener noreferrer" class="btn-table-action" style="padding: 10px 18px; font-size: 14px; background: rgba(0,242,254,0.12); border-color: var(--primary); color: #a5f3fc;">
-          <i class="fa-solid fa-cloud"></i> 豊譽雲端專區 (/f/8988) 開啟
+          <i class="fa-solid fa-cloud"></i> 豊譽雲端專區 (/f/8988)
+        </a>
+        <a href="https://app.notion.com/p/3aa1a56b88108148bf83e40fc03dad3b?v=3aa1a56b88108190916e000c1bb69a93" target="_blank" rel="noopener noreferrer" class="btn-table-action" style="padding: 10px 18px; font-size: 14px; background: rgba(245,158,11,0.12); border-color: #f59e0b; color: #fde68a;">
+          <i class="fa-solid fa-note-sticky"></i> Notion 知識庫開啟
         </a>
       </div>
     `;
