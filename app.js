@@ -950,19 +950,64 @@ window.applyCutoffDate = async function() {
     }
   }
 
-  if (appData && appData.monthlyReportAnalysis && appData.monthlyReportAnalysis.p13_coverage) {
+  // 【核心修復】前端全端即時動態精確重算 P13 統計表格數據 (GitHub Pages 靜態環境無縫支援)
+  if (appData && appData.projects) {
     const parts = dateVal.split("-");
     const mmdd = parts.length >= 3 ? `${parts[1]}/${parts[2]}` : "08/24";
-    const headers = appData.monthlyReportAnalysis.p13_coverage.headers || [];
-    if (headers.length >= 4) {
-      headers[3] = `${mmdd}前預定`;
-    }
+    const headerTitle = `${mmdd}前預定`;
+
+    let totalA = 0;
+    let totalB = 0;
+    let totalDue = 0;
+    let totalC = 0;
+
+    const dynamicRows = (appData.projects || []).map(p => {
+      const normSite = normalizeSiteName(p.shortName);
+      
+      // A: 會議實際議題數
+      const issues = (appData.technicalIssues || []).filter(iss => normalizeSiteName(iss.site) === normSite);
+      const countA = issues.length;
+
+      // B: 待辦追蹤事項數
+      const todos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
+      const countB = todos.length;
+
+      // C: 標註預定 (全案有排定預定產出日期之項目)
+      const rawCtrl = p.controlSheetItems || [];
+      const scheduledItems = rawCtrl.filter(isScheduledItem);
+      const countC = scheduledItems.length;
+
+      // 基準日前預定 (dueDate <= dateVal)
+      const dueItems = scheduledItems.filter(it => it.dueDate && it.dueDate <= dateVal);
+      const countDue = dueItems.length;
+
+      totalA += countA;
+      totalB += countB;
+      totalDue += countDue;
+      totalC += countC;
+
+      return [p.shortName, countA, countB, countDue, countC];
+    });
+
+    // 加入合計列
+    dynamicRows.push(["合計", totalA, totalB, totalDue, totalC]);
+
+    if (!appData.monthlyReportAnalysis) appData.monthlyReportAnalysis = {};
+    appData.monthlyReportAnalysis.p13_coverage = {
+      headers: ["工地名稱", "會議實際議題 (A)", "待辦追蹤事項 (B)", headerTitle, "標註預定 (C)"],
+      rows: dynamicRows,
+      analysis: [
+        `統計基準日：${dateVal}`,
+        `全工區累計待辦追蹤事項共 ${totalB} 筆`,
+        `全工區${headerTitle}管控項目共 ${totalDue} 筆 (全案標註預定共 ${totalC} 筆)`
+      ]
+    };
   }
 
   renderMonthlyReportAnalysis(currentReportView || "coverage");
 
   if (statusEl) {
-    statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald"></i> 已成功更新至基準日：${dateVal}`;
+    statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald"></i> 已成功更新計算至基準日：${dateVal}`;
     statusEl.style.display = "inline-block";
     setTimeout(() => { statusEl.style.display = "none"; }, 4000);
   }
