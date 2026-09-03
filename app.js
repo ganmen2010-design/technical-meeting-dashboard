@@ -55,12 +55,12 @@ const drawerTabs = document.querySelectorAll(".drawer-tab-btn");
 const fileViewerModal = document.getElementById("file-viewer-modal");
 const viewerCloseBtn = document.getElementById("viewer-close-btn");
 
-// 常用工區名稱標準化比對器
+// 常用工區名稱標準化比對器 (完整支援公西檔案庫房、新光合纖等別名匹配)
 function normalizeSiteName(name) {
   if (!name) return "";
   const s = String(name).trim();
-  if (s.includes("新纖") || s.includes("新光合纖")) return "新光合纖南港";
-  if (s.includes("公西")) return "公西檔案庫房";
+  if (s.includes("新纖") || s.includes("新光") || s.includes("南港")) return "新光合纖南港";
+  if (s.includes("公西") || s.includes("庫房") || s.includes("檔案")) return "公西檔案庫房";
   if (s.includes("崇明")) return "台南崇明商場";
   if (s.includes("朴子")) return "朴子安居";
   if (s.includes("坤門")) return "坤門安居";
@@ -1059,7 +1059,35 @@ function renderMonthlyReportAnalysis(viewType) {
       </div>
     `;
   } else if (viewType === "dept") {
-    const p12 = rep.p12_dept_perf || { headers: [], rows: [], analysis: [] };
+    // 【核心動態計算】各工處待辦執行績效與燈號分析 (P12 統計)
+    const deptMap = {};
+    (appData.projects || []).forEach(p => {
+      const d = p.dept || "其他工程處";
+      if (!deptMap[d]) {
+        deptMap[d] = { dept: d, total: 0, completed: 0, pending: 0 };
+      }
+      const norm = normalizeSiteName(p.shortName);
+      const todos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === norm);
+      todos.forEach(t => {
+        if (t.status !== "後續辦理") {
+          deptMap[d].total++;
+          if (t.status === "已完成") deptMap[d].completed++;
+          else deptMap[d].pending++;
+        }
+      });
+    });
+
+    const deptRows = Object.values(deptMap).map(d => {
+      const rateVal = d.total > 0 ? ((d.completed / d.total) * 100).toFixed(1) : 0;
+      let lightPill = `<span class="proj-light-pill light-white">普通</span>`;
+      if (rateVal >= 80) lightPill = `<span class="proj-light-pill light-green">優良</span>`;
+      else if (rateVal >= 65) lightPill = `<span class="proj-light-pill light-yellow">尚可</span>`;
+      else if (rateVal >= 50) lightPill = `<span class="proj-light-pill light-orange">警示</span>`;
+      else lightPill = `<span class="proj-light-pill light-red">落後</span>`;
+
+      return [d.dept, d.total, d.completed, d.pending, `${rateVal}%`, lightPill];
+    });
+
     container.innerHTML = `
       <div class="report-block">
         <div class="report-block-title">
@@ -1070,11 +1098,16 @@ function renderMonthlyReportAnalysis(viewType) {
           <table class="modern-table">
             <thead>
               <tr>
-                ${(p12.headers || []).map(h => `<th>${h}</th>`).join("")}
+                <th style="text-align: center; font-size: 17px;">工程處</th>
+                <th style="text-align: center; font-size: 17px;">待辦總數</th>
+                <th style="text-align: center; font-size: 17px;">已完成</th>
+                <th style="text-align: center; font-size: 17px;">進行中</th>
+                <th style="text-align: center; font-size: 17px;">待辦完成率</th>
+                <th style="text-align: center; font-size: 17px;">健康燈號</th>
               </tr>
             </thead>
             <tbody>
-              ${(p12.rows || []).map(row => `
+              ${deptRows.map(row => `
                 <tr>
                   ${row.map((cell, cIdx) => `
                     <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 17px; vertical-align: middle;">${cell}</td>
@@ -1087,7 +1120,36 @@ function renderMonthlyReportAnalysis(viewType) {
       </div>
     `;
   } else if (viewType === "site") {
-    const p11 = rep.p11_site_perf || { headers: [], rows: [], analysis: [] };
+    // 【核心動態計算】各工地待辦執行績效排名 (P11 統計 - 100% 精準連動待辦追蹤彙整表最新數據)
+    const siteStatsList = (appData.projects || []).map(p => {
+      const norm = normalizeSiteName(p.shortName);
+      const todos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === norm);
+      const total = todos.length;
+      const completed = todos.filter(t => t.status === "已完成").length;
+      const rateVal = total > 0 ? (completed / total) * 100 : 0;
+      const rateStr = `${rateVal.toFixed(1)}%`;
+      const withResult = todos.filter(t => t.status === "已完成" && t.result && t.result.trim() !== "" && t.result.trim() !== "-").length;
+      const uploadStr = completed > 0 ? `${((withResult / completed) * 100).toFixed(1)}%` : "—";
+
+      let lightDot = "⚪";
+      if (rateVal >= 80) lightDot = "🟢";
+      else if (rateVal >= 65) lightDot = "🟡";
+      else if (rateVal >= 50) lightDot = "🟠";
+      else lightDot = "🔴";
+
+      return {
+        siteName: p.shortName,
+        total,
+        completed,
+        rateVal,
+        rateStr: `${rateStr} ${lightDot}`,
+        uploadStr
+      };
+    });
+
+    // 依完成率高至低排序排名
+    siteStatsList.sort((a, b) => b.rateVal - a.rateVal);
+
     container.innerHTML = `
       <div class="report-block">
         <div class="report-block-title">
@@ -1098,15 +1160,23 @@ function renderMonthlyReportAnalysis(viewType) {
           <table class="modern-table">
             <thead>
               <tr>
-                ${(p11.headers || []).map(h => `<th>${h}</th>`).join("")}
+                <th style="width: 70px; text-align: center; font-size: 17px;">排名</th>
+                <th style="text-align: center; font-size: 17px;">工地名稱</th>
+                <th style="text-align: center; font-size: 17px;">待辦總數</th>
+                <th style="text-align: center; font-size: 17px;">已完成</th>
+                <th style="text-align: center; font-size: 17px;">待辦完成率</th>
+                <th style="text-align: center; font-size: 17px;">成果上傳率</th>
               </tr>
             </thead>
             <tbody>
-              ${(p11.rows || []).map(row => `
+              ${siteStatsList.map((s, idx) => `
                 <tr>
-                  ${row.map((cell, cIdx) => `
-                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 17px; vertical-align: middle;">${cell}</td>
-                  `).join("")}
+                  <td style="text-align: center; font-size: 17px; font-weight: 700; color: ${idx < 3 ? '#a5f3fc' : 'var(--text-dim)'};">${idx + 1}</td>
+                  <td class="text-cyan font-bold" style="text-align: center; font-size: 17px;">${s.siteName}</td>
+                  <td style="text-align: center; font-size: 17px;">${s.total}</td>
+                  <td style="text-align: center; font-size: 17px; color: #34d399;">${s.completed}</td>
+                  <td style="text-align: center; font-size: 17px;">${s.rateStr}</td>
+                  <td style="text-align: center; font-size: 17px;">${s.uploadStr}</td>
                 </tr>
               `).join("")}
             </tbody>
