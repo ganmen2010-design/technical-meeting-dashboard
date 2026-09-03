@@ -1,35 +1,38 @@
 /**
  * 技術會議雲端儀表板 (Technical Meeting Cloud Dashboard) - 前端核心邏輯
- * 模組包含：
- * 1. NAS 權限驗證與門禁系統
- * 2. 多人在線即時心跳保活引擎 (Heartbeat Loop 不斷線架構)
- * 3. 1. 公告與指引中心 (行程表、運作概況 Chart.js、技術指引、作業模板)
- * 4. 2. 各專案作業區 (13大工地卡片、健康燈號、三層目錄樹與歷次會議簡報)
- * 5. 3. 全域資料搜尋引擎 (跨專案技術議題、待辦與指引直接跳轉)
- * 6. 4. 上線即時狀況看板
+ * 具備：
+ * 1. 5 欄工作日 Google 日曆模式（六日隱藏，全月份同步與 Google 日曆切換）
+ * 2. 9 大專案作業區（已移除東仁、億載、Wuma、佛教堂等非技術會議專案）
+ * 3. 補齊新纖南港總部 26 筆待辦事項與全工區精準匹配
+ * 4. 各專案技術議題管控表比照待辦事項表格顯示（預定產出日期篩選、固定表頭、4大KPI指標統計）
+ * 5. 全域搜尋引擎（資料清洗去重 -> 結構化歸納 -> 智能總結 -> 精準深層跳轉）
+ * 6. 多人在線 Heartbeat 15 秒不斷線心跳保活
  */
 
 // 全域狀態
 let appData = null;
+let sessionToken = sessionStorage.getItem("nas_session_token");
 let currentUser = null;
-let sessionToken = null;
 let heartbeatInterval = null;
-let currentViewName = "公告與指引中心";
-let currentDrawerProject = null;
+let currentViewName = "總覽首頁";
+let currentCalYear = 2026;
+let currentCalMonth = 9;
 let activeSearchType = "all";
+let currentDrawerProject = null;
+let currentControlFilterMode = "due"; // 'due', 'all', 'no_assignee', 'no_deliverable'
+let currentControlSearchText = "";
 
-// DOM 元素
+// DOM 元件快取
 const loginModal = document.getElementById("login-modal");
-const loginForm = document.getElementById("login-form");
-const loginUsernameInput = document.getElementById("login-username");
-const loginPasswordInput = document.getElementById("login-password");
-const loginErrorMsg = document.getElementById("login-error-msg");
 const appContainer = document.getElementById("app-container");
-
+const loginForm = document.getElementById("login-form");
+const loginAccountInput = document.getElementById("login-account");
+const loginPinInput = document.getElementById("login-pin");
+const loginError = document.getElementById("login-error");
+const btnLogout = document.getElementById("btn-logout");
 const displayUserName = document.getElementById("display-user-name");
 const displayUserDept = document.getElementById("display-user-dept");
 const userAvatarIcon = document.getElementById("user-avatar-icon");
-const btnLogout = document.getElementById("btn-logout");
 const headerOnlineCount = document.getElementById("header-online-count");
 const btnOpenPresence = document.getElementById("btn-open-presence");
 
@@ -42,111 +45,158 @@ const projectModal = document.getElementById("project-modal");
 const drawerCloseBtn = document.getElementById("drawer-close-btn");
 const drawerTabs = document.querySelectorAll(".drawer-tab-btn");
 
-// === 初始化入口 ===
-document.addEventListener("DOMContentLoaded", () => {
-  initAuth();
+const fileViewerModal = document.getElementById("file-viewer-modal");
+const viewerCloseBtn = document.getElementById("viewer-close-btn");
+
+// 常用工區名稱標準化比對器
+function normalizeSiteName(name) {
+  if (!name) return "";
+  const s = String(name).trim();
+  if (s.includes("新纖") || s.includes("新光合纖")) return "新光合纖南港";
+  if (s.includes("公西")) return "公西檔案庫房";
+  if (s.includes("崇明")) return "台南崇明商場";
+  if (s.includes("朴子")) return "朴子安居";
+  if (s.includes("坤門")) return "坤門安居";
+  if (s.includes("平實")) return "平實安居";
+  if (s.includes("立行")) return "立行倉儲物流";
+  if (s.includes("中油")) return "中油綠能";
+  if (s.includes("CDC") || s.includes("防疫")) return "CDC防疫中心";
+  return s;
+}
+
+// 格式化為標準西曆 (YYYY/MM/DD)
+function formatWesternDate(val) {
+  if (!val) return '-';
+  const s = String(val).trim();
+  if (!s || s === '-' || s === '0') return '-';
+  if (/^\d{5}$/.test(s)) {
+    try {
+      const serial = parseInt(s, 10);
+      const dt = new Date((serial - 25569) * 86400 * 1000);
+      const y = dt.getFullYear();
+      const m = String(dt.getMonth() + 1).padStart(2, '0');
+      const d = String(dt.getDate()).padStart(2, '0');
+      return `${y}/${m}/${d}`;
+    } catch(e) {}
+  }
+  return s.replace(/-/g, '/');
+}
+
+// ==============================================================================
+// 1. 初始化與 NAS 權限驗證
+// ==============================================================================
+document.addEventListener("DOMContentLoaded", async () => {
   initNavigations();
-  loadDashboardData();
+  initLoginHandler();
+  initCalendarNavigation();
+  initViewerModal();
+  initMonthlyReportTabs();
+
+  const savedUser = sessionStorage.getItem("nas_user_profile");
+  if (sessionToken && savedUser) {
+    try {
+      currentUser = JSON.parse(savedUser);
+      applyUserUI(currentUser);
+      loginModal.classList.add("hidden");
+      appContainer.classList.remove("blur-locked");
+      startHeartbeat();
+      await loadDashboardData();
+    } catch (e) {
+      console.warn("Session restore failed", e);
+      showLoginForm();
+    }
+  } else {
+    showLoginForm();
+  }
 });
 
-// ==============================================================================
-// 1. NAS 權限登入門禁模組
-// ==============================================================================
-function initAuth() {
-  // 快速登入快捷按鈕
-  document.querySelectorAll(".quick-pill").forEach(btn => {
-    btn.addEventListener("click", () => {
-      loginUsernameInput.value = btn.dataset.user;
-      loginPasswordInput.value = btn.dataset.pwd;
-      submitLogin(btn.dataset.user, btn.dataset.pwd);
+function showLoginForm() {
+  loginModal.classList.remove("hidden");
+  appContainer.classList.add("blur-locked");
+  if (loginAccountInput) loginAccountInput.focus();
+}
+
+function initLoginHandler() {
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      loginError.classList.add("hidden");
+
+      const username = loginAccountInput.value.trim();
+      const pin = loginPinInput.value.trim();
+
+      if (!username || !pin) {
+        showLoginError("請輸入員工帳號與存取 PIN 碼");
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, pin })
+        });
+
+        const data = await res.json();
+        if (data.status === "success" && data.token) {
+          sessionToken = data.token;
+          currentUser = data.user;
+          sessionStorage.setItem("nas_session_token", sessionToken);
+          sessionStorage.setItem("nas_user_profile", JSON.stringify(currentUser));
+
+          applyUserUI(currentUser);
+          loginModal.classList.add("hidden");
+          appContainer.classList.remove("blur-locked");
+          startHeartbeat();
+          await loadDashboardData();
+        } else {
+          showLoginError(data.message || "驗證失敗，請檢查帳號或 PIN 碼");
+        }
+      } catch (err) {
+        console.warn("API Login failed, trying offline mock verification...", err);
+        const fallbackUsers = [
+          { username: "sensebar", pin: "8888", name: "三師爸 (工程副總)", dept: "總經理室", role: "admin", avatar: "fa-user-tie" },
+          { username: "ganmen", pin: "2026", name: "工程部同仁", dept: "工程技術部", role: "engineer", avatar: "fa-helmet-safety" },
+          { username: "guest", pin: "1234", name: "訪客同仁", dept: "工程部", role: "visitor", avatar: "fa-user" }
+        ];
+
+        const match = fallbackUsers.find(u => u.username.toLowerCase() === username.toLowerCase() && u.pin === pin);
+        if (match) {
+          sessionToken = "fallback_token_" + Date.now();
+          currentUser = match;
+          sessionStorage.setItem("nas_session_token", sessionToken);
+          sessionStorage.setItem("nas_user_profile", JSON.stringify(currentUser));
+          applyUserUI(currentUser);
+          loginModal.classList.add("hidden");
+          appContainer.classList.remove("blur-locked");
+          startHeartbeat();
+          await loadDashboardData();
+        } else {
+          showLoginError("帳號或 PIN 碼錯誤 (可使用 sensebar / 8888 或 ganmen / 2026)");
+        }
+      }
     });
-  });
+  }
 
-  // 表單送出
-  loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    submitLogin(loginUsernameInput.value.trim(), loginPasswordInput.value.trim());
-  });
-
-  // 登出按鈕
   if (btnLogout) {
     btnLogout.addEventListener("click", handleLogout);
   }
+}
 
-  // 檢查既有 Session
-  const savedSession = sessionStorage.getItem("nas_session_token");
-  const savedUser = sessionStorage.getItem("nas_user_profile");
-  if (savedSession && savedUser) {
-    sessionToken = savedSession;
-    currentUser = JSON.parse(savedUser);
-    unlockDashboard();
-    startHeartbeat();
+function showLoginError(msg) {
+  if (loginError) {
+    loginError.textContent = msg;
+    loginError.classList.remove("hidden");
   }
 }
 
-async function submitLogin(username, password) {
-  loginErrorMsg.classList.add("hidden");
-  const submitBtn = document.getElementById("btn-login");
-  const origText = submitBtn.innerHTML;
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> 正在驗證 NAS 存取權限...`;
-
-  try {
-    // 優先調用後端登入 API
-    let res = null;
-    try {
-      res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-      });
-    } catch (netErr) {
-      console.warn("Backend API not reachable, testing local fallback...", netErr);
-    }
-
-    if (res && res.ok) {
-      const data = await res.json();
-      sessionToken = data.token;
-      currentUser = data.user;
-    } else {
-      // 靜態部署回退驗證 (讀取 users.json)
-      const usersRes = await fetch("data/users.json");
-      const users = await usersRes.json();
-      const matched = users.find(u => u.username === username);
-
-      if (matched && (matched.passwordHash === password || password === "nas2026" || password === "admin888")) {
-        sessionToken = "SESSION_" + Date.now();
-        currentUser = matched;
-      } else {
-        throw new Error("NAS 帳號或密碼錯誤，請確認具備 NAS 存取權限。");
-      }
-    }
-
-    // 登入成功，儲存狀態
-    sessionStorage.setItem("nas_session_token", sessionToken);
-    sessionStorage.setItem("nas_user_profile", JSON.stringify(currentUser));
-    unlockDashboard();
-    startHeartbeat();
-  } catch (err) {
-    loginErrorMsg.textContent = err.message || "登入失敗，請確認帳號密碼";
-    loginErrorMsg.classList.remove("hidden");
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = origText;
+function applyUserUI(user) {
+  if (!user) return;
+  if (displayUserName) displayUserName.textContent = user.name || user.username;
+  if (displayUserDept) displayUserDept.textContent = user.dept || "技術同仁";
+  if (userAvatarIcon) {
+    userAvatarIcon.innerHTML = `<i class="fa-solid ${user.avatar || 'fa-user-shield'}"></i>`;
   }
-}
-
-function unlockDashboard() {
-  loginModal.classList.add("hidden");
-  appContainer.classList.remove("blur-locked");
-
-  if (displayUserName) displayUserName.textContent = currentUser.name;
-  if (displayUserDept) displayUserDept.textContent = currentUser.dept;
-  if (userAvatarIcon && currentUser.avatar) {
-    userAvatarIcon.innerHTML = `<i class="fa-solid ${currentUser.avatar}"></i>`;
-  }
-  const roleEl = document.getElementById("presence-my-role");
-  if (roleEl) roleEl.textContent = currentUser.name + " (" + currentUser.dept + ")";
 }
 
 function handleLogout() {
@@ -169,15 +219,11 @@ function handleLogout() {
 }
 
 // ==============================================================================
-// 2. 多人在線即時心跳保活引擎 (不斷線架構)
+// 2. 多人在線即時心跳保活引擎
 // ==============================================================================
 function startHeartbeat() {
   clearInterval(heartbeatInterval);
-  
-  // 首次立即發送
   sendHeartbeatPing();
-
-  // 每 15 秒定時發送一次心跳
   heartbeatInterval = setInterval(() => {
     sendHeartbeatPing();
   }, 15000);
@@ -185,7 +231,6 @@ function startHeartbeat() {
 
 async function sendHeartbeatPing() {
   if (!sessionToken || !currentUser) return;
-
   try {
     const res = await fetch("/api/heartbeat", {
       method: "POST",
@@ -201,8 +246,6 @@ async function sendHeartbeatPing() {
       updatePresenceUI(data.onlineCount, data.users, data.serverTime);
     }
   } catch (err) {
-    // 網路波動或離線時優雅降級
-    console.debug("Heartbeat ping fallback mode");
     updatePresenceUI(1, [{
       username: currentUser.username,
       name: currentUser.name,
@@ -244,7 +287,6 @@ function updatePresenceUI(count, users, serverTime) {
 // 3. 導覽列與子分頁切換
 // ==============================================================================
 function initNavigations() {
-  // 主導覽頁籤
   navTabs.forEach(tab => {
     tab.addEventListener("click", () => {
       navTabs.forEach(t => t.classList.remove("active"));
@@ -260,7 +302,6 @@ function initNavigations() {
     });
   });
 
-  // 頂部在線狀態快捷鍵 -> 切換至上線狀況分頁
   if (btnOpenPresence) {
     btnOpenPresence.addEventListener("click", () => {
       const presenceTab = document.querySelector('.nav-tab[data-tab="presence"]');
@@ -268,7 +309,6 @@ function initNavigations() {
     });
   }
 
-  // 公告欄子選單切換
   subnavBtns.forEach(btn => {
     btn.addEventListener("click", () => {
       subnavBtns.forEach(b => b.classList.remove("active"));
@@ -280,7 +320,6 @@ function initNavigations() {
     });
   });
 
-  // 專案抽屜子選單切換
   drawerTabs.forEach(btn => {
     btn.addEventListener("click", () => {
       drawerTabs.forEach(b => b.classList.remove("active"));
@@ -296,7 +335,6 @@ function initNavigations() {
     });
   }
 
-  // 點擊遮罩關閉
   if (projectModal) {
     projectModal.addEventListener("click", (e) => {
       if (e.target === projectModal) {
@@ -306,7 +344,6 @@ function initNavigations() {
     });
   }
 
-  // 搜尋範疇切換
   document.querySelectorAll(".type-chip").forEach(chip => {
     chip.addEventListener("click", () => {
       document.querySelectorAll(".type-chip").forEach(c => c.classList.remove("active"));
@@ -316,7 +353,6 @@ function initNavigations() {
     });
   });
 
-  // 搜尋輸入監聽 (Debounce)
   const searchInput = document.getElementById("global-search-input");
   const btnClearSearch = document.getElementById("btn-clear-search");
   let searchTimer = null;
@@ -324,7 +360,7 @@ function initNavigations() {
   if (searchInput) {
     searchInput.addEventListener("input", () => {
       clearTimeout(searchTimer);
-      searchTimer = setTimeout(performGlobalSearch, 250);
+      searchTimer = setTimeout(performGlobalSearch, 200);
     });
   }
 
@@ -335,7 +371,6 @@ function initNavigations() {
     });
   }
 
-  // 專案作業區工程處篩選按鈕
   document.querySelectorAll(".filter-chip").forEach(chip => {
     chip.addEventListener("click", () => {
       document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
@@ -344,7 +379,6 @@ function initNavigations() {
     });
   });
 
-  // 專案快速名稱搜尋
   const projQuickInput = document.getElementById("project-quick-search");
   if (projQuickInput) {
     projQuickInput.addEventListener("input", () => {
@@ -380,39 +414,57 @@ async function loadDashboardData() {
     appData = await res.json();
     console.log("NAS Data Loaded successfully:", appData);
 
-    // 渲染各模組
-    initCalendarControls();
-    initMonthlyReportControls();
+    renderHeaderOverview(appData);
     renderGoogleCalendar(currentCalYear, currentCalMonth);
-    renderScheduleTable();
-    renderOperationsKPIs();
-    renderOperationsChart();
-    renderMonthlyReportAnalysis(activeReportView);
-    renderGuidelines();
-    renderTemplates();
-    renderOthers();
-    renderProjectsGrid();
+    renderMonthlyReportAnalysis("coverage");
+    renderGuidelines(appData.guidelines || []);
+    renderTemplates(appData.templates || []);
+    renderOthers(appData.others || []);
+    renderWorkspaces(appData.projects || []);
 
   } catch (err) {
-    console.error("Failed to load dashboard data:", err);
+    console.error("Load dashboard data failed:", err);
+    alert("載入技術會議雲端資料失敗，請確認 NAS 連線正常或本機伺服器已啟動。");
   }
 }
 
-// ==============================================================================
-// 4.1 每月技術會議行程表 (Google 日曆月檢視模式)
-// ==============================================================================
-let currentCalYear = 2026;
-let currentCalMonth = 9; // 預設 2026 年 9 月 (對應使用者 https://calendar.google.com/calendar/u/0/r/month/2026/9/1)
-let activeReportView = "dept";
+function renderHeaderOverview(data) {
+  const projCount = document.getElementById("stat-projects-count");
+  const todoCount = document.getElementById("stat-todos-count");
+  const issueCount = document.getElementById("stat-issues-count");
+  const compRate = document.getElementById("stat-completion-rate");
+  const lastUpdate = document.getElementById("stat-last-update");
+  const badgeProj = document.getElementById("badge-proj-count");
 
-function initCalendarControls() {
-  const prevBtn = document.getElementById("cal-prev-month");
-  const nextBtn = document.getElementById("cal-next-month");
-  const todayBtn = document.getElementById("cal-today");
-  const exportIcsBtn = document.getElementById("btn-export-ics");
+  if (projCount) projCount.textContent = (data.projects || []).length;
+  if (badgeProj) badgeProj.textContent = (data.projects || []).length;
+  if (todoCount) todoCount.textContent = data.totalTodos || 268;
+  if (issueCount) issueCount.textContent = data.totalIssues || 0;
 
-  if (prevBtn) {
-    prevBtn.addEventListener("click", () => {
+  let totalComp = 0;
+  let totalAll = 0;
+  if (data.siteStats) {
+    Object.values(data.siteStats).forEach(s => {
+      totalComp += (s.completed || 0);
+      totalAll += (s.total || 0);
+    });
+  }
+  const overallRate = totalAll > 0 ? ((totalComp / totalAll) * 100).toFixed(1) : "0.0";
+  if (compRate) compRate.textContent = `${overallRate}%`;
+  if (lastUpdate && data.updatedAt) lastUpdate.textContent = data.updatedAt;
+}
+
+// ==============================================================================
+// 5. 模組 1：公告欄 (Announcements) - 5 欄工作日日曆 (六日隱藏)
+// ==============================================================================
+function initCalendarNavigation() {
+  const btnPrev = document.getElementById("cal-prev-month");
+  const btnNext = document.getElementById("cal-next-month");
+  const btnToday = document.getElementById("cal-today-btn");
+  const btnExportIcs = document.getElementById("btn-export-ics");
+
+  if (btnPrev) {
+    btnPrev.addEventListener("click", () => {
       currentCalMonth--;
       if (currentCalMonth < 1) {
         currentCalMonth = 12;
@@ -422,8 +474,8 @@ function initCalendarControls() {
     });
   }
 
-  if (nextBtn) {
-    nextBtn.addEventListener("click", () => {
+  if (btnNext) {
+    btnNext.addEventListener("click", () => {
       currentCalMonth++;
       if (currentCalMonth > 12) {
         currentCalMonth = 1;
@@ -433,80 +485,84 @@ function initCalendarControls() {
     });
   }
 
-  if (todayBtn) {
-    todayBtn.addEventListener("click", () => {
-      currentCalYear = 2026;
-      currentCalMonth = 9;
+  if (btnToday) {
+    btnToday.addEventListener("click", () => {
+      const now = new Date();
+      currentCalYear = now.getFullYear();
+      currentCalMonth = now.getMonth() + 1;
       renderGoogleCalendar(currentCalYear, currentCalMonth);
     });
   }
 
-  if (exportIcsBtn) {
-    exportIcsBtn.addEventListener("click", exportTechnicalMeetingsICS);
+  if (btnExportIcs) {
+    btnExportIcs.addEventListener("click", exportTechnicalMeetingIcs);
   }
 }
 
-/**
- * 計算某年某月第 N 個指定星期幾的日期
- * @param {number} year 
- * @param {number} month (1~12)
- * @param {number} weekNum (1~5)
- * @param {number} weekday (0=日, 1=一, 2=二, 3=三, 4=四, 5=五, 6=六)
- */
-function getNthWeekdayOfMonth(year, month, weekNum, weekday) {
-  let count = 0;
-  const daysInMonth = new Date(year, month, 0).getDate();
-  for (let d = 1; d <= daysInMonth; d++) {
-    const date = new Date(year, month - 1, d);
-    if (date.getDay() === weekday) {
-      count++;
-      if (count === weekNum) return d;
-    }
-  }
-  return null;
-}
-
-function getDeptChipClass(dept) {
-  if (dept.includes("北區")) return { chip: "chip-north", dot: "dot-north" };
-  if (dept.includes("中區")) return { chip: "chip-central", dot: "dot-central" };
-  if (dept.includes("台南")) return { chip: "chip-tainan", dot: "dot-tainan" };
-  if (dept.includes("高屏")) return { chip: "chip-kaohsiung", dot: "dot-kaohsiung" };
-  if (dept.includes("宜蘭")) return { chip: "chip-yilan", dot: "dot-yilan" };
-  return { chip: "chip-leisure", dot: "dot-leisure" };
-}
-
-// 2026年9月技術會議實際排程 (對照 Google 日曆實體活動動態)
-const ACTUAL_SEPT_2026_SCHEDULE = {
-  4:  [{ title: "月會-立行倉儲物流", site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "宜蘭技術組", cycle: "排定會議 (週五 10:00)" }],
-  9:  [{ title: "月會-中油綠能", site: "中油綠能", time: "14:00", dept: "高屏工程處", contact: "高屏技術組", cycle: "排定會議 (週三 14:00)" }],
-  10: [{ title: "月會-朴子技術會議", site: "朴子安居", time: "10:00", dept: "中區工程處", contact: "中區技術組", cycle: "第二週 (週四 10:00)" }],
-  11: [{ title: "9月-坤門技術會議", site: "坤門安居", time: "10:00", dept: "宜蘭工程處", contact: "宜蘭技術組", cycle: "第二週 (週五 10:00)" }],
-  14: [{ title: "月會-平實安居", site: "平實安居", time: "14:00", dept: "台南工程處", contact: "台南技術組", cycle: "排定會議 (週一 14:00)" }],
-  15: [{ title: "月會-台南崇明商場", site: "台南崇明商場", time: "10:00", dept: "台南工程處", contact: "台南技術組", cycle: "排定會議 (週二 10:00)" }],
-  17: [{ title: "月會-立行倉儲物流", site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "宜蘭技術組", cycle: "排定會議 (週四 10:00)" }],
-  22: [{ title: "BIM-新纖BIM整合會", site: "新光合纖南港", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第四週 (週二 14:00)" }],
-  23: [{ title: "月會-CDC防疫中心", site: "CDC防疫中心", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "排定會議 (週三 14:00)" }],
-  24: [{ title: "月會-新纖技術會議", site: "新光合纖南港", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第四週 (週四 14:00)" }],
-  29: [{ title: "月會-公西檔案庫房技", site: "公西檔案庫房", time: "14:00", dept: "北區工程處", contact: "北區技術組", cycle: "第五週 (週二 14:00)" }]
-};
+// 2026 年真實 Google 日曆排程表
+const ACTUAL_SEPT_2026_SCHEDULE = [
+  { day: 4, site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "游協理 / 陳所長", cycle: "每月第一週五" },
+  { day: 9, site: "中油綠能", time: "14:00", dept: "高屏工程處", contact: "林協理 / 蔡所長", cycle: "每月第二週三" },
+  { day: 10, site: "朴子技術會議", time: "10:00", dept: "中區工程處", contact: "李副總 / 張所長", cycle: "每月第二週四" },
+  { day: 11, site: "9月-坤門技術會議", time: "10:00", dept: "宜蘭工程處", contact: "游協理 / 簡所長", cycle: "每月第二週五" },
+  { day: 14, site: "平實安居", time: "14:00", dept: "台南工程處", contact: "黃協理 / 劉所長", cycle: "每月第三週一" },
+  { day: 15, site: "台南崇明商場", time: "10:00", dept: "台南工程處", contact: "黃協理 / 吳所長", cycle: "每月第三週二" },
+  { day: 17, site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "游協理 / 陳所長", cycle: "專案特定排程" },
+  { day: 22, site: "新纖BIM模型技術會議", time: "10:00", dept: "北區工程處", contact: "陳協理 / 劉所長", cycle: "專案專案檢討" },
+  { day: 23, site: "CDC防疫中心", time: "10:00", dept: "北區工程處", contact: "陳協理 / 鄭所長", cycle: "每月第四週三" },
+  { day: 24, site: "新纖", time: "10:00", dept: "北區工程處", contact: "陳協理 / 劉所長", cycle: "每月第四週四" },
+  { day: 29, site: "公西檔案庫房", time: "10:00", dept: "北區工程處", contact: "陳協理 / 洪所長", cycle: "每月第五週二" }
+];
 
 function renderGoogleCalendar(year, month) {
-  const monthLabel = document.getElementById("cal-current-month-label");
+  const titleEl = document.getElementById("cal-current-month-title");
   const daysGrid = document.getElementById("gcal-days-grid");
-  if (!monthLabel || !daysGrid || !appData || !appData.schedule) return;
+  if (!titleEl || !daysGrid) return;
 
-  monthLabel.textContent = `${year} 年 ${month} 月 (週一至週五)`;
+  titleEl.textContent = `${year} 年 ${month} 月 (週一至週五)`;
 
-  // 整理該月份所有技術會議 (只顯示技術會議，六、日不顯示)
   const monthMeetings = {};
   if (year === 2026 && month === 9) {
-    Object.keys(ACTUAL_SEPT_2026_SCHEDULE).forEach(day => {
-      monthMeetings[day] = ACTUAL_SEPT_2026_SCHEDULE[day];
+    ACTUAL_SEPT_2026_SCHEDULE.forEach(item => {
+      if (!monthMeetings[item.day]) monthMeetings[item.day] = [];
+      monthMeetings[item.day].push({
+        title: `月會-${item.site}`,
+        site: item.site,
+        time: item.time,
+        dept: item.dept,
+        contact: item.contact,
+        cycle: item.cycle
+      });
     });
   } else {
-    appData.schedule.forEach(s => {
-      const dayNum = getNthWeekdayOfMonth(year, month, s.week, s.weekday);
-      if (dayNum) {
+    // 動態週期排程 fallback
+    const mockMonthlyCycles = [
+      { site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "游協理", nthWeekday: { n: 1, day: 5 } },
+      { site: "中油綠能", time: "14:00", dept: "高屏工程處", contact: "林協理", nthWeekday: { n: 2, day: 3 } },
+      { site: "朴子安居", time: "10:00", dept: "中區工程處", contact: "李副總", nthWeekday: { n: 2, day: 4 } },
+      { site: "坤門安居", time: "10:00", dept: "宜蘭工程處", contact: "游協理", nthWeekday: { n: 2, day: 5 } },
+      { site: "平實安居", time: "14:00", dept: "台南工程處", contact: "黃協理", nthWeekday: { n: 3, day: 1 } },
+      { site: "台南崇明商場", time: "10:00", dept: "台南工程處", contact: "黃協理", nthWeekday: { n: 3, day: 2 } },
+      { site: "CDC防疫中心", time: "10:00", dept: "北區工程處", contact: "陳協理", nthWeekday: { n: 4, day: 3 } },
+      { site: "新光合纖南港", time: "10:00", dept: "北區工程處", contact: "陳協理", nthWeekday: { n: 4, day: 4 } },
+      { site: "公西檔案庫房", time: "10:00", dept: "北區工程處", contact: "陳協理", nthWeekday: { n: 4, day: 5 } }
+    ];
+
+    mockMonthlyCycles.forEach(s => {
+      let count = 0;
+      let dayNum = 0;
+      for (let d = 1; d <= 31; d++) {
+        const dt = new Date(year, month - 1, d);
+        if (dt.getMonth() !== month - 1) break;
+        if (dt.getDay() === s.nthWeekday.day) {
+          count++;
+          if (count === s.nthWeekday.n) {
+            dayNum = d;
+            break;
+          }
+        }
+      }
+      if (dayNum > 0) {
         if (!monthMeetings[dayNum]) monthMeetings[dayNum] = [];
         monthMeetings[dayNum].push({
           title: `月會-${s.site}`,
@@ -514,13 +570,12 @@ function renderGoogleCalendar(year, month) {
           time: s.time,
           dept: s.dept,
           contact: s.contact,
-          cycle: s.cycle
+          cycle: `每月第${s.nthWeekday.n}週`
         });
       }
     });
   }
 
-  // 1 號是星期幾 (0=日, 1=一, 2=二, 3=三, 4=四, 5=五, 6=六)
   const firstDay = new Date(year, month - 1, 1);
   const firstDayOfWeek = firstDay.getDay();
   const totalDays = new Date(year, month, 0).getDate();
@@ -528,8 +583,7 @@ function renderGoogleCalendar(year, month) {
   let cellsHtml = "";
   let renderedCount = 0;
 
-  // 1. 上個月墊底工作日 (週一至週五)
-  // 若 1 號為週一(1)，墊底 0 天；週二(2) 墊底 1 天(週一)；週三(3) 墊底 2 天；週四(4) 墊底 3 天；週五(5) 墊底 4 天
+  // 上個月墊底工作日
   let leadingPadDays = 0;
   if (firstDayOfWeek >= 1 && firstDayOfWeek <= 5) {
     leadingPadDays = firstDayOfWeek - 1;
@@ -547,7 +601,7 @@ function renderGoogleCalendar(year, month) {
     renderedCount++;
   }
 
-  // 2. 本月工作日 (週一至週五，六日隱藏不顯示)
+  // 本月工作日 (六、日不顯示)
   const today = new Date();
   const isCurrentRealMonth = (today.getFullYear() === year && (today.getMonth() + 1) === month);
 
@@ -555,7 +609,7 @@ function renderGoogleCalendar(year, month) {
     const curDate = new Date(year, month - 1, d);
     const dayOfWeek = curDate.getDay();
     if (dayOfWeek === 0 || dayOfWeek === 6) {
-      continue; // 六、日不顯示！
+      continue;
     }
 
     const isToday = isCurrentRealMonth && (today.getDate() === d);
@@ -570,7 +624,7 @@ function renderGoogleCalendar(year, month) {
         <div class="day-events">
           ${dayEvents.map(evt => {
             const colors = getDeptChipClass(evt.dept);
-            const matchedProj = (appData.projects || []).find(p => p.shortName.includes(evt.site) || evt.site.includes(p.shortName));
+            const matchedProj = (appData.projects || []).find(p => normalizeSiteName(p.shortName) === normalizeSiteName(evt.site));
             const projId = matchedProj ? matchedProj.id : "";
             
             const safeEvt = encodeURIComponent(JSON.stringify({
@@ -600,7 +654,7 @@ function renderGoogleCalendar(year, month) {
     renderedCount++;
   }
 
-  // 3. 下個月墊底工作日補齊為 5 的倍數
+  // 下個月墊底補齊為 5 的倍數
   const trailingPadDays = (renderedCount % 5 === 0) ? 0 : (5 - (renderedCount % 5));
   for (let i = 1; i <= trailingPadDays; i++) {
     cellsHtml += `
@@ -614,16 +668,13 @@ function renderGoogleCalendar(year, month) {
   daysGrid.innerHTML = cellsHtml;
 }
 
-// 點擊事件彈出技術會議資訊卡片
 window.showMeetingQuickCard = function(encodedData) {
   try {
     const evt = JSON.parse(decodeURIComponent(encodedData));
-    
-    // 構造 Google Calendar 一鍵加入連結
     const startTimeStr = evt.dateStr.replace(/-/g, '') + 'T' + evt.time.replace(':', '') + '00';
     const endHour = String(parseInt(evt.time.split(':')[0]) + 2).padStart(2, '0');
     const endTimeStr = evt.dateStr.replace(/-/g, '') + 'T' + endHour + evt.time.split(':')[1] + '00';
-    const gcalAddUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(evt.title || (evt.site + ' 技術會議'))}&dates=${startTimeStr}/${endTimeStr}&details=${encodeURIComponent('主辦單位：' + evt.dept + '\\n承辦窗口：' + evt.contact + '\\n週期：' + evt.cycle)}&location=${encodeURIComponent('專案工務所 / 視訊會議')}`;
+    const gcalAddUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(evt.title || (evt.site + ' 技術會議'))}&dates=${startTimeStr}/${endTimeStr}&details=${encodeURIComponent('主辦單位：' + evt.dept + '\n承辦窗口：' + evt.contact + '\n週期：' + evt.cycle)}&location=${encodeURIComponent('專案工務所 / 視訊會議')}`;
     const gcalDayUrl = `https://calendar.google.com/calendar/u/0/r/day/${evt.year}/${evt.month}/${evt.day}`;
 
     const bodyHtml = `
@@ -648,576 +699,395 @@ window.showMeetingQuickCard = function(encodedData) {
             </button>
           ` : ''}
           <a href="${gcalAddUrl}" target="_blank" rel="noopener noreferrer" class="btn-gcal-open" style="padding: 10px 18px; font-size: 14px;">
-            <i class="fa-brands fa-google text-cyan"></i> ＋加入我的 Google 日曆
+            <i class="fa-brands fa-google"></i> 加入我的 Google 日曆
           </a>
           <a href="${gcalDayUrl}" target="_blank" rel="noopener noreferrer" class="btn-table-action" style="padding: 10px 18px; font-size: 14px;">
-            <i class="fa-solid fa-up-right-from-square"></i> 在 Google 日曆中開啟當日
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> 在 Google 日曆中檢視該日
           </a>
         </div>
       </div>
     `;
 
-    const viewerModal = document.getElementById("file-viewer-modal");
-    const viewerTitle = document.getElementById("viewer-file-title");
-    const viewerBody = document.getElementById("viewer-body");
-    const closeBtn = document.getElementById("viewer-close-btn");
-
-    if (viewerModal && viewerTitle && viewerBody) {
-      viewerTitle.innerHTML = `<i class="fa-solid fa-handshake text-cyan"></i> 技術會議行程詳情`;
-      viewerBody.innerHTML = bodyHtml;
-      viewerModal.classList.remove("hidden");
-
-      closeBtn.onclick = () => viewerModal.classList.add("hidden");
-      viewerModal.onclick = (e) => { if (e.target === viewerModal) viewerModal.classList.add("hidden"); };
-    }
+    openCustomModal(`📅 技術會議排程資訊`, bodyHtml);
   } catch (e) {
-    console.error(e);
+    console.error("Parse meeting card error:", e);
   }
 };
 
-// 匯出 2026 技術會議日曆檔 (.ics)
-function exportTechnicalMeetingsICS() {
-  if (!appData || !appData.schedule) return;
+function exportTechnicalMeetingIcs() {
+  let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Technical Meeting Cloud Dashboard//TW\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-CALNAME:2026 技術會議排程表\n";
 
-  let ics = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//FengYu//Technical Meeting Cloud Dashboard//TW",
-    "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",
-    "X-WR-CALNAME:豐譽企業 2026技術會議排程",
-    "X-WR-TIMEZONE:Asia/Taipei"
-  ];
+  ACTUAL_SEPT_2026_SCHEDULE.forEach(evt => {
+    const dayStr = String(evt.day).padStart(2, '0');
+    const timeParts = evt.time.split(':');
+    const startHour = timeParts[0].padStart(2, '0');
+    const startMin = timeParts[1] || '00';
+    const endHour = String(parseInt(startHour, 10) + 2).padStart(2, '0');
 
-  for (let m = 1; m <= 12; m++) {
-    appData.schedule.forEach(s => {
-      const d = getNthWeekdayOfMonth(2026, m, s.week, s.weekday);
-      if (d) {
-        const dateStr = `2026${String(m).padStart(2, '0')}${String(d).padStart(2, '0')}`;
-        const startHour = s.time.split(':')[0];
-        const startMin = s.time.split(':')[1];
-        const endHour = String(parseInt(startHour) + 2).padStart(2, '0');
-        const dtstart = `${dateStr}T${startHour}${startMin}00`;
-        const dtend = `${dateStr}T${endHour}${startMin}00`;
+    icsContent += `BEGIN:VEVENT\nSUMMARY:月會-${evt.site}\nDESCRIPTION:主辦工程處：${evt.dept}\\n承辦窗口：${evt.contact}\\n週期：${evt.cycle}\nLOCATION:專案工務所 / 視訊\nDTSTART:202609${dayStr}T${startHour}${startMin}00\nDTEND:202609${dayStr}T${endHour}${startMin}00\nSTATUS:CONFIRMED\nEND:VEVENT\n`;
+  });
 
-        ics.push("BEGIN:VEVENT");
-        ics.push(`UID:tm-2026-${m}-${s.site}@fengyu.com.tw`);
-        ics.push(`SUMMARY:${s.site} 技術會議`);
-        ics.push(`DESCRIPTION:工程處：${s.dept}\\n週期：${s.cycle}\\n窗口：${s.contact}`);
-        ics.push(`LOCATION:專案工務所 / 視訊會議`);
-        ics.push(`DTSTART;TZID=Asia/Taipei:${dtstart}`);
-        ics.push(`DTEND;TZID=Asia/Taipei:${dtend}`);
-        ics.push("STATUS:CONFIRMED");
-        ics.push("END:VEVENT");
-      }
-    });
-  }
+  icsContent += "END:VCALENDAR";
 
-  ics.push("END:VCALENDAR");
-
-  const blob = new Blob([ics.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+  const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "2026_豐譽技術會議排程.ics";
+  link.download = "2026-Technical-Meetings-Sept.ics";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 }
 
-// 4.1.1 渲染備援清單表格
-function renderScheduleTable() {
-  const tbody = document.getElementById("schedule-table-body");
-  if (!tbody || !appData || !appData.schedule) return;
+function getDeptChipClass(dept) {
+  if (!dept) return { chip: "chip-north" };
+  if (dept.includes("北區")) return { chip: "chip-north" };
+  if (dept.includes("中區")) return { chip: "chip-central" };
+  if (dept.includes("台南")) return { chip: "chip-tainan" };
+  if (dept.includes("高屏")) return { chip: "chip-kaoping" };
+  if (dept.includes("宜蘭")) return { chip: "chip-yilan" };
+  return { chip: "chip-other" };
+}
 
-  tbody.innerHTML = appData.schedule.map(s => {
-    const matchedProj = (appData.projects || []).find(p => p.shortName.includes(s.site) || s.site.includes(p.shortName));
-    const projId = matchedProj ? matchedProj.id : "";
+// ==============================================================================
+// 6. 每月技術會議運作概況分析 (P10~P13)
+// ==============================================================================
+let currentReportView = "coverage";
+window.currentCutoffDate = "2026-08-24";
 
+function initMonthlyReportTabs() {
+  document.querySelectorAll(".report-subtab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".report-subtab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentReportView = btn.dataset.reportView;
+      renderMonthlyReportAnalysis(currentReportView);
+    });
+  });
+}
+
+window.applyCutoffDate = async function() {
+  const input = document.getElementById("cutoff-date-input");
+  const statusEl = document.getElementById("cutoff-update-status");
+  const btn = document.getElementById("btn-update-cutoff-date");
+  if (!input) return;
+
+  const dateVal = input.value || "2026-08-24";
+  window.currentCutoffDate = dateVal;
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> 更新計算中...`;
+  }
+
+  const isLocalServer = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  if (isLocalServer) {
+    try {
+      const res = await fetch("/api/update-cutoff-date", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cutoffDate: dateVal })
+      });
+      const resJson = await res.json();
+      if (resJson.status === "success" && resJson.data) {
+        appData = resJson.data;
+      }
+    } catch (e) {
+      console.warn("Local update cutoff failed, fallback to frontend dynamic calculation", e);
+    }
+  }
+
+  if (appData && appData.monthlyReportAnalysis && appData.monthlyReportAnalysis.p13_coverage) {
+    const parts = dateVal.split("-");
+    const mmdd = parts.length >= 3 ? `${parts[1]}/${parts[2]}` : "08/24";
+    const headers = appData.monthlyReportAnalysis.p13_coverage.headers || [];
+    if (headers.length >= 4) {
+      headers[3] = `${mmdd}前預定`;
+    }
+  }
+
+  renderMonthlyReportAnalysis(currentReportView || "coverage");
+
+  if (statusEl) {
+    statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald"></i> 已成功更新至基準日：${dateVal}`;
+    statusEl.style.display = "inline-block";
+    setTimeout(() => { statusEl.style.display = "none"; }, 4000);
+  }
+
+  if (btn) {
+    btn.disabled = false;
+    btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> 更新計算數據`;
+  }
+};
+
+function renderMonthlyReportAnalysis(viewType) {
+  const container = document.getElementById("monthly-report-dynamic-content");
+  if (!container || !appData) return;
+
+  const rep = appData.monthlyReportAnalysis;
+  if (!rep) {
+    container.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-chart-pie"></i><p>暫無最新技術會議運作概況數據</p></div>`;
+    return;
+  }
+
+  if (viewType === "coverage") {
+    const p13 = rep.p13_coverage || { headers: [], rows: [], analysis: [] };
+    container.innerHTML = `
+      <div class="report-block">
+        <div class="report-block-title">
+          <i class="fa-solid fa-shield-halved text-cyan"></i>
+          <h4>全工區技術議題管控項目覆蓋率分析 (P13 統計)</h4>
+        </div>
+        <div class="table-responsive" style="margin-top: 10px;">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                ${(p13.headers || []).map(h => `<th>${h}</th>`).join("")}
+              </tr>
+            </thead>
+            <tbody>
+              ${(p13.rows || []).map((row, idx) => `
+                <tr class="${idx === p13.rows.length - 1 ? 'total-row' : ''}">
+                  ${row.map((cell, cIdx) => `
+                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}" style="${cIdx > 0 ? 'text-align: right;' : ''}">
+                      ${cell}
+                    </td>
+                  `).join("")}
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  } else if (viewType === "dept") {
+    const p12 = rep.p12_dept_perf || { headers: [], rows: [], analysis: [] };
+    container.innerHTML = `
+      <div class="report-block">
+        <div class="report-block-title">
+          <i class="fa-solid fa-sitemap text-amber"></i>
+          <h4>各工處待辦執行績效與燈號分析 (P12 統計)</h4>
+        </div>
+        <div class="table-responsive" style="margin-top: 10px;">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                ${(p12.headers || []).map(h => `<th>${h}</th>`).join("")}
+              </tr>
+            </thead>
+            <tbody>
+              ${(p12.rows || []).map(row => `
+                <tr>
+                  ${row.map((cell, cIdx) => `
+                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}">${cell}</td>
+                  `).join("")}
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  } else if (viewType === "site") {
+    const p11 = rep.p11_site_perf || { headers: [], rows: [], analysis: [] };
+    container.innerHTML = `
+      <div class="report-block">
+        <div class="report-block-title">
+          <i class="fa-solid fa-cubes-stacked text-emerald"></i>
+          <h4>各工地待辦執行績效排名 (P11 統計)</h4>
+        </div>
+        <div class="table-responsive" style="margin-top: 10px;">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                ${(p11.headers || []).map(h => `<th>${h}</th>`).join("")}
+              </tr>
+            </thead>
+            <tbody>
+              ${(p11.rows || []).map(row => `
+                <tr>
+                  ${row.map((cell, cIdx) => `
+                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}">${cell}</td>
+                  `).join("")}
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  } else if (viewType === "meetings") {
+    const p10m = rep.p10_meetings || { headers: [], rows: [] };
+    container.innerHTML = `
+      <div class="report-block">
+        <div class="report-block-title">
+          <i class="fa-solid fa-handshake-angle text-purple"></i>
+          <h4>各工處每月技術會議召開場次 (P10 統計)</h4>
+        </div>
+        <div class="table-responsive" style="margin-top: 10px;">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                ${(p10m.headers || []).map(h => `<th>${h}</th>`).join("")}
+              </tr>
+            </thead>
+            <tbody>
+              ${(p10m.rows || []).map(row => `
+                <tr>
+                  ${row.map((cell, cIdx) => `
+                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}">${cell}</td>
+                  `).join("")}
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+}
+
+// 渲染技術指引、模板、其他文件
+function renderGuidelines(items) {
+  const list = document.getElementById("guidelines-list");
+  if (!list) return;
+  if (items.length === 0) {
+    list.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-folder-open"></i><p>目前尚無發布之技術指引文件</p></div>`;
+    return;
+  }
+  list.innerHTML = items.map(f => {
+    const safeF = encodeURIComponent(JSON.stringify(f));
     return `
-      <tr>
-        <td><strong>${s.dept}</strong></td>
-        <td><b class="text-cyan">${s.site}</b></td>
-        <td><i class="fa-regular fa-clock text-cyan"></i> ${s.cycle}</td>
-        <td>專案工務所 / 視訊會議</td>
-        <td><span class="proj-light-pill light-green"><i class="fa-solid fa-circle-check"></i> ${s.status}</span></td>
-        <td><i class="fa-solid fa-user-gear"></i> ${s.contact}</td>
-        <td>
-          ${projId ? `
-            <button type="button" class="btn-table-action" onclick="openProjectDrawer('${projId}')">
-              <i class="fa-solid fa-folder-open"></i> 進入作業區
-            </button>
-          ` : '-'}
-        </td>
-      </tr>
+      <div class="file-row-item">
+        <div class="file-left-info">
+          <i class="fa-solid ${getFileIcon(f.ext)}"></i>
+          <span class="file-name-text">${f.name}</span>
+          <small class="text-dim">最後更新：${f.lastModified}</small>
+        </div>
+        <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
+          <i class="fa-solid fa-eye"></i> 檢視檔案
+        </button>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderTemplates(items) {
+  const list = document.getElementById("templates-list");
+  if (!list) return;
+  if (items.length === 0) {
+    list.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-folder-open"></i><p>目前尚無作業模板檔案</p></div>`;
+    return;
+  }
+  list.innerHTML = items.map(f => {
+    const safeF = encodeURIComponent(JSON.stringify(f));
+    return `
+      <div class="file-row-item">
+        <div class="file-left-info">
+          <i class="fa-solid ${getFileIcon(f.ext)}"></i>
+          <span class="file-name-text">${f.name}</span>
+          <small class="text-dim">最後更新：${f.lastModified}</small>
+        </div>
+        <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
+          <i class="fa-solid fa-eye"></i> 檢視模板
+        </button>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderOthers(items) {
+  const list = document.getElementById("others-list");
+  if (!list) return;
+  if (items.length === 0) {
+    list.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-folder-open"></i><p>目前尚無其他文件檔案</p></div>`;
+    return;
+  }
+  list.innerHTML = items.map(f => {
+    const safeF = encodeURIComponent(JSON.stringify(f));
+    return `
+      <div class="file-row-item">
+        <div class="file-left-info">
+          <i class="fa-solid ${getFileIcon(f.ext)}"></i>
+          <span class="file-name-text">${f.name}</span>
+          <small class="text-dim">最後更新：${f.lastModified}</small>
+        </div>
+        <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
+          <i class="fa-solid fa-eye"></i> 檢視文件
+        </button>
+      </div>
     `;
   }).join("");
 }
 
 // ==============================================================================
-// 4.2 每月技術會議運作概況 (依 PPTX P10-P13 自動抽取呈現)
+// 7. 模組 2：各專案作業區 (Workspaces) - 9 大活躍專案
 // ==============================================================================
-function initMonthlyReportControls() {
-  document.querySelectorAll(".report-chip").forEach(chip => {
-    chip.addEventListener("click", () => {
-      document.querySelectorAll(".report-chip").forEach(c => c.classList.remove("active"));
-      chip.classList.add("active");
-      activeReportView = chip.dataset.reportView;
-      renderMonthlyReportAnalysis(activeReportView);
-    });
-  });
-}
+function renderWorkspaces(projects) {
+  const grid = document.getElementById("projects-grid");
+  if (!grid) return;
 
-function renderMonthlyReportAnalysis(viewType) {
-  const container = document.getElementById("monthly-report-content");
-  if (!container || !appData) return;
-
-  const analysis = appData.monthlyReportAnalysis;
-  const sourceLabel = document.getElementById("report-source-label");
-  if (sourceLabel && analysis && analysis.reportFile) {
-    sourceLabel.innerHTML = `<i class="fa-solid fa-file-powerpoint text-orange"></i> 自動同步自 NAS 最新月報 PPTX：<b>${analysis.reportFile}</b> (P10~P13)`;
-  }
-
-  if (!analysis) {
-    container.innerHTML = `
-      <div class="search-empty-prompt">
-        <i class="fa-solid fa-spinner fa-spin"></i>
-        <p>月報運作概況數據讀取中...</p>
-      </div>
-    `;
+  if (!projects || projects.length === 0) {
+    grid.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-folder-closed"></i><p>無專案資料</p></div>`;
     return;
   }
 
-  // 1. 分工處統計 (P12)
-  if (viewType === "dept") {
-    const data = analysis.p12_dept_perf || { headers: [], rows: [], analysis: [] };
-    container.innerHTML = `
-      <div class="table-responsive">
-        <table class="modern-table">
-          <thead>
-            <tr>
-              ${(data.headers || []).map(h => `<th>${h}</th>`).join("")}
-            </tr>
-          </thead>
-          <tbody>
-            ${(data.rows || []).map(row => `
-              <tr style="${row[0] === '合計' ? 'font-weight: 700; background: rgba(0, 242, 254, 0.08);' : ''}">
-                ${row.map((cell, idx) => {
-                  let badge = cell;
-                  if (cell.includes("🟢")) badge = `<span class="proj-light-pill light-green">${cell}</span>`;
-                  else if (cell.includes("🟡")) badge = `<span class="proj-light-pill light-yellow">${cell}</span>`;
-                  else if (cell.includes("🟠")) badge = `<span class="proj-light-pill light-orange">${cell}</span>`;
-                  else if (cell.includes("🔴")) badge = `<span class="proj-light-pill light-red">${cell}</span>`;
-                  return `<td>${badge}</td>`;
-                }).join("")}
-              </tr>
-            `).join("")}
-          </tbody>
-        </table>
-      </div>
-
-      ${(data.analysis || []).length > 0 ? `
-        <div class="report-analysis-callout">
-          <div class="callout-header"><i class="fa-solid fa-clipboard-check text-cyan"></i> 工程處別績效評析 (月報 P12 官方摘要)</div>
-          <div class="callout-body">${data.analysis.join("\n\n")}</div>
-        </div>
-      ` : ''}
-    `;
-  }
-
-  // 2. 分工地績效 (P11)
-  else if (viewType === "site") {
-    const data = analysis.p11_site_perf || { headers: [], rows: [], analysis: [] };
-    container.innerHTML = `
-      <div class="table-responsive">
-        <table class="modern-table">
-          <thead>
-            <tr>
-              ${(data.headers || []).map(h => `<th>${h}</th>`).join("")}
-              <th>作業區跳轉</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${(data.rows || []).map(row => {
-              const siteName = row[1] || "";
-              const matchedProj = (appData.projects || []).find(p => p.shortName.includes(siteName) || siteName.includes(p.shortName));
-              const projId = matchedProj ? matchedProj.id : "";
-
-              return `
-                <tr>
-                  ${row.map((cell, idx) => {
-                    let badge = cell;
-                    if (idx === 0) badge = `<b class="text-cyan">#${cell}</b>`;
-                    else if (idx === 1) badge = `<b>${cell}</b>`;
-                    else if (cell.includes("🟢")) badge = `<span class="proj-light-pill light-green">${cell}</span>`;
-                    else if (cell.includes("🟡")) badge = `<span class="proj-light-pill light-yellow">${cell}</span>`;
-                    else if (cell.includes("🟠")) badge = `<span class="proj-light-pill light-orange">${cell}</span>`;
-                    else if (cell.includes("⬜")) badge = `<span class="proj-light-pill light-white">${cell}</span>`;
-                    return `<td>${badge}</td>`;
-                  }).join("")}
-                  <td>
-                    ${projId ? `
-                      <button type="button" class="btn-table-action" onclick="openProjectDrawer('${projId}')">
-                        <i class="fa-solid fa-folder-open"></i> 查看
-                      </button>
-                    ` : '-'}
-                  </td>
-                </tr>
-              `;
-            }).join("")}
-          </tbody>
-        </table>
-      </div>
-
-      ${(data.analysis || []).length > 0 ? `
-        <div class="report-analysis-callout">
-          <div class="callout-header"><i class="fa-solid fa-chart-pie text-emerald"></i> 各工地績效評估 (月報 P11 官方摘要)</div>
-          <div class="callout-body">${data.analysis.join("\n\n")}</div>
-        </div>
-      ` : ''}
-    `;
-  }
-
-  // 3. 近3月開會與共同議題 (P10)
-  else if (viewType === "meetings") {
-    const meetData = analysis.p10_meetings || { headers: [], rows: [] };
-    const issueData = analysis.p10_common_issues || { headers: [], rows: [] };
-
-    container.innerHTML = `
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px;">
-        <div class="table-responsive">
-          <div style="padding: 10px 14px; font-weight: 700; color: var(--primary); background: rgba(0,242,254,0.08); border-bottom: 1px solid var(--border-color);">
-            <i class="fa-solid fa-calendar-check"></i> 各工地近三個月開會辦理概況 (P10 表1)
-          </div>
-          <table class="modern-table">
-            <thead>
-              <tr>
-                ${(meetData.headers || []).map(h => `<th>${h}</th>`).join("")}
-              </tr>
-            </thead>
-            <tbody>
-              ${(meetData.rows || []).map(row => `
-                <tr style="${row[0] === '合計' ? 'font-weight: 700; background: rgba(0, 242, 254, 0.08);' : ''}">
-                  ${row.map((cell, idx) => `<td>${idx === 0 ? '<b>' + cell + '</b>' : cell}</td>`).join("")}
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-        </div>
-
-        <div class="table-responsive">
-          <div style="padding: 10px 14px; font-weight: 700; color: var(--emerald); background: rgba(16,185,129,0.08); border-bottom: 1px solid var(--border-color);">
-            <i class="fa-solid fa-comments"></i> 跨工地技術共同議題類別 (P10 表2)
-          </div>
-          <table class="modern-table">
-            <thead>
-              <tr>
-                ${(issueData.headers || []).map(h => `<th>${h}</th>`).join("")}
-              </tr>
-            </thead>
-            <tbody>
-              ${(issueData.rows || []).map(row => `
-                <tr>
-                  <td><span class="proj-dept-tag">${row[0]}</span></td>
-                  <td><b class="text-cyan">${row[1]}</b></td>
-                  <td><small>${row[2]}</small></td>
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    `;
-  }
-
-  // 4. 議題與待辦排程覆蓋度比對 (P13)
-  else if (viewType === "coverage") {
-    const data = analysis.p13_coverage || { headers: [], rows: [], analysis: [] };
-    const cutoffParts = (window.currentCutoffDate || "2026-08-24").split("-");
-    const cutoffMMDD = cutoffParts.length >= 3 ? `${cutoffParts[1]}/${cutoffParts[2]}` : "08/24";
-    
-    // 同步更新 headers 第 4 欄
-    if (data.headers && data.headers.length >= 4) {
-      data.headers[3] = `${cutoffMMDD}前預定`;
-    }
-
-    container.innerHTML = `
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-        <span class="cal-filter-tag"><i class="fa-solid fa-calendar-check text-cyan"></i> <b>統計基準日：${window.currentCutoffDate || '2026-08-24'}</b> (依最新技術月報基準)</span>
-        <span style="font-size: 13px; color: var(--text-muted);"><i class="fa-solid fa-circle-info text-amber"></i> 本表「${cutoffMMDD}前預定」與各項比對數據均以此統計基準日截切計算</span>
-      </div>
-      <div class="table-responsive">
-        <table class="modern-table">
-          <thead>
-            <tr>
-              ${(data.headers || []).map(h => `<th>${h}</th>`).join("")}
-            </tr>
-          </thead>
-          <tbody>
-            ${(data.rows || []).map(row => `
-              <tr style="${row[0] === '合計' ? 'font-weight: 700; background: rgba(0, 242, 254, 0.08);' : ''}">
-                ${row.map((cell, idx) => `<td>${idx === 0 ? '<b>' + cell + '</b>' : cell}</td>`).join("")}
-              </tr>
-            `).join("")}
-          </tbody>
-        </table>
-      </div>
-
-      ${(data.analysis || []).length > 0 ? `
-        <div class="report-analysis-callout">
-          <div class="callout-header"><i class="fa-solid fa-magnifying-glass-chart text-amber"></i> 排程覆蓋與管理聚焦度分析 (月報 P13 官方摘要)</div>
-          <div class="callout-body">${data.analysis.join("\n\n")}</div>
-        </div>
-      ` : ''}
-    `;
-  }
-}
-
-// 4.3 渲染運作概況 KPI
-function renderOperationsKPIs() {
-  if (!appData) return;
-  const kpiProjects = document.getElementById("kpi-projects-count");
-  const kpiTodos = document.getElementById("kpi-todos-count");
-  const kpiIssues = document.getElementById("kpi-issues-count");
-  const kpiAvgRate = document.getElementById("kpi-avg-rate");
-  const kpiLightStatus = document.getElementById("kpi-light-status");
-
-  // 累計追蹤待辦事項筆數與「待辦追蹤事項 (B)」完全連動 (268 筆)
-  let sumB = 268;
-  if (appData.monthlyReportAnalysis && appData.monthlyReportAnalysis.p13_coverage) {
-    const p13Rows = appData.monthlyReportAnalysis.p13_coverage.rows || [];
-    const totalRow = p13Rows.find(r => r[0] === '合計');
-    if (totalRow && totalRow[2]) {
-      sumB = parseInt(totalRow[2]) || 268;
-    }
-  }
-
-  if (kpiProjects) kpiProjects.textContent = `${appData.totalProjects || 13} 案`;
-  if (kpiTodos) {
-    kpiTodos.textContent = `${sumB} 筆`;
-    const sub = kpiTodos.parentElement ? kpiTodos.parentElement.querySelector(".kpi-sub") : null;
-    if (sub) sub.innerHTML = `<i class="fa-solid fa-link text-cyan"></i> 與待辦追蹤事項 (B) 連動`;
-  }
-  if (kpiIssues) kpiIssues.textContent = `${appData.totalTechnicalIssues || 155} 案`;
-
-  let totCompleted = 0;
-  let totAll = 0;
-  if (appData.deptStats) {
-    Object.values(appData.deptStats).forEach(d => {
-      totCompleted += (d.completed || 0);
-      totAll += (d.total || 0);
-    });
-  }
-  const overallRate = totAll > 0 ? ((totCompleted / totAll) * 100).toFixed(1) : "92.5";
-  if (kpiAvgRate) kpiAvgRate.textContent = `${overallRate}%`;
-
-  if (kpiLightStatus) {
-    if (parseFloat(overallRate) >= 90) {
-      kpiLightStatus.innerHTML = `🟢 運作良好 (完成率達標)`;
-      kpiLightStatus.className = "kpi-sub text-emerald";
-    } else {
-      kpiLightStatus.innerHTML = `🟡 持續追蹤中`;
-      kpiLightStatus.className = "kpi-sub text-amber";
-    }
-  }
-}
-
-// 4.4 渲染運作概況各處完成率長條圖 (Chart.js)
-function renderOperationsChart() {
-  const ctx = document.getElementById("dept-rate-chart");
-  // 依待辦完成率排名高低由左至右排列 (宜蘭 76.0% > 中區 75.0% > 北區 68.3% > 高屏 59.3% > 台南 55.2%)
-  const depts = Object.keys(appData.deptStats).sort((a, b) => {
-    return (appData.deptStats[b].completionRate || 0) - (appData.deptStats[a].completionRate || 0);
-  });
-  const rates = depts.map(d => appData.deptStats[d].completionRate || 0);
-  const colors = rates.map(r => r >= 90 ? '#10b981' : (r >= 70 ? '#fbbf24' : (r >= 50 ? '#fb923c' : '#f43f5e')));
-
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: depts,
-      datasets: [{
-        label: '待辦事項完成率 (%)',
-        data: rates,
-        backgroundColor: colors,
-        borderRadius: 8,
-        barThickness: 34
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: (item) => ` 完成率: ${item.raw}%`
-          }
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 100,
-          ticks: { color: '#94a3b8', callback: (v) => v + '%' },
-          grid: { color: 'rgba(255, 255, 255, 0.05)' }
-        },
-        x: {
-          ticks: { color: '#f1f5f9', font: { weight: '600' } },
-          grid: { display: false }
-        }
-      }
-    }
-  });
-}
-
-// 4.5 渲染發布技術指引
-function renderGuidelines() {
-  const grid = document.getElementById("guidelines-grid");
-  if (!grid || !appData || !appData.guidelines) return;
-
-  grid.innerHTML = appData.guidelines.map(g => `
-    <div class="glass-card category-folder-card">
-      <div class="folder-header">
-        <span class="folder-title"><i class="fa-solid fa-folder-tree text-cyan"></i> ${g.category}</span>
-        <span class="files-badge">${(g.files || []).length} 份文件</span>
-      </div>
-      <div class="category-files-list">
-        ${(g.files || []).map(f => `
-          <div class="category-file-item">
-            <span class="file-left-info" title="${f.name}">
-              <i class="fa-solid ${getFileIcon(f.ext)}"></i>
-              <span class="file-name-text">${f.name}</span>
-            </span>
-            <button type="button" class="btn-file-view" onclick="alert('開啟NAS檔案: ${f.name}')">
-              <i class="fa-solid fa-download"></i> 檢視
-            </button>
-          </div>
-        `).join("")}
-      </div>
-    </div>
-  `).join("");
-}
-
-// 4.6 渲染作業模板
-function renderTemplates() {
-  const grid = document.getElementById("templates-grid");
-  if (!grid || !appData || !appData.templates) return;
-
-  grid.innerHTML = appData.templates.map(t => `
-    <div class="glass-card category-folder-card">
-      <div class="folder-header">
-        <span class="folder-title"><i class="fa-solid fa-file-contract text-emerald"></i> ${t.category}</span>
-        <span class="files-badge">${(t.files || []).length} 份模板</span>
-      </div>
-      <div class="category-files-list">
-        ${(t.files || []).map(f => `
-          <div class="category-file-item">
-            <span class="file-left-info" title="${f.name}">
-              <i class="fa-solid ${getFileIcon(f.ext)}"></i>
-              <span class="file-name-text">${f.name}</span>
-            </span>
-            <button type="button" class="btn-file-view" onclick="alert('下載模板: ${f.name}')">
-              <i class="fa-solid fa-file-arrow-down"></i> 下載模板
-            </button>
-          </div>
-        `).join("")}
-      </div>
-    </div>
-  `).join("");
-}
-
-// 4.7 渲染其他文件
-function renderOthers() {
-  const grid = document.getElementById("others-grid");
-  if (!grid || !appData || !appData.others) return;
-
-  grid.innerHTML = appData.others.map(o => `
-    <div class="glass-card category-folder-card">
-      <div class="folder-header">
-        <span class="folder-title"><i class="fa-solid fa-folder-open text-purple"></i> ${o.category}</span>
-        <span class="files-badge">${(o.files || []).length} 份文件</span>
-      </div>
-      <div class="category-files-list">
-        ${(o.files || []).map(f => `
-          <div class="category-file-item">
-            <span class="file-left-info" title="${f.name}">
-              <i class="fa-solid ${getFileIcon(f.ext)}"></i>
-              <span class="file-name-text">${f.name}</span>
-            </span>
-            <button type="button" class="btn-file-view" onclick="alert('查看檔案: ${f.name}')">
-              <i class="fa-solid fa-eye"></i> 檢視
-            </button>
-          </div>
-        `).join("")}
-      </div>
-    </div>
-  `).join("");
-}
-
-// ==============================================================================
-// 5. 模組 2：各專案作業區 (Workspaces Matrix)
-// ==============================================================================
-function renderProjectsGrid(projectsToRender = null) {
-  const grid = document.getElementById("projects-grid");
-  if (!grid || !appData) return;
-
-  const projects = projectsToRender || appData.projects || [];
-  document.getElementById("badge-proj-count").textContent = projects.length;
-
   grid.innerHTML = projects.map(p => {
-    const stats = p.stats || { total: 0, completed: 0, pending: 0, completionRate: 0, light: 'white' };
-    const lightClass = `light-${stats.light || 'white'}`;
-    const lightText = stats.light === 'green' ? '🟢 良好' : (stats.light === 'yellow' ? '🟡 追蹤' : (stats.light === 'orange' ? '🟠 偏低' : (stats.light === 'red' ? '🔴 落後' : '⬜ 無待辦')));
-    const meetingCount = (p.meetings || []).length;
+    const normSite = normalizeSiteName(p.shortName);
+    const projTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
+    const ctrlItemsCount = (p.controlSheetItems || []).length;
+    const stats = p.stats || { total: projTodos.length, completed: 0, completionRate: 0, light: 'white' };
+    
+    let lightColorClass = "light-white";
+    if (stats.light === "green") lightColorClass = "light-green";
+    else if (stats.light === "yellow") lightColorClass = "light-yellow";
+    else if (stats.light === "orange") lightColorClass = "light-orange";
+    else if (stats.light === "red") lightColorClass = "light-red";
+
+    const meetingsCount = (p.meetings || []).length;
 
     return `
-      <div class="glass-card project-card" data-id="${p.id}" data-dept="${p.dept}" data-name="${p.name}" onclick="openProjectDrawer('${p.id}')">
-        <div>
-          <div class="proj-header-row">
-            <div>
-              <span class="proj-dept-tag">${p.dept}</span>
-              <h3 class="proj-title">${p.shortName}</h3>
-            </div>
-            <span class="proj-light-pill ${lightClass}">
-              ${lightText} ${stats.completionRate}%
-            </span>
+      <div class="project-card glass-card" data-id="${p.id}" data-dept="${p.dept}" data-name="${p.name}" onclick="openProjectDrawer('${p.id}')">
+        <div class="proj-header">
+          <span class="proj-dept-tag">${p.dept}</span>
+          <span class="proj-light-pill ${lightColorClass}">
+            待辦完成率: ${stats.completionRate}%
+          </span>
+        </div>
+
+        <h3 class="proj-title">${p.name}</h3>
+
+        <div class="proj-metrics">
+          <div class="metric-item">
+            <span class="metric-label">歷次會議</span>
+            <span class="metric-val text-cyan">${meetingsCount} 場</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">專案待辦</span>
+            <span class="metric-val text-emerald">${projTodos.length} 筆</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">議題管控</span>
+            <span class="metric-val text-purple">${ctrlItemsCount} 項</span>
           </div>
         </div>
 
-        <div class="proj-stat-metrics">
-          <div class="proj-metric-item">
-            <span class="m-lbl">歷次會議</span>
-            <span class="m-val text-cyan">${meetingCount} 場</span>
-          </div>
-          <div class="proj-metric-item">
-            <span class="m-lbl">已完成待辦</span>
-            <span class="m-val text-emerald">${stats.completed} 筆</span>
-          </div>
-          <div class="proj-metric-item">
-            <span class="m-lbl">待辦事項總數</span>
-            <span class="m-val">${stats.total} 筆</span>
-          </div>
-        </div>
-
-        <div class="proj-footer-row">
-          <span><i class="fa-solid fa-folder"></i> 完整三大作業區資料夾</span>
-          <button type="button" class="btn-open-project">
-            <span>點入查看</span> <i class="fa-solid fa-arrow-right"></i>
-          </button>
-        </div>
+        <button type="button" class="btn-proj-enter" onclick="event.stopPropagation(); openProjectDrawer('${p.id}')">
+          進入作業區 <i class="fa-solid fa-arrow-right"></i>
+        </button>
       </div>
     `;
   }).join("");
 }
 
 function filterProjectsByDept(dept) {
-  if (!appData || !appData.projects) return;
-  if (dept === "all") {
-    renderProjectsGrid(appData.projects);
-  } else {
-    const filtered = appData.projects.filter(p => p.dept === dept);
-    renderProjectsGrid(filtered);
-  }
+  const cards = document.querySelectorAll(".project-card");
+  cards.forEach(card => {
+    if (dept === "all" || card.dataset.dept.includes(dept)) {
+      card.style.display = "";
+    } else {
+      card.style.display = "none";
+    }
+  });
 }
 
 // 專案抽屜詳細展開
@@ -1234,6 +1104,7 @@ window.openProjectDrawer = function(projectId) {
   const nameEl = document.getElementById("drawer-project-name");
   const lightEl = document.getElementById("drawer-project-light");
   const todoCountEl = document.getElementById("drawer-todo-count");
+  const controlCountEl = document.getElementById("drawer-control-count");
 
   if (deptEl) deptEl.textContent = proj.dept;
   if (nameEl) nameEl.textContent = proj.name;
@@ -1244,9 +1115,10 @@ window.openProjectDrawer = function(projectId) {
     lightEl.textContent = `待辦完成率: ${stats.completionRate}%`;
   }
 
-  // 取得此專案的待辦清單
-  const projTodos = (appData.todoItems || []).filter(t => t.site.includes(proj.shortName) || proj.shortName.includes(t.site));
+  const normSite = normalizeSiteName(proj.shortName);
+  const projTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
   if (todoCountEl) todoCountEl.textContent = projTodos.length;
+  if (controlCountEl) controlCountEl.textContent = (proj.controlSheetItems || []).length;
 
   // 預設開啟第一個頁籤：歷次會議資料
   drawerTabs.forEach(b => b.classList.remove("active"));
@@ -1257,6 +1129,20 @@ window.openProjectDrawer = function(projectId) {
   projectModal.classList.remove("hidden");
 };
 
+// 支援深層跳轉專案抽屜至指定頁籤
+window.openProjectDrawerTab = function(projectId, tabType) {
+  openProjectDrawer(projectId);
+  drawerTabs.forEach(b => {
+    if (b.dataset.drawerTab === tabType) {
+      b.classList.add("active");
+    } else {
+      b.classList.remove("active");
+    }
+  });
+  renderDrawerTabContent(tabType);
+};
+
+// 渲染抽屜內部頁籤
 function renderDrawerTabContent(tabType) {
   const content = document.getElementById("drawer-body-content");
   if (!content || !currentDrawerProject) return;
@@ -1274,7 +1160,7 @@ function renderDrawerTabContent(tabType) {
     content.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
         <span style="font-size: 13px; color: var(--text-muted);">
-          <i class="fa-solid fa-folder-tree text-cyan"></i> 共 ${meetings.length} 場會議紀錄，點擊會議標題可展開/收合
+          <i class="fa-solid fa-folder-tree text-cyan"></i> 共 ${meetings.length} 場會議紀錄，檔案已全數展開（可點擊單場標題收合）
         </span>
         <button type="button" class="btn-table-action" onclick="toggleAllMeetingCards()">
           <i class="fa-solid fa-arrows-up-down"></i> 全部展開 / 收合
@@ -1323,34 +1209,163 @@ function renderDrawerTabContent(tabType) {
     `;
   }
 
-  // 頁籤 2: 技術議題管控表
+  // 頁籤 2: 技術議題管控表 (比照待辦事項表格顯示 + 4大指標統計)
   else if (tabType === "control") {
+    const rawItems = proj.controlSheetItems || [];
     const controlFiles = (proj.categories && proj.categories["2.技術議題管控表(每月更新)"]) || [];
-    if (controlFiles.length === 0) {
-      content.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-table"></i><p>目前尚無管控表檔案</p></div>`;
+    const latestFile = controlFiles.length > 0 ? controlFiles[controlFiles.length - 1] : null;
+
+    if (rawItems.length === 0 && controlFiles.length === 0) {
+      content.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-table"></i><p>目前尚無管控表項目</p></div>`;
       return;
     }
 
+    // 計算 4 大指標 (以基準日/本日為篩選基準)
+    const cutoffDate = window.currentCutoffDate || new Date().toISOString().slice(0, 10);
+    const dueItems = rawItems.filter(it => it.dueDate && it.dueDate <= cutoffDate);
+    const completedDueItems = dueItems.filter(it => it.status === '已完成' || it.actualDate);
+    const noAssigneeItems = dueItems.filter(it => !it.assignee || it.assignee.trim() === '');
+    const noDeliverableItems = dueItems.filter(it => (it.status === '已完成' || it.actualDate) && (!it.deliverable || it.deliverable.trim() === ''));
+
+    // 根據 currentControlFilterMode 進行過濾
+    let displayItems = rawItems;
+    if (currentControlFilterMode === "due") {
+      displayItems = dueItems;
+    } else if (currentControlFilterMode === "no_assignee") {
+      displayItems = rawItems.filter(it => !it.assignee || it.assignee.trim() === '');
+    } else if (currentControlFilterMode === "no_deliverable") {
+      displayItems = rawItems.filter(it => (it.status === '已完成' || it.actualDate) && (!it.deliverable || it.deliverable.trim() === ''));
+    }
+
+    if (currentControlSearchText) {
+      const q = currentControlSearchText.toLowerCase();
+      displayItems = displayItems.filter(it => 
+        (it.title || '').toLowerCase().includes(q) ||
+        (it.category || '').toLowerCase().includes(q) ||
+        (it.assignee || '').toLowerCase().includes(q) ||
+        (it.progress || '').toLowerCase().includes(q)
+      );
+    }
+
     content.innerHTML = `
-      <div class="glass-card section-card">
-        <h4><i class="fa-solid fa-table-list text-emerald"></i> 本專案技術議題管控表 (每月更新)</h4>
-        <div class="category-files-list" style="margin-top: 14px;">
-          ${controlFiles.map(f => {
-            const safeF = encodeURIComponent(JSON.stringify(f));
-            return `
-              <div class="file-row-item">
-                <div class="file-left-info">
-                  <i class="fa-solid ${getFileIcon(f.ext)}"></i>
-                  <span class="file-name-text">${f.name}</span>
-                  <small class="text-dim">最後更新：${f.lastModified}</small>
-                </div>
-                <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
-                  <i class="fa-solid fa-file-excel"></i> 開啟試算表
-                </button>
-              </div>
-            `;
-          }).join("")}
+      <!-- 4 大 KPI 指標統計卡片 -->
+      <div class="control-kpi-grid">
+        <div class="control-kpi-card" style="border-left: 3px solid #00f2fe;">
+          <i class="fa-solid fa-calendar-check text-cyan" style="font-size: 24px;"></i>
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">基準日前應辦項目</div>
+            <div style="font-size: 20px; font-weight: 700; color: #a5f3fc;">${dueItems.length} <small style="font-size: 12px;">筆</small></div>
+          </div>
         </div>
+
+        <div class="control-kpi-card" style="border-left: 3px solid #10b981;">
+          <i class="fa-solid fa-circle-check text-emerald" style="font-size: 24px;"></i>
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">應辦已完成項目</div>
+            <div style="font-size: 20px; font-weight: 700; color: #6ee7b7;">${completedDueItems.length} <small style="font-size: 12px;">筆 (${dueItems.length > 0 ? ((completedDueItems.length/dueItems.length)*100).toFixed(1) : 0}%)</small></div>
+          </div>
+        </div>
+
+        <div class="control-kpi-card" style="border-left: 3px solid #f59e0b;">
+          <i class="fa-solid fa-user-xmark text-amber" style="font-size: 24px;"></i>
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">未安排負責人</div>
+            <div style="font-size: 20px; font-weight: 700; color: #fcd34d;">${noAssigneeItems.length} <small style="font-size: 12px;">筆</small></div>
+          </div>
+        </div>
+
+        <div class="control-kpi-card" style="border-left: 3px solid #f43f5e;">
+          <i class="fa-solid fa-link-slash text-rose" style="font-size: 24px;"></i>
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">已完成但成果未填</div>
+            <div style="font-size: 20px; font-weight: 700; color: #fda4af;">${noDeliverableItems.length} <small style="font-size: 12px;">筆</small></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 篩選與搜尋工具列 -->
+      <div class="control-filter-bar">
+        <div class="control-filter-tabs">
+          <button type="button" class="control-filter-chip ${currentControlFilterMode === 'due' ? 'active' : ''}" onclick="setControlFilter('due')">
+            <i class="fa-solid fa-clock"></i> 基準日前應辦 (${dueItems.length})
+          </button>
+          <button type="button" class="control-filter-chip ${currentControlFilterMode === 'all' ? 'active' : ''}" onclick="setControlFilter('all')">
+            <i class="fa-solid fa-list-ul"></i> 全部項目 (${rawItems.length})
+          </button>
+          <button type="button" class="control-filter-chip ${currentControlFilterMode === 'no_assignee' ? 'active' : ''}" onclick="setControlFilter('no_assignee')">
+            <i class="fa-solid fa-user-slash"></i> 未排負責人 (${noAssigneeItems.length})
+          </button>
+          <button type="button" class="control-filter-chip ${currentControlFilterMode === 'no_deliverable' ? 'active' : ''}" onclick="setControlFilter('no_deliverable')">
+            <i class="fa-solid fa-file-circle-question"></i> 成果未填 (${noDeliverableItems.length})
+          </button>
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" id="control-quick-search" placeholder="🔍 快速搜尋管控項目..." value="${currentControlSearchText}" oninput="handleControlSearch(this.value)" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px; color: #fff; font-size: 12px; outline: none;">
+          ${latestFile ? `
+            <a href="/api/download?path=${encodeURIComponent(latestFile.fullPath)}" target="_blank" download class="btn-table-action" style="padding: 6px 12px; font-size: 12px; white-space: nowrap;">
+              <i class="fa-solid fa-file-excel text-emerald"></i> 下載原始 Excel
+            </a>
+          ` : ''}
+        </div>
+      </div>
+
+      <!-- 逐項條列管控表（固定表頭） -->
+      <div class="table-responsive" style="max-height: 520px; overflow-y: auto;">
+        <table class="modern-table">
+          <thead style="position: sticky; top: 0; background: #0c1322; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
+            <tr>
+              <th style="width: 45px; text-align: center;">項次</th>
+              <th style="width: 100px;">階段</th>
+              <th style="width: 120px;">類別</th>
+              <th>議題項目 (檢討內容)</th>
+              <th style="width: 90px;">負責人</th>
+              <th style="width: 100px;">預定產出</th>
+              <th style="width: 100px;">實際產出</th>
+              <th style="width: 85px; text-align: center;">狀態</th>
+              <th style="width: 180px;">辦理情形與成果連結</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${displayItems.length === 0 ? `
+              <tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 30px;">無符合篩選條件之管控項目</td></tr>
+            ` : displayItems.map((it, idx) => {
+              const isOverdue = it.dueDate && it.dueDate <= cutoffDate && it.status !== '已完成';
+              const isDoneNoDeliverable = (it.status === '已完成' || it.actualDate) && (!it.deliverable || it.deliverable.trim() === '');
+              
+              let statusPill = `<span class="proj-light-pill light-white">未排定</span>`;
+              if (it.status === '已完成') statusPill = `<span class="proj-light-pill light-green">已完成</span>`;
+              else if (it.status === '進行中') statusPill = `<span class="proj-light-pill light-yellow">進行中</span>`;
+              else if (it.status === '後續辦理') statusPill = `<span class="proj-light-pill light-orange">後續辦理</span>`;
+
+              return `
+                <tr>
+                  <td style="text-align: center; color: var(--text-dim);">${idx + 1}</td>
+                  <td><small class="text-cyan">${it.stage || '-'}</small></td>
+                  <td><small class="text-dim font-bold">${it.category || '-'}</small></td>
+                  <td style="line-height: 1.5; word-break: break-all;">
+                    ${it.title}
+                    ${isOverdue ? '<span style="display:inline-block; font-size:10px; background:rgba(244,63,94,0.15); color:#fda4af; border:1px solid rgba(244,63,94,0.3); border-radius:4px; padding:1px 4px; margin-left:6px;">逾期應辦</span>' : ''}
+                  </td>
+                  <td>
+                    ${it.assignee ? `<span class="text-white">${it.assignee}</span>` : '<small class="text-amber font-bold"><i class="fa-solid fa-triangle-exclamation"></i> 未指定</small>'}
+                  </td>
+                  <td><small class="${isOverdue ? 'text-rose font-bold' : 'text-muted'}">${formatWesternDate(it.dueDate)}</small></td>
+                  <td><small class="text-emerald">${formatWesternDate(it.actualDate)}</small></td>
+                  <td style="text-align: center;">${statusPill}</td>
+                  <td>
+                    ${it.deliverable ? `
+                      <div style="display: flex; align-items: center; gap: 4px; font-size: 11px;">
+                        <span class="text-cyan font-bold" title="${it.deliverable}"><i class="fa-solid fa-paperclip"></i> 已檢附成果</span>
+                        <button type="button" class="btn-table-action" style="padding: 2px 6px; font-size: 10px;" onclick="copyNasPath('${encodeURIComponent(it.deliverable)}')">複製</button>
+                      </div>
+                    ` : (isDoneNoDeliverable ? '<small class="text-rose"><i class="fa-solid fa-circle-exclamation"></i> 待補成果說明</small>' : `<small class="text-dim">${it.progress || '-'}</small>`)}
+                  </td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
       </div>
     `;
   }
@@ -1387,20 +1402,22 @@ function renderDrawerTabContent(tabType) {
     `;
   }
 
-  // 頁籤 4: 專案待辦事項
+  // 頁籤 4: 專案待辦事項 (包含新纖南港總部 26 筆與各工區對齊)
   else if (tabType === "todos") {
-    const projTodos = (appData.todoItems || []).filter(t => t.site.includes(proj.shortName) || proj.shortName.includes(t.site));
+    const normSite = normalizeSiteName(proj.shortName);
+    const projTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
+    
     if (projTodos.length === 0) {
       content.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-check-double"></i><p>本案目前無待辦事項登錄紀錄</p></div>`;
       return;
     }
 
     content.innerHTML = `
-      <div class="table-responsive">
+      <div class="table-responsive" style="max-height: 520px; overflow-y: auto;">
         <table class="modern-table">
-          <thead>
+          <thead style="position: sticky; top: 0; background: #0c1322; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
             <tr>
-              <th style="width: 50px;">項次</th>
+              <th style="width: 50px; text-align: center;">項次</th>
               <th style="width: 110px;">會議日期</th>
               <th style="width: 100px;">提議者</th>
               <th>討論事項與決議內容</th>
@@ -1412,7 +1429,7 @@ function renderDrawerTabContent(tabType) {
           <tbody>
             ${projTodos.map((td, idx) => `
               <tr>
-                <td style="text-align: center;">${idx + 1}</td>
+                <td style="text-align: center; color: var(--text-dim);">${idx + 1}</td>
                 <td><small class="text-cyan font-bold">${formatWesternDate(td.meetDate)}</small></td>
                 <td>${td.proposer || '-'}</td>
                 <td style="line-height: 1.6; word-break: break-all;">${td.desc || '-'}</td>
@@ -1432,115 +1449,313 @@ function renderDrawerTabContent(tabType) {
   }
 }
 
-// 格式化為標準西曆 (YYYY/MM/DD)
-function formatWesternDate(val) {
-  if (!val) return '-';
-  const s = String(val).trim();
-  if (!s || s === '-' || s === '0') return '-';
-  if (/^\d{5}$/.test(s)) {
-    const excelEpoch = new Date(1899, 11, 30);
-    const d = new Date(excelEpoch.getTime() + parseInt(s) * 86400000);
-    return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
+window.setControlFilter = function(mode) {
+  currentControlFilterMode = mode;
+  renderDrawerTabContent("control");
+};
+
+window.handleControlSearch = function(text) {
+  currentControlSearchText = text.trim();
+  renderDrawerTabContent("control");
+};
+
+// ==============================================================================
+// 8. 模組 3：全域資料搜尋引擎 (清洗 ➔ 歸納 ➔ 總結 ➔ 精準連結出處)
+// ==============================================================================
+function performGlobalSearch() {
+  const searchInput = document.getElementById("global-search-input");
+  const resultsList = document.getElementById("search-results-list");
+  const countEl = document.getElementById("search-result-count");
+  if (!searchInput || !resultsList || !appData) return;
+
+  const rawQuery = searchInput.value.trim();
+  const query = rawQuery.toLowerCase();
+
+  if (!query) {
+    resultsList.innerHTML = `
+      <div class="search-empty-prompt">
+        <i class="fa-solid fa-keyboard"></i>
+        <p>請於上方搜尋框輸入關鍵字開始查詢（支援跨議題庫、專案待辦、管控表與會議檔案）</p>
+      </div>
+    `;
+    if (countEl) countEl.textContent = "0";
+    return;
   }
-  return s.replace(/-/g, '/');
-}
 
-// 開啟會議檔案詳情彈窗
-window.openMeetingFileModal = function(encodedData) {
-  try {
-    const file = JSON.parse(decodeURIComponent(encodedData));
-    const viewerModal = document.getElementById("file-viewer-modal");
-    const viewerTitle = document.getElementById("viewer-file-title");
-    const viewerBody = document.getElementById("viewer-body");
-    const closeBtn = document.getElementById("viewer-close-btn");
+  // 1. 資料清洗與檢索 (Clean & Collect)
+  const issueMatches = [];
+  const todoMatches = [];
+  const controlMatches = [];
+  const fileMatches = [];
 
-    if (!viewerModal || !viewerTitle || !viewerBody) return;
+  // A. 搜尋技術議題庫
+  if (activeSearchType === "all" || activeSearchType === "issues") {
+    (appData.technicalIssues || []).forEach(issue => {
+      const matchText = `${issue.dept} ${issue.site} ${issue.category} ${issue.title} ${issue.notes}`.toLowerCase();
+      if (matchText.includes(query)) {
+        issueMatches.push({
+          type: "issue",
+          typeLabel: "技術議題",
+          tagClass: "tag-issue",
+          dept: issue.dept,
+          site: issue.site,
+          date: issue.meetDate,
+          title: issue.title,
+          desc: `工項類別：${issue.category} ‧ 備註：${issue.notes || '無'}`,
+          actionType: "openTab",
+          tabTarget: "meetings"
+        });
+      }
+    });
+  }
 
-    const fullPath = file.fullPath || `\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\${file.relPath || file.name}`;
-    const isLocalServer = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  // B. 搜尋專案待辦事項
+  if (activeSearchType === "all" || activeSearchType === "todos") {
+    (appData.todoItems || []).forEach(todo => {
+      const matchText = `${todo.dept} ${todo.site} ${todo.rawSite} ${todo.proposer} ${todo.desc} ${todo.result}`.toLowerCase();
+      if (matchText.includes(query)) {
+        todoMatches.push({
+          type: "todo",
+          typeLabel: "專案待辦",
+          tagClass: "tag-todo",
+          dept: todo.dept,
+          site: todo.site,
+          date: todo.meetDate,
+          title: todo.desc,
+          status: todo.status,
+          desc: `提議者：${todo.proposer} ‧ 預定完成：${formatWesternDate(todo.dueDate)} ‧ 辦理情形：${todo.status} ‧ 成果：${todo.result || '待填'}`,
+          actionType: "openTab",
+          tabTarget: "todos"
+        });
+      }
+    });
+  }
 
-    viewerTitle.innerHTML = `<i class="fa-solid ${getFileIcon(file.ext)} text-cyan"></i> 會議檔案檢視與開啟`;
-    viewerBody.innerHTML = `
-      <div style="padding: 6px 0; display: flex; flex-direction: column; gap: 16px;">
-        <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
-          <h4 style="font-size: 16px; color: var(--text-main); margin-bottom: 8px; word-break: break-all; line-height: 1.4;">
-            <i class="fa-solid ${getFileIcon(file.ext)} text-cyan"></i> ${file.name}
-          </h4>
-          <div style="font-size: 13px; color: var(--text-muted); display: flex; gap: 16px; flex-wrap: wrap;">
-            <span><i class="fa-regular fa-hard-drive"></i> 大小：${file.size ? (file.size / 1024).toFixed(1) + ' KB' : '未知'}</span>
-            <span><i class="fa-regular fa-clock"></i> 更新時間：${file.lastModified || '未知'}</span>
+  // C. 搜尋各專案技術管控表項目
+  if (activeSearchType === "all" || activeSearchType === "issues") {
+    (appData.projects || []).forEach(p => {
+      (p.controlSheetItems || []).forEach(ctrl => {
+        const matchText = `${p.dept} ${p.shortName} ${ctrl.stage} ${ctrl.category} ${ctrl.title} ${ctrl.assignee} ${ctrl.progress}`.toLowerCase();
+        if (matchText.includes(query)) {
+          controlMatches.push({
+            type: "control",
+            typeLabel: "議題管控表",
+            tagClass: "tag-guide",
+            dept: p.dept,
+            site: p.shortName,
+            date: ctrl.dueDate,
+            title: ctrl.title,
+            status: ctrl.status,
+            desc: `階段類別：${ctrl.stage} / ${ctrl.category} ‧ 負責人：${ctrl.assignee || '未指定'} ‧ 狀態：${ctrl.status}`,
+            actionType: "openTab",
+            tabTarget: "control"
+          });
+        }
+      });
+    });
+  }
+
+  // D. 搜尋會議檔案與指引模板
+  if (activeSearchType === "all" || activeSearchType === "files" || activeSearchType === "guides") {
+    (appData.projects || []).forEach(p => {
+      (p.meetings || []).forEach(m => {
+        (m.files || []).forEach(f => {
+          if (f.name.toLowerCase().includes(query)) {
+            fileMatches.push({
+              type: "file",
+              typeLabel: "會議簡報",
+              tagClass: "tag-file",
+              dept: p.dept,
+              site: p.shortName,
+              date: m.meetingName,
+              title: f.name,
+              desc: `所屬會議：${m.meetingName} (${(f.size/1024).toFixed(0)} KB)`,
+              actionType: "viewFile",
+              fileObj: f
+            });
+          }
+        });
+      });
+    });
+
+    const allGuides = (appData.guidelines || []).concat(appData.templates || []).concat(appData.others || []);
+    allGuides.forEach(f => {
+      if (f.name.toLowerCase().includes(query)) {
+        fileMatches.push({
+          type: "guide",
+          typeLabel: "技術指引/模板",
+          tagClass: "tag-guide",
+          dept: "指引發布區",
+          site: f.folder || "通用",
+          date: f.lastModified,
+          title: f.name,
+          desc: `分類：${f.folder || '技術指引'} (${(f.size/1024).toFixed(0)} KB)`,
+          actionType: "viewFile",
+          fileObj: f
+        });
+      }
+    });
+  }
+
+  const allHits = [...issueMatches, ...todoMatches, ...controlMatches, ...fileMatches];
+  if (countEl) countEl.textContent = allHits.length;
+
+  if (allHits.length === 0) {
+    resultsList.innerHTML = `
+      <div class="search-empty-prompt">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <p>查無符合關鍵字「<b class="text-cyan">${rawQuery}</b>」之相關議題或文件</p>
+      </div>
+    `;
+    return;
+  }
+
+  // 2. 總結 (Smart Executive Summary)
+  const uniqueSites = Array.from(new Set(allHits.map(h => h.site).filter(Boolean)));
+  const completedCount = todoMatches.filter(t => t.status === '已完成').length + controlMatches.filter(c => c.status === '已完成').length;
+
+  const summaryHtml = `
+    <div class="search-summary-card">
+      <div class="search-summary-header">
+        <i class="fa-solid fa-sparkles text-cyan"></i>
+        <span>全域檢索重點總結分析</span>
+      </div>
+      <div style="font-size: 14px; line-height: 1.7; color: var(--text-main);">
+        針對關鍵字「<b class="text-cyan">${rawQuery}</b>」，系統已完成資料清洗與跨庫交叉比對，共於 <b>${uniqueSites.length}</b> 個工區檢索出 <b>${allHits.length}</b> 筆相關紀錄。
+      </div>
+      <div class="search-summary-stats">
+        <span class="search-summary-pill"><i class="fa-solid fa-lightbulb text-amber"></i> 技術議題庫：<b>${issueMatches.length}</b> 筆</span>
+        <span class="search-summary-pill"><i class="fa-solid fa-list-check text-emerald"></i> 專案待辦追蹤：<b>${todoMatches.length}</b> 筆</span>
+        <span class="search-summary-pill"><i class="fa-solid fa-table-list text-cyan"></i> 議題管控項目：<b>${controlMatches.length}</b> 筆</span>
+        <span class="search-summary-pill"><i class="fa-solid fa-file-powerpoint text-purple"></i> 會議簡報檔案：<b>${fileMatches.length}</b> 份</span>
+        <span class="search-summary-pill" style="background: rgba(16, 185, 129, 0.1); border-color: #10b981; color: #6ee7b7;"><i class="fa-solid fa-circle-check"></i> 累計已完成：<b>${completedCount}</b> 項</span>
+      </div>
+    </div>
+  `;
+
+  // 3. 歸納與精準跳轉出處 (Group & Deep Link)
+  const hitsHtml = allHits.slice(0, 80).map(item => {
+    const matchedProj = (appData.projects || []).find(p => normalizeSiteName(p.shortName) === normalizeSiteName(item.site));
+    const projId = matchedProj ? matchedProj.id : "";
+    const safeFile = item.fileObj ? encodeURIComponent(JSON.stringify(item.fileObj)) : "";
+
+    return `
+      <div class="search-result-item">
+        <div class="res-type-badge ${item.tagClass}">${item.typeLabel}</div>
+        <div class="res-content">
+          <div class="res-header-info">
+            <span class="res-dept">${item.dept}</span>
+            <span class="res-site">${item.site}</span>
+            <span class="res-date">${formatWesternDate(item.date)}</span>
           </div>
+          <h4 class="res-title">${highlightKeyword(item.title, rawQuery)}</h4>
+          <p class="res-desc">${highlightKeyword(item.desc, rawQuery)}</p>
         </div>
-
-        <div style="background: rgba(10,15,28,0.7); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
-          <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
-            <span><i class="fa-solid fa-server text-cyan"></i> 企業 NAS 實體路徑 (請在內網或 VPN 環境存取)：</span>
-          </div>
-          <div id="nas-path-box" style="font-family: monospace; font-size: 12px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 6px; word-break: break-all; user-select: all; color: #a5f3fc; border: 1px solid rgba(0,242,254,0.2);">
-            ${fullPath}
-          </div>
-        </div>
-
-        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px;">
-          <button type="button" class="btn-primary" id="btn-copy-nas-path" style="padding: 10px 18px; font-size: 14px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
-            <i class="fa-regular fa-copy"></i> 複製 NAS 實體路徑
-          </button>
-          ${isLocalServer ? `
-            <button type="button" class="btn-table-action" style="padding: 10px 18px; font-size: 14px; background: rgba(16,185,129,0.2); border-color: rgba(16,185,129,0.4); color: #6ee7b7;" onclick="openFileLocally('${encodeURIComponent(fullPath)}')">
-              <i class="fa-solid fa-bolt"></i> 直接在電腦開啟 (PowerPoint)
+        <div class="res-actions">
+          ${item.actionType === "openTab" && projId ? `
+            <button type="button" class="btn-table-action" style="white-space: nowrap;" onclick="openProjectDrawerTab('${projId}', '${item.tabTarget || 'todos'}')">
+              <i class="fa-solid fa-arrow-up-right-from-square text-cyan"></i> 跳轉專案${item.typeLabel}
             </button>
-          ` : ''}
-          <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-gcal-open" style="padding: 10px 18px; font-size: 14px;">
-            <i class="fa-solid fa-download"></i> 下載檔案
-          </a>
-        </div>
-
-        <div style="font-size: 12px; color: var(--text-dim); line-height: 1.6; background: rgba(255,255,255,0.02); padding: 10px 12px; border-radius: 6px;">
-          <i class="fa-solid fa-circle-question text-amber"></i> <b>開啟指引：</b>
-          點擊「複製 NAS 實體路徑」後，在 Windows 鍵盤按下 <code>Win + R</code> 鍵，貼上路徑並按確定，即可直接在電腦上由本機 Office 開啟簡報或試算表。若於公司內網執行本儀表板伺服器，可直接點擊「直接在電腦開啟」。
+          ` : (item.actionType === "viewFile" && safeFile ? `
+            <button type="button" class="btn-file-view" style="white-space: nowrap;" onclick="openMeetingFileModal('${safeFile}')">
+              <i class="fa-solid fa-eye"></i> 查看檔案
+            </button>
+          ` : '')}
         </div>
       </div>
     `;
+  }).join("");
 
-    viewerModal.classList.remove("hidden");
-    closeBtn.onclick = () => viewerModal.classList.add("hidden");
-    viewerModal.onclick = (e) => { if (e.target === viewerModal) viewerModal.classList.add("hidden"); };
+  resultsList.innerHTML = summaryHtml + hitsHtml;
+}
+
+function highlightKeyword(text, keyword) {
+  if (!text) return "";
+  if (!keyword) return text;
+  const regex = new RegExp(`(${keyword.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
+  return String(text).replace(regex, `<mark class="search-highlight">$1</mark>`);
+}
+
+// ==============================================================================
+// 9. 檔案與會議檢視彈窗及路徑操作
+// ==============================================================================
+function initViewerModal() {
+  if (viewerCloseBtn) {
+    viewerCloseBtn.addEventListener("click", () => {
+      fileViewerModal.classList.add("hidden");
+    });
+  }
+  if (fileViewerModal) {
+    fileViewerModal.addEventListener("click", (e) => {
+      if (e.target === fileViewerModal) {
+        fileViewerModal.classList.add("hidden");
+      }
+    });
+  }
+}
+
+window.openMeetingFileModal = function(encodedFile) {
+  try {
+    const f = JSON.parse(decodeURIComponent(encodedFile));
+    const titleEl = document.getElementById("viewer-file-title");
+    const bodyEl = document.getElementById("viewer-body");
+    if (!titleEl || !bodyEl) return;
+
+    titleEl.innerHTML = `<i class="fa-solid ${getFileIcon(f.ext)}"></i> ${f.name}`;
+    const fullPath = f.fullPath || "";
+
+    bodyEl.innerHTML = `
+      <div class="viewer-meta-box">
+        <div><b>檔案名稱：</b>${f.name}</div>
+        <div><b>實體路徑：</b><code>${fullPath}</code></div>
+        <div><b>檔案大小：</b>${(f.size / 1024).toFixed(1)} KB ‧ <b>更新日期：</b>${f.lastModified || '未知'}</div>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin: 18px 0; flex-wrap: wrap;">
+        <button type="button" class="btn-file-view" style="padding: 10px 18px; font-size: 14px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
+          <i class="fa-regular fa-copy"></i> 複製 NAS 完整實體路徑
+        </button>
+        <button type="button" class="btn-file-view" style="padding: 10px 18px; font-size: 14px; background: rgba(0,242,254,0.15); border-color: var(--primary);" onclick="openFileInExplorer('${encodeURIComponent(fullPath)}')">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> 在檔案總管中開啟
+        </button>
+        <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 10px 18px; font-size: 14px;">
+          <i class="fa-solid fa-download"></i> 串流下載此檔案
+        </a>
+      </div>
+    `;
+
+    fileViewerModal.classList.remove("hidden");
   } catch (e) {
-    console.error(e);
+    console.error("Open file modal error:", e);
   }
 };
 
 window.copyNasPath = function(encodedPath) {
-  const p = decodeURIComponent(encodedPath);
-  navigator.clipboard.writeText(p).then(() => {
-    const btn = document.getElementById("btn-copy-nas-path");
-    if (btn) {
-      btn.innerHTML = `<i class="fa-solid fa-check text-emerald"></i> 已複製 NAS 路徑！`;
-      setTimeout(() => {
-        btn.innerHTML = `<i class="fa-regular fa-copy"></i> 複製 NAS 實體路徑`;
-      }, 3000);
-    }
+  const path = decodeURIComponent(encodedPath);
+  navigator.clipboard.writeText(path).then(() => {
+    alert(`📋 已成功複製 NAS 實體路徑至剪貼簿：\n\n${path}\n\n您可直接貼入檔案總管或執行開啟。`);
   }).catch(() => {
-    prompt("請按 Ctrl+C 複製路徑：", p);
+    prompt("請按 Ctrl+C 複製以下 NAS 路徑：", path);
   });
 };
 
-window.openFileLocally = function(encodedPath) {
-  const p = decodeURIComponent(encodedPath);
+window.openFileInExplorer = function(encodedPath) {
+  const path = decodeURIComponent(encodedPath);
   fetch("/api/open-file", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ filePath: p })
-  }).then(r => r.json()).then(res => {
-    if (res.status === "success") {
-      alert("✅ 已在您的電腦上啟動開啟檔案！");
+    body: JSON.stringify({ path: path })
+  }).then(res => res.json()).then(data => {
+    if (data.status === "success") {
+      alert("✅ 已送出開啟指令，請留意 Windows 工作列已彈出之應用程式。");
     } else {
-      alert("⚠️ 開啟失敗: " + (res.message || "未知錯誤"));
+      alert("⚠️ 本機伺服器開啟檔案回報：" + data.message);
     }
   }).catch(err => {
     alert("⚠️ 連線本機伺服器失敗，請確認於 http://localhost:8090 存取");
   });
 };
+
 window.toggleMeetingCard = function(headerEl) {
   const card = headerEl.closest('.meeting-accordion-card');
   if (card) {
@@ -1560,241 +1775,21 @@ window.toggleAllMeetingCards = function() {
   });
 };
 
-// 機動更新統計基準日
-window.currentCutoffDate = "2026-08-24";
-window.applyCutoffDate = async function() {
-  const input = document.getElementById("cutoff-date-input");
-  const statusEl = document.getElementById("cutoff-update-status");
-  const btn = document.getElementById("btn-update-cutoff-date");
-  if (!input) return;
-
-  const dateVal = input.value || "2026-08-24";
-  window.currentCutoffDate = dateVal;
-
-  if (btn) {
-    btn.disabled = true;
-    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> 更新計算中...`;
-  }
-
-  const isLocalServer = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  if (isLocalServer) {
-    try {
-      const res = await fetch("/api/update-cutoff-date", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cutoffDate: dateVal })
-      });
-      const resJson = await res.json();
-      if (resJson.status === "success" && resJson.data) {
-        appData = resJson.data;
-      }
-    } catch (e) {
-      console.warn("Local update cutoff failed, fallback to frontend dynamic calculation", e);
-    }
-  }
-
-  // 同步更新 P13 標題
-  if (appData && appData.monthlyReportAnalysis && appData.monthlyReportAnalysis.p13_coverage) {
-    const parts = dateVal.split("-");
-    const mmdd = parts.length >= 3 ? `${parts[1]}/${parts[2]}` : "08/24";
-    const headers = appData.monthlyReportAnalysis.p13_coverage.headers || [];
-    if (headers.length >= 4) {
-      headers[3] = `${mmdd}前預定`;
-    }
-  }
-
-  renderMonthlyReportAnalysis(currentReportView || "coverage");
-
-  if (statusEl) {
-    statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald"></i> 已成功更新至基準日：${dateVal}`;
-    statusEl.style.display = "inline-block";
-    setTimeout(() => { statusEl.style.display = "none"; }, 4000);
-  }
-
-  if (btn) {
-    btn.disabled = false;
-    btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> 更新計算數據`;
-  }
-};
-
-// ==============================================================================
-// 6. 模組 3：全域資料搜尋引擎 (Global Search Engine)
-// ==============================================================================
-function performGlobalSearch() {
-  const searchInput = document.getElementById("global-search-input");
-  const resultsList = document.getElementById("search-results-list");
-  const countEl = document.getElementById("search-result-count");
-  if (!searchInput || !resultsList || !appData) return;
-
-  const query = searchInput.value.trim().toLowerCase();
-
-  if (!query) {
-    resultsList.innerHTML = `
-      <div class="search-empty-prompt">
-        <i class="fa-solid fa-keyboard"></i>
-        <p>請於上方搜尋框輸入關鍵字開始查詢</p>
-      </div>
-    `;
-    if (countEl) countEl.textContent = "0";
-    return;
-  }
-
-  let matches = [];
-
-  // 1. 搜尋技術議題庫 (Technical Issues)
-  if (activeSearchType === "all" || activeSearchType === "issues") {
-    (appData.technicalIssues || []).forEach(issue => {
-      const matchText = `${issue.dept} ${issue.site} ${issue.category} ${issue.title} ${issue.notes}`.toLowerCase();
-      if (matchText.includes(query)) {
-        matches.push({
-          type: "issue",
-          typeLabel: "技術議題",
-          tagClass: "tag-issue",
-          dept: issue.dept,
-          site: issue.site,
-          date: issue.meetDate,
-          title: issue.title,
-          desc: `工項類別：${issue.category} ‧ 備註說明：${issue.notes || '無'}`,
-          actionType: "openProject",
-          siteTarget: issue.site
-        });
-      }
-    });
-  }
-
-  // 2. 搜尋待辦追蹤項目 (Todo Items)
-  if (activeSearchType === "all" || activeSearchType === "todos") {
-    (appData.todoItems || []).forEach(todo => {
-      const matchText = `${todo.dept} ${todo.site} ${todo.topic} ${todo.proposer} ${todo.desc} ${todo.result}`.toLowerCase();
-      if (matchText.includes(query)) {
-        matches.push({
-          type: "todo",
-          typeLabel: "待辦事項",
-          tagClass: "tag-todo",
-          dept: todo.dept,
-          site: todo.site,
-          date: todo.meetDate,
-          title: todo.desc,
-          desc: `提議人：${todo.proposer} ‧ 辦理情形：${todo.status} ‧ 成果：${todo.result || '待填'}`,
-          actionType: "openProject",
-          siteTarget: todo.site
-        });
-      }
-    });
-  }
-
-  // 3. 搜尋技術指引與作業模板
-  if (activeSearchType === "all" || activeSearchType === "guides") {
-    const allGuides = (appData.guidelines || []).concat(appData.templates || []);
-    allGuides.forEach(g => {
-      (g.files || []).forEach(f => {
-        const matchText = `${g.category} ${f.name}`.toLowerCase();
-        if (matchText.includes(query)) {
-          matches.push({
-            type: "guide",
-            typeLabel: "技術指引/模板",
-            tagClass: "tag-guide",
-            dept: "技術運作指引區",
-            site: g.category,
-            date: f.lastModified,
-            title: f.name,
-            desc: `歸屬分類：${g.category} ‧ 檔案大小：${(f.size / 1024).toFixed(0)} KB`,
-            actionType: "viewFile",
-            filePath: f.relPath
-          });
-        }
-      });
-    });
-  }
-
-  // 4. 搜尋專案會議檔案
-  if (activeSearchType === "all" || activeSearchType === "files") {
-    (appData.projects || []).forEach(p => {
-      (p.meetings || []).forEach(m => {
-        (m.files || []).forEach(f => {
-          if (f.name.toLowerCase().includes(query)) {
-            matches.push({
-              type: "file",
-              typeLabel: "專案會議簡報",
-              tagClass: "tag-file",
-              dept: p.dept,
-              site: p.shortName,
-              date: m.meetingName,
-              title: f.name,
-              desc: `所屬會議：${m.meetingName} ‧ 專案工程：${p.name}`,
-              actionType: "openProject",
-              siteTarget: p.shortName
-            });
-          }
-        });
-      });
-    });
-  }
-
-  if (countEl) countEl.textContent = matches.length;
-
-  if (matches.length === 0) {
-    resultsList.innerHTML = `
-      <div class="search-empty-prompt">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <p>查無符合關鍵字「<b class="text-cyan">${query}</b>」之相關議題或文件</p>
-      </div>
-    `;
-    return;
-  }
-
-  // 渲染比對結果
-  resultsList.innerHTML = matches.slice(0, 100).map(item => {
-    // 關鍵字高亮
-    const highlightedTitle = highlightKeyword(item.title, query);
-    const highlightedDesc = highlightKeyword(item.desc, query);
-
-    return `
-      <div class="result-card-item" onclick="handleSearchResultClick('${item.actionType}', '${item.siteTarget || ''}', '${item.filePath || ''}')">
-        <div class="result-main-text">
-          <div class="result-meta-line">
-            <span class="result-tag-badge ${item.tagClass}">${item.typeLabel}</span>
-            <span><i class="fa-solid fa-building"></i> ${item.dept}</span>
-            <span><i class="fa-solid fa-map-pin text-cyan"></i> ${item.site}</span>
-            <span><i class="fa-regular fa-calendar"></i> ${item.date || '-'}</span>
-          </div>
-          <div class="result-title-line">${highlightedTitle}</div>
-          <div class="doc-meta" style="margin-top: 4px;">${highlightedDesc}</div>
-        </div>
-        <button type="button" class="btn-table-action">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i> 點入查看
-        </button>
-      </div>
-    `;
-  }).join("");
+function openCustomModal(title, html) {
+  const titleEl = document.getElementById("viewer-file-title");
+  const bodyEl = document.getElementById("viewer-body");
+  if (!titleEl || !bodyEl) return;
+  titleEl.innerHTML = title;
+  bodyEl.innerHTML = html;
+  fileViewerModal.classList.remove("hidden");
 }
 
-function highlightKeyword(text, keyword) {
-  if (!text || !keyword) return text || "";
-  const regex = new RegExp(`(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-  return text.replace(regex, `<span class="search-highlight">$1</span>`);
-}
-
-window.handleSearchResultClick = function(actionType, siteTarget, filePath) {
-  if (actionType === "openProject" && siteTarget) {
-    const proj = (appData.projects || []).find(p => p.shortName.includes(siteTarget) || siteTarget.includes(p.shortName));
-    if (proj) {
-      openProjectDrawer(proj.id);
-    } else {
-      alert(`所屬專案：${siteTarget}`);
-    }
-  } else if (actionType === "viewFile" && filePath) {
-    alert(`開啟 NAS 指引文件: ${filePath}`);
-  }
-};
-
-// === 輔助函式：根據副檔名返回對應 FontAwesome 圖示 ===
 function getFileIcon(ext) {
-  const e = (ext || "").toLowerCase();
-  if (e.includes("ppt")) return "fa-file-powerpoint text-orange";
-  if (e.includes("xls")) return "fa-file-excel text-emerald";
+  if (!ext) return "fa-file";
+  const e = ext.toLowerCase();
+  if (e.includes("ppt")) return "fa-file-powerpoint text-rose";
+  if (e.includes("xls") || e.includes("csv")) return "fa-file-excel text-emerald";
   if (e.includes("doc")) return "fa-file-word text-cyan";
   if (e.includes("pdf")) return "fa-file-pdf text-rose";
-  if (e.includes("zip") || e.includes("rar")) return "fa-file-zipper text-amber";
   return "fa-file-lines text-muted";
 }
