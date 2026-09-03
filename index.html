@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=1.0">
+  <link rel="stylesheet" href="style.css?v=2.0">
 </head>
 <body>
   <!-- 背景發光粒子球體 (玻璃擬態質感) -->
@@ -19,7 +19,7 @@
   </div>
 
   <!-- NAS 登入門禁彈窗 (有 NAS 權限者始可登入) -->
-  <div id="login-modal" class="modal-overlay">
+  <div id="login-modal" class="modal-overlay hidden">
     <div class="modal-card login-card glass-card">
       <div class="login-header">
         <div class="login-icon">
@@ -65,7 +65,7 @@
   </div>
 
   <!-- 主應用介面容器 (登入後解鎖顯示) -->
-  <div id="app-container" class="app-container blur-locked">
+  <div id="app-container" class="app-container">
     <!-- 頂部導覽列 (Header Bar) -->
     <header class="glass-card header-bar">
       <div class="header-brand">
@@ -455,6 +455,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=1.0"></script>
+  <script src="app.js?v=2.0"></script>
 </body>
 </html>

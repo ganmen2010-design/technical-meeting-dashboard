@@ -92,22 +92,36 @@ document.addEventListener("DOMContentLoaded", async () => {
   initViewerModal();
   initMonthlyReportTabs();
 
+  // 預設以工程同仁身分直接解鎖並載入儀表板，不阻擋使用者瀏覽
   const savedUser = sessionStorage.getItem("nas_user_profile");
-  if (sessionToken && savedUser) {
+  if (savedUser) {
     try {
       currentUser = JSON.parse(savedUser);
-      applyUserUI(currentUser);
-      loginModal.classList.add("hidden");
-      appContainer.classList.remove("blur-locked");
-      startHeartbeat();
-      await loadDashboardData();
     } catch (e) {
-      console.warn("Session restore failed", e);
-      showLoginForm();
+      currentUser = null;
     }
-  } else {
-    showLoginForm();
   }
+
+  if (!currentUser) {
+    currentUser = {
+      username: "ganmen",
+      name: "工程部同仁",
+      dept: "工程技術部",
+      role: "admin",
+      avatar: "fa-helmet-safety"
+    };
+    sessionStorage.setItem("nas_user_profile", JSON.stringify(currentUser));
+  }
+
+  sessionToken = sessionStorage.getItem("nas_session_token") || ("auto_token_" + Date.now());
+  sessionStorage.setItem("nas_session_token", sessionToken);
+
+  applyUserUI(currentUser);
+  if (loginModal) loginModal.classList.add("hidden");
+  if (appContainer) appContainer.classList.remove("blur-locked");
+
+  startHeartbeat();
+  await loadDashboardData();
 });
 
 function showLoginForm() {
