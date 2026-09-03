@@ -2427,3 +2427,77 @@ h5 { font-size: 17px !important; }
 .guideline-folder-card.collapsed .guideline-toggle-icon {
   transform: rotate(-90deg);
 }
+
+/* 搜尋結果兩欄佈局 */
+.search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+@media (max-width: 950px) {
+  .search-results-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Google AI 模式摘要卡片 */
+.google-ai-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9));
+  border: 1px solid rgba(0, 242, 254, 0.35);
+  border-radius: var(--radius-md);
+  padding: 18px 22px;
+  margin-bottom: 22px;
+  box-shadow: 0 4px 20px rgba(0, 242, 254, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.google-ai-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00f2fe, #4facfe, #a855f7, #ec4899);
+}
+
+.ai-mode-badge {
+  font-size: 13px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #d8b4fe;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ai-cite-pill {
+  font-size: 14px;
+  padding: 5px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-color);
+  color: #e2e8f0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-fast);
+  text-decoration: none;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-cite-pill:hover {
+  background: rgba(0, 242, 254, 0.15);
+  border-color: var(--primary);
+  color: #a5f3fc;
+  transform: translateY(-1px);
+}
