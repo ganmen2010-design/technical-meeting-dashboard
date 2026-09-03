@@ -1,3 +1,8 @@
+function isScheduledItem(it) {
+  if (!it || !it.dueDate) return false;
+  const s = String(it.dueDate).trim();
+  return s !== "" && s !== "-" && s !== "未排定" && s !== "0" && s !== "None" && s !== "null";
+}
 const FENGYU_NEXTCLOUD_BASE = "https://ncaio.fengyu.com.tw/f/8988";
 /**
  * 技術會議雲端儀表板 (Technical Meeting Cloud Dashboard) - 前端核心邏輯
@@ -1431,7 +1436,8 @@ function renderWorkspaces(projects) {
   grid.innerHTML = projects.map(p => {
     const normSite = normalizeSiteName(p.shortName);
     const projTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
-    const ctrlItemsCount = (p.controlSheetItems || []).length;
+    const scheduledCtrlItems = (p.controlSheetItems || []).filter(isScheduledItem);
+    const ctrlItemsCount = scheduledCtrlItems.length;
     const stats = p.stats || { total: projTodos.length, completed: 0, completionRate: 0, light: 'white' };
     
     let lightColorClass = "light-white";
@@ -1515,7 +1521,8 @@ window.openProjectDrawer = function(projectId) {
   const normSite = normalizeSiteName(proj.shortName);
   const projTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
   if (todoCountEl) todoCountEl.textContent = projTodos.length;
-  if (controlCountEl) controlCountEl.textContent = (proj.controlSheetItems || []).length;
+  const scheduledCtrlItems = (proj.controlSheetItems || []).filter(isScheduledItem);
+  if (controlCountEl) controlCountEl.textContent = scheduledCtrlItems.length;
 
   // 預設開啟第一個頁籤：歷次會議資料
   drawerTabs.forEach(b => b.classList.remove("active"));
@@ -1626,11 +1633,14 @@ function renderDrawerTabContent(tabType) {
       return;
     }
 
+    // 【核心優化】全案排定項目：嚴格篩選有排定預定產出日期之項目
+    const scheduledItems = rawItems.filter(isScheduledItem);
+
     // 計算 4 大指標 (以基準日/本日為篩選基準)
     const cutoffDate = window.currentCutoffDate || new Date().toISOString().slice(0, 10);
-    const dueItems = rawItems.filter(it => it.dueDate && it.dueDate <= cutoffDate);
+    const dueItems = scheduledItems.filter(it => it.dueDate && it.dueDate <= cutoffDate);
     const completedDueItems = dueItems.filter(it => it.status === '已完成' || it.actualDate);
-    const noAssigneeItems = dueItems.filter(it => !it.assignee || it.assignee.trim() === '');
+    const noAssigneeItems = dueItems.filter(it => !it.assignee || it.assignee.trim() === '' || it.assignee === '未指定');
     const noDeliverableItems = dueItems.filter(it => (it.status === '已完成' || it.actualDate) && (!it.deliverable || it.deliverable.trim() === ''));
 
     // 【核心優化】切換至議題管控時，將抽屜頂部標籤直接替換為 4 大 KPI 標籤！
@@ -1646,14 +1656,16 @@ function renderDrawerTabContent(tabType) {
       `;
     }
 
-    // 根據 currentControlFilterMode 進行過濾
-    let displayItems = rawItems;
+    // 根據 currentControlFilterMode 進行過濾 (全部項目以全案有排定預定產出日期為準)
+    let displayItems = scheduledItems;
     if (currentControlFilterMode === "due") {
       displayItems = dueItems;
     } else if (currentControlFilterMode === "no_assignee") {
-      displayItems = rawItems.filter(it => !it.assignee || it.assignee.trim() === '');
+      displayItems = noAssigneeItems;
     } else if (currentControlFilterMode === "no_deliverable") {
-      displayItems = rawItems.filter(it => (it.status === '已完成' || it.actualDate) && (!it.deliverable || it.deliverable.trim() === ''));
+      displayItems = noDeliverableItems;
+    } else if (currentControlFilterMode === "all_raw") {
+      displayItems = rawItems;
     }
 
     if (currentControlSearchText) {
@@ -1674,7 +1686,7 @@ function renderDrawerTabContent(tabType) {
             <i class="fa-solid fa-clock"></i> 基準日前應辦 (${dueItems.length})
           </button>
           <button type="button" class="control-filter-chip ${currentControlFilterMode === 'all' ? 'active' : ''}" onclick="setControlFilter('all')">
-            <i class="fa-solid fa-list-ul"></i> 全部項目 (${rawItems.length})
+            <i class="fa-solid fa-list-check"></i> 全部排定項目 (${scheduledItems.length})
           </button>
           <button type="button" class="control-filter-chip ${currentControlFilterMode === 'no_assignee' ? 'active' : ''}" onclick="setControlFilter('no_assignee')">
             <i class="fa-solid fa-user-slash"></i> 未排負責人 (${noAssigneeItems.length})
