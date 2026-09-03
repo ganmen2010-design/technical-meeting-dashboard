@@ -2116,3 +2116,53 @@ body {
   white-space: pre-line;
 }
 
+
+/* 壓縮版 KPI 精簡橫條 (Ribbon) */
+.control-kpi-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.kpi-mini-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.kpi-mini-pill b {
+  font-size: 14px;
+}
+
+.kpi-mini-pill.kpi-cyan {
+  border-color: rgba(0, 242, 254, 0.35);
+  color: #a5f3fc;
+  background: rgba(0, 242, 254, 0.06);
+}
+
+.kpi-mini-pill.kpi-emerald {
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #6ee7b7;
+  background: rgba(16, 185, 129, 0.06);
+}
+
+.kpi-mini-pill.kpi-amber {
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #fcd34d;
+  background: rgba(245, 158, 11, 0.06);
+}
+
+.kpi-mini-pill.kpi-rose {
+  border-color: rgba(244, 63, 94, 0.35);
+  color: #fda4af;
+  background: rgba(244, 63, 94, 0.06);
+}

@@ -1163,7 +1163,7 @@ window.openProjectDrawer = function(projectId) {
   const controlCountEl = document.getElementById("drawer-control-count");
 
   if (deptEl) deptEl.textContent = proj.dept;
-  if (nameEl) nameEl.textContent = proj.name;
+  if (nameEl) nameEl.textContent = proj.shortName || proj.name;
   
   const stats = proj.stats || { completionRate: 0, light: 'white' };
   if (lightEl) {
@@ -1304,38 +1304,19 @@ function renderDrawerTabContent(tabType) {
     }
 
     content.innerHTML = `
-      <!-- 4 大 KPI 指標統計卡片 -->
-      <div class="control-kpi-grid">
-        <div class="control-kpi-card" style="border-left: 3px solid #00f2fe;">
-          <i class="fa-solid fa-calendar-check text-cyan" style="font-size: 24px;"></i>
-          <div>
-            <div style="font-size: 11px; color: var(--text-muted);">基準日前應辦項目</div>
-            <div style="font-size: 20px; font-weight: 700; color: #a5f3fc;">${dueItems.length} <small style="font-size: 12px;">筆</small></div>
-          </div>
+      <!-- 壓縮精簡版 4 大指標橫條 (Ribbon) -->
+      <div class="control-kpi-ribbon">
+        <div class="kpi-mini-pill kpi-cyan">
+          <i class="fa-solid fa-calendar-check"></i> 基準日應辦：<b>${dueItems.length}</b> 筆
         </div>
-
-        <div class="control-kpi-card" style="border-left: 3px solid #10b981;">
-          <i class="fa-solid fa-circle-check text-emerald" style="font-size: 24px;"></i>
-          <div>
-            <div style="font-size: 11px; color: var(--text-muted);">應辦已完成項目</div>
-            <div style="font-size: 20px; font-weight: 700; color: #6ee7b7;">${completedDueItems.length} <small style="font-size: 12px;">筆 (${dueItems.length > 0 ? ((completedDueItems.length/dueItems.length)*100).toFixed(1) : 0}%)</small></div>
-          </div>
+        <div class="kpi-mini-pill kpi-emerald">
+          <i class="fa-solid fa-circle-check"></i> 已完成：<b>${completedDueItems.length}</b> 筆 (${dueItems.length > 0 ? ((completedDueItems.length/dueItems.length)*100).toFixed(1) : 0}%)
         </div>
-
-        <div class="control-kpi-card" style="border-left: 3px solid #f59e0b;">
-          <i class="fa-solid fa-user-xmark text-amber" style="font-size: 24px;"></i>
-          <div>
-            <div style="font-size: 11px; color: var(--text-muted);">未安排負責人</div>
-            <div style="font-size: 20px; font-weight: 700; color: #fcd34d;">${noAssigneeItems.length} <small style="font-size: 12px;">筆</small></div>
-          </div>
+        <div class="kpi-mini-pill kpi-amber">
+          <i class="fa-solid fa-user-xmark"></i> 未排負責人：<b>${noAssigneeItems.length}</b> 筆
         </div>
-
-        <div class="control-kpi-card" style="border-left: 3px solid #f43f5e;">
-          <i class="fa-solid fa-link-slash text-rose" style="font-size: 24px;"></i>
-          <div>
-            <div style="font-size: 11px; color: var(--text-muted);">已完成但成果未填</div>
-            <div style="font-size: 20px; font-weight: 700; color: #fda4af;">${noDeliverableItems.length} <small style="font-size: 12px;">筆</small></div>
-          </div>
+        <div class="kpi-mini-pill kpi-rose">
+          <i class="fa-solid fa-link-slash"></i> 成果未填：<b>${noDeliverableItems.length}</b> 筆
         </div>
       </div>
 
@@ -1367,7 +1348,7 @@ function renderDrawerTabContent(tabType) {
       </div>
 
       <!-- 逐項條列管控表（固定表頭） -->
-      <div class="table-responsive" style="max-height: 520px; overflow-y: auto;">
+      <div class="table-responsive" style="max-height: 620px; overflow-y: auto;">
         <table class="modern-table">
           <thead style="position: sticky; top: 0; background: #0c1322; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
             <tr>
@@ -1469,7 +1450,7 @@ function renderDrawerTabContent(tabType) {
     }
 
     content.innerHTML = `
-      <div class="table-responsive" style="max-height: 520px; overflow-y: auto;">
+      <div class="table-responsive" style="max-height: 620px; overflow-y: auto;">
         <table class="modern-table">
           <thead style="position: sticky; top: 0; background: #0c1322; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
             <tr>
@@ -1531,24 +1512,42 @@ function performGlobalSearch() {
     resultsList.innerHTML = `
       <div class="search-empty-prompt">
         <i class="fa-solid fa-keyboard"></i>
-        <p>請於上方搜尋框輸入關鍵字開始查詢（支援跨議題庫、專案待辦、管控表與會議檔案）</p>
+        <p>請於上方搜尋框輸入關鍵字開始查詢（聚焦技術議題庫、專案會議簡報與各類技術指引）</p>
       </div>
     `;
     if (countEl) countEl.textContent = "0";
     return;
   }
 
-  // 1. 資料清洗與檢索 (Clean & Collect)
+  // 1. 資料清洗與檢索 (只搜尋：技術議題庫 155 筆、會議簡報檔案、技術指引模板)
   const issueMatches = [];
-  const todoMatches = [];
-  const controlMatches = [];
   const fileMatches = [];
 
-  // A. 搜尋技術議題庫
+  // A. 搜尋技術議題庫 (155 筆跨專案技術結晶)
   if (activeSearchType === "all" || activeSearchType === "issues") {
     (appData.technicalIssues || []).forEach(issue => {
       const matchText = `${issue.dept} ${issue.site} ${issue.category} ${issue.title} ${issue.notes}`.toLowerCase();
       if (matchText.includes(query)) {
+        // 尋找對應之專案簡報檔案或目錄
+        const matchedProj = (appData.projects || []).find(p => normalizeSiteName(p.shortName) === normalizeSiteName(issue.site));
+        let issueFileObj = null;
+        if (matchedProj) {
+          // 搜尋該專案歷次會議中是否有對應日期的簡報
+          for (const m of (matchedProj.meetings || [])) {
+            for (const f of (m.files || [])) {
+              if (f.name.toLowerCase().includes(query) || (issue.meetDate && f.name.includes(issue.meetDate.replace(/-/g, '')))) {
+                issueFileObj = f;
+                break;
+              }
+            }
+            if (issueFileObj) break;
+          }
+          // 若無特定日，取該專案最新會議簡報
+          if (!issueFileObj && matchedProj.meetings && matchedProj.meetings.length > 0 && matchedProj.meetings[0].files && matchedProj.meetings[0].files.length > 0) {
+            issueFileObj = matchedProj.meetings[0].files[0];
+          }
+        }
+
         issueMatches.push({
           type: "issue",
           typeLabel: "技術議題",
@@ -1557,61 +1556,16 @@ function performGlobalSearch() {
           site: issue.site,
           date: issue.meetDate,
           title: issue.title,
-          desc: `工項類別：${issue.category} ‧ 備註：${issue.notes || '無'}`,
-          actionType: "openTab",
-          tabTarget: "meetings"
+          desc: `工項類別：${issue.category} ‧ 備註說明：${issue.notes || '無'}`,
+          actionType: "viewIssueFile",
+          fileObj: issueFileObj,
+          issueObj: issue
         });
       }
     });
   }
 
-  // B. 搜尋專案待辦事項
-  if (activeSearchType === "all" || activeSearchType === "todos") {
-    (appData.todoItems || []).forEach(todo => {
-      const matchText = `${todo.dept} ${todo.site} ${todo.rawSite} ${todo.proposer} ${todo.desc} ${todo.result}`.toLowerCase();
-      if (matchText.includes(query)) {
-        todoMatches.push({
-          type: "todo",
-          typeLabel: "專案待辦",
-          tagClass: "tag-todo",
-          dept: todo.dept,
-          site: todo.site,
-          date: todo.meetDate,
-          title: todo.desc,
-          status: todo.status,
-          desc: `提議者：${todo.proposer} ‧ 預定完成：${formatWesternDate(todo.dueDate)} ‧ 辦理情形：${todo.status} ‧ 成果：${todo.result || '待填'}`,
-          actionType: "openTab",
-          tabTarget: "todos"
-        });
-      }
-    });
-  }
-
-  // C. 搜尋各專案技術管控表項目
-  if (activeSearchType === "all" || activeSearchType === "issues") {
-    (appData.projects || []).forEach(p => {
-      (p.controlSheetItems || []).forEach(ctrl => {
-        const matchText = `${p.dept} ${p.shortName} ${ctrl.stage} ${ctrl.category} ${ctrl.title} ${ctrl.assignee} ${ctrl.progress}`.toLowerCase();
-        if (matchText.includes(query)) {
-          controlMatches.push({
-            type: "control",
-            typeLabel: "議題管控表",
-            tagClass: "tag-guide",
-            dept: p.dept,
-            site: p.shortName,
-            date: ctrl.dueDate,
-            title: ctrl.title,
-            status: ctrl.status,
-            desc: `階段類別：${ctrl.stage} / ${ctrl.category} ‧ 負責人：${ctrl.assignee || '未指定'} ‧ 狀態：${ctrl.status}`,
-            actionType: "openTab",
-            tabTarget: "control"
-          });
-        }
-      });
-    });
-  }
-
-  // D. 搜尋會議檔案與指引模板
+  // B. 搜尋會議簡報檔案與指引模板
   if (activeSearchType === "all" || activeSearchType === "files" || activeSearchType === "guides") {
     (appData.projects || []).forEach(p => {
       (p.meetings || []).forEach(m => {
@@ -1653,47 +1607,43 @@ function performGlobalSearch() {
     });
   }
 
-  const allHits = [...issueMatches, ...todoMatches, ...controlMatches, ...fileMatches];
+  const allHits = [...issueMatches, ...fileMatches];
   if (countEl) countEl.textContent = allHits.length;
 
   if (allHits.length === 0) {
     resultsList.innerHTML = `
       <div class="search-empty-prompt">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <p>查無符合關鍵字「<b class="text-cyan">${rawQuery}</b>」之相關議題或文件</p>
+        <p>查無符合關鍵字「<b class="text-cyan">${rawQuery}</b>」之相關技術議題或會議文件</p>
       </div>
     `;
     return;
   }
 
-  // 2. 總結 (Smart Executive Summary)
+  // 2. 總結 (Smart Executive Summary) - 只呈現技術議題庫與文件簡報
   const uniqueSites = Array.from(new Set(allHits.map(h => h.site).filter(Boolean)));
-  const completedCount = todoMatches.filter(t => t.status === '已完成').length + controlMatches.filter(c => c.status === '已完成').length;
 
   const summaryHtml = `
     <div class="search-summary-card">
       <div class="search-summary-header">
         <i class="fa-solid fa-sparkles text-cyan"></i>
-        <span>全域檢索重點總結分析</span>
+        <span>全域技術議題與文件搜尋總結</span>
       </div>
       <div style="font-size: 14px; line-height: 1.7; color: var(--text-main);">
-        針對關鍵字「<b class="text-cyan">${rawQuery}</b>」，系統已完成資料清洗與跨庫交叉比對，共於 <b>${uniqueSites.length}</b> 個工區檢索出 <b>${allHits.length}</b> 筆相關紀錄。
+        針對關鍵字「<b class="text-cyan">${rawQuery}</b>」，系統已過濾非技術性資料，共於 <b>${uniqueSites.length}</b> 個工區檢索出 <b>${allHits.length}</b> 筆技術結晶與檔案：
       </div>
       <div class="search-summary-stats">
         <span class="search-summary-pill"><i class="fa-solid fa-lightbulb text-amber"></i> 技術議題庫：<b>${issueMatches.length}</b> 筆</span>
-        <span class="search-summary-pill"><i class="fa-solid fa-list-check text-emerald"></i> 專案待辦追蹤：<b>${todoMatches.length}</b> 筆</span>
-        <span class="search-summary-pill"><i class="fa-solid fa-table-list text-cyan"></i> 議題管控項目：<b>${controlMatches.length}</b> 筆</span>
-        <span class="search-summary-pill"><i class="fa-solid fa-file-powerpoint text-purple"></i> 會議簡報檔案：<b>${fileMatches.length}</b> 份</span>
-        <span class="search-summary-pill" style="background: rgba(16, 185, 129, 0.1); border-color: #10b981; color: #6ee7b7;"><i class="fa-solid fa-circle-check"></i> 累計已完成：<b>${completedCount}</b> 項</span>
+        <span class="search-summary-pill"><i class="fa-solid fa-file-powerpoint text-rose"></i> 專案會議簡報：<b>${fileMatches.filter(f => f.type === 'file').length}</b> 份</span>
+        <span class="search-summary-pill"><i class="fa-solid fa-book text-cyan"></i> 技術指引與模板：<b>${fileMatches.filter(f => f.type === 'guide').length}</b> 份</span>
       </div>
     </div>
   `;
 
-  // 3. 歸納與精準跳轉出處 (Group & Deep Link)
+  // 3. 歸納與直接連結檔案 (Direct File Link)
   const hitsHtml = allHits.slice(0, 80).map(item => {
-    const matchedProj = (appData.projects || []).find(p => normalizeSiteName(p.shortName) === normalizeSiteName(item.site));
-    const projId = matchedProj ? matchedProj.id : "";
     const safeFile = item.fileObj ? encodeURIComponent(JSON.stringify(item.fileObj)) : "";
+    const safeIssue = item.issueObj ? encodeURIComponent(JSON.stringify(item.issueObj)) : "";
 
     return `
       <div class="search-result-item">
@@ -1708,11 +1658,11 @@ function performGlobalSearch() {
           <p class="res-desc">${highlightKeyword(item.desc, rawQuery)}</p>
         </div>
         <div class="res-actions">
-          ${item.actionType === "openTab" && projId ? `
-            <button type="button" class="btn-table-action" style="white-space: nowrap;" onclick="openProjectDrawerTab('${projId}', '${item.tabTarget || 'todos'}')">
-              <i class="fa-solid fa-arrow-up-right-from-square text-cyan"></i> 跳轉專案${item.typeLabel}
+          ${item.actionType === "viewIssueFile" ? `
+            <button type="button" class="btn-file-view" style="white-space: nowrap;" onclick="openTechnicalIssueModal('${safeIssue}', '${safeFile}')">
+              <i class="fa-solid fa-file-powerpoint"></i> 檢視/開啟議題來源檔案
             </button>
-          ` : (item.actionType === "viewFile" && safeFile ? `
+          ` : (safeFile ? `
             <button type="button" class="btn-file-view" style="white-space: nowrap;" onclick="openMeetingFileModal('${safeFile}')">
               <i class="fa-solid fa-eye"></i> 查看檔案
             </button>
@@ -1724,6 +1674,60 @@ function performGlobalSearch() {
 
   resultsList.innerHTML = summaryHtml + hitsHtml;
 }
+
+// 點擊技術議題直接連結與開啟來源檔案
+window.openTechnicalIssueModal = function(encodedIssue, encodedFile) {
+  try {
+    const issue = JSON.parse(decodeURIComponent(encodedIssue));
+    const file = encodedFile ? JSON.parse(decodeURIComponent(encodedFile)) : null;
+
+    const matchedProj = (appData.projects || []).find(p => normalizeSiteName(p.shortName) === normalizeSiteName(issue.site));
+    const projId = matchedProj ? matchedProj.id : "";
+
+    const fullPath = file ? file.fullPath : `\\192.168.1.221\s5\1003技術會議資料專區\1.各專案作業區\目錄-各工地歷次會議技術議題查詢.xlsx`;
+
+    const bodyHtml = `
+      <div style="padding: 6px 0; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="proj-dept-tag">${issue.dept}</span>
+          <span class="cal-filter-tag"><i class="fa-solid fa-lightbulb text-amber"></i> 技術議題庫</span>
+          <span style="font-size: 13px; color: var(--text-dim); margin-left: auto;">會議日期：${formatWesternDate(issue.meetDate)}</span>
+        </div>
+
+        <h3 style="font-size: 18px; color: #a5f3fc; line-height: 1.5;">${issue.title}</h3>
+
+        <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; font-size: 13px; line-height: 1.8;">
+          <div><i class="fa-solid fa-tag text-cyan"></i> <b>工項分類：</b>${issue.category}</div>
+          <div><i class="fa-solid fa-comment-dots text-emerald"></i> <b>討論與備註說明：</b>${issue.notes || '無額外備註'}</div>
+          <div><i class="fa-solid fa-folder-tree text-purple"></i> <b>來源檔案位置：</b><code>${fullPath}</code></div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap;">
+          <button type="button" class="btn-file-view" style="padding: 10px 18px; font-size: 14px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
+            <i class="fa-regular fa-copy"></i> 複製 NAS 實體路徑
+          </button>
+          <button type="button" class="btn-file-view" style="padding: 10px 18px; font-size: 14px; background: rgba(0,242,254,0.15); border-color: var(--primary);" onclick="openFileInExplorer('${encodeURIComponent(fullPath)}')">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> 在檔案總管中開啟
+          </button>
+          ${file ? `
+            <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 10px 18px; font-size: 14px;">
+              <i class="fa-solid fa-download"></i> 下載來源檔案
+            </a>
+          ` : ''}
+          ${projId ? `
+            <button type="button" class="btn-table-action" style="padding: 10px 18px; font-size: 14px; margin-left: auto;" onclick="openProjectDrawerTab('${projId}', 'meetings'); document.getElementById('file-viewer-modal').classList.add('hidden');">
+              <i class="fa-solid fa-folder-open"></i> 進入專案作業區歷次會議
+            </button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+
+    openCustomModal(`💡 技術議題與檔案連結`, bodyHtml);
+  } catch (e) {
+    console.error("Open technical issue modal error:", e);
+  }
+};
 
 function highlightKeyword(text, keyword) {
   if (!text) return "";
