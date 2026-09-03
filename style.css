@@ -2276,3 +2276,135 @@ body {
 .gcal-event-chip {
   font-size: 13.5px !important;
 }
+
+/* ==============================================================================
+   大字體排版系統 (>16pt / 17px~24px) 與嚴格置中
+   ============================================================================== */
+html {
+  font-size: 17px !important;
+}
+
+body {
+  font-size: 17px !important;
+  line-height: 1.65 !important;
+}
+
+/* 標題層級放大 */
+h1 { font-size: 32px !important; }
+h2 { font-size: 26px !important; }
+h3 { font-size: 22px !important; }
+h4 { font-size: 19px !important; }
+h5 { font-size: 17px !important; }
+
+/* 導覽列、標籤、按鈕放大 */
+.nav-tab,
+.subnav-btn,
+.filter-chip,
+.report-chip,
+.type-chip,
+.btn-table-action,
+.btn-file-view,
+.btn-gcal-open,
+.btn-nav-today,
+.btn-nav-arrow {
+  font-size: 16.5px !important;
+  font-weight: 600 !important;
+}
+
+/* KPI 卡片文字放大 */
+.kpi-title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+}
+.kpi-val {
+  font-size: 32px !important;
+  font-weight: 800 !important;
+}
+.kpi-sub {
+  font-size: 15px !important;
+}
+
+/* 全域表格文字放大與嚴格置中 */
+.modern-table,
+.report-table,
+.data-table,
+.todo-table,
+.control-table {
+  font-size: 17px !important;
+  width: 100% !important;
+}
+
+.modern-table th,
+.report-table th,
+.data-table th,
+.todo-table th,
+.control-table th {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 12px 14px !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+
+.modern-table td,
+.report-table td,
+.data-table td,
+.todo-table td,
+.control-table td {
+  font-size: 16.5px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 12px 14px !important;
+}
+
+/* P10~P13 月報表格數據嚴格置中 */
+#monthly-report-dynamic-content table th,
+#monthly-report-dynamic-content table td {
+  text-align: center !important;
+  vertical-align: middle !important;
+  font-size: 17px !important;
+}
+
+/* 僅文字描述長欄位維持靠左對齊以利閱讀 */
+.todo-table td.col-desc,
+.control-table td.col-topic,
+.control-table td.col-result,
+.file-name-text,
+.res-desc,
+.res-title {
+  text-align: left !important;
+}
+
+/* 指引檔案列表文字放大 */
+.file-row-item {
+  font-size: 16.5px !important;
+  padding: 12px 16px !important;
+}
+.file-name-text {
+  font-size: 16.5px !important;
+  font-weight: 600 !important;
+}
+.guideline-folder-title {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+/* 日曆文字放大 */
+.current-month-display {
+  font-size: 22px !important;
+  font-weight: 800 !important;
+}
+.gcal-weekday {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  padding: 10px !important;
+}
+.day-num {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+}
+.gcal-event-chip {
+  font-size: 15px !important;
+  padding: 6px 10px !important;
+}

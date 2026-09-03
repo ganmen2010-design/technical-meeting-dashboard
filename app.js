@@ -989,14 +989,14 @@ function renderMonthlyReportAnalysis(viewType) {
           <table class="modern-table">
             <thead>
               <tr>
-                ${(p13.headers || []).map(h => `<th>${h}</th>`).join("")}
+                ${(p13.headers || []).map((h, hIdx) => `<th style="text-align: center; font-size: 17px;">${h}</th>`).join("")}
               </tr>
             </thead>
             <tbody>
               ${(p13.rows || []).map((row, idx) => `
                 <tr class="${idx === p13.rows.length - 1 ? 'total-row' : ''}">
                   ${row.map((cell, cIdx) => `
-                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}" style="${cIdx > 0 ? 'text-align: right;' : ''}">
+                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 17px; vertical-align: middle;">
                       ${cell}
                     </td>
                   `).join("")}
@@ -1026,7 +1026,7 @@ function renderMonthlyReportAnalysis(viewType) {
               ${(p12.rows || []).map(row => `
                 <tr>
                   ${row.map((cell, cIdx) => `
-                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}">${cell}</td>
+                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 17px; vertical-align: middle;">${cell}</td>
                   `).join("")}
                 </tr>
               `).join("")}
@@ -1054,7 +1054,7 @@ function renderMonthlyReportAnalysis(viewType) {
               ${(p11.rows || []).map(row => `
                 <tr>
                   ${row.map((cell, cIdx) => `
-                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}">${cell}</td>
+                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 17px; vertical-align: middle;">${cell}</td>
                   `).join("")}
                 </tr>
               `).join("")}
@@ -1082,7 +1082,7 @@ function renderMonthlyReportAnalysis(viewType) {
               ${(p10m.rows || []).map(row => `
                 <tr>
                   ${row.map((cell, cIdx) => `
-                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}">${cell}</td>
+                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 17px; vertical-align: middle;">${cell}</td>
                   `).join("")}
                 </tr>
               `).join("")}
@@ -1114,13 +1114,31 @@ function renderGuidelines(items) {
   }
 
   const groups = groupFilesByFolder(items);
-  list.innerHTML = Object.entries(groups).map(([folderName, fList], idx) => `
+  const toolbarHtml = `
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+      <span style="font-size: 17px; color: #a5f3fc; font-weight: 700;">
+        <i class="fa-solid fa-folder-tree"></i> 技術指引分類目錄 (共 ${items.length} 份文件)
+      </span>
+      <div style="display: flex; gap: 10px;">
+        <button type="button" class="btn-table-action" onclick="toggleAllGuidelineFolders(true)" style="padding: 8px 16px; font-size: 16px;">
+          <i class="fa-solid fa-square-plus text-cyan"></i> 全部展開
+        </button>
+        <button type="button" class="btn-table-action" onclick="toggleAllGuidelineFolders(false)" style="padding: 8px 16px; font-size: 16px;">
+          <i class="fa-solid fa-square-minus text-amber"></i> 全部收合
+        </button>
+      </div>
+    </div>
+  `;
+
+  const cardsHtml = Object.entries(groups).map(([folderName, fList], idx) => `
     <div class="guideline-folder-card">
-      <div class="guideline-folder-header" onclick="this.nextElementSibling.classList.toggle('hidden');">
+      <div class="guideline-folder-header" onclick="toggleGuidelineFolder(this)">
         <span class="guideline-folder-title"><i class="fa-solid fa-book-bookmark text-cyan"></i> ${folderName}</span>
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span class="files-badge">${fList.length} 份指引檔案</span>
-          <i class="fa-solid fa-chevron-down text-muted"></i>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span class="files-badge" style="font-size: 15px; padding: 4px 12px;">${fList.length} 份指引檔案</span>
+          <button type="button" class="btn-table-action" style="padding: 4px 10px; font-size: 14px; background: rgba(0,242,254,0.08); border-color: rgba(0,242,254,0.3);">
+            <i class="fa-solid fa-chevron-down text-cyan"></i> <span class="toggle-text">收合</span>
+          </button>
         </div>
       </div>
       <div class="category-files-list" style="padding: 10px 16px;">
@@ -1130,7 +1148,7 @@ function renderGuidelines(items) {
           return `
             <div class="file-row-item">
               <div class="file-left-info" title="${f.name}">
-                <i class="fa-solid ${getFileIcon(f.ext)}"></i>
+                <i class="fa-solid ${getFileIcon(f.ext)}" style="font-size: 20px;"></i>
                 <span class="file-name-text">${f.name}</span>
                 <small class="text-dim">(${(f.size/1024).toFixed(0)} KB ‧ ${f.lastModified})</small>
               </div>
@@ -1138,10 +1156,10 @@ function renderGuidelines(items) {
                 <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
                   <i class="fa-solid fa-eye"></i> 查看
                 </button>
-                <button type="button" class="btn-table-action" style="padding: 6px 10px; font-size: 12px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
+                <button type="button" class="btn-table-action" style="padding: 8px 12px; font-size: 14px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
                   <i class="fa-regular fa-copy"></i> 複製路徑
                 </button>
-                <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 6px 10px; font-size: 12px;">
+                <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 8px 12px; font-size: 14px;">
                   <i class="fa-solid fa-download"></i> 下載
                 </a>
               </div>
@@ -1151,7 +1169,42 @@ function renderGuidelines(items) {
       </div>
     </div>
   `).join("");
+
+  list.innerHTML = toolbarHtml + cardsHtml;
 }
+
+window.toggleGuidelineFolder = function(headerEl) {
+  const content = headerEl.nextElementSibling;
+  const icon = headerEl.querySelector(".fa-chevron-down, .fa-chevron-right");
+  const text = headerEl.querySelector(".toggle-text");
+  if (!content) return;
+  const isHidden = content.classList.toggle("hidden");
+  if (icon) {
+    icon.className = isHidden ? "fa-solid fa-chevron-right text-muted" : "fa-solid fa-chevron-down text-cyan";
+  }
+  if (text) {
+    text.textContent = isHidden ? "展開" : "收合";
+  }
+};
+
+window.toggleAllGuidelineFolders = function(expand) {
+  document.querySelectorAll(".guideline-folder-card").forEach(card => {
+    const content = card.querySelector(".category-files-list");
+    const icon = card.querySelector(".fa-chevron-down, .fa-chevron-right");
+    const text = card.querySelector(".toggle-text");
+    if (content) {
+      if (expand) {
+        content.classList.remove("hidden");
+        if (icon) icon.className = "fa-solid fa-chevron-down text-cyan";
+        if (text) text.textContent = "收合";
+      } else {
+        content.classList.add("hidden");
+        if (icon) icon.className = "fa-solid fa-chevron-right text-muted";
+        if (text) text.textContent = "展開";
+      }
+    }
+  });
+};
 
 function renderTemplates(items) {
   const list = document.getElementById("templates-list");
