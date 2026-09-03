@@ -1553,13 +1553,28 @@ function renderDrawerTabContent(tabType) {
 
   const proj = currentDrawerProject;
 
-  // 若非管控表頁籤，還原頂部待辦完成率標籤
-  if (tabType !== "control") {
-    const headerStatsContainer = document.getElementById("drawer-header-stats-container");
-    if (headerStatsContainer) {
-      const stats = proj.stats || { completionRate: 0, light: 'white' };
-      headerStatsContainer.innerHTML = `<span class="drawer-stat-badge light-${stats.light || 'white'}">待辦完成率: ${stats.completionRate}%</span>`;
-    }
+  // 頁籤頂部狀態標籤動態更新
+  const headerStatsContainer = document.getElementById("drawer-header-stats-container");
+  const normSite = normalizeSiteName(proj.shortName);
+  const projTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
+  const completedTodos = projTodos.filter(t => t.status === '已完成');
+  const noResultTodos = completedTodos.filter(t => !t.result || t.result.trim() === '' || t.result.trim() === '-' || t.result.trim() === '待補');
+  const todoStats = proj.stats || { 
+    completionRate: projTodos.length > 0 ? ((completedTodos.length / projTodos.length) * 100).toFixed(1) : 0, 
+    light: 'white' 
+  };
+
+  if (tabType === "todos" && headerStatsContainer) {
+    // 【核心新增】專案待辦事項頁面：在待辦完成率右邊新增已完成()、成果未填()
+    headerStatsContainer.innerHTML = `
+      <div class="control-header-ribbon">
+        <span class="drawer-stat-badge light-${todoStats.light || 'white'}">待辦完成率: ${todoStats.completionRate}%</span>
+        <span class="kpi-mini-pill kpi-emerald"><i class="fa-solid fa-circle-check"></i> 已完成(${completedTodos.length})</span>
+        <span class="kpi-mini-pill kpi-rose"><i class="fa-solid fa-link-slash"></i> 成果未填(${noResultTodos.length})</span>
+      </div>
+    `;
+  } else if (tabType !== "control" && headerStatsContainer) {
+    headerStatsContainer.innerHTML = `<span class="drawer-stat-badge light-${todoStats.light || 'white'}">待辦完成率: ${todoStats.completionRate}%</span>`;
   }
 
   // 頁籤 1: 歷次會議資料
