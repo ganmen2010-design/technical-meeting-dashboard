@@ -1916,7 +1916,8 @@ window.openProjectDrawer = function(projectId) {
 
   if (deptEl) deptEl.innerHTML = `${proj.dept} <span style="margin-left: 8px; font-size: 13px; color: #fbbf24; font-weight: normal;"><i class="fa-solid fa-user-gear"></i> 技術會議窗口：各專案規劃組及負責人</span>`;
   if (nameEl) nameEl.textContent = proj.shortName || proj.name;
-  
+
+  const normSite = normalizeSiteName(proj.shortName);
   const drawerTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
   const drawerPostponed = drawerTodos.filter(t => t.status === "後續辦理").length;
   const drawerActive = drawerTodos.length - drawerPostponed;
@@ -1931,9 +1932,7 @@ window.openProjectDrawer = function(projectId) {
     lightEl.textContent = `待辦完成率: ${stats.completionRate}%`;
   }
 
-  const normSite = normalizeSiteName(proj.shortName);
-  const projTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
-  if (todoCountEl) todoCountEl.textContent = projTodos.length;
+  if (todoCountEl) todoCountEl.textContent = drawerTodos.length;
   const scheduledCtrlItems = (proj.controlSheetItems || []).filter(isScheduledItem);
   if (controlCountEl) controlCountEl.textContent = scheduledCtrlItems.length;
 
@@ -1943,7 +1942,9 @@ window.openProjectDrawer = function(projectId) {
   if (firstTab) firstTab.classList.add("active");
 
   renderDrawerTabContent("meetings");
-  projectModal.classList.remove("hidden");
+  if (projectModal) {
+    projectModal.classList.remove("hidden");
+  }
 };
 
 // 支援深層跳轉專案抽屜至指定頁籤
