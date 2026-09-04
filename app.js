@@ -635,7 +635,7 @@ function initNavigations() {
           renderGoogleCalendar(currentCalYear, currentCalMonth);
         } else if (subType === "operations") {
           renderHeaderOverview(appData);
-          renderMonthlyReportAnalysis(currentReportView || "coverage");
+          renderMonthlyReportAnalysis(currentReportView || "dept");
           // renderDeptChart removed
         } else if (subType === "guidelines") {
           renderGuidelines(appData.guidelines || []);
@@ -744,7 +744,7 @@ async function loadDashboardData() {
 
     renderHeaderOverview(appData);
     renderGoogleCalendar(currentCalYear, currentCalMonth);
-    renderMonthlyReportAnalysis("coverage");
+    renderMonthlyReportAnalysis(currentReportView || "dept");
     // renderDeptChart removed
     renderGuidelines(appData.guidelines || []);
     renderTemplates(appData.templates || []);
@@ -1172,7 +1172,7 @@ function getDeptChipClass(dept) {
 // ==============================================================================
 // 6. 每月技術會議運作概況分析 (P10~P13)
 // ==============================================================================
-let currentReportView = "coverage";
+let currentReportView = "dept";
 window.currentCutoffDate = "2026-08-24";
 
 function initMonthlyReportTabs() {
@@ -1271,7 +1271,7 @@ window.applyCutoffDate = async function() {
     };
   }
 
-  renderMonthlyReportAnalysis(currentReportView || "coverage");
+  renderMonthlyReportAnalysis(currentReportView || "dept");
 
   if (statusEl) {
     statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald"></i> 已成功更新計算至基準日：${dateVal}`;
