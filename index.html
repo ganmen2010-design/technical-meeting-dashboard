@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=22.0">
+  <link rel="stylesheet" href="style.css?v=23.0">
 </head>
 <body>
   <!-- 背景發光粒子球體 (玻璃擬態質感) -->
@@ -137,6 +137,9 @@
           </button>
           <button type="button" class="subnav-btn" data-sub="others">
             <i class="fa-solid fa-folder-open"></i> 其他文件及法規
+          </button>
+          <button type="button" class="subnav-btn" data-sub="sharepoint">
+            <i class="fa-solid fa-graduation-cap text-amber"></i> SPS品保分享會簡報庫 <span class="badge-count" id="badge-sp-count">816</span>
           </button>
         </div>
 
@@ -297,6 +300,29 @@
             <!-- JS Dynamic Render -->
           </div>
         </div>
+
+        <!-- 1.6 SPS品保分享會簡報分類存檔 (816 份簡報) -->
+        <div id="sub-sharepoint" class="subpane hidden">
+          <div class="glass-card section-card">
+            <div class="card-header" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div class="section-title-group" style="display: flex; align-items: center; gap: 12px;">
+                  <i class="fa-solid fa-graduation-cap section-icon text-amber" style="font-size: 26px;"></i>
+                  <div>
+                    <h3 style="margin: 0; font-size: 20px;">SPS品質文件 - Share Point分享會簡報庫</h3>
+                    <p class="section-subtitle" style="margin: 4px 0 0 0; color: var(--text-dim); font-size: 14px;">收錄 1006安保中心 001-品保中心 16 大專業工程類別共 816 份施工品質自檢與技術分享簡報</p>
+                  </div>
+                </div>
+              </div>
+              <div class="category-meta-badge" style="margin-top: 4px; font-size: 13px; color: #a5f3fc; background: rgba(0,242,254,0.08); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(0,242,254,0.2);">
+                <i class="fa-solid fa-server"></i> <b>NAS 實體專區：</b>\192.168.1.221\s5@6安保中心-品保中心-SPS品質文件(分享會&知識庫&標準施工圖&自檢表)\Share Point分享會	-分享時間-share point簡報分類存檔
+              </div>
+            </div>
+            <div id="sharepoint-list" style="margin-top: 15px;">
+              <!-- JS Dynamic Render -->
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- 模組 2：各專案作業區 (Workspaces) -->
@@ -341,6 +367,7 @@
             <span class="type-label">搜尋範疇：</span>
             <button type="button" class="type-chip active" data-type="all">全部範疇</button>
             <button type="button" class="type-chip" data-type="issues">技術議題庫 (155)</button>
+            <button type="button" class="type-chip" data-type="sharepoint"><i class="fa-solid fa-graduation-cap"></i> SPS品保分享會 (816)</button>
             <button type="button" class="type-chip" data-type="files">專案會議簡報</button>
             <button type="button" class="type-chip" data-type="guides">技術指引與模板</button>
           </div>
@@ -441,6 +468,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=22.0"></script>
+  <script src="app.js?v=23.0"></script>
 </body>
 </html>

@@ -501,6 +501,9 @@ async function loadDashboardData() {
     renderGuidelines(appData.guidelines || []);
     renderTemplates(appData.templates || []);
     renderOthers(appData.others || []);
+    renderSharepointPresentations(appData.sharepointPresentations || []);
+    const spBadge = document.getElementById("badge-sp-count");
+    if (spBadge) spBadge.textContent = (appData.sharepointPresentations || []).length;
     renderWorkspaces(appData.projects || []);
 
   } catch (err) {
