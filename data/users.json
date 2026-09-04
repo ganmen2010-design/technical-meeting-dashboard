@@ -1,74 +1,113 @@
 [
   {
     "username": "admin",
+    "email": "admin@fengyu.com.tw",
+    "domain": "fengyu.com.tw",
     "passwordHash": "admin888",
-    "name": "系統管理員",
+    "name": "總部管理員",
     "role": "admin",
     "dept": "總部工務技術部",
     "avatar": "fa-user-shield",
-    "permissions": ["all"]
+    "permissions": [
+      "all"
+    ]
+  },
+  {
+    "username": "ganmen",
+    "email": "ganmen@fengyu.com.tw",
+    "domain": "fengyu.com.tw",
+    "passwordHash": "nas2026",
+    "name": "工程技術主管 (ganmen)",
+    "role": "admin",
+    "dept": "工程技術部",
+    "avatar": "fa-user-gear",
+    "permissions": [
+      "all"
+    ]
   },
   {
     "username": "north_dir",
+    "email": "north@fengyu.com.tw",
+    "domain": "fengyu.com.tw",
     "passwordHash": "north123",
-    "name": "北區工程處 主任",
+    "name": "北區工程處 處長/規畫組",
     "role": "director",
     "dept": "北區工程處",
     "avatar": "fa-user-tie",
-    "permissions": ["北區工程處-1.CDC防疫中心", "北區工程處-2.新光合纖南港總部", "北區工程處-3.公西聯合檔案庫房"]
+    "permissions": [
+      "北區工程處-1.CDC防疫中心",
+      "北區工程處-2.新光合纖南港總部",
+      "北區工程處-3.公西聯合檔案庫房"
+    ]
   },
   {
     "username": "central_dir",
+    "email": "central@fengyu.com.tw",
+    "domain": "fengyu.com.tw",
     "passwordHash": "central123",
-    "name": "中區工程處 主任",
+    "name": "中區工程處 處長/規畫組",
     "role": "director",
     "dept": "中區工程處",
     "avatar": "fa-user-tie",
-    "permissions": ["中區工程處-0.東仁安居", "中區工程處-1.朴子安居"]
+    "permissions": [
+      "中區工程處-0.東仁安居",
+      "中區工程處-1.朴子安居"
+    ]
   },
   {
     "username": "tainan_dir",
+    "email": "tainan@fengyu.com.tw",
+    "domain": "fengyu.com.tw",
     "passwordHash": "tainan123",
-    "name": "台南工程處 主任",
+    "name": "台南工程處 處長/規畫組",
     "role": "director",
     "dept": "台南工程處",
     "avatar": "fa-user-tie",
-    "permissions": ["台南工程處-0.億載安居", "台南工程處-1.平實安居", "台南工程處-2.台南崇明商場"]
+    "permissions": [
+      "台南工程處-0.億載安居",
+      "台南工程處-1.平實安居",
+      "台南工程處-2.台南崇明商場"
+    ]
   },
   {
     "username": "yilan_dir",
+    "email": "yilan@fengyu.com.tw",
+    "domain": "fengyu.com.tw",
     "passwordHash": "yilan123",
-    "name": "宜蘭工程處 主任",
+    "name": "宜蘭工程處 處長/規畫組",
     "role": "director",
     "dept": "宜蘭工程處",
     "avatar": "fa-user-tie",
-    "permissions": ["宜蘭工程處-1.坤門安居", "宜蘭工程處-2.立行倉儲物流"]
+    "permissions": [
+      "宜蘭工程處-1.坤門安居",
+      "宜蘭工程處-2.立行倉儲物流"
+    ]
   },
   {
     "username": "kaohsiung_dir",
+    "email": "kaohsiung@fengyu.com.tw",
+    "domain": "fengyu.com.tw",
     "passwordHash": "kaohsiung123",
-    "name": "高屏工程處 主任",
+    "name": "高屏工程處 處長/規畫組",
     "role": "director",
     "dept": "高屏工程處",
     "avatar": "fa-user-tie",
-    "permissions": ["高屏工程處-1.中油綠能", "高屏工程處-2.佛教堂"]
-  },
-  {
-    "username": "leisure_dir",
-    "passwordHash": "leisure123",
-    "name": "休閒事業處 主任",
-    "role": "director",
-    "dept": "休閒事業處",
-    "avatar": "fa-user-tie",
-    "permissions": ["休閒事業處-1.Wuma宿舍"]
+    "permissions": [
+      "高屏工程處-1.中油綠能",
+      "高屏工程處-2.佛教堂"
+    ]
   },
   {
     "username": "engineer",
+    "email": "engineer@fengyu.com.tw",
+    "domain": "fengyu.com.tw",
     "passwordHash": "nas2026",
     "name": "技術工程師",
     "role": "engineer",
     "dept": "工程技術部",
     "avatar": "fa-helmet-safety",
-    "permissions": ["all"]
+    "permissions": [
+      "all"
+    ]
   }
 ]

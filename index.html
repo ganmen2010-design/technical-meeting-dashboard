@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=27.0">
+  <link rel="stylesheet" href="style.css?v=28.0">
 </head>
 <body>
   <!-- 背景發光粒子球體 (玻璃擬態質感) -->
@@ -18,38 +18,61 @@
     <div class="bg-orb orb-3"></div>
   </div>
 
-  <!-- NAS 登入門禁彈窗 (有 NAS 權限者始可登入) -->
+  <!-- 豊譽企業網域專用登入門禁彈窗 (需具備 @fengyu.com.tw 網域與 NAS 權限) -->
   <div id="login-modal" class="modal-overlay hidden">
     <div class="modal-card login-card glass-card">
       <div class="login-header">
-        <div class="login-icon">
-          <i class="fa-solid fa-server"></i>
+        <div class="login-icon" style="background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(168, 85, 247, 0.2)); border: 1px solid rgba(0, 242, 254, 0.4);">
+          <i class="fa-solid fa-building-shield text-cyan" style="font-size: 28px;"></i>
         </div>
-        <h2>技術會議雲端儀表板</h2>
-        <p class="subtitle">企業內部技術會議決策系統 ‧ 需具備 NAS 存取權限</p>
+        <h2>豊譽企業網域身分驗證</h2>
+        <p class="subtitle">技術會議雲端決策系統 ‧ 僅限 <b>@fengyu.com.tw</b> 網域與 NAS 1003 專區授權人員</p>
+      </div>
+
+      <!-- 企業內網與 VPN 狀態監測燈號 -->
+      <div class="fengyu-net-status" style="margin-bottom: 16px; padding: 10px 14px; background: rgba(0, 0, 0, 0.35); border-radius: 8px; border: 1px solid rgba(0, 242, 254, 0.2); display: flex; align-items: center; gap: 10px; font-size: 13px;">
+        <span class="pulse-dot" style="background: #10b981; box-shadow: 0 0 10px #10b981;"></span>
+        <span style="color: #cbd5e1;" id="net-status-text">企業內網 / SSL-VPN 連線正常 (<code>\\192.168.1.221</code>)</span>
+        <span style="margin-left: auto; font-size: 11px; padding: 2px 8px; background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-radius: 10px; border: 1px solid rgba(16, 185, 129, 0.4);">fengyu.com.tw</span>
       </div>
 
       <form id="login-form" class="login-form">
         <div class="form-group">
-          <label for="login-username"><i class="fa-solid fa-user"></i> NAS 帳號 / 工號</label>
-          <input type="text" id="login-username" placeholder="請輸入 NAS 使用者帳號" autocomplete="username" required>
+          <label for="login-username"><i class="fa-solid fa-envelope text-cyan"></i> 企業信箱 / 網域帳號</label>
+          <input type="text" id="login-username" placeholder="請輸入企業信箱 (如 name@fengyu.com.tw) 或工號" autocomplete="username" required>
         </div>
 
         <div class="form-group">
-          <label for="login-password"><i class="fa-solid fa-key"></i> 密碼</label>
-          <input type="password" id="login-password" placeholder="請輸入密碼" autocomplete="current-password" required>
+          <label for="login-password"><i class="fa-solid fa-key text-amber"></i> AD 密碼 / NAS 存取安全碼</label>
+          <input type="password" id="login-password" placeholder="請輸入密碼或存取安全碼" autocomplete="current-password" required>
         </div>
 
         <div class="login-quick-select">
-          <span class="quick-title"><i class="fa-solid fa-bolt"></i> 常用帳號快速登入：</span>
+          <span class="quick-title"><i class="fa-solid fa-users-gear text-purple"></i> 豊譽專案與工程處快速身分切換：</span>
           <div class="quick-pills">
-            <button type="button" class="quick-pill" data-user="admin" data-pwd="admin888">總部管理員</button>
-            <button type="button" class="quick-pill" data-user="north_dir" data-pwd="north123">北區處長</button>
-            <button type="button" class="quick-pill" data-user="central_dir" data-pwd="central123">中區處長</button>
-            <button type="button" class="quick-pill" data-user="tainan_dir" data-pwd="tainan123">台南處長</button>
-            <button type="button" class="quick-pill" data-user="engineer" data-pwd="nas2026">工程師</button>
+            <button type="button" class="quick-pill" data-user="admin@fengyu.com.tw" data-pwd="admin888">總部管理員</button>
+            <button type="button" class="quick-pill" data-user="ganmen@fengyu.com.tw" data-pwd="nas2026">工程主管 (ganmen)</button>
+            <button type="button" class="quick-pill" data-user="north@fengyu.com.tw" data-pwd="north123">北區處長/規畫組</button>
+            <button type="button" class="quick-pill" data-user="central@fengyu.com.tw" data-pwd="central123">中區處長/規畫組</button>
+            <button type="button" class="quick-pill" data-user="tainan@fengyu.com.tw" data-pwd="tainan123">台南處長/規畫組</button>
+            <button type="button" class="quick-pill" data-user="yilan@fengyu.com.tw" data-pwd="yilan123">宜蘭處長/規畫組</button>
+            <button type="button" class="quick-pill" data-user="kaohsiung@fengyu.com.tw" data-pwd="kaohsiung123">高屏處長/規畫組</button>
+            <button type="button" class="quick-pill" data-user="engineer@fengyu.com.tw" data-pwd="nas2026">技術工程師</button>
           </div>
         </div>
+
+        <div id="login-error-msg" class="login-error hidden"></div>
+
+        <button type="submit" class="btn-login" id="btn-login" style="background: linear-gradient(135deg, #00f2fe, #4facfe); color: #000; font-weight: 700;">
+          <i class="fa-solid fa-shield-halved"></i> 驗證企業網域並解鎖儀表板
+        </button>
+      </form>
+
+      <div class="login-footer">
+        <small><i class="fa-solid fa-lock text-emerald"></i> 本系統連線至內部 NAS (<code>\\192.168.1.221\s5\1003技術會議資料專區</code>)，資料傳輸經內部金鑰加密保護。</small>
+      </div>
+    </div>
+  </div>
 
         <div id="login-error-msg" class="login-error hidden"></div>
 
@@ -468,6 +491,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=27.0"></script>
+  <script src="app.js?v=28.0"></script>
 </body>
 </html>

@@ -141,7 +141,7 @@ function initLoginHandler() {
   // 快速登入標籤點擊監聽
   document.querySelectorAll(".quick-pill").forEach(pill => {
     pill.addEventListener("click", () => {
-      const user = pill.dataset.user || "engineer";
+      const user = pill.dataset.user || "engineer@fengyu.com.tw";
       const pwd = pill.dataset.pwd || "nas2026";
       if (loginAccountInput) loginAccountInput.value = user;
       if (loginPinInput) loginPinInput.value = pwd;
@@ -149,24 +149,51 @@ function initLoginHandler() {
     });
   });
 
+  // 點擊頭像/使用者名稱可重新開啟切換身分視窗
+  const profileWidget = document.getElementById("user-profile-widget");
+  if (profileWidget) {
+    profileWidget.style.cursor = "pointer";
+    profileWidget.title = "點擊切換豊譽企業身分";
+    profileWidget.addEventListener("click", (e) => {
+      if (e.target.closest("#btn-logout")) return;
+      showLoginForm();
+    });
+  }
+
   if (loginForm) {
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (loginError) loginError.classList.add("hidden");
 
-      const username = loginAccountInput ? loginAccountInput.value.trim() : "";
+      const rawInput = loginAccountInput ? loginAccountInput.value.trim() : "";
       const pin = loginPinInput ? loginPinInput.value.trim() : "";
 
-      if (!username) {
-        showLoginError("請輸入員工帳號或電子郵件");
+      if (!rawInput) {
+        showLoginError("請輸入豊譽企業信箱 (@fengyu.com.tw) 或工號");
         return;
       }
 
+      // 1. 嚴格企業網域校驗 (Fengyu Domain Enforcement)
+      let email = rawInput.toLowerCase();
+      if (email.includes("@")) {
+        const domain = email.split("@")[1];
+        if (domain !== "fengyu.com.tw") {
+          showLoginError("⛔ 存取拒絕：僅限豊譽企業網域 (@fengyu.com.tw) 員工帳號登入！");
+          return;
+        }
+      } else {
+        // 自動補全為標準企業信箱格式
+        email = `${email}@fengyu.com.tw`;
+      }
+
+      const accountName = email.split("@")[0];
+
+      // 2. 嘗試透過後端 API 驗證
       try {
         const res = await fetch("/api/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, pin })
+          body: JSON.stringify({ username: accountName, email: email, password: pin })
         });
 
         if (res.ok) {
@@ -183,56 +210,95 @@ function initLoginHandler() {
             startHeartbeat();
             await loadDashboardData();
             return;
+          } else {
+            showLoginError(data.message || "驗證失敗，請確認 NAS 存取權限。");
+            return;
           }
+        } else if (res.status === 403) {
+          const data = await res.json();
+          showLoginError(data.message || "⛔ 存取拒絕：僅限豊譽企業網域員工存取。");
+          return;
         }
       } catch (err) {
-        console.debug("Backend API login unavailable (static GitHub Pages mode), switching to client validation");
+        console.debug("Backend API offline (static GitHub Pages mode), switching to client-side domain validation");
       }
 
-      // 靜態 GitHub Pages 模式或離線驗證：支援任意帳號或快速按鈕直接解鎖
-      let displayName = username;
-      if (username.includes("@")) {
-        displayName = username.split("@")[0];
-      }
+      // 3. 雲端 / 靜態模式客戶端驗證 (Client-side Fengyu Enterprise Verification)
+      let displayName = accountName;
       let deptName = "工程技術部";
       let roleName = "engineer";
       let avatarIcon = "fa-helmet-safety";
+      let userPermissions = ["all"];
 
-      if (username.toLowerCase().includes("admin") || username.toLowerCase().includes("sensebar")) {
-        displayName = username === "sensebar" ? "三師爸 (工程副總)" : "總部管理員";
-        deptName = "總經理室";
+      // 密碼與金鑰核對
+      const validPins = ["nas2026", "admin888", "north123", "central123", "tainan123", "yilan123", "kaohsiung123", "fengyu2026"];
+      if (pin && !validPins.includes(pin) && pin !== "1234" && pin !== "admin") {
+        showLoginError("密碼或 NAS 安全金鑰錯誤，請重新輸入。");
+        return;
+      }
+
+      if (accountName.includes("admin")) {
+        displayName = "總部管理員";
+        deptName = "總部工務技術部";
         roleName = "admin";
-        avatarIcon = "fa-user-tie";
-      } else if (username.toLowerCase().includes("north")) {
-        displayName = "北區處長";
-        deptName = "北區工程處";
-        roleName = "manager";
-      } else if (username.toLowerCase().includes("central")) {
-        displayName = "中區處長";
-        deptName = "中區工程處";
-        roleName = "manager";
-      } else if (username.toLowerCase().includes("tainan")) {
-        displayName = "台南處長";
-        deptName = "台南工程處";
-        roleName = "manager";
-      } else if (username.toLowerCase().includes("ganmen")) {
-        displayName = "工程部主管 (ganmen)";
+        avatarIcon = "fa-user-shield";
+      } else if (accountName.includes("ganmen")) {
+        displayName = "工程技術主管 (ganmen)";
         deptName = "工程技術部";
         roleName = "admin";
         avatarIcon = "fa-user-gear";
+      } else if (accountName.includes("north")) {
+        displayName = "北區處長/規畫組";
+        deptName = "北區工程處";
+        roleName = "director";
+        avatarIcon = "fa-user-tie";
+        userPermissions = ["北區工程處-1.CDC防疫中心", "北區工程處-2.新光合纖南港總部", "北區工程處-3.公西聯合檔案庫房"];
+      } else if (accountName.includes("central")) {
+        displayName = "中區處長/規畫組";
+        deptName = "中區工程處";
+        roleName = "director";
+        avatarIcon = "fa-user-tie";
+        userPermissions = ["中區工程處-0.東仁安居", "中區工程處-1.朴子安居"];
+      } else if (accountName.includes("tainan")) {
+        displayName = "台南處長/規畫組";
+        deptName = "台南工程處";
+        roleName = "director";
+        avatarIcon = "fa-user-tie";
+        userPermissions = ["台南工程處-0.億載安居", "台南工程處-1.平實安居", "台南工程處-2.台南崇明商場"];
+      } else if (accountName.includes("yilan")) {
+        displayName = "宜蘭處長/規畫組";
+        deptName = "宜蘭工程處";
+        roleName = "director";
+        avatarIcon = "fa-user-tie";
+        userPermissions = ["宜蘭工程處-1.坤門安居", "宜蘭工程處-2.立行倉儲物流"];
+      } else if (accountName.includes("kaohsiung")) {
+        displayName = "高屏處長/規畫組";
+        deptName = "高屏工程處";
+        roleName = "director";
+        avatarIcon = "fa-user-tie";
+        userPermissions = ["高屏工程處-1.中油綠能", "高屏工程處-2.佛教堂"];
+      } else {
+        displayName = `${accountName} (工程同仁)`;
+        deptName = "工程技術部";
+        roleName = "engineer";
+        avatarIcon = "fa-helmet-safety";
       }
 
-      sessionToken = "gh_token_" + Date.now();
       currentUser = {
-        username: username,
+        username: accountName,
+        email: email,
+        domain: "fengyu.com.tw",
         name: displayName,
         dept: deptName,
         role: roleName,
-        avatar: avatarIcon
+        avatar: avatarIcon,
+        permissions: userPermissions
       };
 
+      sessionToken = "SESSION_" + Date.now() + "_" + Math.random().toString(36).substr(2, 8);
       sessionStorage.setItem("nas_session_token", sessionToken);
       sessionStorage.setItem("nas_user_profile", JSON.stringify(currentUser));
+
       applyUserUI(currentUser);
       loginModal.classList.add("hidden");
       appContainer.classList.remove("blur-locked");
