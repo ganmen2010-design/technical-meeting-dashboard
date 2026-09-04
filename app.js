@@ -99,32 +99,43 @@ document.addEventListener("DOMContentLoaded", async () => {
   initViewerModal();
   initMonthlyReportTabs();
 
-  // 讀取登入身分
-  const savedUser = sessionStorage.getItem("nas_user_profile");
-  if (savedUser) {
-    try {
-      currentUser = JSON.parse(savedUser);
-    } catch (e) {
-      currentUser = null;
+  // 1. 優先從 localStorage 讀取已建檔/修改後的個人帳密與身分 (永久記住)
+  let savedUser = null;
+  try {
+    const localSaved = localStorage.getItem("fengyu_saved_user");
+    if (localSaved) {
+      savedUser = JSON.parse(localSaved);
     }
+  } catch(e) {}
+
+  if (!savedUser) {
+    try {
+      const sessSaved = sessionStorage.getItem("nas_user_profile");
+      if (sessSaved) {
+        savedUser = JSON.parse(sessSaved);
+      }
+    } catch(e) {}
   }
 
-  if (!currentUser) {
-    // 預設為統一初始帳號登入
+  if (savedUser) {
+    currentUser = savedUser;
+  } else {
+    // 預設為技術暨品保處 甘銘鐘 主管或統一帳號
     currentUser = {
-      username: "FU",
-      email: "FU@fengyu.com.tw",
+      username: "ganmen",
+      email: "ganmen@fengyu.com.tw",
       domain: "fengyu.com.tw",
-      name: "豐譽同仁 (統一初始帳號)",
+      name: "甘銘鐘 (技術暨品保處)",
       dept: "技術暨品保處",
-      role: "engineer",
-      avatar: "fa-helmet-safety",
+      role: "admin",
+      avatar: "fa-user-gear",
       permissions: ["all"],
-      isInitialUnified: true
+      isInitialUnified: false
     };
-    sessionStorage.setItem("nas_user_profile", JSON.stringify(currentUser));
+    localStorage.setItem("fengyu_saved_user", JSON.stringify(currentUser));
   }
 
+  sessionStorage.setItem("nas_user_profile", JSON.stringify(currentUser));
   sessionToken = sessionStorage.getItem("nas_session_token") || ("auto_token_" + Date.now());
   sessionStorage.setItem("nas_session_token", sessionToken);
 
@@ -139,6 +150,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 function showLoginForm() {
   if (loginModal) loginModal.classList.remove("hidden");
   if (appContainer) appContainer.classList.add("blur-locked");
+  
+  // 自動帶入已儲存之建檔帳密
+  try {
+    const saved = localStorage.getItem("fengyu_saved_user");
+    if (saved) {
+      const u = JSON.parse(saved);
+      if (loginAccountInput && u.email) loginAccountInput.value = u.email;
+      if (loginPinInput && u.passwordHash) loginPinInput.value = u.passwordHash;
+    }
+  } catch(e) {}
+
   if (loginAccountInput) loginAccountInput.focus();
 }
 
@@ -419,9 +441,38 @@ window.handleSaveProfile = async function(event) {
 
   const cleanUsername = email.split("@")[0];
 
-  // 1. 發送至後端 API (若有連線)
+  const updatedUserObj = {
+    username: cleanUsername,
+    email: email,
+    domain: "fengyu.com.tw",
+    passwordHash: newPassword,
+    name: name,
+    dept: dept,
+    role: "engineer",
+    avatar: "fa-user-gear",
+    permissions: ["all"],
+    isInitialUnified: false
+  };
+
+  // 1. 永久建檔至 localStorage (確保下次開瀏覽器完全免重新輸入)
+  localStorage.setItem("fengyu_saved_user", JSON.stringify(updatedUserObj));
+
+  let customUsers = [];
   try {
-    const res = await fetch("/api/update-profile", {
+    customUsers = JSON.parse(localStorage.getItem("fengyu_custom_users") || "[]");
+  } catch(e) {}
+
+  const existIdx = customUsers.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
+  if (existIdx >= 0) {
+    customUsers[existIdx] = updatedUserObj;
+  } else {
+    customUsers.push(updatedUserObj);
+  }
+  localStorage.setItem("fengyu_custom_users", JSON.stringify(customUsers));
+
+  // 2. 同步至伺服器 API (若在線)
+  try {
+    await fetch("/api/update-profile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -433,45 +484,21 @@ window.handleSaveProfile = async function(event) {
       })
     });
   } catch(e) {
-    console.debug("Backend update-profile offline, saving to local custom users store.");
+    console.debug("Offline / static mode, user saved to localStorage.");
   }
 
-  // 2. 本地儲存 (localStorage custom users)
-  let customUsers = [];
-  try {
-    customUsers = JSON.parse(localStorage.getItem("fengyu_custom_users") || "[]");
-  } catch(e) {}
-
-  const updatedUserObj = {
-    username: cleanUsername,
-    email: email,
-    domain: "fengyu.com.tw",
-    passwordHash: newPassword,
-    name: name,
-    dept: dept,
-    role: dept.includes("處長") ? "director" : "engineer",
-    avatar: "fa-user-gear",
-    permissions: ["all"],
-    isInitialUnified: false
-  };
-
-  const existIdx = customUsers.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
-  if (existIdx >= 0) {
-    customUsers[existIdx] = updatedUserObj;
-  } else {
-    customUsers.push(updatedUserObj);
-  }
-
-  localStorage.setItem("fengyu_custom_users", JSON.stringify(customUsers));
-
-  // 3. 更新目前 Session 身分
+  // 3. 更新目前 Session 與 UI
   currentUser = updatedUserObj;
   sessionStorage.setItem("nas_user_profile", JSON.stringify(currentUser));
+
+  // 4. 同步更新登入輸入框 (若下次手動登出登入，自動帶入此帳密)
+  if (loginAccountInput) loginAccountInput.value = email;
+  if (loginPinInput) loginPinInput.value = newPassword;
 
   applyUserUI(currentUser);
   closeEditProfileModal();
 
-  showAIToast(`✅ 豐譽個人帳密已成功更新！未來可直接使用 ${email} 登入。`);
+  showAIToast(`✅ 帳密建檔完成！已永久儲存 ${email} (${name})，爾後無需重複輸入。`);
 };
 
 function showProfError(msg) {
@@ -2263,16 +2290,27 @@ window.handleControlSearch = function(text) {
 // 8. 模組 3：全域資料搜尋引擎 (進階資料清洗 ➔ 主題歸納 ➔ 深度萃取總結 ➔ 出處直達)
 // ==============================================================================
 
-// 全國/豐譽建築工程核心工項知識矩陣 (包含規劃重點、施工注意事項、缺失防範對策)
+// 全國/豐譽建築工程核心工項知識矩陣 (整合「0.管控表-樣板115.07.01(公西案例)」官方細項標準)
 const ENGINEERING_KNOWLEDGE_MATRIX = {
   "連續壁": {
     topic: "連續壁工程 (Diaphragm Wall)",
     icon: "fa-cubes-stacked",
+    controlSheetSubitems: [
+      "景觀高程及壓樑高程確認",
+      "各層摩擦筋/預留筋設置檢討",
+      "鋼筋頭高度檢討",
+      "壁體內埋設物位置 (止水帶/端板箱型接頭)",
+      "預埋套管位置 (穿壁套管/傾度管/水壓計)",
+      "景觀水溝、共同管溝等位置檢討"
+    ],
     planning: [
-      { badge: "地質鑽探研判", text: "詳查基地鑽探柱狀圖、卵礫石與砂土層厚度、透水係數及歷史地下水位，評估坍孔風險與泥漿比重配置。" },
-      { badge: "導溝精度放樣", text: "導溝內淨寬設計為壁厚 +3~5 cm，頂部需高於地表 10~15 cm 防止雨水倒灌，放樣垂直度偏差嚴格控制 ≤ 1/500。" },
-      { badge: "單元分割配置", text: "開挖單元長度規劃 5.0~7.0 m，公母單元交錯配置；端板接頭/止水帶（PVC/水膨脹/鋼板箱型）完整性預先檢討。" },
-      { badge: "動線與沉澱池", text: "重型履帶吊車與抓斗作業動線地耐力驗算（防機具傾倒）；配置三段式泥漿沉澱池，容量需達單元開挖體積 1.5 倍以上。" }
+      { badge: "管控表-景觀與壓樑", text: "【管控表細項】景觀高程及壓樑高程確認，頂部需高於周邊地表 10~15 cm 防止雨水倒灌，放樣垂直度偏差嚴格控制 ≤ 1/500。" },
+      { badge: "管控表-摩擦筋預留筋", text: "【管控表細項】各層摩擦筋/預留筋設置檢討，開挖單元長度規劃 5.0~7.0 m，公母單元對稱配置與搭接檢討。" },
+      { badge: "管控表-鋼筋頭高度", text: "【管控表細項】鋼筋頭高度檢討，確認頂部超灌 50~80cm 鑿除劣質浮漿層後之主筋錨定與搭接長度。" },
+      { badge: "管控表-壁體內埋設物", text: "【管控表細項】壁體內埋設物位置確認，檢討公母單元端板接頭/止水帶（PVC/水膨脹/鋼板箱型接頭）之完整性與密貼度。" },
+      { badge: "管控表-預埋套管位置", text: "【管控表細項】穿壁套管、觀測監測管（壁體傾度管、水壓計）預埋定位與加勁固定，嚴防澆置移位。" },
+      { badge: "管控表-管溝景觀介面", text: "【管控表細項】景觀水溝、共同管溝位置檢討；重型履帶吊車作業動線地耐力驗算與三段式泥漿沉澱池容量規劃。" },
+      { badge: "地質鑽探研判", text: "詳查基地鑽探柱狀圖、卵礫石與砂土層厚度、透水係數及歷史地下水位，評估坍孔風險與泥漿比重配置。" }
     ],
     construction: [
       { badge: "成槽與垂直度", text: "每開挖 5m 以超音波測壁儀（Koden）檢測垂直度（偏差嚴格控制 ≤ 1/200 ~ 1/300），偏斜即時回填黏土球糾偏。" },
@@ -2291,11 +2329,22 @@ const ENGINEERING_KNOWLEDGE_MATRIX = {
   "模板": {
     topic: "模板工程與支撐系統 (Formwork & Shoring)",
     icon: "fa-layer-group",
+    controlSheetSubitems: [
+      "軀體圖說審查與各系統套繪",
+      "配模計畫 (鋁模/木模/清水模分割)",
+      "拆模孔及人孔規劃與結構補強",
+      "外牆分割計畫 (明縫/滴水線)",
+      "置料區/傳料動線與塔吊動線",
+      "鋼構/帷幕/格柵欄杆固定方式",
+      "模板清潔孔規劃 (洗模排水孔)"
+    ],
     planning: [
-      { badge: "載重與側壓計算", text: "依混凝土澆置速度與高度精算新拌混凝土側壓力，設計對拉螺桿（Tie Rod）間距與外加勁肋材。" },
-      { badge: "清水模分割計畫", text: "清水模需繪製螺桿孔位、明縫/陰角分割圖，落實模具模組化與損耗率管控。" },
-      { badge: "支撐系統檢討", text: "滿堂支撐架依載重檢討立柱間距，雙向配置水平繫條與剪刀撐（斜撐），確保整體穩定性。" },
-      { badge: "節點收頭設計", text: "梁柱接頭與牆板收頭處預留清潔口與止漿角材，避免拆模後產生蜂窩漏漿。" }
+      { badge: "管控表-軀體圖說", text: "【管控表細項】軀體圖說繪製與各系統套繪核對，控制樑柱斷面與樓板高程基準線。" },
+      { badge: "管控表-配模計畫", text: "【管控表細項】鋁模/木模配模計畫，精算新拌混凝土側壓力，設計對拉螺桿（Tie Rod）間距與加勁材。" },
+      { badge: "管控表-拆模人孔", text: "【管控表細項】拆模孔及人孔規劃與結構補強，確保拆模後傳料安全與孔洞止水封堵工法。" },
+      { badge: "管控表-外牆分割", text: "【管控表細項】外牆分割計畫、滴水線與明縫陰角排版，確保立面平整美觀與損耗控制。" },
+      { badge: "管控表-置料動線", text: "【管控表細項】置料區/傳料動線規劃，滿堂支撐架依載重配置立柱、水平繫條與斜撐補強。" },
+      { badge: "管控表-預埋固定", text: "【管控表細項】鋼構/帷幕/格柵欄杆固定方式與預埋鐵件套繪，避免後續打鑿破壞結構。" }
     ],
     construction: [
       { badge: "墨線放樣複核", text: "模板組立前複核基準軸線與高程水平線，嚴格控制垂直度與柱樑斷面尺寸偏差（≤ 3mm）。" },
@@ -2314,11 +2363,22 @@ const ENGINEERING_KNOWLEDGE_MATRIX = {
   "防水": {
     topic: "防水隔熱工程 (Waterproofing & Insulation)",
     icon: "fa-shield-halved",
+    controlSheetSubitems: [
+      "結構施工縫止水帶/止水條",
+      "建築與土接觸面防水與複壁排水",
+      "筏基回填區BS版防水防潮",
+      "室內用水區域 (浴廁/廚房/陽台) 防水",
+      "鋼構RC交界面彈性防水密封",
+      "建築外露面/外牆窗戶/帷幕防水",
+      "臨戶外門水密及截水系統"
+    ],
     planning: [
-      { badge: "分區系統設計", text: "屋頂（彈泥+PU/烘烤毯）、外牆（聚合物水泥/矽烷浸透）、浴廁（雙層彈泥+玻纖網）、地下室（矽酸質/複壁排水）分區配置。" },
-      { badge: "泛水與倒角設計", text: "所有女兒牆、基座陰陽角均需規劃 45° 水泥砂漿泛水倒角（斜角 ≥ 5cm），避免應力集中撕裂。" },
-      { badge: "落水頭管邊補強", text: "落水頭與穿牆管周邊規劃 10cm 凹槽填打無收縮止水砂漿與聚氨酯填縫膠。" },
-      { badge: "試水排水動線", text: "防水層規劃 1/50~1/100 洩水坡度，洩水動線暢通，預留蓄水試驗高度。" }
+      { badge: "管控表-結構施工縫", text: "【管控表細項】結構施工縫防水止水條、水膨脹止水帶配置，避免冷縫成為漏水路徑。" },
+      { badge: "管控表-與土接觸面", text: "【管控表細項】建築與土接觸面防水、地下室外壁周邊淺溝與複壁排水系統檢討。" },
+      { badge: "管控表-筏基BS版", text: "【管控表細項】筏基回填區 BS 版防水防潮、地坪預降與集水坑連通管配置。" },
+      { badge: "管控表-室內用水區", text: "【管控表細項】浴廁、廚房、陽台等室內用水區域雙層防水、泛水倒角與 48hr 蓄水試驗規劃。" },
+      { badge: "管控表-鋼構RC交界", text: "【管控表細項】鋼構與 RC 交界處耐候填縫膠與抗位移防水膜設計，防熱脹冷縮撕裂。" },
+      { badge: "管控表-外露面門窗", text: "【管控表細項】建築外露面、臨戶外門水密截水溝、外牆窗戶四周嵌縫與耐候矽利康打設。" }
     ],
     construction: [
       { badge: "基層素地清理", text: "素地打鑿凸起物、填補坑洞、高壓吸塵，檢測含水率 ≤ 8% 始可進行底塗施作。" },
@@ -2334,37 +2394,25 @@ const ENGINEERING_KNOWLEDGE_MATRIX = {
       { name: "女兒牆頂端滲水", cause: "防水層未收頭入壓條溝或泛水蓋板不良", solution: "防水膜向上延伸入收頭凹槽內並以壓條固定及矽利康封邊。" }
     ]
   },
-  "泥作": {
-    topic: "泥作粉刷與貼磚工程 (Plastering & Masonry)",
-    icon: "fa-trowel-bricks",
-    planning: [
-      { badge: "介面防裂檢討", text: "RC 與磚牆/輕質隔間牆異材質交接處，規劃 20cm 寬耐鹼玻纖網或鍍鋅鋼絲網防裂。" },
-      { badge: "厚度分層控制", text: "粗胚打底厚度超過 20mm 時需分層施作（每層 ≤ 15mm），防止自重下垂滑移龜裂。" },
-      { badge: "灰誌基準放樣", text: "全區雷射墨線放樣，設定水平垂直灰誌（麻吉），門窗開口預留塞縫空間 15~20mm。" },
-      { badge: "貼磚計畫排版", text: "繪製起磚圖，避免出現小於 1/3 磚之碎磚，預留伸縮縫（每 3~5m 設置一處）。" }
-    ],
-    construction: [
-      { badge: "RC打鑿與土膏甩漿", text: "RC 牆面全面打鑿拉毛、清除油污，均勻塗刷水泥土膏（添加樹脂黏著劑）增強握裹力。" },
-      { badge: "砂漿配比嚴格管制", text: "打底砂漿嚴格採用 1:3 水泥粗砂（篩選水洗砂）；粉光面採用 1:2 細砂，嚴禁隨意加水。" },
-      { badge: "分層打底與壓光", text: "第一道打底刮糙成齒狀，待硬化後施作第二道，表面以木光刮平；粉光需以鐵鏝刀壓光 2~3 遍。" },
-      { badge: "門窗框塞縫充填", text: "門窗框周邊以 1:2 防水水泥砂漿加壓灌注充填飽滿，嚴禁空洞留存滲水路徑。" },
-      { badge: "噴水養護作業", text: "打底完成後翌日起連續噴水養護至少 3 天，保持濕潤防止水分急遽蒸發乾縮龜裂。" }
-    ],
-    pitfalls: [
-      { name: "牆面澎拱脫落", cause: "基層未打鑿拉毛、土膏乾涸或灰塵未清", solution: "打底前徹底沖洗濕潤，塗刷土膏後趁濕（未結皮前）立即抹上砂漿。" },
-      { name: "表面細微龜裂", cause: "砂漿配比水灰比過大、細砂過多或養護不足", solution: "採用合格水洗中粗砂，嚴格管制坍度，落實連續噴水養護作業。" },
-      { name: "壁癌與白華析出", cause: "砂漿內含游離鈣受濕氣水份溶解滲出結晶", solution: "採用抗白華防水水泥砂漿，室內外牆體徹底隔絕水分滲入來源。" },
-      { name: "磁磚中空掉落", cause: "背膠塗佈不均或梳理齒距不足、晾置過久", solution: "採用雙面塗抹法（基層+磚背均塗膠泥），揉壓擠出空氣，抽樣敲擊檢驗。" }
-    ]
-  },
   "鋼筋": {
     topic: "鋼筋工程 (Rebar Fabrication & Placement)",
     icon: "fa-bars-staggered",
+    controlSheetSubitems: [
+      "樑柱接頭鋼筋檢討及綁紮要領",
+      "機電穿樑補強筋配置",
+      "角隅鋼筋補強與開口防裂",
+      "高低板配筋與降板收頭",
+      "擴梁及擴柱配筋檢討",
+      "帷幕/鋼構預埋件燒銲與錨定",
+      "NTC鋼筋預組工法評估"
+    ],
     planning: [
-      { badge: "接頭穿透率檢討", text: "BIM 3D 檢討梁柱接頭鋼筋密集區穿透率（淨間距 ≥ 25mm 或 1.33 倍粗粒料骨材最大粒徑）。" },
-      { badge: "續接器位置錯開", text: "主筋續接器錯開設置，同一斷面續接率不得超過 50%，續接位置避開塑鉸區（應力集中區）。" },
-      { badge: "保護層與墊塊規劃", text: "基礎 7.5cm、梁柱 4.0cm、樓板 2.0cm，規劃高強度水泥或塑膠定位墊塊密度（≥ 4個/m²）。" },
-      { badge: "錨定與搭接長度", text: "依設計強度精算鋼筋伸展與搭接長度（一般 ≥ 40d~50d），柱筋延伸至基礎底部確實錨定。" }
+      { badge: "管控表-樑柱接頭", text: "【管控表細項】樑柱接頭鋼筋檢討及綁紮要領，3D 套繪檢討鋼筋密集區穿透率（淨間距 ≥ 25mm）。" },
+      { badge: "管控表-機電穿樑", text: "【管控表細項】機電穿樑補強，套管位於梁跨中 1/3~1/4 剪力較小區，配置 45° 斜向補強筋與閉合箍筋。" },
+      { badge: "管控表-角隅補強", text: "【管控表細項】開口部角隅鋼筋補強、高低板降板配筋與錨定長度檢討。" },
+      { badge: "管控表-擴梁擴柱", text: "【管控表細項】擴梁及擴柱配筋、主筋續接器錯開設置（同一斷面續接率 ≤ 50%）。" },
+      { badge: "管控表-預埋件燒銲", text: "【管控表細項】帷幕/鋼構預埋件燒銲與保護層厚度確認（基礎 7.5cm、樑柱 4.0cm、樓板 2.0cm）。" },
+      { badge: "管控表-NTC預組", text: "【管控表細項】NTC 鋼筋預組工法評估，規劃地面模組化綁紮與大型吊裝防扭曲變形工法。" }
     ],
     construction: [
       { badge: "間距與綁紮固定", text: "鋼筋間距依圖放樣，交叉點以鍍鋅鐵絲確實緊固綁紮（主筋全綁、副筋跳綁），防止澆置移位。" },
@@ -2380,37 +2428,58 @@ const ENGINEERING_KNOWLEDGE_MATRIX = {
       { name: "主筋偏移偏斜", cause: "澆置混凝土衝擊或施工放樣誤差", solution: "柱主筋於樓板面預先以定位箍筋固定牢固，偏位需依結構技師簽證補強。" }
     ]
   },
-  "混凝土": {
-    topic: "混凝土澆置與養護工程 (Concrete Pouring & Curing)",
-    icon: "fa-fill-drip",
+  "泥作": {
+    topic: "泥作粉刷與貼磚工程 (Plastering & Masonry)",
+    icon: "fa-trowel-bricks",
+    controlSheetSubitems: [
+      "外牆白華/戶外地板白華/戶外樓梯白華防範",
+      "外牆汙染垂掛/懸挑底部滴水線/水濺防範",
+      "輕隔間下槽及止水墩放樣檢討",
+      "配合貼磚橫向補強料加密及倒板",
+      "RC面打鑿拉毛與麻吉灰誌基準放樣",
+      "門窗框塞縫防水灌注充填"
+    ],
     planning: [
-      { badge: "配比設計審查", text: "審查強度（f'c）、水灰比（W/C ≤ 0.5）、坍度、初凝/終凝時間、氯離子含量及抗滲配比。" },
-      { badge: "澆置動線計畫", text: "規劃壓送車停放位置、配管路徑、澆置分區順序（由遠而近、由低而高），備妥備用壓送設備。" },
-      { badge: "冷縫預防對策", text: "精算單小時出車量與澆置方量，確保下層混凝土初凝前完成上層澆置覆蓋，嚴防施工冷縫。" },
-      { badge: "天候應變計畫", text: "雨天備妥大型防雨帆布，高溫天候（> 32°C）要求預拌廠添加緩凝劑並控制出廠溫度（≤ 32°C）。" }
+      { badge: "管控表-防白華檢討", text: "【管控表細項】外牆白華、戶外地板白華、戶外樓梯白華防範，選用抗白華防水水泥砂漿。" },
+      { badge: "管控表-防污染滴水", text: "【管控表細項】外牆汙染垂掛防範、懸挑底部滴水線/滴水條留設、底部水濺汙染隔離。" },
+      { badge: "管控表-輕隔間止水", text: "【管控表細項】輕隔間下槽及止水墩放樣檢討、浴廁門檻止水墩高程預留。" },
+      { badge: "管控表-貼磚補強料", text: "【管控表細項】配合貼磚橫向補強料加密及倒板，預防磁磚黏著後震動脫落。" },
+      { badge: "異材質介面防裂", text: "RC 與磚牆/輕質牆異材質交接處，規劃 20cm 寬耐鹼玻纖網或鍍鋅鋼絲網防裂。" },
+      { badge: "灰誌基準放樣", text: "全區雷射墨線放樣，設定水平垂直灰誌（麻吉），門窗開口預留塞縫空間 15~20mm。" }
     ],
     construction: [
-      { badge: "進場坍度與氯離子檢驗", text: "每車檢核出機時間（90分鐘內澆置完畢），現場抽測坍度、溫度、空氣量及氯離子含量（≤ 0.15 kg/m³）。" },
-      { badge: "管線潤滑砂漿排除", text: "壓送泵管啟動時之潤滑砂漿嚴禁打入結構體內，必須完全排放至廢料桶運離。" },
-      { badge: "分層澆置厚度管制", text: "每層澆置厚度控制在 30~50 cm，特密管/象鼻管出料口距離澆置面 ≤ 1.5 m，防止粒料分離。" },
-      { badge: "高頻震動棒振搗", text: "震動棒垂直插入下層混凝土 5~10 cm，插點間距 ≤ 50 cm，每次振搗 10~15 秒至表面浮漿即緩慢拔出。" },
-      { badge: "表面壓光與濕治養護", text: "初凝前以木鏝刀整平，終凝前以鐵鏝刀壓光 2 次防裂；澆置翌日起覆蓋麻布/透水不織布蓄水養護 ≥ 7 天。" }
+      { badge: "RC打鑿與土膏甩漿", text: "RC 牆面全面打鑿拉毛、清除油污，均勻塗刷水泥土膏（添加樹脂黏著劑）增強握裹力。" },
+      { badge: "砂漿配比嚴格管制", text: "打底砂漿嚴格採用 1:3 水泥粗砂（篩選水洗砂）；粉光面採用 1:2 細砂，嚴禁隨意加水。" },
+      { badge: "分層打底與壓光", text: "第一道打底刮糙成齒狀，待硬化後施作第二道，表面以木光刮平；粉光需以鐵鏝刀壓光 2~3 遍。" },
+      { badge: "門窗框塞縫充填", text: "門窗框周邊以 1:2 防水水泥砂漿加壓灌注充填飽滿，嚴禁空洞留存滲水路徑。" },
+      { badge: "噴水養護作業", text: "打底完成後翌日起連續噴水養護至少 3 天，保持濕潤防止水分急遽蒸發乾縮龜裂。" }
     ],
     pitfalls: [
-      { name: "蜂窩與麻面孔洞", cause: "漏振、過振導致粒料分離或鋼筋過密", solution: "梁柱密集處輔以小管徑震動棒或橡膠槌輕敲外模，採用自充填混凝土（SCC）。" },
-      { name: "施工冷縫滲水", cause: "壓送中斷或出車間隔過長超過初凝時間", solution: "連續澆置嚴控供料，若產生冷縫需鑿除浮漿塗刷環氧樹脂接著劑。" },
-      { name: "塑性收縮裂縫", cause: "表面水分蒸發過快、風大或未及時覆蓋", solution: "初凝整平後立即噴灑養護劑或覆蓋保濕不織布，嚴禁現場隨意加水。" },
-      { name: "強度未達設計標準", cause: "水灰比失控、現場加水或養護水分不足", solution: "嚴格監控出料單，抗壓試體取樣製作與標準水中養護，落實 28 天抗壓試驗。" }
+      { name: "牆面澎拱脫落", cause: "基層未打鑿拉毛、土膏乾涸或灰塵未清", solution: "打底前徹底沖洗濕潤，塗刷土膏後趁濕（未結皮前）立即抹上砂漿。" },
+      { name: "表面細微龜裂", cause: "砂漿配比水灰比過大、細砂過多或養護不足", solution: "採用合格水洗中粗砂，嚴格管制坍度，落實連續噴水養護作業。" },
+      { name: "壁癌與白華析出", cause: "砂漿內含游離鈣受濕氣水份溶解滲出結晶", solution: "採用抗白華防水水泥砂漿，室內外牆體徹底隔絕水分滲入來源。" },
+      { name: "磁磚中空掉落", cause: "背膠塗佈不均或梳理齒距不足、晾置過久", solution: "採用雙面塗抹法（基層+磚背均塗膠泥），揉壓擠出空氣，抽樣敲擊檢驗。" }
     ]
   },
   "開挖": {
     topic: "地下室土方開挖與擋土支撐 (Excavation & Shoring)",
     icon: "fa-dolly",
+    controlSheetSubitems: [
+      "建築、結構、中間樁三向套圖",
+      "水平支撐間距與預力加載檢討",
+      "斜撐長度及梁柱衝突檢討",
+      "構台配置、高程、車行動線與載重檢討",
+      "千斤頂、土壓計、傾度管安全監測位置",
+      "構台上方欄杆高度、輪擋及吊料空間檢討",
+      "中間樁工法及拔樁回填計畫"
+    ],
     planning: [
-      { badge: "分階開挖計畫", text: "依結構計算書規劃每階開挖深度（各層樑底或支撐中心線下方 50cm），嚴禁超挖。" },
-      { badge: "型鋼支撐系統", text: "設計 H 型鋼橫檔（圍令）、水平支撐、斜撐、中間柱及預力施加值（Pre-load）。" },
-      { badge: "地下水降水控制", text: "規劃點井（Wellpoint）或深井（Deep Well）降水計畫，兼顧坑內降水與坑外水位保護（防地層沉陷）。" },
-      { badge: "自動化安全監測", text: "周邊布設壁體傾度管、水壓計、沉陷點、支撐應力計、鄰房傾斜計，設定警戒與行動值。" }
+      { badge: "管控表-三向套圖", text: "【管控表細項】建築、結構、中間樁套圖，檢討支撐橫檔與結構柱樑高程衝突。" },
+      { badge: "管控表-水平支撐間距", text: "【管控表細項】水平支撐垂直與水平間距檢討，計算側土壓力並設定預應力（Pre-load）施加值。" },
+      { badge: "管控表-斜撐長度衝突", text: "【管控表細項】斜撐長度及衝突檢討，確保千斤頂頂撐空間與開挖怪手迴轉半徑。" },
+      { badge: "管控表-構台配置動線", text: "【管控表細項】構台配置、高程、車行動線檢討，進行重型出土卡車載重與地耐力驗算。" },
+      { badge: "管控表-安全監測位置", text: "【管控表細項】千斤頂、土壓計、壁體傾度管、水位觀測井及鄰房沉陷監測點位置布設。" },
+      { badge: "管控表-欄杆輪擋吊料", text: "【管控表細項】構台上方欄杆高度（≥ 120cm）、安全輪擋及吊料開口防墜設施檢討。" }
     ],
     construction: [
       { badge: "嚴格依序開挖", text: "挖土機分區下挖，各區開挖完成後立即架設型鋼支撐，嚴禁大面積開挖懸空。" },
@@ -2429,11 +2498,22 @@ const ENGINEERING_KNOWLEDGE_MATRIX = {
   "門窗": {
     topic: "門窗與外牆帷幕工程 (Doors, Windows & Curtain Wall)",
     icon: "fa-door-open",
+    controlSheetSubitems: [
+      "門窗尺寸、台度高程、分割檢討",
+      "門窗MO及門窗尺寸微調",
+      "門窗五金、把手高度及無障礙法規",
+      "門框寬度、安裝進出面與裝修齊平",
+      "逃生窗、排煙窗與消防連動檢核",
+      "玻璃厚度、顏色、規格及熱浸檢驗",
+      "一樓外圍防風檢核、防水檢討、室內外斷水"
+    ],
     planning: [
-      { badge: "風壓與水密氣密設計", text: "依建築技術規則耐風壓計算及風洞試驗數據，選定鋁門窗/帷幕抗風壓（360 kgf/m²）、水密（50 kgf/m²）、氣密等級。" },
-      { badge: "預埋件精準定位", text: "帷幕預埋鐵件（Anchor Plate）於結構體灌漿前預先套繪放樣，留設 3D 調整裕度。" },
-      { badge: "熱應力與玻璃選用", text: "大片玻璃檢討熱應力破裂風險，採用 Low-E 複層或膠合強化玻璃，並通過熱浸處理（HST）防止自爆。" },
-      { badge: "填縫膠相容性", text: "送驗結構膠與耐候矽利康膠（Silicone）之附著力與相容性試驗，選定抗位移變形等級。" }
+      { badge: "管控表-門窗尺寸台度", text: "【管控表細項】門窗尺寸、台度高程、立面分割檢討，對齊結構體樑底與裝修完成面。" },
+      { badge: "管控表-MO尺寸調整", text: "【管控表細項】門窗 MO（砌磚/RC開口）及門窗尺寸微調，預留塞縫與防水膠空間 15~20mm。" },
+      { badge: "管控表-五金把手高度", text: "【管控表細項】門窗五金、把手高度及無障礙法規檢討，確認開啟方向與動線不衝突。" },
+      { badge: "管控表-安裝進出面", text: "【管控表細項】門框寬度、安裝進出面與室內外裝修材收頭齊平檢討。" },
+      { badge: "管控表-玻璃熱浸規格", text: "【管控表細項】玻璃厚度、顏色、Low-E 規格審查，大片玻璃要求進行熱浸處理（HST）防自爆。" },
+      { badge: "管控表-外圍斷水水密", text: "【管控表細項】一樓外圍防風檢核、防水檢討、室內外地坪高差斷水與 AAMA 501.2 現場水密噴水試驗。" }
     ],
     construction: [
       { badge: "雷射 3D 空間放樣", text: "以全站儀進行三維空間基準線放樣，校正預埋件與轉接件位置，垂直水平偏差 ≤ 2mm。" },
@@ -2450,13 +2530,24 @@ const ENGINEERING_KNOWLEDGE_MATRIX = {
     ]
   },
   "機電": {
-    topic: "機電給排水與穿梁套管 (MEP Engineering & Sleeves)",
+    topic: "機電給排水與六向整合 (MEP Engineering & Integration)",
     icon: "fa-bolt",
+    controlSheetSubitems: [
+      "管線衝突與設備衝突檢討",
+      "配管順序、走向、高程檢討與穿樑檢討",
+      "受電室/發電機/電信/消防/空調機房空間檢討",
+      "轉換層機電配管 (管道間/轉折管排/汙排水匯流)",
+      "梯廳機電整合與梯廳六向整合 (天花/壁面/開關/電盤)",
+      "浴室、廚房、陽台機電與六向整合",
+      "屋頂層機電整合 (水箱/設備基座/水錶/透氣墩座/落水頭)"
+    ],
     planning: [
-      { badge: "BIM 3D 碰撞檢討", text: "進行建築/結構/機電（CSD/SEM）3D 圖面套繪，檢討管線共架、高程淨高與維修空間。" },
-      { badge: "穿梁套管規範", text: "套管設置於梁跨中 1/3~1/4 剪力較小區；管徑 ≤ 1/3 梁深；相鄰套管淨距 ≥ 3 倍大管徑。" },
-      { badge: "套管補強筋設計", text: "穿梁套管周邊依結構圖說配置 45° 斜向補強筋及閉合式補強箍筋，確保梁體抗剪強度。" },
-      { badge: "管線坡度與排水", text: "污水與雨水管路規劃 1/50~1/100 排水坡度，避免水平轉向過多造成氣塞與沉積堵塞。" }
+      { badge: "管控表-管線設備衝突", text: "【管控表細項】管線衝突與設備衝突檢討，進行建築/結構/機電（CSD/SEM）BIM 3D 套繪。" },
+      { badge: "管控表-穿樑配管高程", text: "【管控表細項】穿樑檢討與配管順序、走向、高程檢討，套管置於跨中 1/3~1/4 剪力較小區且管徑 ≤ 1/3 梁深。" },
+      { badge: "管控表-機房空間載重", text: "【管控表細項】受電室、發電機房、電信機房、消防機房空間及大型設備進出動線與載重檢討。" },
+      { badge: "管控表-轉換層機電", text: "【管控表細項】轉換層機電配管檢討，管道間轉折管排、汙排水匯流與維修空間規劃。" },
+      { badge: "管控表-梯廳六向整合", text: "【管控表細項】梯廳六向整合（管排淨高、設備、箱體、電盤、照明、弱電、消防、開關整合）。" },
+      { badge: "管控表-屋頂層機電", text: "【管控表細項】屋頂層機電整合（水箱空間、設備基座、水錶空間、屋頂管排、透氣管墩座、溢水落水頭）。" }
     ],
     construction: [
       { badge: "套管牢固固定", text: "穿梁套管與鋼筋以點焊或扎絲牢固固定，管口以專用端蓋封堵，防止灌漿時浮動位移及進漿。" },
@@ -2470,29 +2561,6 @@ const ENGINEERING_KNOWLEDGE_MATRIX = {
       { name: "排水管路漏水滲水", cause: "管材接合膠水塗抹不均或未落實水壓試驗", solution: "PVC 接合前以清潔劑擦拭並塗滿膠水；隱蔽前 100% 進行通水試水拍照。" },
       { name: "冷凝水滴落破壞天花板", cause: "冰水管保溫不良、管夾處未作斷熱墊塊", solution: "管夾支架處加裝高密度硬質保溫木托（斷熱墊），保溫層完全密封。" },
       { name: "防火區劃破口遭罰", cause: "管線穿孔後未作防火填塞或填塞不全", solution: "逐層建立穿牆防火填塞查驗清單，填塞後拍照黏貼標籤供消防查驗。" }
-    ]
-  },
-  "品保": {
-    topic: "品保中心品質管理與自主檢查 (Quality Assurance & SPS)",
-    icon: "fa-award",
-    planning: [
-      { badge: "SPS品質文件落實", text: "依安保中心 001-品保中心 SPS 標準圖說、施工規範與自主檢查表，編制分項品質計畫書。" },
-      { badge: "檢驗停留點 (Hold Point)", text: "明確訂定隱蔽工程查驗停留點（如基礎開挖面、鋼筋綁紮、防水試水、灌漿前夕），未經品檢合格嚴禁進行下一道工序。" },
-      { badge: "材料進場檢驗管制", text: "所有結構材料（鋼筋、混凝土、鋼骨、磁磚、防水材）進場查驗出廠證明並落實抽樣送驗。" },
-      { badge: "首件樣板工程推行", text: "各分項工程施作前先完成「首件樣板（Mock-up）」，經業主、監造及工務所共同驗收確認品質標準。" }
-    ],
-    construction: [
-      { badge: "自主檢查逐項落實", text: "工地工程師每日落實一級自主檢查表，拍照記錄關鍵尺寸、垂直度、保護層及施工細節。" },
-      { badge: "品保中心抽查複驗", text: "品保中心定期巡迴抽查（二級品管），針對重點缺失開立改善通知單（NCR）並限期回覆。" },
-      { badge: "試驗報告追蹤彙整", text: "混凝土 7/28 天抗壓、鋼筋拉拔、水質試驗等報告即時建檔分析，異常第一時間發布預警。" },
-      { badge: "技術分享會經驗反饋", text: "定期召開 SPS 技術分享會，將各工地實際遭遇之施工難題與處置成果轉化為標準簡報傳承。" },
-      { badge: "數位化品管歷程歸檔", text: "全面導入雲端儀表板與 Notion 知識庫，將技術議題、待辦改善進度與圖說照片即時雙向連動。" }
-    ],
-    pitfalls: [
-      { name: "自主檢查表流於形式", cause: "未於現場實測即勾選、無照片佐證", solution: "全面推行現場量測標註照片上傳，抽查發現造假即列入工區品管評比扣分。" },
-      { name: "缺失改善未追蹤結案", cause: "改善通知單開立後未複查確認效果", solution: "儀表板待辦清單嚴格追蹤改善前中後對比照片，未通過複查不得結案。" },
-      { name: "材料未驗先用", cause: "工期緊迫未等試驗報告即先行施作", solution: "嚴格執行停留點門禁，未取得出廠證明與檢驗報告者吊扣進場通行權。" },
-      { name: "重複性通病屢次發生", cause: "經驗未有效傳承、工班未經教育訓練", solution: "開工前調閱 SPS 歷年分享會簡報進行工班教育訓練，落實標準作業程序。" }
     ]
   }
 };

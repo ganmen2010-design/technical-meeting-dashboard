@@ -13,6 +13,19 @@
     ]
   },
   {
+    "username": "ganmen",
+    "email": "ganmen@fengyu.com.tw",
+    "domain": "fengyu.com.tw",
+    "passwordHash": "Aa34561297+b",
+    "name": "甘銘鐘 (技術暨品保處)",
+    "role": "admin",
+    "dept": "技術暨品保處",
+    "avatar": "fa-user-gear",
+    "permissions": [
+      "all"
+    ]
+  },
+  {
     "username": "FU",
     "email": "FU@fengyu.com.tw",
     "domain": "fengyu.com.tw",
