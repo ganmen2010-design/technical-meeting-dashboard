@@ -2,10 +2,11 @@
  * 技術會議雲端儀表板伺服器 (Technical Meeting Cloud Dashboard Server)
  * 輕量原生 Node.js 實現，具備：
  * 1. 靜態前端資源託管
- * 2. NAS 權限驗證與門禁 Session
- * 3. 即時多人在線心跳保活引擎 (不斷線 Presence System)
- * 4. NAS 實體檔案代理檢視與下載
- * 5. 熱更新重新掃描 API
+ * 2. 豊譽企業網域 (@fengyu.com.tw) 驗證與 NAS 權限門禁 Session
+ * 3. 支援統一初始帳號 (FU@fengyu.com.tw / Aa34561297+b) 與自訂個人帳密修改
+ * 4. 即時多人在線心跳保活引擎 (不斷線 Presence System)
+ * 5. NAS 實體檔案代理檢視與下載
+ * 6. 熱更新重新掃描 API
  */
 
 const http = require("http");
@@ -162,7 +163,7 @@ const server = http.createServer(async (req, res) => {
         email: matched.email || `${matched.username}@fengyu.com.tw`,
         domain: "fengyu.com.tw",
         name: matched.name,
-        dept: matched.dept,
+        dept: matched.dept || "技術暨品保處",
         role: matched.role,
         avatar: matched.avatar || "fa-helmet-safety",
         currentView: "儀表板總覽",
@@ -180,7 +181,7 @@ const server = http.createServer(async (req, res) => {
           email: matched.email || `${matched.username}@fengyu.com.tw`,
           domain: "fengyu.com.tw",
           name: matched.name,
-          dept: matched.dept,
+          dept: matched.dept || "技術暨品保處",
           role: matched.role,
           avatar: matched.avatar || "fa-helmet-safety",
           permissions: matched.permissions || ["all"],
@@ -214,7 +215,7 @@ const server = http.createServer(async (req, res) => {
       domain: "fengyu.com.tw",
       passwordHash: newPassword || "Aa34561297+b",
       name: name || cleanUsername,
-      dept: dept || "工程技術部",
+      dept: dept || "技術暨品保處",
       role: dept && dept.includes("處長") ? "director" : "engineer",
       avatar: "fa-user-gear",
       permissions: ["all"],
@@ -238,7 +239,7 @@ const server = http.createServer(async (req, res) => {
       active.username = cleanUsername;
       active.email = email;
       active.name = name || cleanUsername;
-      active.dept = dept || "工程技術部";
+      active.dept = dept || "技術暨品保處";
       active.isInitialUnified = false;
     }
 
@@ -249,61 +250,8 @@ const server = http.createServer(async (req, res) => {
     });
     return;
   }
-    }
 
-    const cleanUsername = inputAccount.includes("@") ? inputAccount.split("@")[0] : inputAccount;
-    const users = readUsers();
-    
-    // 比對 users.json 中的 username 或 email
-    const matched = users.find(u => 
-      u.username.toLowerCase() === cleanUsername || 
-      (u.email && u.email.toLowerCase() === inputAccount) ||
-      (u.email && u.email.toLowerCase() === `${cleanUsername}@fengyu.com.tw`)
-    );
-
-    if (matched && (matched.passwordHash === password || password === "nas2026" || password === "admin888" || password === "fengyu2026")) {
-      const token = "SESSION_" + Date.now() + "_" + Math.random().toString(36).substr(2, 8);
-      
-      // 註冊上線狀態
-      activeUsers.set(token, {
-        token: token,
-        username: matched.username,
-        email: matched.email || `${matched.username}@fengyu.com.tw`,
-        domain: "fengyu.com.tw",
-        name: matched.name,
-        dept: matched.dept,
-        role: matched.role,
-        avatar: matched.avatar,
-        currentView: "儀表板總覽",
-        loginTime: new Date().toLocaleTimeString("zh-TW", { hour12: false }),
-        lastPing: Date.now(),
-        ip: clientIp
-      });
-
-      sendJson(res, 200, {
-        status: "success",
-        token: token,
-        user: {
-          username: matched.username,
-          email: matched.email || `${matched.username}@fengyu.com.tw`,
-          domain: "fengyu.com.tw",
-          name: matched.name,
-          dept: matched.dept,
-          role: matched.role,
-          avatar: matched.avatar,
-          permissions: matched.permissions
-        }
-      });
-    } else {
-      sendJson(res, 401, {
-        status: "error",
-        message: "帳號或密碼錯誤，請確認具備豊譽企業網域 (@fengyu.com.tw) 及 NAS 1003 專區權限。"
-      });
-    }
-    return;
-  }
-
-  // 2.1 企業內網與 VPN 狀態檢測
+  // 2.2 企業內網與 VPN 狀態檢測
   if (pathname === "/api/network-status" && req.method === "GET") {
     const isIntranet = clientIp.includes("192.168.1.") || clientIp.includes("192.168.") || clientIp.includes("10.") || clientIp === "127.0.0.1" || clientIp === "::1";
     sendJson(res, 200, {
@@ -325,6 +273,21 @@ const server = http.createServer(async (req, res) => {
       const user = activeUsers.get(token);
       user.lastPing = now;
       if (currentView) user.currentView = currentView;
+    } else if (token) {
+      activeUsers.set(token, {
+        token: token,
+        username: "FU",
+        email: "FU@fengyu.com.tw",
+        domain: "fengyu.com.tw",
+        name: "豐譽同仁",
+        dept: "技術暨品保處",
+        role: "engineer",
+        avatar: "fa-helmet-safety",
+        currentView: currentView || "儀表板總覽",
+        loginTime: new Date().toLocaleTimeString("zh-TW", { hour12: false }),
+        lastPing: now,
+        ip: clientIp
+      });
     }
 
     const onlineList = Array.from(activeUsers.values()).map(u => ({
@@ -335,14 +298,13 @@ const server = http.createServer(async (req, res) => {
       avatar: u.avatar,
       currentView: u.currentView,
       loginTime: u.loginTime,
-      activeSecondsAgo: Math.round((now - u.lastPing) / 1000)
+      ip: u.ip
     }));
 
     sendJson(res, 200, {
       status: "success",
       onlineCount: onlineList.length,
-      users: onlineList,
-      serverTime: new Date().toLocaleTimeString("zh-TW", { hour12: false })
+      users: onlineList
     });
     return;
   }
@@ -350,118 +312,81 @@ const server = http.createServer(async (req, res) => {
   // 4. 登出
   if (pathname === "/api/logout" && req.method === "POST") {
     const { token } = await parseBody(req);
-    if (token) activeUsers.delete(token);
-    sendJson(res, 200, { status: "success" });
+    if (token && activeUsers.has(token)) {
+      activeUsers.delete(token);
+    }
+    sendJson(res, 200, { status: "success", message: "Logged out" });
     return;
   }
 
-  // 5. 觸發重新掃描 NAS 數據 (管理員手動同步)
-  if (pathname === "/api/rescan" && req.method === "POST") {
-    exec("python scan_nas.py", { cwd: __dirname }, (error, stdout, stderr) => {
-      if (error) {
-        sendJson(res, 500, { status: "error", message: error.message });
-      } else {
-        sendJson(res, 200, { status: "success", message: "NAS 重新掃描完成" });
-      }
-    });
-    return;
-  }
-
-  // 6. 在本機開啟 NAS 實體檔案 (Windows start)
-  if (pathname === "/api/open-file" && req.method === "POST") {
-    const { filePath } = await parseBody(req);
+  // 5. 檔案下載代理
+  if (pathname === "/api/download" && req.method === "GET") {
+    const filePath = parsedUrl.query.path;
     if (!filePath) {
-      sendJson(res, 400, { status: "error", message: "缺少檔案路徑" });
+      sendJson(res, 400, { status: "error", message: "Missing file path" });
       return;
     }
-    exec(`start "" "${filePath}"`, (err) => {
-      if (err) {
-        sendJson(res, 500, { status: "error", message: "本機啟動檔案失敗：" + err.message });
-      } else {
-        sendJson(res, 200, { status: "success", message: "已在電腦上開啟檔案" });
-      }
-    });
-    return;
-  }
 
-  // 7. 下載 NAS 實體檔案
-  if (pathname === "/api/download" && req.method === "GET") {
-    const targetFile = parsedUrl.query.path;
-    if (targetFile && fs.existsSync(targetFile) && fs.statSync(targetFile).isFile()) {
-      const ext = path.extname(targetFile).toLowerCase();
-      const contentType = MIME_TYPES[ext] || "application/octet-stream";
-      const filename = path.basename(targetFile);
+    if (fs.existsSync(filePath)) {
+      const stat = fs.statSync(filePath);
+      const ext = path.extname(filePath).toLowerCase();
+      const mime = MIME_TYPES[ext] || "application/octet-stream";
+      const filename = path.basename(filePath);
+
       res.writeHead(200, {
-        "Content-Type": contentType,
+        "Content-Type": mime,
+        "Content-Length": stat.size,
         "Content-Disposition": `attachment; filename="${encodeURIComponent(filename)}"`
       });
-      fs.createReadStream(targetFile).pipe(res);
+
+      const readStream = fs.createReadStream(filePath);
+      readStream.pipe(res);
     } else {
-      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
-      res.end("NAS 檔案不存在或無存取權限");
+      sendJson(res, 404, { status: "error", message: `NAS 檔案不存在: ${filePath}` });
     }
     return;
   }
 
-  // 8. 機動更新統計基準日 (執行 update_report.ps1)
-  if (pathname === "/api/update-cutoff-date" && req.method === "POST") {
-    const { cutoffDate } = await parseBody(req);
-    const dateStr = cutoffDate || "2026-08-24";
-    const scriptPath = path.join(
-      process.env.USERPROFILE || "C:\\Users\\ganmen",
-      ".gemini\\config\\plugins\\technical-meeting-report-updater\\skills\\technical-meeting-report-updater\\scripts\\update_report.ps1"
-    );
-    const cmd = `powershell -ExecutionPolicy Bypass -File "${scriptPath}" -CutoffDateStr "${dateStr}"`;
-    exec(cmd, { cwd: __dirname }, (error, stdout, stderr) => {
-      if (error) {
-        sendJson(res, 500, { status: "error", message: error.message });
+  // 6. 熱更新重新掃描 NAS API
+  if (pathname === "/api/rescan" && req.method === "POST") {
+    const scriptPath = path.join(__dirname, "scan_nas.py");
+    exec(`python "${scriptPath}"`, (err, stdout, stderr) => {
+      if (err) {
+        console.error("Rescan failed:", err);
+        sendJson(res, 500, { status: "error", message: "掃描失敗", error: stderr });
       } else {
-        let freshData = null;
-        if (fs.existsSync(NAS_DATA_FILE)) {
-          try {
-            freshData = JSON.parse(fs.readFileSync(NAS_DATA_FILE, "utf-8"));
-          } catch(e) {}
-        }
-        sendJson(res, 200, { status: "success", message: `已成功依據統計基準日 ${dateStr} 更新數據`, data: freshData });
+        console.log("Rescan completed:", stdout);
+        sendJson(res, 200, { status: "success", message: "NAS 資料庫掃描並索引完成！" });
       }
     });
     return;
   }
 
-  // === 靜態檔案服務 ===
+  // === 靜態檔案託管 ===
   let reqPath = pathname === "/" ? "/index.html" : pathname;
-  let filePath = path.join(PUBLIC_DIR, reqPath);
+  let safePath = path.normalize(path.join(PUBLIC_DIR, reqPath));
 
-  // 安全路徑檢查防跨目錄攻擊
-  if (!filePath.startsWith(PUBLIC_DIR)) {
-    res.writeHead(403);
-    res.end("Forbidden");
+  if (!safePath.startsWith(PUBLIC_DIR)) {
+    sendJson(res, 403, { status: "error", message: "Access Denied" });
     return;
   }
 
-  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-    const ext = path.extname(filePath).toLowerCase();
-    const contentType = MIME_TYPES[ext] || "application/octet-stream";
-    res.writeHead(200, { "Content-Type": contentType });
-    fs.createReadStream(filePath).pipe(res);
+  if (fs.existsSync(safePath) && fs.statSync(safePath).isFile()) {
+    const ext = path.extname(safePath).toLowerCase();
+    const mime = MIME_TYPES[ext] || "text/plain";
+    res.writeHead(200, { "Content-Type": mime });
+    fs.createReadStream(safePath).pipe(res);
   } else {
-    // SPA Fallback to index.html
-    const indexPath = path.join(PUBLIC_DIR, "index.html");
-    if (fs.existsSync(indexPath)) {
-      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-      fs.createReadStream(indexPath).pipe(res);
-    } else {
-      res.writeHead(404);
-      res.end("Not Found");
-    }
+    res.writeHead(404, { "Content-Type": "text/html; charset=utf-8" });
+    res.end("<h1>404 Not Found - 技術會議雲端儀表板</h1>");
   }
 });
 
 server.listen(PORT, () => {
-  console.log("====================================================");
-  console.log("🚀 技術會議雲端儀表板伺服器已成功啟動！");
-  console.log(`🌐 本地存取網址: http://localhost:${PORT}`);
-  console.log(`📂 資料庫位置: ${NAS_DATA_FILE}`);
-  console.log("👥 即時多人在線心跳保活監測已就緒 (不斷線架構)");
-  console.log("====================================================");
+  console.log(`=======================================================`);
+  console.log(`🚀 技術會議雲端儀表板 (Technical Meeting Cloud Dashboard)`);
+  console.log(`🌐 服務運行中: http://localhost:${PORT}`);
+  console.log("📁 NAS 資料專區: \\\\192.168.1.221\\\\s5\\\\1003技術會議資料專區");
+  console.log(`🛡️ 企業網域門禁: 支援 FU@fengyu.com.tw 統一登入與個人帳密修改`);
+  console.log(`=======================================================`);
 });

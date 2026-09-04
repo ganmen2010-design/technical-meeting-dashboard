@@ -6,7 +6,7 @@
     "passwordHash": "admin888",
     "name": "總部管理員",
     "role": "admin",
-    "dept": "總部工務技術部",
+    "dept": "技術暨品保處",
     "avatar": "fa-user-shield",
     "permissions": [
       "all"
@@ -17,9 +17,9 @@
     "email": "FU@fengyu.com.tw",
     "domain": "fengyu.com.tw",
     "passwordHash": "Aa34561297+b",
-    "name": "豐譽同仁 (初始統一帳號)",
+    "name": "豐譽同仁 (統一初始帳號)",
     "role": "engineer",
-    "dept": "工程技術部",
+    "dept": "技術暨品保處",
     "avatar": "fa-helmet-safety",
     "permissions": [
       "all"

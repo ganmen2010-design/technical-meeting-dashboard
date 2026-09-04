@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       email: "FU@fengyu.com.tw",
       domain: "fengyu.com.tw",
       name: "豐譽同仁 (統一初始帳號)",
-      dept: "工程技術部",
+      dept: "技術暨品保處",
       role: "engineer",
       avatar: "fa-helmet-safety",
       permissions: ["all"],
@@ -240,7 +240,7 @@ function initLoginHandler() {
       );
 
       let displayName = "";
-      let deptName = "工程技術部";
+      let deptName = "技術暨品保處";
       let roleName = "engineer";
       let avatarIcon = "fa-helmet-safety";
       let isUnified = false;
@@ -251,7 +251,7 @@ function initLoginHandler() {
           return;
         }
         displayName = "總部管理員";
-        deptName = "總部工務技術部";
+        deptName = "技術暨品保處";
         roleName = "admin";
         avatarIcon = "fa-user-shield";
       } else if (accountName === "fu") {
@@ -260,7 +260,7 @@ function initLoginHandler() {
           return;
         }
         displayName = "豐譽同仁 (統一初始帳號)";
-        deptName = "工程技術部";
+        deptName = "技術暨品保處";
         roleName = "engineer";
         avatarIcon = "fa-helmet-safety";
         isUnified = true;
@@ -270,7 +270,7 @@ function initLoginHandler() {
           return;
         }
         displayName = customMatched.name || accountName;
-        deptName = customMatched.dept || "工程技術部";
+        deptName = customMatched.dept || "技術暨品保處";
         roleName = customMatched.role || "engineer";
         avatarIcon = customMatched.avatar || "fa-user-gear";
       } else {
@@ -280,7 +280,7 @@ function initLoginHandler() {
           return;
         }
         displayName = `${accountName} (工程同仁)`;
-        deptName = "工程技術部";
+        deptName = "技術暨品保處";
         roleName = "engineer";
         avatarIcon = "fa-helmet-safety";
         isUnified = true;
@@ -330,7 +330,7 @@ function applyUserUI(user) {
   if (displayUserName) {
     displayUserName.innerHTML = `${user.name || user.username} <span style="font-size: 11px; padding: 1px 6px; background: rgba(0,242,254,0.15); border: 1px solid rgba(0,242,254,0.35); border-radius: 8px; color: #a5f3fc; font-weight: normal; margin-left: 4px;">${user.domain || '@fengyu.com.tw'}</span>`;
   }
-  if (displayUserDept) displayUserDept.textContent = user.dept || "工程技術部";
+  if (displayUserDept) displayUserDept.textContent = user.dept || "技術暨品保處";
   if (userAvatarIcon) {
     userAvatarIcon.innerHTML = `<i class="fa-solid ${user.avatar || 'fa-user-shield'}"></i>`;
   }
@@ -393,7 +393,7 @@ window.handleSaveProfile = async function(event) {
 
   const name = profNameInput ? profNameInput.value.trim() : "";
   const email = profEmailInput ? profEmailInput.value.trim().toLowerCase() : "";
-  const dept = profDeptInput ? profDeptInput.value : "工程技術部";
+  const dept = profDeptInput ? profDeptInput.value : "技術暨品保處";
   const newPassword = profNewPwd ? profNewPwd.value.trim() : "";
   const confirmPassword = profConfirmPwd ? profConfirmPwd.value.trim() : "";
 

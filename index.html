@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=29.0">
+  <link rel="stylesheet" href="style.css?v=30.0">
 </head>
 <body>
   <!-- 背景發光粒子球體 (玻璃擬態質感) -->
@@ -18,7 +18,7 @@
     <div class="bg-orb orb-3"></div>
   </div>
 
-  <!-- 豊譽企業網域專用登入門禁彈窗 (僅保留總部管理員與統一初始帳號 FU@fengyu.com.tw) -->
+  <!-- 豊譽企業網域專用登入門禁彈窗 (僅允許統一帳號 FU@fengyu.com.tw 登入後自訂個人帳密) -->
   <div id="login-modal" class="modal-overlay hidden">
     <div class="modal-card login-card glass-card">
       <div class="login-header">
@@ -53,18 +53,9 @@
           <input type="password" id="login-password" value="Aa34561297+b" placeholder="預設密碼：Aa34561297+b" autocomplete="current-password" required>
         </div>
 
-        <!-- 快速切換區：依需求僅保留「總部管理員」 -->
-        <div class="login-quick-select" style="margin-bottom: 16px;">
-          <span class="quick-title"><i class="fa-solid fa-shield-halved text-purple"></i> 快速切換：</span>
-          <div class="quick-pills">
-            <button type="button" class="quick-pill" data-user="admin@fengyu.com.tw" data-pwd="admin888"><i class="fa-solid fa-user-shield"></i> 總部管理員</button>
-            <button type="button" class="quick-pill" data-user="FU@fengyu.com.tw" data-pwd="Aa34561297+b" style="border-color: rgba(0,242,254,0.4);"><i class="fa-solid fa-key"></i> 統一初始帳號 (FU)</button>
-          </div>
-        </div>
-
         <div id="login-error-msg" class="login-error hidden"></div>
 
-        <button type="submit" class="btn-login" id="btn-login" style="background: linear-gradient(135deg, #00f2fe, #4facfe); color: #000; font-weight: 700;">
+        <button type="submit" class="btn-login" id="btn-login" style="background: linear-gradient(135deg, #00f2fe, #4facfe); color: #000; font-weight: 700; margin-top: 10px;">
           <i class="fa-solid fa-right-to-bracket"></i> 驗證登入並進入儀表板
         </button>
       </form>
@@ -75,7 +66,7 @@
     </div>
   </div>
 
-  <!-- 主應用介面容器 (登入後解鎖顯示) --> (登入後解鎖顯示) -->
+  <!-- 主應用介面容器 (登入後解鎖顯示) -->
   <div id="app-container" class="app-container">
     <!-- 頂部導覽列 (Header Bar) -->
     <header class="glass-card header-bar">
@@ -515,14 +506,12 @@
             <i class="fa-solid fa-building text-purple"></i> 所屬工程處 / 單位
           </label>
           <select id="prof-dept" style="width: 100%; padding: 10px 12px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
-            <option value="總部工務技術部">總部工務技術部</option>
+            <option value="技術暨品保處">技術暨品保處</option>
             <option value="北區工程處">北區工程處</option>
             <option value="中區工程處">中區工程處</option>
             <option value="台南工程處">台南工程處</option>
             <option value="宜蘭工程處">宜蘭工程處</option>
             <option value="高屏工程處">高屏工程處</option>
-            <option value="休閒事業處">休閒事業處</option>
-            <option value="品保中心">品保中心</option>
           </select>
         </div>
 
@@ -567,6 +556,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=29.0"></script>
+  <script src="app.js?v=30.0"></script>
 </body>
 </html>
