@@ -24299,12 +24299,14 @@
         }
       ],
       "stats": {
+        "dept": "中區工程處",
         "total": 56,
-        "postponed": 0,
-        "active": 56,
         "completed": 47,
+        "uploaded": 42,
+        "pending": 9,
+        "postponed": 0,
         "completionRate": 83.9,
-        "light": "green"
+        "light": "yellow"
       },
       "controlSheetItems": [
         {
@@ -32082,12 +32084,14 @@
         }
       ],
       "stats": {
-        "total": 46,
-        "postponed": 8,
-        "active": 38,
+        "dept": "北區工程處",
+        "total": 38,
         "completed": 28,
+        "uploaded": 26,
+        "pending": 10,
+        "postponed": 8,
         "completionRate": 73.7,
-        "light": "yellow"
+        "light": "orange"
       },
       "controlSheetItems": [
         {
@@ -48209,12 +48213,14 @@
         }
       ],
       "stats": {
-        "total": 26,
-        "postponed": 1,
-        "active": 25,
+        "dept": "北區工程處",
+        "total": 25,
         "completed": 18,
+        "uploaded": 12,
+        "pending": 7,
+        "postponed": 1,
         "completionRate": 72.0,
-        "light": "yellow"
+        "light": "orange"
       },
       "controlSheetItems": [
         {
@@ -74930,10 +74936,12 @@
         }
       ],
       "stats": {
+        "dept": "北區工程處",
         "total": 12,
-        "postponed": 0,
-        "active": 12,
         "completed": 3,
+        "uploaded": 3,
+        "pending": 9,
+        "postponed": 0,
         "completionRate": 25.0,
         "light": "red"
       },
@@ -88259,10 +88267,12 @@
         }
       ],
       "stats": {
-        "total": 41,
-        "postponed": 1,
-        "active": 40,
+        "dept": "台南工程處",
+        "total": 40,
         "completed": 22,
+        "uploaded": 12,
+        "pending": 18,
+        "postponed": 1,
         "completionRate": 55.0,
         "light": "orange"
       },
@@ -97126,10 +97136,12 @@
         }
       ],
       "stats": {
-        "total": 29,
-        "postponed": 11,
-        "active": 18,
+        "dept": "台南工程處",
+        "total": 18,
         "completed": 10,
+        "uploaded": 9,
+        "pending": 8,
+        "postponed": 11,
         "completionRate": 55.6,
         "light": "orange"
       },
@@ -113721,10 +113733,12 @@
         }
       ],
       "stats": {
-        "total": 37,
-        "postponed": 2,
-        "active": 35,
+        "dept": "宜蘭工程處",
+        "total": 35,
         "completed": 27,
+        "uploaded": 18,
+        "pending": 8,
+        "postponed": 2,
         "completionRate": 77.1,
         "light": "yellow"
       },
@@ -117628,12 +117642,14 @@
         }
       ],
       "stats": {
+        "dept": "宜蘭工程處",
         "total": 15,
-        "postponed": 0,
-        "active": 15,
         "completed": 11,
+        "uploaded": 10,
+        "pending": 4,
+        "postponed": 0,
         "completionRate": 73.3,
-        "light": "yellow"
+        "light": "orange"
       },
       "controlSheetItems": [
         {
@@ -122441,10 +122457,12 @@
         }
       ],
       "stats": {
-        "total": 73,
-        "postponed": 19,
-        "active": 54,
+        "dept": "高屏工程處",
+        "total": 54,
         "completed": 32,
+        "uploaded": 25,
+        "pending": 22,
+        "postponed": 19,
         "completionRate": 59.3,
         "light": "orange"
       },

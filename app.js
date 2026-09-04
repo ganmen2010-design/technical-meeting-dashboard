@@ -2061,20 +2061,19 @@ function performGlobalSearch() {
     return;
   }
 
-  // 1. 資料清洗與檢索 (只搜尋：技術議題庫 155 筆、會議簡報檔案、技術指引模板)
+  // 1. 資料清洗與檢索 (搜尋：技術議題庫 155 筆、會議簡報檔案、指引模板、SPS品保分享會 816 份)
   const issueMatches = [];
   const fileMatches = [];
+  const sharepointMatches = [];
 
   // A. 搜尋技術議題庫 (155 筆跨專案技術結晶)
   if (activeSearchType === "all" || activeSearchType === "issues") {
     (appData.technicalIssues || []).forEach(issue => {
       const matchText = `${issue.dept} ${issue.site} ${issue.category} ${issue.title} ${issue.notes}`.toLowerCase();
       if (matchText.includes(query)) {
-        // 尋找對應之專案簡報檔案或目錄
         const matchedProj = (appData.projects || []).find(p => normalizeSiteName(p.shortName) === normalizeSiteName(issue.site));
         let issueFileObj = null;
         if (matchedProj) {
-          // 搜尋該專案歷次會議中是否有對應日期的簡報
           for (const m of (matchedProj.meetings || [])) {
             for (const f of (m.files || [])) {
               if (f.name.toLowerCase().includes(query) || (issue.meetDate && f.name.includes(issue.meetDate.replace(/-/g, '')))) {
@@ -2084,7 +2083,6 @@ function performGlobalSearch() {
             }
             if (issueFileObj) break;
           }
-          // 若無特定日，取該專案最新會議簡報
           if (!issueFileObj && matchedProj.meetings && matchedProj.meetings.length > 0 && matchedProj.meetings[0].files && matchedProj.meetings[0].files.length > 0) {
             issueFileObj = matchedProj.meetings[0].files[0];
           }
@@ -2149,7 +2147,28 @@ function performGlobalSearch() {
     });
   }
 
-  const allHits = [...issueMatches, ...fileMatches];
+  // C. 【核心新增】搜尋 SPS 品保中心分享會簡報庫 (816 份專業簡報)
+  if (activeSearchType === "all" || activeSearchType === "sharepoint") {
+    (appData.sharepointPresentations || []).forEach(sp => {
+      const matchText = `${sp.category} ${sp.subFolder || ''} ${sp.title} ${sp.name}`.toLowerCase();
+      if (matchText.includes(query)) {
+        sharepointMatches.push({
+          type: "sharepoint",
+          typeLabel: "SPS品保簡報",
+          tagClass: "tag-sharepoint",
+          dept: "品保中心",
+          site: sp.category,
+          date: sp.date || sp.lastModified,
+          title: sp.name,
+          desc: `工項類別：${sp.category} ‧ 檔案大小：${(sp.size/1024).toFixed(0)} KB`,
+          actionType: "viewFile",
+          fileObj: sp
+        });
+      }
+    });
+  }
+
+  const allHits = [...issueMatches, ...fileMatches, ...sharepointMatches];
   if (countEl) countEl.textContent = allHits.length;
 
   if (allHits.length === 0) {
@@ -2175,6 +2194,8 @@ function performGlobalSearch() {
     const safeIssue = h.issueObj ? encodeURIComponent(JSON.stringify(h.issueObj)) : "";
     if (h.type === "issue") {
       return `<button type="button" class="ai-cite-pill" onclick="openTechnicalIssueModal('${safeIssue}', '${safeFile}')" title="${h.title}"><i class="fa-solid fa-location-dot text-cyan"></i> ${site}：${h.title}</button>`;
+    } else if (h.type === "sharepoint") {
+      return `<button type="button" class="ai-cite-pill" onclick="openMeetingFileModal('${safeFile}')" title="${h.title}"><i class="fa-solid fa-graduation-cap text-amber"></i> 【SPS品保】${site}：${h.title}</button>`;
     } else {
       return `<button type="button" class="ai-cite-pill" onclick="openMeetingFileModal('${safeFile}')" title="${h.title}"><i class="fa-solid fa-file-powerpoint text-rose"></i> ${site}：${h.title}</button>`;
     }
