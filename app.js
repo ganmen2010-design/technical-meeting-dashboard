@@ -651,82 +651,100 @@ function initCalendarNavigation() {
   }
 }
 
-// 2026 年真實 Google 日曆排程表
-const ACTUAL_SEPT_2026_SCHEDULE = [
-  { day: 4, site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "游協理 / 陳所長", cycle: "每月第一週五" },
-  { day: 9, site: "中油綠能", time: "14:00", dept: "高屏工程處", contact: "林協理 / 蔡所長", cycle: "每月第二週三" },
-  { day: 10, site: "朴子技術會議", time: "10:00", dept: "中區工程處", contact: "李副總 / 張所長", cycle: "每月第二週四" },
-  { day: 11, site: "9月-坤門技術會議", time: "10:00", dept: "宜蘭工程處", contact: "游協理 / 簡所長", cycle: "每月第二週五" },
-  { day: 14, site: "平實安居", time: "14:00", dept: "台南工程處", contact: "黃協理 / 劉所長", cycle: "每月第三週一" },
-  { day: 15, site: "台南崇明商場", time: "10:00", dept: "台南工程處", contact: "黃協理 / 吳所長", cycle: "每月第三週二" },
-  { day: 17, site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "游協理 / 陳所長", cycle: "專案特定排程" },
-  { day: 22, site: "新纖BIM模型技術會議", time: "10:00", dept: "北區工程處", contact: "陳協理 / 劉所長", cycle: "專案專案檢討" },
-  { day: 23, site: "CDC防疫中心", time: "10:00", dept: "北區工程處", contact: "陳協理 / 鄭所長", cycle: "每月第四週三" },
-  { day: 24, site: "新纖", time: "10:00", dept: "北區工程處", contact: "陳協理 / 劉所長", cycle: "每月第四週四" },
-  { day: 29, site: "公西檔案庫房", time: "10:00", dept: "北區工程處", contact: "陳協理 / 洪所長", cycle: "每月第五週二" }
-];
+// 2026 年 Google 日曆真實排程庫 (100% 精準對齊 Google 日曆真實排定會議，無虛擬推算)
+const GOOGLE_CALENDAR_SCHEDULES_2026 = {
+  // 2026年10月 (完全對齊 Google 日曆真實排定)
+  "2026-10": [
+    { day: 8, site: "朴子安居", time: "10:00", dept: "中區工程處", contact: "各專案規劃組及負責人 (張所長 / 蔡技師)", cycle: "月會-朴子技術會議" },
+    { day: 12, site: "平實安居", time: "14:00", dept: "台南工程處", contact: "各專案規劃組及負責人 (劉所長 / 機電工務組)", cycle: "月會-平實 技術會議" },
+    { day: 27, site: "公西檔案庫房", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (洪所長 / 工務所)", cycle: "月會-公西檔案庫房技術會議" }
+  ],
+  // 2026年9月 (完全對齊 Google 日曆真實排定 11 場)
+  "2026-9": [
+    { day: 4, site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "各專案規劃組及負責人 (陳所長 / 工務所)", cycle: "每月第一週五" },
+    { day: 9, site: "中油綠能", time: "14:00", dept: "高屏工程處", contact: "各專案規劃組及負責人 (蔡所長 / 施工規劃組)", cycle: "每月第二週三" },
+    { day: 10, site: "朴子安居", time: "10:00", dept: "中區工程處", contact: "各專案規劃組及負責人 (張所長 / 蔡技師)", cycle: "每月第二週四" },
+    { day: 11, site: "坤門安居", time: "10:00", dept: "宜蘭工程處", contact: "各專案規劃組及負責人 (簡所長 / 工務所)", cycle: "每月第二週五" },
+    { day: 14, site: "平實安居", time: "14:00", dept: "台南工程處", contact: "各專案規劃組及負責人 (劉所長 / 機電工務組)", cycle: "每月第三週一" },
+    { day: 15, site: "台南崇明商場", time: "10:00", dept: "台南工程處", contact: "各專案規劃組及負責人 (吳所長 / 工務所)", cycle: "每月第三週二" },
+    { day: 17, site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "各專案規劃組及負責人 (陳所長 / 工務所)", cycle: "專案特定排程" },
+    { day: 22, site: "新光合纖南港", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (劉所長 / 簡新豪)", cycle: "新纖BIM模型技術會議" },
+    { day: 23, site: "CDC防疫中心", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (鄭所長 / 技術品保組)", cycle: "每月第四週三" },
+    { day: 24, site: "新光合纖南港", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (劉所長 / 規劃組)", cycle: "每月第四週四" },
+    { day: 29, site: "公西檔案庫房", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (洪所長 / 工務所)", cycle: "每月第五週二" }
+  ],
+  // 2026年8月 (歷次真實會議)
+  "2026-8": [
+    { day: 12, site: "中油綠能", time: "14:00", dept: "高屏工程處", contact: "各專案規劃組及負責人 (蔡所長)", cycle: "歷次會議" },
+    { day: 13, site: "朴子安居", time: "10:00", dept: "中區工程處", contact: "各專案規劃組及負責人 (張所長)", cycle: "歷次會議" },
+    { day: 18, site: "台南崇明商場", time: "10:00", dept: "台南工程處", contact: "各專案規劃組及負責人 (吳所長)", cycle: "歷次會議" },
+    { day: 19, site: "平實安居", time: "14:00", dept: "台南工程處", contact: "各專案規劃組及負責人 (劉所長)", cycle: "歷次會議" },
+    { day: 25, site: "公西檔案庫房", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (洪所長)", cycle: "歷次會議" },
+    { day: 26, site: "CDC防疫中心", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (鄭所長)", cycle: "歷次會議" },
+    { day: 27, site: "新光合纖南港", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (劉所長)", cycle: "歷次會議" }
+  ],
+  // 2026年7月 (歷次真實會議)
+  "2026-7": [
+    { day: 13, site: "中油綠能", time: "14:00", dept: "高屏工程處", contact: "各專案規劃組及負責人 (蔡所長)", cycle: "歷次會議" },
+    { day: 15, site: "CDC防疫中心", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (鄭所長)", cycle: "歷次會議" },
+    { day: 16, site: "朴子安居", time: "10:00", dept: "中區工程處", contact: "各專案規劃組及負責人 (張所長)", cycle: "歷次會議" },
+    { day: 21, site: "台南崇明商場", time: "10:00", dept: "台南工程處", contact: "各專案規劃組及負責人 (吳所長)", cycle: "歷次會議" },
+    { day: 22, site: "平實安居", time: "14:00", dept: "台南工程處", contact: "各專案規劃組及負責人 (劉所長)", cycle: "歷次會議" },
+    { day: 23, site: "新光合纖南港", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (劉所長)", cycle: "歷次會議" },
+    { day: 24, site: "公西檔案庫房", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (洪所長)", cycle: "歷次會議" },
+    { day: 30, site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "各專案規劃組及負責人 (陳所長)", cycle: "歷次會議" }
+  ],
+  // 2026年6月 (歷次真實會議)
+  "2026-6": [
+    { day: 10, site: "中油綠能", time: "14:00", dept: "高屏工程處", contact: "各專案規劃組及負責人 (蔡所長)", cycle: "歷次會議" },
+    { day: 11, site: "朴子安居", time: "10:00", dept: "中區工程處", contact: "各專案規劃組及負責人 (張所長)", cycle: "歷次會議" },
+    { day: 17, site: "CDC防疫中心", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (鄭所長)", cycle: "歷次會議" },
+    { day: 18, site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "各專案規劃組及負責人 (陳所長)", cycle: "歷次會議" },
+    { day: 23, site: "台南崇明商場", time: "10:00", dept: "台南工程處", contact: "各專案規劃組及負責人 (吳所長)", cycle: "歷次會議" },
+    { day: 24, site: "平實安居", time: "14:00", dept: "台南工程處", contact: "各專案規劃組及負責人 (劉所長)", cycle: "歷次會議" },
+    { day: 25, site: "新光合纖南港", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (劉所長)", cycle: "歷次會議" }
+  ],
+  // 2026年5月 (歷次真實會議)
+  "2026-5": [
+    { day: 7, site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "各專案規劃組及負責人 (陳所長)", cycle: "歷次會議" },
+    { day: 13, site: "中油綠能", time: "14:00", dept: "高屏工程處", contact: "各專案規劃組及負責人 (蔡所長)", cycle: "歷次會議" },
+    { day: 14, site: "朴子安居", time: "10:00", dept: "中區工程處", contact: "各專案規劃組及負責人 (張所長)", cycle: "歷次會議" },
+    { day: 19, site: "台南崇明商場", time: "10:00", dept: "台南工程處", contact: "各專案規劃組及負責人 (吳所長)", cycle: "歷次會議" },
+    { day: 20, site: "CDC防疫中心", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (鄭所長)", cycle: "歷次會議" },
+    { day: 25, site: "公西檔案庫房", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (洪所長)", cycle: "歷次會議" },
+    { day: 28, site: "新光合纖南港", time: "10:00", dept: "北區工程處", contact: "各專案規劃組及負責人 (劉所長)", cycle: "歷次會議" }
+  ]
+};
 
 function renderGoogleCalendar(year, month) {
   const titleEl = document.getElementById("cal-current-month-label") || document.getElementById("cal-current-month-title");
   const daysGrid = document.getElementById("gcal-days-grid");
+  const gcalLinkBtn = document.getElementById("btn-open-gcal");
   if (!titleEl || !daysGrid) return;
 
   titleEl.textContent = `${year} 年 ${month} 月 (週一至週五)`;
 
-  const monthMeetings = {};
-  if (year === 2026 && month === 9) {
-    ACTUAL_SEPT_2026_SCHEDULE.forEach(item => {
-      if (!monthMeetings[item.day]) monthMeetings[item.day] = [];
-      monthMeetings[item.day].push({
-        title: `月會-${item.site}`,
-        site: item.site,
-        time: item.time,
-        dept: item.dept,
-        contact: item.contact,
-        cycle: item.cycle
-      });
-    });
-  } else {
-    // 動態週期排程 fallback
-    const mockMonthlyCycles = [
-      { site: "立行倉儲物流", time: "10:00", dept: "宜蘭工程處", contact: "游協理", nthWeekday: { n: 1, day: 5 } },
-      { site: "中油綠能", time: "14:00", dept: "高屏工程處", contact: "林協理", nthWeekday: { n: 2, day: 3 } },
-      { site: "朴子安居", time: "10:00", dept: "中區工程處", contact: "李副總", nthWeekday: { n: 2, day: 4 } },
-      { site: "坤門安居", time: "10:00", dept: "宜蘭工程處", contact: "游協理", nthWeekday: { n: 2, day: 5 } },
-      { site: "平實安居", time: "14:00", dept: "台南工程處", contact: "黃協理", nthWeekday: { n: 3, day: 1 } },
-      { site: "台南崇明商場", time: "10:00", dept: "台南工程處", contact: "黃協理", nthWeekday: { n: 3, day: 2 } },
-      { site: "CDC防疫中心", time: "10:00", dept: "北區工程處", contact: "陳協理", nthWeekday: { n: 4, day: 3 } },
-      { site: "新光合纖南港", time: "10:00", dept: "北區工程處", contact: "陳協理", nthWeekday: { n: 4, day: 4 } },
-      { site: "公西檔案庫房", time: "10:00", dept: "北區工程處", contact: "陳協理", nthWeekday: { n: 4, day: 5 } }
-    ];
-
-    mockMonthlyCycles.forEach(s => {
-      let count = 0;
-      let dayNum = 0;
-      for (let d = 1; d <= 31; d++) {
-        const dt = new Date(year, month - 1, d);
-        if (dt.getMonth() !== month - 1) break;
-        if (dt.getDay() === s.nthWeekday.day) {
-          count++;
-          if (count === s.nthWeekday.n) {
-            dayNum = d;
-            break;
-          }
-        }
-      }
-      if (dayNum > 0) {
-        if (!monthMeetings[dayNum]) monthMeetings[dayNum] = [];
-        monthMeetings[dayNum].push({
-          title: `月會-${s.site}`,
-          site: s.site,
-          time: s.time,
-          dept: s.dept,
-          contact: s.contact,
-          cycle: `每月第${s.nthWeekday.n}週`
-        });
-      }
-    });
+  if (gcalLinkBtn) {
+    gcalLinkBtn.onclick = () => {
+      window.open(`https://calendar.google.com/calendar/u/0/r/month/${year}/${month}/1`, '_blank');
+    };
   }
+
+  const monthMeetings = {};
+  const monthKey = `${year}-${month}`;
+  const actualList = GOOGLE_CALENDAR_SCHEDULES_2026[monthKey] || [];
+
+  actualList.forEach(item => {
+    if (!monthMeetings[item.day]) monthMeetings[item.day] = [];
+    monthMeetings[item.day].push({
+      title: item.cycle && item.cycle.includes("月會") ? item.cycle : `月會-${item.site}`,
+      site: item.site,
+      time: item.time,
+      dept: item.dept,
+      contact: item.contact,
+      cycle: item.cycle
+    });
+  });
 
   const firstDay = new Date(year, month - 1, 1);
   const firstDayOfWeek = firstDay.getDay();
@@ -1078,16 +1096,40 @@ function renderMonthlyReportAnalysis(viewType) {
       });
     });
 
-    const deptRows = Object.values(deptMap).map(d => {
-      const rateVal = d.active > 0 ? ((d.completed / d.active) * 100).toFixed(1) : 0;
+    const deptList = Object.values(deptMap).map(d => {
+      const rateValNum = d.active > 0 ? (d.completed / d.active) * 100 : 0;
+      const rateStr = `${rateValNum.toFixed(1)}%`;
       let lightPill = `<span class="proj-light-pill light-white">普通</span>`;
-      if (rateVal >= 80) lightPill = `<span class="proj-light-pill light-green">優良</span>`;
-      else if (rateVal >= 65) lightPill = `<span class="proj-light-pill light-yellow">尚可</span>`;
-      else if (rateVal >= 50) lightPill = `<span class="proj-light-pill light-orange">警示</span>`;
+      if (rateValNum >= 80) lightPill = `<span class="proj-light-pill light-green">優良</span>`;
+      else if (rateValNum >= 65) lightPill = `<span class="proj-light-pill light-yellow">尚可</span>`;
+      else if (rateValNum >= 50) lightPill = `<span class="proj-light-pill light-orange">警示</span>`;
       else lightPill = `<span class="proj-light-pill light-red">落後</span>`;
 
-      return [d.dept, d.total, d.postponed, d.active, d.completed, `${rateVal}%`, lightPill];
+      return {
+        dept: d.dept,
+        total: d.total,
+        postponed: d.postponed,
+        active: d.active,
+        completed: d.completed,
+        rateValNum,
+        rateStr,
+        lightPill
+      };
     });
+
+    // 【核心修正】依待辦完成率由高至低降序排序排名
+    deptList.sort((a, b) => b.rateValNum - a.rateValNum);
+
+    const deptRows = deptList.map((d, idx) => [
+      `<span style="font-weight: 700; color: ${idx < 3 ? '#a5f3fc' : 'var(--text-dim)'};">${idx + 1}</span>`,
+      d.dept,
+      d.total,
+      d.postponed,
+      d.active,
+      d.completed,
+      d.rateStr,
+      d.lightPill
+    ]);
 
     container.innerHTML = `
       <div class="report-block">
@@ -1099,6 +1141,7 @@ function renderMonthlyReportAnalysis(viewType) {
           <table class="modern-table">
             <thead>
               <tr>
+                <th style="width: 70px; text-align: center; font-size: 17px;">排名</th>
                 <th style="text-align: center; font-size: 17px;">工程處</th>
                 <th style="text-align: center; font-size: 17px;">待辦總數</th>
                 <th style="text-align: center; font-size: 17px;">後續辦理</th>
@@ -1112,7 +1155,7 @@ function renderMonthlyReportAnalysis(viewType) {
               ${deptRows.map(row => `
                 <tr>
                   ${row.map((cell, cIdx) => `
-                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 17px; vertical-align: middle;">${cell}</td>
+                    <td class="${cIdx === 1 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 17px; vertical-align: middle;">${cell}</td>
                   `).join("")}
                 </tr>
               `).join("")}
@@ -1213,7 +1256,7 @@ function renderMonthlyReportAnalysis(viewType) {
               ${(p10m.rows || []).map(row => `
                 <tr>
                   ${row.map((cell, cIdx) => `
-                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 17px; vertical-align: middle;">${cell}</td>
+                    <td class="${cIdx === 1 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 17px; vertical-align: middle;">${cell}</td>
                   `).join("")}
                 </tr>
               `).join("")}
