@@ -1424,6 +1424,7 @@ function renderOthers(items) {
     list.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-folder-open"></i><p>目前尚無其他文件檔案</p></div>`;
     return;
   }
+
   const groups = groupFilesByFolder(items);
   const toolbarHtml = `
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
@@ -1447,7 +1448,7 @@ function renderOthers(items) {
         <span class="guideline-folder-title"><i class="fa-solid fa-folder-open text-purple"></i> ${folderName}</span>
         <div style="display: flex; align-items: center; gap: 12px;">
           <span class="files-badge" style="font-size: 15px; padding: 4px 12px;">${fList.length} 份文件</span>
-          <button type="button" class="btn-table-action" style="padding: 4px 12px; font-size: 14.5px; background: rgba(168,85,247,0.08); border-color: rgba(168,85,247,0.3); pointer-events: none;">
+          <button type="button" class="btn-table-action" style="padding: 4px 12px; font-size: 14.5px; background: rgba(0,242,254,0.08); border-color: rgba(0,242,254,0.3); pointer-events: none;">
             <i class="fa-solid fa-chevron-down text-purple guideline-toggle-icon"></i> <span class="toggle-text">收合</span>
           </button>
         </div>
@@ -1461,7 +1462,7 @@ function renderOthers(items) {
               <div class="file-left-info" title="${f.name}">
                 <i class="fa-solid ${getFileIcon(f.ext)}" style="font-size: 22px;"></i>
                 <span class="file-name-text">${f.name}</span>
-                <small class="text-dim">(${(f.size/1024).toFixed(0)} KB)</small>
+                <small class="text-dim">(${(f.size/1024).toFixed(0)} KB ‧ ${f.lastModified})</small>
               </div>
               <div class="file-actions">
                 <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
@@ -1484,40 +1485,49 @@ function renderOthers(items) {
   list.innerHTML = toolbarHtml + cardsHtml;
 }
 
-window.toggleGuidelineFolder = function(headerEl) {
-  const card = headerEl.closest(".guideline-folder-card");
-  if (!card) return;
-  const isCollapsed = card.classList.toggle("collapsed");
-  const text = card.querySelector(".toggle-text");
-  if (text) text.textContent = isCollapsed ? "展開" : "收合";
-};
+// 渲染 SPS品保分享會簡報庫 (816 份簡報)
+function renderSharepointPresentations(items) {
+  const list = document.getElementById("sharepoint-list");
+  if (!list) return;
+  const spItems = items || (appData && appData.sharepointPresentations) || [];
+  if (spItems.length === 0) {
+    list.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-folder-open"></i><p>目前尚無 SPS 品保分享會簡報檔案</p></div>`;
+    return;
+  }
 
-window.toggleAllGuidelineFolders = function(expand) {
-  document.querySelectorAll(".guideline-folder-card").forEach(card => {
-    const text = card.querySelector(".toggle-text");
-    if (expand) {
-      card.classList.remove("collapsed");
-      if (text) text.textContent = "收合";
-    } else {
-      card.classList.add("collapsed");
-      if (text) text.textContent = "展開";
-    }
+  const groups = {};
+  spItems.forEach(f => {
+    const cat = f.category || "00菇系報告";
+    if (!groups[cat]) groups[cat] = [];
+    groups[cat].push(f);
   });
-};
 
-function renderTemplates(items) {
-  const list = document.getElementById("templates-list");
-  if (!list) return;
-  if (items.length === 0) {
-    list.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-folder-open"></i><p>目前尚無作業模板檔案</p></div>`;
-    return;
-  }
-  const groups = groupFilesByFolder(items);
-  list.innerHTML = Object.entries(groups).map(([folderName, fList]) => `
-    <div class="guideline-folder-card">
-      <div class="guideline-folder-header" onclick="this.nextElementSibling.classList.toggle('hidden');">
-        <span class="guideline-folder-title"><i class="fa-solid fa-file-contract text-emerald"></i> ${folderName}</span>
-        <span class="files-badge">${fList.length} 份樣板</span>
+  const toolbarHtml = `
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+      <span style="font-size: 18px; color: #a5f3fc; font-weight: 700;">
+        <i class="fa-solid fa-folder-tree"></i> SPS品質簡報分類目錄 (共 17 類別 ‧ ${spItems.length} 份文件)
+      </span>
+      <div style="display: flex; gap: 10px;">
+        <button type="button" class="btn-table-action" onclick="toggleAllGuidelineFolders(true)" style="padding: 8px 18px; font-size: 15px; cursor: pointer;">
+          <i class="fa-solid fa-square-plus text-cyan"></i> 全部展開
+        </button>
+        <button type="button" class="btn-table-action" onclick="toggleAllGuidelineFolders(false)" style="padding: 8px 18px; font-size: 15px; cursor: pointer;">
+          <i class="fa-solid fa-square-minus text-amber"></i> 全部收合
+        </button>
+      </div>
+    </div>
+  `;
+
+  const cardsHtml = Object.entries(groups).map(([folderName, fList], idx) => `
+    <div class="guideline-folder-card ${idx > 2 ? 'collapsed' : ''}" id="sp-card-${idx}">
+      <div class="guideline-folder-header" onclick="toggleGuidelineFolder(this)" style="cursor: pointer; user-select: none;">
+        <span class="guideline-folder-title"><i class="fa-solid fa-graduation-cap text-amber"></i> ${folderName}</span>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span class="files-badge" style="font-size: 15px; padding: 4px 12px; background: rgba(245,158,11,0.15); color: #fbbf24; border-color: rgba(245,158,11,0.3);">${fList.length} 份品質簡報</span>
+          <button type="button" class="btn-table-action" style="padding: 4px 12px; font-size: 14.5px; background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.3); pointer-events: none;">
+            <i class="fa-solid fa-chevron-down text-amber guideline-toggle-icon"></i> <span class="toggle-text">${idx > 2 ? '展開' : '收合'}</span>
+          </button>
+        </div>
       </div>
       <div class="category-files-list" style="padding: 10px 16px;">
         ${fList.map(f => {
@@ -1526,18 +1536,18 @@ function renderTemplates(items) {
           return `
             <div class="file-row-item">
               <div class="file-left-info" title="${f.name}">
-                <i class="fa-solid ${getFileIcon(f.ext)}"></i>
+                <i class="fa-solid ${getFileIcon(f.ext)}" style="font-size: 22px;"></i>
                 <span class="file-name-text">${f.name}</span>
-                <small class="text-dim">(${(f.size/1024).toFixed(0)} KB)</small>
+                <small class="text-dim">(${(f.size/1024).toFixed(0)} KB ‧ ${f.date || f.lastModified})</small>
               </div>
               <div class="file-actions">
                 <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
                   <i class="fa-solid fa-eye"></i> 查看
                 </button>
-                <button type="button" class="btn-table-action" style="padding: 6px 10px; font-size: 12px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
+                <button type="button" class="btn-table-action" style="padding: 8px 12px; font-size: 14.5px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
                   <i class="fa-regular fa-copy"></i> 複製路徑
                 </button>
-                <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 6px 10px; font-size: 12px;">
+                <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 8px 12px; font-size: 14.5px;">
                   <i class="fa-solid fa-download"></i> 下載
                 </a>
               </div>
@@ -1547,50 +1557,8 @@ function renderTemplates(items) {
       </div>
     </div>
   `).join("");
-}
 
-function renderOthers(items) {
-  const list = document.getElementById("others-list");
-  if (!list) return;
-  if (items.length === 0) {
-    list.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-folder-open"></i><p>目前尚無其他文件檔案</p></div>`;
-    return;
-  }
-  const groups = groupFilesByFolder(items);
-  list.innerHTML = Object.entries(groups).map(([folderName, fList]) => `
-    <div class="guideline-folder-card">
-      <div class="guideline-folder-header" onclick="this.nextElementSibling.classList.toggle('hidden');">
-        <span class="guideline-folder-title"><i class="fa-solid fa-folder-open text-purple"></i> ${folderName}</span>
-        <span class="files-badge">${fList.length} 份文件</span>
-      </div>
-      <div class="category-files-list" style="padding: 10px 16px;">
-        ${fList.map(f => {
-          const safeF = encodeURIComponent(JSON.stringify(f));
-          const fullPath = f.fullPath || "";
-          return `
-            <div class="file-row-item">
-              <div class="file-left-info" title="${f.name}">
-                <i class="fa-solid ${getFileIcon(f.ext)}"></i>
-                <span class="file-name-text">${f.name}</span>
-                <small class="text-dim">(${(f.size/1024).toFixed(0)} KB)</small>
-              </div>
-              <div class="file-actions">
-                <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
-                  <i class="fa-solid fa-eye"></i> 查看
-                </button>
-                <button type="button" class="btn-table-action" style="padding: 6px 10px; font-size: 12px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
-                  <i class="fa-regular fa-copy"></i> 複製路徑
-                </button>
-                <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 6px 10px; font-size: 12px;">
-                  <i class="fa-solid fa-download"></i> 下載
-                </a>
-              </div>
-            </div>
-          `;
-        }).join("")}
-      </div>
-    </div>
-  `).join("");
+  list.innerHTML = toolbarHtml + cardsHtml;
 }
 
 // ==============================================================================
