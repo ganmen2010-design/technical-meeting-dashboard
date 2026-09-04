@@ -841,7 +841,7 @@ window.showMeetingQuickCard = function(encodedData) {
         <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; font-size: 14px; line-height: 1.8;">
           <div><i class="fa-regular fa-clock text-cyan"></i> <b>會議日期與時間：</b>${evt.dateStr} ${evt.time} (${evt.cycle})</div>
           <div><i class="fa-solid fa-location-dot text-rose"></i> <b>會議常態地點：</b>專案工務所 / 視訊會議</div>
-          <div><i class="fa-solid fa-user-gear text-amber"></i> <b>承辦業務窗口：</b>${evt.contact}</div>
+          <div><i class="fa-solid fa-user-gear text-amber"></i> <b>專案技術會議窗口：</b><span class="text-cyan font-bold">${evt.contact}</span></div>
         </div>
 
         <div style="display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap;">
@@ -1611,6 +1611,12 @@ function renderWorkspaces(projects) {
           </div>
         </div>
 
+        <div style="margin-top: 10px; padding: 6px 10px; background: rgba(0,242,254,0.05); border: 1px solid rgba(0,242,254,0.15); border-radius: 6px; font-size: 13.5px; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-user-gear text-amber"></i>
+          <span style="color: var(--text-dim);">會議窗口：</span>
+          <span style="color: #a5f3fc; font-weight: 600;">各專案規劃組及負責人</span>
+        </div>
+
         <button type="button" class="btn-proj-enter" onclick="event.stopPropagation(); openProjectDrawer('${p.id}')">
           進入作業區 <i class="fa-solid fa-arrow-right"></i>
         </button>
@@ -1646,7 +1652,7 @@ window.openProjectDrawer = function(projectId) {
   const todoCountEl = document.getElementById("drawer-todo-count");
   const controlCountEl = document.getElementById("drawer-control-count");
 
-  if (deptEl) deptEl.textContent = proj.dept;
+  if (deptEl) deptEl.innerHTML = `${proj.dept} <span style="margin-left: 8px; font-size: 13px; color: #fbbf24; font-weight: normal;"><i class="fa-solid fa-user-gear"></i> 技術會議窗口：各專案規劃組及負責人</span>`;
   if (nameEl) nameEl.textContent = proj.shortName || proj.name;
   
   const drawerTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
