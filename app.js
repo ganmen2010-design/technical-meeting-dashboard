@@ -527,23 +527,21 @@ function renderHeaderOverview(data) {
   if (badgeProj) badgeProj.textContent = numProjects;
   if (kpiProj) kpiProj.textContent = `${numProjects} 案`;
 
-  const numTodos = data.totalTodos || 268;
-  if (todoCount) todoCount.textContent = numTodos;
-  if (kpiTodo) kpiTodo.textContent = `${numTodos} 筆`;
+  // 【核心修正】待辦完成率：分母嚴格扣除狀態為「後續辦理」之筆數
+  const allTodos = data.todoItems || [];
+  const activeTodos = allTodos.filter(t => t.status !== "後續辦理");
+  const compTodos = allTodos.filter(t => t.status === "已完成");
+  const postponedTodos = allTodos.filter(t => t.status === "後續辦理");
+  
+  const numActive = activeTodos.length; // 293 筆實際應考核
+  if (todoCount) todoCount.textContent = numActive;
+  if (kpiTodo) kpiTodo.textContent = `${numActive} 筆`;
 
   const numIssues = data.totalIssues || (data.technicalIssues || []).length;
   if (issueCount) issueCount.textContent = numIssues;
   if (kpiIssue) kpiIssue.textContent = `${numIssues} 案`;
 
-  let totalComp = 0;
-  let totalAll = 0;
-  if (data.siteStats) {
-    Object.values(data.siteStats).forEach(s => {
-      totalComp += (s.completed || 0);
-      totalAll += (s.total || 0);
-    });
-  }
-  const overallRate = totalAll > 0 ? ((totalComp / totalAll) * 100).toFixed(1) : "75.8";
+  const overallRate = numActive > 0 ? ((compTodos.length / numActive) * 100).toFixed(1) : "67.6";
   if (compRate) compRate.textContent = `${overallRate}%`;
   if (kpiRate) kpiRate.textContent = `${overallRate}%`;
   if (lastUpdate && data.updatedAt) lastUpdate.textContent = data.updatedAt;
@@ -1059,18 +1057,21 @@ function renderMonthlyReportAnalysis(viewType) {
       </div>
     `;
   } else if (viewType === "dept") {
-    // 【核心動態計算】各工處待辦執行績效與燈號分析 (P12 統計)
+    // 【核心動態計算】各工處待辦執行績效與燈號分析 (P12 統計 - 分母扣除後續辦理)
     const deptMap = {};
     (appData.projects || []).forEach(p => {
       const d = p.dept || "其他工程處";
       if (!deptMap[d]) {
-        deptMap[d] = { dept: d, total: 0, completed: 0, pending: 0 };
+        deptMap[d] = { dept: d, total: 0, postponed: 0, active: 0, completed: 0, pending: 0 };
       }
       const norm = normalizeSiteName(p.shortName);
       const todos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === norm);
       todos.forEach(t => {
-        if (t.status !== "後續辦理") {
-          deptMap[d].total++;
+        deptMap[d].total++;
+        if (t.status === "後續辦理") {
+          deptMap[d].postponed++;
+        } else {
+          deptMap[d].active++;
           if (t.status === "已完成") deptMap[d].completed++;
           else deptMap[d].pending++;
         }
@@ -1078,21 +1079,21 @@ function renderMonthlyReportAnalysis(viewType) {
     });
 
     const deptRows = Object.values(deptMap).map(d => {
-      const rateVal = d.total > 0 ? ((d.completed / d.total) * 100).toFixed(1) : 0;
+      const rateVal = d.active > 0 ? ((d.completed / d.active) * 100).toFixed(1) : 0;
       let lightPill = `<span class="proj-light-pill light-white">普通</span>`;
       if (rateVal >= 80) lightPill = `<span class="proj-light-pill light-green">優良</span>`;
       else if (rateVal >= 65) lightPill = `<span class="proj-light-pill light-yellow">尚可</span>`;
       else if (rateVal >= 50) lightPill = `<span class="proj-light-pill light-orange">警示</span>`;
       else lightPill = `<span class="proj-light-pill light-red">落後</span>`;
 
-      return [d.dept, d.total, d.completed, d.pending, `${rateVal}%`, lightPill];
+      return [d.dept, d.total, d.postponed, d.active, d.completed, `${rateVal}%`, lightPill];
     });
 
     container.innerHTML = `
       <div class="report-block">
         <div class="report-block-title">
           <i class="fa-solid fa-sitemap text-amber"></i>
-          <h4>各工處待辦執行績效與燈號分析 (P12 統計)</h4>
+          <h4>各工處待辦執行績效與燈號分析 (P12 統計 - 扣除後續辦理)</h4>
         </div>
         <div class="table-responsive" style="margin-top: 10px;">
           <table class="modern-table">
@@ -1100,8 +1101,9 @@ function renderMonthlyReportAnalysis(viewType) {
               <tr>
                 <th style="text-align: center; font-size: 17px;">工程處</th>
                 <th style="text-align: center; font-size: 17px;">待辦總數</th>
+                <th style="text-align: center; font-size: 17px;">後續辦理</th>
+                <th style="text-align: center; font-size: 17px;">應辦(分母)</th>
                 <th style="text-align: center; font-size: 17px;">已完成</th>
-                <th style="text-align: center; font-size: 17px;">進行中</th>
                 <th style="text-align: center; font-size: 17px;">待辦完成率</th>
                 <th style="text-align: center; font-size: 17px;">健康燈號</th>
               </tr>
@@ -1120,13 +1122,15 @@ function renderMonthlyReportAnalysis(viewType) {
       </div>
     `;
   } else if (viewType === "site") {
-    // 【核心動態計算】各工地待辦執行績效排名 (P11 統計 - 100% 精準連動待辦追蹤彙整表最新數據)
+    // 【核心動態計算】各工地待辦執行績效排名 (P11 統計 - 分母扣除後續辦理)
     const siteStatsList = (appData.projects || []).map(p => {
       const norm = normalizeSiteName(p.shortName);
       const todos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === norm);
       const total = todos.length;
+      const postponed = todos.filter(t => t.status === "後續辦理").length;
+      const active = total - postponed;
       const completed = todos.filter(t => t.status === "已完成").length;
-      const rateVal = total > 0 ? (completed / total) * 100 : 0;
+      const rateVal = active > 0 ? (completed / active) * 100 : 0;
       const rateStr = `${rateVal.toFixed(1)}%`;
       const withResult = todos.filter(t => t.status === "已完成" && t.result && t.result.trim() !== "" && t.result.trim() !== "-").length;
       const uploadStr = completed > 0 ? `${((withResult / completed) * 100).toFixed(1)}%` : "—";
@@ -1140,6 +1144,8 @@ function renderMonthlyReportAnalysis(viewType) {
       return {
         siteName: p.shortName,
         total,
+        postponed,
+        active,
         completed,
         rateVal,
         rateStr: `${rateStr} ${lightDot}`,
@@ -1154,7 +1160,7 @@ function renderMonthlyReportAnalysis(viewType) {
       <div class="report-block">
         <div class="report-block-title">
           <i class="fa-solid fa-cubes-stacked text-emerald"></i>
-          <h4>各工地待辦執行績效排名 (P11 統計)</h4>
+          <h4>各工地待辦執行績效排名 (P11 統計 - 扣除後續辦理)</h4>
         </div>
         <div class="table-responsive" style="margin-top: 10px;">
           <table class="modern-table">
@@ -1163,6 +1169,8 @@ function renderMonthlyReportAnalysis(viewType) {
                 <th style="width: 70px; text-align: center; font-size: 17px;">排名</th>
                 <th style="text-align: center; font-size: 17px;">工地名稱</th>
                 <th style="text-align: center; font-size: 17px;">待辦總數</th>
+                <th style="text-align: center; font-size: 17px;">後續辦理</th>
+                <th style="text-align: center; font-size: 17px;">應辦(分母)</th>
                 <th style="text-align: center; font-size: 17px;">已完成</th>
                 <th style="text-align: center; font-size: 17px;">待辦完成率</th>
                 <th style="text-align: center; font-size: 17px;">成果上傳率</th>
@@ -1174,8 +1182,10 @@ function renderMonthlyReportAnalysis(viewType) {
                   <td style="text-align: center; font-size: 17px; font-weight: 700; color: ${idx < 3 ? '#a5f3fc' : 'var(--text-dim)'};">${idx + 1}</td>
                   <td class="text-cyan font-bold" style="text-align: center; font-size: 17px;">${s.siteName}</td>
                   <td style="text-align: center; font-size: 17px;">${s.total}</td>
+                  <td style="text-align: center; font-size: 17px; color: #fbbf24;">${s.postponed}</td>
+                  <td style="text-align: center; font-size: 17px; font-weight: 700;">${s.active}</td>
                   <td style="text-align: center; font-size: 17px; color: #34d399;">${s.completed}</td>
-                  <td style="text-align: center; font-size: 17px;">${s.rateStr}</td>
+                  <td style="text-align: center; font-size: 17px; font-weight: 700;">${s.rateStr}</td>
                   <td style="text-align: center; font-size: 17px;">${s.uploadStr}</td>
                 </tr>
               `).join("")}
@@ -1554,7 +1564,18 @@ function renderWorkspaces(projects) {
     const projTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
     const scheduledCtrlItems = (p.controlSheetItems || []).filter(isScheduledItem);
     const ctrlItemsCount = scheduledCtrlItems.length;
-    const stats = p.stats || { total: projTodos.length, completed: 0, completionRate: 0, light: 'white' };
+    const postponedCount = projTodos.filter(t => t.status === "後續辦理").length;
+    const activeCount = projTodos.length - postponedCount;
+    const completedCount = projTodos.filter(t => t.status === "已完成").length;
+    const rateVal = activeCount > 0 ? ((completedCount / activeCount) * 100).toFixed(1) : 0;
+    const stats = {
+      total: projTodos.length,
+      postponed: postponedCount,
+      active: activeCount,
+      completed: completedCount,
+      completionRate: rateVal,
+      light: rateVal >= 80 ? "green" : (rateVal >= 65 ? "yellow" : (rateVal >= 50 ? "orange" : "red"))
+    };
     
     let lightColorClass = "light-white";
     if (stats.light === "green") lightColorClass = "light-green";
@@ -1628,7 +1649,15 @@ window.openProjectDrawer = function(projectId) {
   if (deptEl) deptEl.textContent = proj.dept;
   if (nameEl) nameEl.textContent = proj.shortName || proj.name;
   
-  const stats = proj.stats || { completionRate: 0, light: 'white' };
+  const drawerTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
+  const drawerPostponed = drawerTodos.filter(t => t.status === "後續辦理").length;
+  const drawerActive = drawerTodos.length - drawerPostponed;
+  const drawerCompleted = drawerTodos.filter(t => t.status === "已完成").length;
+  const drawerRateVal = drawerActive > 0 ? ((drawerCompleted / drawerActive) * 100).toFixed(1) : 0;
+  const stats = {
+    completionRate: drawerRateVal,
+    light: drawerRateVal >= 80 ? "green" : (drawerRateVal >= 65 ? "yellow" : (drawerRateVal >= 50 ? "orange" : "red"))
+  };
   if (lightEl) {
     lightEl.className = `drawer-stat-badge light-${stats.light || 'white'}`;
     lightEl.textContent = `待辦完成率: ${stats.completionRate}%`;
@@ -1673,19 +1702,22 @@ function renderDrawerTabContent(tabType) {
   const headerStatsContainer = document.getElementById("drawer-header-stats-container");
   const normSite = normalizeSiteName(proj.shortName);
   const projTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
+  const postponedTodos = projTodos.filter(t => t.status === '後續辦理');
+  const activeTodos = projTodos.filter(t => t.status !== '後續辦理');
   const completedTodos = projTodos.filter(t => t.status === '已完成');
   const noResultTodos = completedTodos.filter(t => !t.result || t.result.trim() === '' || t.result.trim() === '-' || t.result.trim() === '待補');
-  const todoStats = proj.stats || { 
-    completionRate: projTodos.length > 0 ? ((completedTodos.length / projTodos.length) * 100).toFixed(1) : 0, 
-    light: 'white' 
+  const rateVal = activeTodos.length > 0 ? ((completedTodos.length / activeTodos.length) * 100).toFixed(1) : 0;
+  const todoStats = {
+    completionRate: rateVal,
+    light: rateVal >= 80 ? "green" : (rateVal >= 65 ? "yellow" : (rateVal >= 50 ? "orange" : "red"))
   };
 
   if (tabType === "todos" && headerStatsContainer) {
-    // 【核心新增】專案待辦事項頁面：在待辦完成率右邊新增已完成()、成果未填()
     headerStatsContainer.innerHTML = `
       <div class="control-header-ribbon">
         <span class="drawer-stat-badge light-${todoStats.light || 'white'}">待辦完成率: ${todoStats.completionRate}%</span>
         <span class="kpi-mini-pill kpi-emerald"><i class="fa-solid fa-circle-check"></i> 已完成(${completedTodos.length})</span>
+        <span class="kpi-mini-pill kpi-amber"><i class="fa-solid fa-clock-rotate-left"></i> 後續辦理(${postponedTodos.length})</span>
         <span class="kpi-mini-pill kpi-rose"><i class="fa-solid fa-link-slash"></i> 成果未填(${noResultTodos.length})</span>
       </div>
     `;
