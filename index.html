@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=28.0">
+  <link rel="stylesheet" href="style.css?v=29.0">
 </head>
 <body>
   <!-- 背景發光粒子球體 (玻璃擬態質感) -->
@@ -18,7 +18,7 @@
     <div class="bg-orb orb-3"></div>
   </div>
 
-  <!-- 豊譽企業網域專用登入門禁彈窗 (需具備 @fengyu.com.tw 網域與 NAS 權限) -->
+  <!-- 豊譽企業網域專用登入門禁彈窗 (僅保留總部管理員與統一初始帳號 FU@fengyu.com.tw) -->
   <div id="login-modal" class="modal-overlay hidden">
     <div class="modal-card login-card glass-card">
       <div class="login-header">
@@ -36,35 +36,36 @@
         <span style="margin-left: auto; font-size: 11px; padding: 2px 8px; background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-radius: 10px; border: 1px solid rgba(16, 185, 129, 0.4);">fengyu.com.tw</span>
       </div>
 
+      <!-- 統一登入說明卡片 -->
+      <div style="background: rgba(0, 242, 254, 0.08); border: 1px dashed rgba(0, 242, 254, 0.35); border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: 13px; line-height: 1.6; color: #a5f3fc;">
+        <i class="fa-solid fa-circle-info text-amber"></i> <b>統一初始登入說明：</b><br>
+        同仁請先使用統一帳號 <code>FU@fengyu.com.tw</code>（密碼 <code>Aa34561297+b</code>）登入後，再至右上角修改為個人帳號與自訂密碼。
+      </div>
+
       <form id="login-form" class="login-form">
         <div class="form-group">
           <label for="login-username"><i class="fa-solid fa-envelope text-cyan"></i> 企業信箱 / 網域帳號</label>
-          <input type="text" id="login-username" placeholder="請輸入企業信箱 (如 name@fengyu.com.tw) 或工號" autocomplete="username" required>
+          <input type="text" id="login-username" value="FU@fengyu.com.tw" placeholder="請輸入企業信箱 (如 FU@fengyu.com.tw 或個人信箱)" autocomplete="username" required>
         </div>
 
         <div class="form-group">
-          <label for="login-password"><i class="fa-solid fa-key text-amber"></i> AD 密碼 / NAS 存取安全碼</label>
-          <input type="password" id="login-password" placeholder="請輸入密碼或存取安全碼" autocomplete="current-password" required>
+          <label for="login-password"><i class="fa-solid fa-key text-amber"></i> 登入密碼 / NAS 存取安全碼</label>
+          <input type="password" id="login-password" value="Aa34561297+b" placeholder="預設密碼：Aa34561297+b" autocomplete="current-password" required>
         </div>
 
-        <div class="login-quick-select">
-          <span class="quick-title"><i class="fa-solid fa-users-gear text-purple"></i> 豊譽專案與工程處快速身分切換：</span>
+        <!-- 快速切換區：依需求僅保留「總部管理員」 -->
+        <div class="login-quick-select" style="margin-bottom: 16px;">
+          <span class="quick-title"><i class="fa-solid fa-shield-halved text-purple"></i> 快速切換：</span>
           <div class="quick-pills">
-            <button type="button" class="quick-pill" data-user="admin@fengyu.com.tw" data-pwd="admin888">總部管理員</button>
-            <button type="button" class="quick-pill" data-user="ganmen@fengyu.com.tw" data-pwd="nas2026">工程主管 (ganmen)</button>
-            <button type="button" class="quick-pill" data-user="north@fengyu.com.tw" data-pwd="north123">北區處長/規畫組</button>
-            <button type="button" class="quick-pill" data-user="central@fengyu.com.tw" data-pwd="central123">中區處長/規畫組</button>
-            <button type="button" class="quick-pill" data-user="tainan@fengyu.com.tw" data-pwd="tainan123">台南處長/規畫組</button>
-            <button type="button" class="quick-pill" data-user="yilan@fengyu.com.tw" data-pwd="yilan123">宜蘭處長/規畫組</button>
-            <button type="button" class="quick-pill" data-user="kaohsiung@fengyu.com.tw" data-pwd="kaohsiung123">高屏處長/規畫組</button>
-            <button type="button" class="quick-pill" data-user="engineer@fengyu.com.tw" data-pwd="nas2026">技術工程師</button>
+            <button type="button" class="quick-pill" data-user="admin@fengyu.com.tw" data-pwd="admin888"><i class="fa-solid fa-user-shield"></i> 總部管理員</button>
+            <button type="button" class="quick-pill" data-user="FU@fengyu.com.tw" data-pwd="Aa34561297+b" style="border-color: rgba(0,242,254,0.4);"><i class="fa-solid fa-key"></i> 統一初始帳號 (FU)</button>
           </div>
         </div>
 
         <div id="login-error-msg" class="login-error hidden"></div>
 
         <button type="submit" class="btn-login" id="btn-login" style="background: linear-gradient(135deg, #00f2fe, #4facfe); color: #000; font-weight: 700;">
-          <i class="fa-solid fa-shield-halved"></i> 驗證企業網域並解鎖儀表板
+          <i class="fa-solid fa-right-to-bracket"></i> 驗證登入並進入儀表板
         </button>
       </form>
 
@@ -74,20 +75,7 @@
     </div>
   </div>
 
-        <div id="login-error-msg" class="login-error hidden"></div>
-
-        <button type="submit" class="btn-login" id="btn-login">
-          <i class="fa-solid fa-right-to-bracket"></i> 驗證權限並登入儀表板
-        </button>
-      </form>
-
-      <div class="login-footer">
-        <small><i class="fa-solid fa-shield-halved text-emerald"></i> 本系統連線至內部 NAS (<code>\\192.168.1.221\s5\1003技術會議資料專區</code>)，資料傳輸經內部金鑰加密保護。</small>
-      </div>
-    </div>
-  </div>
-
-  <!-- 主應用介面容器 (登入後解鎖顯示) -->
+  <!-- 主應用介面容器 (登入後解鎖顯示) --> (登入後解鎖顯示) -->
   <div id="app-container" class="app-container">
     <!-- 頂部導覽列 (Header Bar) -->
     <header class="glass-card header-bar">
@@ -109,20 +97,34 @@
           <span class="online-counter"><i class="fa-solid fa-users"></i> 在線 <b id="header-online-count">1</b> 人</span>
         </div>
 
-        <div class="user-profile-widget" id="user-profile-widget">
+        <div class="user-profile-widget" id="user-profile-widget" title="點擊切換/修改豐譽個人帳密">
           <div class="user-avatar" id="user-avatar-icon">
             <i class="fa-solid fa-user-shield"></i>
           </div>
           <div class="user-info">
-            <span class="user-name" id="display-user-name">訪客同仁</span>
+            <span class="user-name" id="display-user-name">豐譽同仁</span>
             <span class="user-dept" id="display-user-dept">工程技術部</span>
           </div>
+          <button type="button" class="btn-tool-pill" onclick="openEditProfileModal(); event.stopPropagation();" title="修改個人帳號與密碼" style="padding: 4px 8px; font-size: 12px; margin-left: 6px; background: rgba(0,242,254,0.15); border: 1px solid rgba(0,242,254,0.35); color: #a5f3fc; border-radius: 6px; cursor: pointer;">
+            <i class="fa-solid fa-user-pen"></i>
+          </button>
           <button type="button" class="btn-logout" id="btn-logout" title="登出系統">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
           </button>
         </div>
       </div>
     </header>
+
+    <!-- 統一初始帳號修改引導 Banner -->
+    <div id="unified-account-banner" class="glass-card hidden" style="margin: 0 0 12px 0; padding: 10px 18px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(0, 242, 254, 0.12)); border: 1px solid rgba(245, 158, 11, 0.45); display: flex; align-items: center; justify-content: space-between; border-radius: 10px; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: #fde68a;">
+        <i class="fa-solid fa-triangle-exclamation text-amber" style="font-size: 16px;"></i>
+        <span>您目前使用統一初始帳號 (<b>FU@fengyu.com.tw</b>) 登入，建議修改為您的豐譽個人帳密。</span>
+      </div>
+      <button type="button" onclick="openEditProfileModal()" style="padding: 6px 14px; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 6px; color: #000; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+        <i class="fa-solid fa-user-pen"></i> 修改為個人帳密
+      </button>
+    </div>
 
     <!-- 主頁籤導覽列 (Main Tabs Navigation) -->
     <nav class="glass-card main-nav">
@@ -478,6 +480,80 @@
     </div>
   </div>
 
+  <!-- 豐譽個人帳密與資料修改彈窗 -->
+  <div id="edit-profile-modal" class="modal-overlay hidden">
+    <div class="modal-card glass-card" style="max-width: 480px; padding: 24px; border: 1px solid rgba(0, 242, 254, 0.35);">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-size: 18px; color: #a5f3fc; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-user-pen text-cyan"></i> 修改為豐譽個人帳號與密碼
+        </h3>
+        <button type="button" class="close-btn" onclick="closeEditProfileModal()">&times;</button>
+      </div>
+
+      <p style="font-size: 13px; color: #94a3b8; line-height: 1.6; margin-bottom: 16px;">
+        請設定您的個人姓名、豐譽專屬信箱與自訂密碼。設定完成後，未來即可直接使用個人帳密登入系統。
+      </p>
+
+      <form id="edit-profile-form" onsubmit="handleSaveProfile(event)" style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="form-group">
+          <label for="prof-name" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
+            <i class="fa-solid fa-id-card text-cyan"></i> 您的姓名 / 稱謂
+          </label>
+          <input type="text" id="prof-name" placeholder="例如：陳大明 工程師 / 張處長" required style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+        </div>
+
+        <div class="form-group">
+          <label for="prof-email" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
+            <i class="fa-solid fa-envelope text-cyan"></i> 豐譽個人企業信箱
+          </label>
+          <input type="email" id="prof-email" placeholder="例如：daming@fengyu.com.tw" required style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+          <small style="color: #64748b; font-size: 11.5px; margin-top: 4px; display: block;">必須以 <code>@fengyu.com.tw</code> 結尾</small>
+        </div>
+
+        <div class="form-group">
+          <label for="prof-dept" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
+            <i class="fa-solid fa-building text-purple"></i> 所屬工程處 / 單位
+          </label>
+          <select id="prof-dept" style="width: 100%; padding: 10px 12px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+            <option value="總部工務技術部">總部工務技術部</option>
+            <option value="北區工程處">北區工程處</option>
+            <option value="中區工程處">中區工程處</option>
+            <option value="台南工程處">台南工程處</option>
+            <option value="宜蘭工程處">宜蘭工程處</option>
+            <option value="高屏工程處">高屏工程處</option>
+            <option value="休閒事業處">休閒事業處</option>
+            <option value="品保中心">品保中心</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="prof-new-password" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
+            <i class="fa-solid fa-key text-amber"></i> 自訂新密碼 / NAS 存取碼
+          </label>
+          <input type="password" id="prof-new-password" placeholder="請設定自訂密碼" required style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+        </div>
+
+        <div class="form-group">
+          <label for="prof-confirm-password" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
+            <i class="fa-solid fa-check-double text-emerald"></i> 確認新密碼
+          </label>
+          <input type="password" id="prof-confirm-password" placeholder="請再次輸入新密碼" required style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+        </div>
+
+        <div id="prof-error-msg" class="login-error hidden" style="margin-top: 4px;"></div>
+
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+          <button type="button" class="btn-table-action" onclick="closeEditProfileModal()" style="flex: 1; padding: 10px; border-radius: 6px; background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15);">
+            取消
+          </button>
+          <button type="submit" class="btn-login" style="flex: 2; margin: 0; padding: 10px; border-radius: 6px; background: linear-gradient(135deg, #00f2fe, #4facfe); color: #000; font-weight: 700;">
+            <i class="fa-solid fa-floppy-disk"></i> 儲存並切換為個人帳密
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- 檔案詳細資料檢視彈窗 -->
   <div id="file-viewer-modal" class="modal-overlay hidden">
     <div class="modal-card file-viewer-card glass-card">
@@ -491,6 +567,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=28.0"></script>
+  <script src="app.js?v=29.0"></script>
 </body>
 </html>

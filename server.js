@@ -119,7 +119,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // 2. 豊譽企業網域專用登入與 NAS 權限驗證
+  // 2. 豊譽企業網域專用登入與 NAS 權限驗證 (支援統一初始帳號 FU@fengyu.com.tw 與個人自訂帳密)
   if (pathname === "/api/login" && req.method === "POST") {
     const { username, password, email } = await parseBody(req);
     const inputAccount = (email || username || "").trim().toLowerCase();
@@ -134,6 +134,121 @@ const server = http.createServer(async (req, res) => {
         });
         return;
       }
+    }
+
+    const cleanUsername = inputAccount.includes("@") ? inputAccount.split("@")[0] : inputAccount;
+    const users = readUsers();
+    
+    // 比對 users.json 中的 username 或 email
+    const matched = users.find(u => 
+      u.username.toLowerCase() === cleanUsername || 
+      (u.email && u.email.toLowerCase() === inputAccount) ||
+      (u.email && u.email.toLowerCase() === `${cleanUsername}@fengyu.com.tw`)
+    );
+
+    // 統一登入密碼 Aa34561297+b 或管理員密碼 admin888 或個人自訂密碼
+    const isValidPassword = matched && (
+      matched.passwordHash === password ||
+      (matched.username.toLowerCase() === "fu" && password === "Aa34561297+b") ||
+      (matched.username.toLowerCase() === "admin" && (password === "admin888" || password === "Aa34561297+b"))
+    );
+
+    if (matched && isValidPassword) {
+      const token = "SESSION_" + Date.now() + "_" + Math.random().toString(36).substr(2, 8);
+      
+      activeUsers.set(token, {
+        token: token,
+        username: matched.username,
+        email: matched.email || `${matched.username}@fengyu.com.tw`,
+        domain: "fengyu.com.tw",
+        name: matched.name,
+        dept: matched.dept,
+        role: matched.role,
+        avatar: matched.avatar || "fa-helmet-safety",
+        currentView: "儀表板總覽",
+        loginTime: new Date().toLocaleTimeString("zh-TW", { hour12: false }),
+        lastPing: Date.now(),
+        ip: clientIp,
+        isInitialUnified: matched.username.toLowerCase() === "fu"
+      });
+
+      sendJson(res, 200, {
+        status: "success",
+        token: token,
+        user: {
+          username: matched.username,
+          email: matched.email || `${matched.username}@fengyu.com.tw`,
+          domain: "fengyu.com.tw",
+          name: matched.name,
+          dept: matched.dept,
+          role: matched.role,
+          avatar: matched.avatar || "fa-helmet-safety",
+          permissions: matched.permissions || ["all"],
+          isInitialUnified: matched.username.toLowerCase() === "fu"
+        }
+      });
+    } else {
+      sendJson(res, 401, {
+        status: "error",
+        message: "帳號或密碼錯誤。請以統一帳號 FU@fengyu.com.tw (密碼 Aa34561297+b) 或個人自訂帳密登入。"
+      });
+    }
+    return;
+  }
+
+  // 2.1 修改為豐譽個人帳密 API
+  if (pathname === "/api/update-profile" && req.method === "POST") {
+    const { token, name, email, dept, newPassword } = await parseBody(req);
+    if (!email || !email.toLowerCase().endsWith("@fengyu.com.tw")) {
+      sendJson(res, 400, { status: "error", message: "個人信箱必須為 @fengyu.com.tw 網域" });
+      return;
+    }
+
+    const cleanUsername = email.split("@")[0].trim();
+    const users = readUsers();
+    const existingIdx = users.findIndex(u => u.username.toLowerCase() === cleanUsername.toLowerCase() || (u.email && u.email.toLowerCase() === email.toLowerCase()));
+
+    const updatedUser = {
+      username: cleanUsername,
+      email: email,
+      domain: "fengyu.com.tw",
+      passwordHash: newPassword || "Aa34561297+b",
+      name: name || cleanUsername,
+      dept: dept || "工程技術部",
+      role: dept && dept.includes("處長") ? "director" : "engineer",
+      avatar: "fa-user-gear",
+      permissions: ["all"],
+      isInitialUnified: false
+    };
+
+    if (existingIdx >= 0) {
+      users[existingIdx] = updatedUser;
+    } else {
+      users.push(updatedUser);
+    }
+
+    try {
+      fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf-8");
+    } catch (e) {
+      console.error("Failed to write users.json:", e);
+    }
+
+    if (token && activeUsers.has(token)) {
+      const active = activeUsers.get(token);
+      active.username = cleanUsername;
+      active.email = email;
+      active.name = name || cleanUsername;
+      active.dept = dept || "工程技術部";
+      active.isInitialUnified = false;
+    }
+
+    sendJson(res, 200, {
+      status: "success",
+      message: "個人帳號與密碼更新成功！",
+      user: updatedUser
+    });
+    return;
+  }
     }
 
     const cleanUsername = inputAccount.includes("@") ? inputAccount.split("@")[0] : inputAccount;

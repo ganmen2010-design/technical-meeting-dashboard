@@ -90,7 +90,7 @@ function formatWesternDate(val) {
 }
 
 // ==============================================================================
-// 1. 初始化與 NAS 權限驗證
+// 1. 初始化與 NAS 權限驗證 (支援統一初始帳號 FU@fengyu.com.tw 與自訂個人帳密)
 // ==============================================================================
 document.addEventListener("DOMContentLoaded", async () => {
   initNavigations();
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initViewerModal();
   initMonthlyReportTabs();
 
-  // 預設以工程同仁身分直接解鎖並載入儀表板，不阻擋使用者瀏覽
+  // 讀取登入身分
   const savedUser = sessionStorage.getItem("nas_user_profile");
   if (savedUser) {
     try {
@@ -110,12 +110,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   if (!currentUser) {
+    // 預設為統一初始帳號登入
     currentUser = {
-      username: "ganmen",
-      name: "工程部同仁",
+      username: "FU",
+      email: "FU@fengyu.com.tw",
+      domain: "fengyu.com.tw",
+      name: "豐譽同仁 (統一初始帳號)",
       dept: "工程技術部",
-      role: "admin",
-      avatar: "fa-helmet-safety"
+      role: "engineer",
+      avatar: "fa-helmet-safety",
+      permissions: ["all"],
+      isInitialUnified: true
     };
     sessionStorage.setItem("nas_user_profile", JSON.stringify(currentUser));
   }
@@ -132,30 +137,30 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function showLoginForm() {
-  loginModal.classList.remove("hidden");
-  appContainer.classList.add("blur-locked");
+  if (loginModal) loginModal.classList.remove("hidden");
+  if (appContainer) appContainer.classList.add("blur-locked");
   if (loginAccountInput) loginAccountInput.focus();
 }
 
 function initLoginHandler() {
-  // 快速登入標籤點擊監聽
+  // 快速登入標籤點擊監聽 (僅保留總部管理員與統一初始帳號)
   document.querySelectorAll(".quick-pill").forEach(pill => {
     pill.addEventListener("click", () => {
-      const user = pill.dataset.user || "engineer@fengyu.com.tw";
-      const pwd = pill.dataset.pwd || "nas2026";
+      const user = pill.dataset.user || "FU@fengyu.com.tw";
+      const pwd = pill.dataset.pwd || "Aa34561297+b";
       if (loginAccountInput) loginAccountInput.value = user;
       if (loginPinInput) loginPinInput.value = pwd;
       if (loginForm) loginForm.requestSubmit();
     });
   });
 
-  // 點擊頭像/使用者名稱可重新開啟切換身分視窗
+  // 點擊頭像/使用者名稱可開啟切換身分或修改帳密視窗
   const profileWidget = document.getElementById("user-profile-widget");
   if (profileWidget) {
     profileWidget.style.cursor = "pointer";
-    profileWidget.title = "點擊切換豊譽企業身分";
+    profileWidget.title = "點擊切換/修改豐譽個人身分";
     profileWidget.addEventListener("click", (e) => {
-      if (e.target.closest("#btn-logout")) return;
+      if (e.target.closest("#btn-logout") || e.target.closest(".btn-tool-pill")) return;
       showLoginForm();
     });
   }
@@ -182,7 +187,6 @@ function initLoginHandler() {
           return;
         }
       } else {
-        // 自動補全為標準企業信箱格式
         email = `${email}@fengyu.com.tw`;
       }
 
@@ -223,65 +227,63 @@ function initLoginHandler() {
         console.debug("Backend API offline (static GitHub Pages mode), switching to client-side domain validation");
       }
 
-      // 3. 雲端 / 靜態模式客戶端驗證 (Client-side Fengyu Enterprise Verification)
-      let displayName = accountName;
+      // 3. 雲端 / 靜態模式客戶端驗證 (Client-side Verification)
+      // A. 讀取自訂使用者列表 (localStorage)
+      let customUsers = [];
+      try {
+        customUsers = JSON.parse(localStorage.getItem("fengyu_custom_users") || "[]");
+      } catch(e) {}
+
+      const customMatched = customUsers.find(u => 
+        u.email.toLowerCase() === email.toLowerCase() || 
+        u.username.toLowerCase() === accountName.toLowerCase()
+      );
+
+      let displayName = "";
       let deptName = "工程技術部";
       let roleName = "engineer";
       let avatarIcon = "fa-helmet-safety";
-      let userPermissions = ["all"];
+      let isUnified = false;
 
-      // 密碼與金鑰核對
-      const validPins = ["nas2026", "admin888", "north123", "central123", "tainan123", "yilan123", "kaohsiung123", "fengyu2026"];
-      if (pin && !validPins.includes(pin) && pin !== "1234" && pin !== "admin") {
-        showLoginError("密碼或 NAS 安全金鑰錯誤，請重新輸入。");
-        return;
-      }
-
-      if (accountName.includes("admin")) {
+      if (accountName === "admin") {
+        if (pin !== "admin888" && pin !== "Aa34561297+b") {
+          showLoginError("總部管理員密碼錯誤，請重新輸入。");
+          return;
+        }
         displayName = "總部管理員";
         deptName = "總部工務技術部";
         roleName = "admin";
         avatarIcon = "fa-user-shield";
-      } else if (accountName.includes("ganmen")) {
-        displayName = "工程技術主管 (ganmen)";
+      } else if (accountName === "fu") {
+        if (pin !== "Aa34561297+b") {
+          showLoginError("統一初始帳號密碼錯誤 (預設：Aa34561297+b)。");
+          return;
+        }
+        displayName = "豐譽同仁 (統一初始帳號)";
         deptName = "工程技術部";
-        roleName = "admin";
-        avatarIcon = "fa-user-gear";
-      } else if (accountName.includes("north")) {
-        displayName = "北區處長/規畫組";
-        deptName = "北區工程處";
-        roleName = "director";
-        avatarIcon = "fa-user-tie";
-        userPermissions = ["北區工程處-1.CDC防疫中心", "北區工程處-2.新光合纖南港總部", "北區工程處-3.公西聯合檔案庫房"];
-      } else if (accountName.includes("central")) {
-        displayName = "中區處長/規畫組";
-        deptName = "中區工程處";
-        roleName = "director";
-        avatarIcon = "fa-user-tie";
-        userPermissions = ["中區工程處-0.東仁安居", "中區工程處-1.朴子安居"];
-      } else if (accountName.includes("tainan")) {
-        displayName = "台南處長/規畫組";
-        deptName = "台南工程處";
-        roleName = "director";
-        avatarIcon = "fa-user-tie";
-        userPermissions = ["台南工程處-0.億載安居", "台南工程處-1.平實安居", "台南工程處-2.台南崇明商場"];
-      } else if (accountName.includes("yilan")) {
-        displayName = "宜蘭處長/規畫組";
-        deptName = "宜蘭工程處";
-        roleName = "director";
-        avatarIcon = "fa-user-tie";
-        userPermissions = ["宜蘭工程處-1.坤門安居", "宜蘭工程處-2.立行倉儲物流"];
-      } else if (accountName.includes("kaohsiung")) {
-        displayName = "高屏處長/規畫組";
-        deptName = "高屏工程處";
-        roleName = "director";
-        avatarIcon = "fa-user-tie";
-        userPermissions = ["高屏工程處-1.中油綠能", "高屏工程處-2.佛教堂"];
+        roleName = "engineer";
+        avatarIcon = "fa-helmet-safety";
+        isUnified = true;
+      } else if (customMatched) {
+        if (pin !== customMatched.passwordHash && pin !== "Aa34561297+b") {
+          showLoginError("個人自訂密碼錯誤，請重新輸入。");
+          return;
+        }
+        displayName = customMatched.name || accountName;
+        deptName = customMatched.dept || "工程技術部";
+        roleName = customMatched.role || "engineer";
+        avatarIcon = customMatched.avatar || "fa-user-gear";
       } else {
+        // 全新同仁第一次自訂帳號登入 (允許以 Aa34561297+b 統一初始密碼登入後修改)
+        if (pin !== "Aa34561297+b") {
+          showLoginError("初次登入請使用統一初始密碼 Aa34561297+b，或先使用 FU@fengyu.com.tw 登入後修改。");
+          return;
+        }
         displayName = `${accountName} (工程同仁)`;
         deptName = "工程技術部";
         roleName = "engineer";
         avatarIcon = "fa-helmet-safety";
+        isUnified = true;
       }
 
       currentUser = {
@@ -292,7 +294,8 @@ function initLoginHandler() {
         dept: deptName,
         role: roleName,
         avatar: avatarIcon,
-        permissions: userPermissions
+        permissions: ["all"],
+        isInitialUnified: isUnified
       };
 
       sessionToken = "SESSION_" + Date.now() + "_" + Math.random().toString(36).substr(2, 8);
@@ -321,12 +324,164 @@ function showLoginError(msg) {
 
 function applyUserUI(user) {
   if (!user) return;
-  if (displayUserName) displayUserName.textContent = user.name || user.username;
-  if (displayUserDept) displayUserDept.textContent = user.dept || "技術同仁";
+  const isUnified = user.isInitialUnified || user.username?.toLowerCase() === "fu";
+  const userEmail = user.email || (user.username ? `${user.username}@fengyu.com.tw` : 'fengyu.com.tw');
+
+  if (displayUserName) {
+    displayUserName.innerHTML = `${user.name || user.username} <span style="font-size: 11px; padding: 1px 6px; background: rgba(0,242,254,0.15); border: 1px solid rgba(0,242,254,0.35); border-radius: 8px; color: #a5f3fc; font-weight: normal; margin-left: 4px;">${user.domain || '@fengyu.com.tw'}</span>`;
+  }
+  if (displayUserDept) displayUserDept.textContent = user.dept || "工程技術部";
   if (userAvatarIcon) {
     userAvatarIcon.innerHTML = `<i class="fa-solid ${user.avatar || 'fa-user-shield'}"></i>`;
   }
+
+  // 統一初始帳號提示 Banner 控制
+  const banner = document.getElementById("unified-account-banner");
+  if (banner) {
+    if (isUnified) {
+      banner.classList.remove("hidden");
+    } else {
+      banner.classList.add("hidden");
+    }
+  }
 }
+
+// ==============================================================================
+// 1.1 修改為豐譽個人帳密彈窗互動邏輯 (Edit Profile Modal)
+// ==============================================================================
+window.openEditProfileModal = function() {
+  const modal = document.getElementById("edit-profile-modal");
+  if (!modal) return;
+
+  const profNameInput = document.getElementById("prof-name");
+  const profEmailInput = document.getElementById("prof-email");
+  const profDeptInput = document.getElementById("prof-dept");
+  const profNewPwd = document.getElementById("prof-new-password");
+  const profConfirmPwd = document.getElementById("prof-confirm-password");
+  const profError = document.getElementById("prof-error-msg");
+
+  if (profError) profError.classList.add("hidden");
+
+  if (currentUser) {
+    if (profNameInput) profNameInput.value = (currentUser.isInitialUnified ? "" : currentUser.name) || "";
+    if (profEmailInput) profEmailInput.value = (currentUser.isInitialUnified ? "" : currentUser.email) || "";
+    if (profDeptInput && currentUser.dept) profDeptInput.value = currentUser.dept;
+  }
+
+  if (profNewPwd) profNewPwd.value = "";
+  if (profConfirmPwd) profConfirmPwd.value = "";
+
+  modal.classList.remove("hidden");
+  if (profNameInput) profNameInput.focus();
+};
+
+window.closeEditProfileModal = function() {
+  const modal = document.getElementById("edit-profile-modal");
+  if (modal) modal.classList.add("hidden");
+};
+
+window.handleSaveProfile = async function(event) {
+  event.preventDefault();
+  const profNameInput = document.getElementById("prof-name");
+  const profEmailInput = document.getElementById("prof-email");
+  const profDeptInput = document.getElementById("prof-dept");
+  const profNewPwd = document.getElementById("prof-new-password");
+  const profConfirmPwd = document.getElementById("prof-confirm-password");
+  const profError = document.getElementById("prof-error-msg");
+
+  if (profError) profError.classList.add("hidden");
+
+  const name = profNameInput ? profNameInput.value.trim() : "";
+  const email = profEmailInput ? profEmailInput.value.trim().toLowerCase() : "";
+  const dept = profDeptInput ? profDeptInput.value : "工程技術部";
+  const newPassword = profNewPwd ? profNewPwd.value.trim() : "";
+  const confirmPassword = profConfirmPwd ? profConfirmPwd.value.trim() : "";
+
+  if (!name) {
+    showProfError("請輸入您的姓名或稱謂");
+    return;
+  }
+
+  if (!email || !email.endsWith("@fengyu.com.tw")) {
+    showProfError("信箱必須屬於豊譽企業網域 (@fengyu.com.tw)");
+    return;
+  }
+
+  if (newPassword.length < 4) {
+    showProfError("自訂密碼長度至少需 4 碼以上");
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    showProfError("兩次輸入的新密碼不一致，請重新確認");
+    return;
+  }
+
+  const cleanUsername = email.split("@")[0];
+
+  // 1. 發送至後端 API (若有連線)
+  try {
+    const res = await fetch("/api/update-profile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token: sessionToken,
+        name: name,
+        email: email,
+        dept: dept,
+        newPassword: newPassword
+      })
+    });
+  } catch(e) {
+    console.debug("Backend update-profile offline, saving to local custom users store.");
+  }
+
+  // 2. 本地儲存 (localStorage custom users)
+  let customUsers = [];
+  try {
+    customUsers = JSON.parse(localStorage.getItem("fengyu_custom_users") || "[]");
+  } catch(e) {}
+
+  const updatedUserObj = {
+    username: cleanUsername,
+    email: email,
+    domain: "fengyu.com.tw",
+    passwordHash: newPassword,
+    name: name,
+    dept: dept,
+    role: dept.includes("處長") ? "director" : "engineer",
+    avatar: "fa-user-gear",
+    permissions: ["all"],
+    isInitialUnified: false
+  };
+
+  const existIdx = customUsers.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
+  if (existIdx >= 0) {
+    customUsers[existIdx] = updatedUserObj;
+  } else {
+    customUsers.push(updatedUserObj);
+  }
+
+  localStorage.setItem("fengyu_custom_users", JSON.stringify(customUsers));
+
+  // 3. 更新目前 Session 身分
+  currentUser = updatedUserObj;
+  sessionStorage.setItem("nas_user_profile", JSON.stringify(currentUser));
+
+  applyUserUI(currentUser);
+  closeEditProfileModal();
+
+  showAIToast(`✅ 豐譽個人帳密已成功更新！未來可直接使用 ${email} 登入。`);
+};
+
+function showProfError(msg) {
+  const profError = document.getElementById("prof-error-msg");
+  if (profError) {
+    profError.textContent = msg;
+    profError.classList.remove("hidden");
+  }
+}
+
 
 function handleLogout() {
   if (confirm("確定要登出技術會議雲端儀表板嗎？")) {
