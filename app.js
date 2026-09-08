@@ -597,26 +597,76 @@ function updatePresenceUI(count, users, serverTime) {
 // ==============================================================================
 // 3. 導覽列與子分頁切換
 // ==============================================================================
+window.switchMainTab = function(tabName, shouldScroll = false) {
+  const allTabs = document.querySelectorAll(".nav-tab");
+  const allPanes = document.querySelectorAll(".tab-pane");
+
+  allTabs.forEach(t => {
+    if (t.dataset.tab === tabName) {
+      t.classList.add("active");
+    } else {
+      t.classList.remove("active");
+    }
+  });
+
+  allPanes.forEach(p => {
+    if (p.id === `tab-${tabName}`) {
+      p.classList.remove("hidden");
+    } else {
+      p.classList.add("hidden");
+    }
+  });
+
+  // 分頁切換後之動態即時渲染
+  if (appData) {
+    if (tabName === "announcements") {
+      const activeSub = document.querySelector(".subnav-btn.active")?.dataset.sub || "schedule";
+      if (activeSub === "schedule") {
+        renderGoogleCalendar(currentCalYear, currentCalMonth);
+      } else if (activeSub === "operations") {
+        renderHeaderOverview(appData);
+        renderMonthlyReportAnalysis();
+      } else if (activeSub === "guidelines") {
+        renderGuidelines(appData.guidelines || []);
+      }
+    } else if (tabName === "workspaces") {
+      renderWorkspaces(appData.projects || []);
+    } else if (tabName === "search") {
+      performGlobalSearch();
+      const searchInp = document.getElementById("global-search-input");
+      if (searchInp) setTimeout(() => searchInp.focus(), 80);
+    }
+  }
+
+  const activeTabEl = document.querySelector(`.nav-tab[data-tab="${tabName}"]`);
+  currentViewName = activeTabEl ? activeTabEl.textContent.trim() : tabName;
+  sendHeartbeatPing();
+
+  if (shouldScroll) {
+    const targetPane = document.getElementById(`tab-${tabName}`);
+    if (targetPane) {
+      targetPane.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+};
+
 function initNavigations() {
-  navTabs.forEach(tab => {
+  const allTabs = document.querySelectorAll(".nav-tab");
+  allTabs.forEach(tab => {
+    const tabName = tab.dataset.tab;
+    // 1. 單擊切換分頁並展示
     tab.addEventListener("click", () => {
-      navTabs.forEach(t => t.classList.remove("active"));
-      tabPanes.forEach(p => p.classList.add("hidden"));
-
-      tab.classList.add("active");
-      const targetId = `tab-${tab.dataset.tab}`;
-      const targetPane = document.getElementById(targetId);
-      if (targetPane) targetPane.classList.remove("hidden");
-
-      currentViewName = tab.textContent.trim();
-      sendHeartbeatPing();
+      window.switchMainTab(tabName, false);
+    });
+    // 2. 點兩下 (雙擊) 切換並自動捲動聚焦至下方內容
+    tab.addEventListener("dblclick", () => {
+      window.switchMainTab(tabName, true);
     });
   });
 
   if (btnOpenPresence) {
     btnOpenPresence.addEventListener("click", () => {
-      const presenceTab = document.querySelector('.nav-tab[data-tab="presence"]');
-      if (presenceTab) presenceTab.click();
+      showAIToast(`🟢 豐譽技術會議系統心跳保活連線中 (在線人數：${headerOnlineCount ? headerOnlineCount.textContent : 1} 人)`);
     });
   }
 

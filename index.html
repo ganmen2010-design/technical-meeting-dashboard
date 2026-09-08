@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=36.0">
+  <link rel="stylesheet" href="style.css?v=38.0">
 </head>
 <body>
   <!-- 背景發光粒子球體 (玻璃擬態質感) -->
@@ -128,9 +128,7 @@
       <button type="button" class="nav-tab" data-tab="search">
         <i class="fa-solid fa-magnifying-glass-chart"></i> 3. 全域資料搜尋
       </button>
-      <button type="button" class="nav-tab" data-tab="presence">
-        <i class="fa-solid fa-satellite-dish"></i> 4. 上線即時狀況 <span class="badge-live">LIVE</span>
-      </button>
+      
     </nav>
 
     <!-- 內容區域 (Content Area) -->
@@ -284,6 +282,7 @@
             <!-- JS Dynamic Render -->
           </div>
         </div>
+      </section>
 
       <!-- 模組 2：各專案作業區 (Workspaces) -->
       <section id="tab-workspaces" class="tab-pane hidden">
@@ -342,43 +341,7 @@
         </div>
       </section>
 
-      <!-- 模組 4：上線即時狀況 (Live Presence) -->
-      <section id="tab-presence" class="tab-pane hidden">
-        <div class="glass-card presence-dashboard-card">
-          <div class="presence-header-row">
-            <div>
-              <h2><i class="fa-solid fa-satellite-dish text-emerald"></i> 即時上線狀況監測中心 (不斷線保活架構)</h2>
-              <p class="presence-sub">系統採用雙向心跳維持機制 (Heartbeat Loop)，確保多位同仁同時上線討論會議不中斷！</p>
-            </div>
-            <div class="presence-stat-box">
-              <span class="stat-num" id="presence-online-num">1</span>
-              <span class="stat-lbl">目前在線人數</span>
-            </div>
-          </div>
-
-          <div class="connection-health-bar">
-            <div class="health-item">
-              <i class="fa-solid fa-circle-check text-emerald"></i> 連線狀態：<b class="text-emerald">穩定連線中</b>
-            </div>
-            <div class="health-item">
-              <i class="fa-solid fa-heart-pulse text-rose pulse-anim"></i> 心跳保活：<b>每 15 秒同步</b>
-            </div>
-            <div class="health-item">
-              <i class="fa-solid fa-clock text-cyan"></i> 伺服器時間：<b id="presence-server-time">--:--:--</b>
-            </div>
-            <div class="health-item">
-              <i class="fa-solid fa-shield-halved text-amber"></i> 權限級別：<b id="presence-my-role">總部管理員</b>
-            </div>
-          </div>
-
-          <div class="online-users-section">
-            <h3><i class="fa-solid fa-users text-cyan"></i> 當前在線同仁名冊</h3>
-            <div class="online-users-grid" id="online-users-grid">
-              <!-- JS Dynamic Render -->
-            </div>
-          </div>
-        </div>
-      </section>
+      
     </main>
   </div>
 
@@ -500,6 +463,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=36.0"></script>
+  <script src="app.js?v=38.0"></script>
 </body>
 </html>
