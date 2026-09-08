@@ -898,6 +898,73 @@ body {
   box-shadow: 0 0 12px var(--primary-glow);
 }
 
+/* === Meeting Accordion Card (歷次會議資料收合與展開) === */
+.meeting-accordion-card {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: var(--transition-fast);
+}
+
+.meeting-accordion-card:hover {
+  border-color: rgba(0, 242, 254, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.meeting-header-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 18px;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  user-select: none;
+  transition: var(--transition-fast);
+}
+
+.meeting-header-toggle:hover {
+  background: rgba(0, 242, 254, 0.08);
+}
+
+.m-title-text {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.files-badge {
+  background: rgba(0, 242, 254, 0.12);
+  color: #a5f3fc;
+  border: 1px solid rgba(0, 242, 254, 0.25);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.meeting-toggle-arrow {
+  color: var(--text-dim);
+  font-size: 13px;
+  transition: transform 0.2s ease;
+}
+
+.m-files-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 18px;
+  background: rgba(0, 0, 0, 0.22);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.meeting-accordion-card.collapsed .m-files-grid {
+  display: none !important;
+}
+
 /* === 模組 3：全域資料搜尋 === */
 .search-hero-card {
   padding: 32px;

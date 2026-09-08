@@ -1860,7 +1860,7 @@ function renderDrawerTabContent(tabType) {
     headerStatsContainer.innerHTML = `<span class="drawer-stat-badge light-${todoStats.light || 'white'}">待辦完成率: ${todoStats.completionRate}%</span>`;
   }
 
-  // 頁籤 1: 歷次會議資料
+  // 頁籤 1: 歷次會議資料 (預設為收合模式)
   if (tabType === "meetings") {
     const meetings = proj.meetings || [];
     if (meetings.length === 0) {
@@ -1871,7 +1871,7 @@ function renderDrawerTabContent(tabType) {
     content.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
         <span style="font-size: 13px; color: var(--text-muted);">
-          <i class="fa-solid fa-folder-tree text-cyan"></i> 共 ${meetings.length} 場會議紀錄，檔案已全數展開（可點擊單場標題收合）
+          <i class="fa-solid fa-folder-tree text-cyan"></i> 共 ${meetings.length} 場會議紀錄（預設收合，點擊單場標題可展開/收合）
         </span>
         <button type="button" class="btn-table-action" onclick="toggleAllMeetingCards()">
           <i class="fa-solid fa-arrows-up-down"></i> 全部展開 / 收合
@@ -1880,15 +1880,15 @@ function renderDrawerTabContent(tabType) {
 
       <div style="display: flex; flex-direction: column; gap: 14px;">
         ${meetings.map((m, idx) => `
-          <div class="meeting-accordion-card" id="meeting-card-${idx}">
+          <div class="meeting-accordion-card collapsed" id="meeting-card-${idx}">
             <div class="meeting-header-toggle" onclick="toggleMeetingCard(this)">
               <span class="m-title-text"><i class="fa-solid fa-calendar-day text-cyan"></i> ${m.meetingName}</span>
               <div style="display: flex; align-items: center; gap: 10px;">
                 <span class="files-badge">${m.fileCount} 份會議檔案</span>
-                <i class="fa-solid fa-chevron-down meeting-toggle-arrow"></i>
+                <i class="fa-solid fa-chevron-right meeting-toggle-arrow"></i>
               </div>
             </div>
-            <div class="m-files-grid">
+            <div class="m-files-grid" style="display: none;">
               ${(m.files || []).map(f => {
                 const safeF = encodeURIComponent(JSON.stringify(f));
                 const fullPath = f.fullPath || '';
@@ -2151,6 +2151,61 @@ window.setControlFilter = function(mode) {
 window.handleControlSearch = function(text) {
   currentControlSearchText = text.trim();
   renderDrawerTabContent("control");
+};
+
+window.toggleMeetingCard = function(headerEl) {
+  const card = headerEl.closest(".meeting-accordion-card");
+  if (!card) return;
+  const grid = card.querySelector(".m-files-grid");
+  const arrow = card.querySelector(".meeting-toggle-arrow");
+
+  const isCollapsed = card.classList.contains("collapsed") || (grid && grid.style.display === "none");
+
+  if (isCollapsed) {
+    card.classList.remove("collapsed");
+    if (grid) grid.style.display = "flex";
+    if (arrow) {
+      arrow.classList.remove("fa-chevron-right");
+      arrow.classList.add("fa-chevron-down");
+    }
+  } else {
+    card.classList.add("collapsed");
+    if (grid) grid.style.display = "none";
+    if (arrow) {
+      arrow.classList.remove("fa-chevron-down");
+      arrow.classList.add("fa-chevron-right");
+    }
+  }
+};
+
+window.toggleAllMeetingCards = function() {
+  const cards = document.querySelectorAll(".meeting-accordion-card");
+  if (cards.length === 0) return;
+
+  const anyCollapsed = Array.from(cards).some(c => c.classList.contains("collapsed") || c.querySelector(".m-files-grid")?.style.display === "none");
+
+  cards.forEach(card => {
+    const grid = card.querySelector(".m-files-grid");
+    const arrow = card.querySelector(".meeting-toggle-arrow");
+
+    if (anyCollapsed) {
+      // 全數展開
+      card.classList.remove("collapsed");
+      if (grid) grid.style.display = "flex";
+      if (arrow) {
+        arrow.classList.remove("fa-chevron-right");
+        arrow.classList.add("fa-chevron-down");
+      }
+    } else {
+      // 全數收合
+      card.classList.add("collapsed");
+      if (grid) grid.style.display = "none";
+      if (arrow) {
+        arrow.classList.remove("fa-chevron-down");
+        arrow.classList.add("fa-chevron-right");
+      }
+    }
+  });
 };
 
 // ==============================================================================
