@@ -636,13 +636,8 @@ function initNavigations() {
         } else if (subType === "operations") {
           renderHeaderOverview(appData);
           renderMonthlyReportAnalysis();
-          // renderDeptChart removed
         } else if (subType === "guidelines") {
           renderGuidelines(appData.guidelines || []);
-        } else if (subType === "templates") {
-          renderTemplates(appData.templates || []);
-        } else if (subType === "others") {
-          renderOthers(appData.others || []);
         }
       }
     });
@@ -747,9 +742,7 @@ async function loadDashboardData() {
     renderMonthlyReportAnalysis();
     // renderDeptChart removed
     renderGuidelines(appData.guidelines || []);
-    renderTemplates(appData.templates || []);
-    renderOthers(appData.others || []);
-    renderSharepointPresentations(appData.sharepointPresentations || []);
+
     const spBadge = document.getElementById("badge-sp-count");
     if (spBadge) spBadge.textContent = (appData.sharepointPresentations || []).length;
     renderWorkspaces((appData && appData.projects) ? appData.projects : []);
@@ -1528,35 +1521,74 @@ function groupFilesByFolder(files) {
 function renderGuidelines(items) {
   const list = document.getElementById("guidelines-list");
   if (!list) return;
-  if (items.length === 0) {
-    list.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-folder-open"></i><p>目前尚無發布之技術指引文件</p></div>`;
+
+  const nas00Path = "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\2.技術會議運作指引(供查看及下載)\\00發布區";
+
+  if (!items || items.length === 0) {
+    list.innerHTML = `
+      <div class="glass-card section-card" style="margin-bottom: 20px;">
+        <div class="card-header" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 12px;">
+            <div class="section-title-group" style="display: flex; align-items: center; gap: 12px;">
+              <i class="fa-solid fa-book-bookmark section-icon text-cyan" style="font-size: 26px;"></i>
+              <div>
+                <h3 style="margin: 0; font-size: 20px;">發布技術指引 (00發布區)</h3>
+                <p class="section-subtitle" style="margin: 4px 0 0 0; color: var(--text-dim); font-size: 14px;">收錄技術會議運作標準作業模板、地質改良樁工法參數與各項發布規劃指引</p>
+              </div>
+            </div>
+            <button type="button" class="btn-table-action" onclick="copyNasPath('${encodeURIComponent(nas00Path)}')" style="padding: 8px 16px; font-size: 14px;">
+              <i class="fa-regular fa-copy text-cyan"></i> 複製 00發布區 NAS 路徑
+            </button>
+          </div>
+          <div class="category-meta-badge" style="margin-top: 4px; font-size: 13.5px; color: #a5f3fc; background: rgba(0,242,254,0.08); padding: 6px 14px; border-radius: 6px; border: 1px solid rgba(0,242,254,0.2); width: 100%;">
+            <i class="fa-solid fa-server text-cyan"></i> <b>NAS 實體專區：</b>\\\\192.168.1.221\\s5\\1003技術會議資料專區\\2.技術會議運作指引(供查看及下載)\\00發布區
+          </div>
+        </div>
+      </div>
+      <div class="search-empty-prompt"><i class="fa-solid fa-folder-open"></i><p>00發布區目前尚無檔案</p></div>
+    `;
     return;
   }
 
   const groups = groupFilesByFolder(items);
-  const toolbarHtml = `
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
-      <span style="font-size: 18px; color: #a5f3fc; font-weight: 700;">
-        <i class="fa-solid fa-folder-tree"></i> 技術指引分類目錄 (共 ${items.length} 份文件)
-      </span>
-      <div style="display: flex; gap: 10px;">
-        <button type="button" class="btn-table-action" onclick="toggleAllGuidelineFolders(true)" style="padding: 8px 18px; font-size: 16.5px; cursor: pointer;">
-          <i class="fa-solid fa-square-plus text-cyan"></i> 全部展開
-        </button>
-        <button type="button" class="btn-table-action" onclick="toggleAllGuidelineFolders(false)" style="padding: 8px 18px; font-size: 16.5px; cursor: pointer;">
-          <i class="fa-solid fa-square-minus text-amber"></i> 全部收合
-        </button>
+  const headerHtml = `
+    <div class="glass-card section-card" style="margin-bottom: 20px;">
+      <div class="card-header" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 12px;">
+          <div class="section-title-group" style="display: flex; align-items: center; gap: 12px;">
+            <i class="fa-solid fa-book-bookmark section-icon text-cyan" style="font-size: 26px;"></i>
+            <div>
+              <h3 style="margin: 0; font-size: 20px;">發布技術指引 (00發布區)</h3>
+              <p class="section-subtitle" style="margin: 4px 0 0 0; color: var(--text-dim); font-size: 14px;">收錄技術會議運作標準作業模板、地質改良樁工法參數與各項發布規劃指引</p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button type="button" class="btn-table-action" onclick="copyNasPath('${encodeURIComponent(nas00Path)}')" style="padding: 8px 16px; font-size: 14px;">
+              <i class="fa-regular fa-copy text-cyan"></i> 複製 00發布區 NAS 路徑
+            </button>
+            <button type="button" class="btn-table-action" onclick="toggleAllGuidelineFolders(true)" style="padding: 8px 16px; font-size: 14px;">
+              <i class="fa-solid fa-square-plus text-cyan"></i> 全部展開
+            </button>
+            <button type="button" class="btn-table-action" onclick="toggleAllGuidelineFolders(false)" style="padding: 8px 16px; font-size: 14px;">
+              <i class="fa-solid fa-square-minus text-amber"></i> 全部收合
+            </button>
+          </div>
+        </div>
+        <div class="category-meta-badge" style="margin-top: 4px; font-size: 13.5px; color: #a5f3fc; background: rgba(0,242,254,0.08); padding: 6px 14px; border-radius: 6px; border: 1px solid rgba(0,242,254,0.2); width: 100%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <span><i class="fa-solid fa-server text-cyan"></i> <b>NAS 實體專區：</b>\\\\192.168.1.221\\s5\\1003技術會議資料專區\\2.技術會議運作指引(供查看及下載)\\00發布區</span>
+          <span class="badge-pill bg-cyan-glow" style="padding: 2px 10px; font-size: 12px;">共 ${items.length} 份發布文件</span>
+        </div>
       </div>
     </div>
   `;
 
   const cardsHtml = Object.entries(groups).map(([folderName, fList], idx) => `
-    <div class="guideline-folder-card" id="guide-card-${idx}">
+    <div class="guideline-folder-card" id="guide-card-${idx}" style="margin-bottom: 16px;">
       <div class="guideline-folder-header" onclick="toggleGuidelineFolder(this)" style="cursor: pointer; user-select: none;">
-        <span class="guideline-folder-title"><i class="fa-solid fa-book-bookmark text-cyan"></i> ${folderName}</span>
+        <span class="guideline-folder-title"><i class="fa-solid fa-folder-tree text-cyan"></i> ${folderName}</span>
         <div style="display: flex; align-items: center; gap: 12px;">
-          <span class="files-badge" style="font-size: 15px; padding: 4px 12px;">${fList.length} 份指引檔案</span>
-          <button type="button" class="btn-table-action" style="padding: 4px 12px; font-size: 14.5px; background: rgba(0,242,254,0.08); border-color: rgba(0,242,254,0.3); pointer-events: none;">
+          <span class="files-badge" style="font-size: 14.5px; padding: 4px 12px;">${fList.length} 份指引檔案</span>
+          <button type="button" class="btn-table-action" style="padding: 4px 12px; font-size: 14px; background: rgba(0,242,254,0.08); border-color: rgba(0,242,254,0.3); pointer-events: none;">
             <i class="fa-solid fa-chevron-down text-cyan guideline-toggle-icon"></i> <span class="toggle-text">收合</span>
           </button>
         </div>
@@ -1574,12 +1606,12 @@ function renderGuidelines(items) {
               </div>
               <div class="file-actions">
                 <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
-                  <i class="fa-solid fa-eye"></i> 查看
+                  <i class="fa-solid fa-eye"></i> 查看/開啟
                 </button>
-                <button type="button" class="btn-table-action" style="padding: 8px 12px; font-size: 14.5px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
+                <button type="button" class="btn-table-action" style="padding: 8px 12px; font-size: 14px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')" title="複製 NAS 實體路徑">
                   <i class="fa-regular fa-copy"></i> 複製路徑
                 </button>
-                <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 8px 12px; font-size: 14.5px;">
+                <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 8px 12px; font-size: 14px;" title="下載檔案">
                   <i class="fa-solid fa-download"></i> 下載
                 </a>
               </div>
@@ -1590,218 +1622,7 @@ function renderGuidelines(items) {
     </div>
   `).join("");
 
-  list.innerHTML = toolbarHtml + cardsHtml;
-}
-
-function renderTemplates(items) {
-  const list = document.getElementById("templates-list");
-  if (!list) return;
-  if (items.length === 0) {
-    list.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-folder-open"></i><p>目前尚無作業模板檔案</p></div>`;
-    return;
-  }
-  const groups = groupFilesByFolder(items);
-  const toolbarHtml = `
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
-      <span style="font-size: 18px; color: #a5f3fc; font-weight: 700;">
-        <i class="fa-solid fa-file-contract text-emerald"></i> 作業模板分類目錄 (共 ${items.length} 份文件)
-      </span>
-      <div style="display: flex; gap: 10px;">
-        <button type="button" class="btn-table-action" onclick="toggleAllGuidelineFolders(true)" style="padding: 8px 18px; font-size: 16.5px; cursor: pointer;">
-          <i class="fa-solid fa-square-plus text-cyan"></i> 全部展開
-        </button>
-        <button type="button" class="btn-table-action" onclick="toggleAllGuidelineFolders(false)" style="padding: 8px 18px; font-size: 16.5px; cursor: pointer;">
-          <i class="fa-solid fa-square-minus text-amber"></i> 全部收合
-        </button>
-      </div>
-    </div>
-  `;
-
-  const cardsHtml = Object.entries(groups).map(([folderName, fList], idx) => `
-    <div class="guideline-folder-card" id="tmpl-card-${idx}">
-      <div class="guideline-folder-header" onclick="toggleGuidelineFolder(this)" style="cursor: pointer; user-select: none;">
-        <span class="guideline-folder-title"><i class="fa-solid fa-file-contract text-emerald"></i> ${folderName}</span>
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <span class="files-badge" style="font-size: 15px; padding: 4px 12px;">${fList.length} 份樣板</span>
-          <button type="button" class="btn-table-action" style="padding: 4px 12px; font-size: 14.5px; background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.3); pointer-events: none;">
-            <i class="fa-solid fa-chevron-down text-emerald guideline-toggle-icon"></i> <span class="toggle-text">收合</span>
-          </button>
-        </div>
-      </div>
-      <div class="category-files-list" style="padding: 10px 16px;">
-        ${fList.map(f => {
-          const safeF = encodeURIComponent(JSON.stringify(f));
-          const fullPath = f.fullPath || "";
-          return `
-            <div class="file-row-item">
-              <div class="file-left-info" title="${f.name}">
-                <i class="fa-solid ${getFileIcon(f.ext)}" style="font-size: 22px;"></i>
-                <span class="file-name-text">${f.name}</span>
-                <small class="text-dim">(${(f.size/1024).toFixed(0)} KB)</small>
-              </div>
-              <div class="file-actions">
-                <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
-                  <i class="fa-solid fa-eye"></i> 查看
-                </button>
-                <button type="button" class="btn-table-action" style="padding: 8px 12px; font-size: 14.5px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
-                  <i class="fa-regular fa-copy"></i> 複製路徑
-                </button>
-                <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 8px 12px; font-size: 14.5px;">
-                  <i class="fa-solid fa-download"></i> 下載
-                </a>
-              </div>
-            </div>
-          `;
-        }).join("")}
-      </div>
-    </div>
-  `).join("");
-
-  list.innerHTML = toolbarHtml + cardsHtml;
-}
-
-function renderOthers(items) {
-  const list = document.getElementById("others-list");
-  if (!list) return;
-  if (items.length === 0) {
-    list.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-folder-open"></i><p>目前尚無其他文件檔案</p></div>`;
-    return;
-  }
-
-  const groups = groupFilesByFolder(items);
-  const toolbarHtml = `
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
-      <span style="font-size: 18px; color: #a5f3fc; font-weight: 700;">
-        <i class="fa-solid fa-folder-open text-purple"></i> 其他文件分類目錄 (共 ${items.length} 份文件)
-      </span>
-      <div style="display: flex; gap: 10px;">
-        <button type="button" class="btn-table-action" onclick="toggleAllGuidelineFolders(true)" style="padding: 8px 18px; font-size: 16.5px; cursor: pointer;">
-          <i class="fa-solid fa-square-plus text-cyan"></i> 全部展開
-        </button>
-        <button type="button" class="btn-table-action" onclick="toggleAllGuidelineFolders(false)" style="padding: 8px 18px; font-size: 16.5px; cursor: pointer;">
-          <i class="fa-solid fa-square-minus text-amber"></i> 全部收合
-        </button>
-      </div>
-    </div>
-  `;
-
-  const cardsHtml = Object.entries(groups).map(([folderName, fList], idx) => `
-    <div class="guideline-folder-card" id="other-card-${idx}">
-      <div class="guideline-folder-header" onclick="toggleGuidelineFolder(this)" style="cursor: pointer; user-select: none;">
-        <span class="guideline-folder-title"><i class="fa-solid fa-folder-open text-purple"></i> ${folderName}</span>
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <span class="files-badge" style="font-size: 15px; padding: 4px 12px;">${fList.length} 份文件</span>
-          <button type="button" class="btn-table-action" style="padding: 4px 12px; font-size: 14.5px; background: rgba(0,242,254,0.08); border-color: rgba(0,242,254,0.3); pointer-events: none;">
-            <i class="fa-solid fa-chevron-down text-purple guideline-toggle-icon"></i> <span class="toggle-text">收合</span>
-          </button>
-        </div>
-      </div>
-      <div class="category-files-list" style="padding: 10px 16px;">
-        ${fList.map(f => {
-          const safeF = encodeURIComponent(JSON.stringify(f));
-          const fullPath = f.fullPath || "";
-          return `
-            <div class="file-row-item">
-              <div class="file-left-info" title="${f.name}">
-                <i class="fa-solid ${getFileIcon(f.ext)}" style="font-size: 22px;"></i>
-                <span class="file-name-text">${f.name}</span>
-                <small class="text-dim">(${(f.size/1024).toFixed(0)} KB ‧ ${f.lastModified})</small>
-              </div>
-              <div class="file-actions">
-                <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
-                  <i class="fa-solid fa-eye"></i> 查看
-                </button>
-                <button type="button" class="btn-table-action" style="padding: 8px 12px; font-size: 14.5px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
-                  <i class="fa-regular fa-copy"></i> 複製路徑
-                </button>
-                <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 8px 12px; font-size: 14.5px;">
-                  <i class="fa-solid fa-download"></i> 下載
-                </a>
-              </div>
-            </div>
-          `;
-        }).join("")}
-      </div>
-    </div>
-  `).join("");
-
-  list.innerHTML = toolbarHtml + cardsHtml;
-}
-
-// 渲染 SPS品保分享會簡報庫 (816 份簡報)
-function renderSharepointPresentations(items) {
-  const list = document.getElementById("sharepoint-list");
-  if (!list) return;
-  const spItems = items || (appData && appData.sharepointPresentations) || [];
-  if (spItems.length === 0) {
-    list.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-folder-open"></i><p>目前尚無 SPS 品保分享會簡報檔案</p></div>`;
-    return;
-  }
-
-  const groups = {};
-  spItems.forEach(f => {
-    const cat = f.category || "00菇系報告";
-    if (!groups[cat]) groups[cat] = [];
-    groups[cat].push(f);
-  });
-
-  const toolbarHtml = `
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
-      <span style="font-size: 18px; color: #a5f3fc; font-weight: 700;">
-        <i class="fa-solid fa-folder-tree"></i> SPS品質簡報分類目錄 (共 17 類別 ‧ ${spItems.length} 份文件)
-      </span>
-      <div style="display: flex; gap: 10px;">
-        <button type="button" class="btn-table-action" onclick="toggleAllGuidelineFolders(true)" style="padding: 8px 18px; font-size: 15px; cursor: pointer;">
-          <i class="fa-solid fa-square-plus text-cyan"></i> 全部展開
-        </button>
-        <button type="button" class="btn-table-action" onclick="toggleAllGuidelineFolders(false)" style="padding: 8px 18px; font-size: 15px; cursor: pointer;">
-          <i class="fa-solid fa-square-minus text-amber"></i> 全部收合
-        </button>
-      </div>
-    </div>
-  `;
-
-  const cardsHtml = Object.entries(groups).map(([folderName, fList], idx) => `
-    <div class="guideline-folder-card ${idx > 2 ? 'collapsed' : ''}" id="sp-card-${idx}">
-      <div class="guideline-folder-header" onclick="toggleGuidelineFolder(this)" style="cursor: pointer; user-select: none;">
-        <span class="guideline-folder-title"><i class="fa-solid fa-graduation-cap text-amber"></i> ${folderName}</span>
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <span class="files-badge" style="font-size: 15px; padding: 4px 12px; background: rgba(245,158,11,0.15); color: #fbbf24; border-color: rgba(245,158,11,0.3);">${fList.length} 份品質簡報</span>
-          <button type="button" class="btn-table-action" style="padding: 4px 12px; font-size: 14.5px; background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.3); pointer-events: none;">
-            <i class="fa-solid fa-chevron-down text-amber guideline-toggle-icon"></i> <span class="toggle-text">${idx > 2 ? '展開' : '收合'}</span>
-          </button>
-        </div>
-      </div>
-      <div class="category-files-list" style="padding: 10px 16px;">
-        ${fList.map(f => {
-          const safeF = encodeURIComponent(JSON.stringify(f));
-          const fullPath = f.fullPath || "";
-          return `
-            <div class="file-row-item">
-              <div class="file-left-info" title="${f.name}">
-                <i class="fa-solid ${getFileIcon(f.ext)}" style="font-size: 22px;"></i>
-                <span class="file-name-text">${f.name}</span>
-                <small class="text-dim">(${(f.size/1024).toFixed(0)} KB ‧ ${f.date || f.lastModified})</small>
-              </div>
-              <div class="file-actions">
-                <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
-                  <i class="fa-solid fa-eye"></i> 查看
-                </button>
-                <button type="button" class="btn-table-action" style="padding: 8px 12px; font-size: 14.5px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
-                  <i class="fa-regular fa-copy"></i> 複製路徑
-                </button>
-                <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 8px 12px; font-size: 14.5px;">
-                  <i class="fa-solid fa-download"></i> 下載
-                </a>
-              </div>
-            </div>
-          `;
-        }).join("")}
-      </div>
-    </div>
-  `).join("");
-
-  list.innerHTML = toolbarHtml + cardsHtml;
+  list.innerHTML = headerHtml + cardsHtml;
 }
 
 // ==============================================================================
