@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=38.0">
+  <link rel="stylesheet" href="style.css?v=39.0">
 </head>
 <body>
   <!-- 背景發光粒子球體 (玻璃擬態質感) -->
@@ -119,7 +119,7 @@
 
     <!-- 主頁籤導覽列 (Main Tabs Navigation) -->
     <nav class="glass-card main-nav">
-      <button type="button" class="nav-tab active" data-tab="announcements">
+      <button type="button" class="nav-tab" data-tab="announcements">
         <i class="fa-solid fa-bullhorn"></i> 1. 公告與指引中心
       </button>
       <button type="button" class="nav-tab" data-tab="workspaces">
@@ -128,13 +128,21 @@
       <button type="button" class="nav-tab" data-tab="search">
         <i class="fa-solid fa-magnifying-glass-chart"></i> 3. 全域資料搜尋
       </button>
-      
     </nav>
 
     <!-- 內容區域 (Content Area) -->
     <main class="main-content">
+      <!-- 預設待命提示卡片 (點選主頁籤後隱藏) -->
+      <div id="tab-standby-prompt" class="glass-card standby-card">
+        <div class="standby-icon-box">
+          <i class="fa-solid fa-layer-group text-cyan"></i>
+        </div>
+        <h3>歡迎使用 豐譽技術會議雲端儀表板</h3>
+        <p>請點選（或點擊兩下）上方 <b>1. 公告與指引中心</b>、<b>2. 各專案作業區</b> 或 <b>3. 全域資料搜尋</b> 主頁籤，展開查看各模組內容及次頁籤。</p>
+      </div>
+
       <!-- 模組 1：公告欄 (Announcements & Guidelines) -->
-      <section id="tab-announcements" class="tab-pane active">
+      <section id="tab-announcements" class="tab-pane hidden">
         <!-- 公告欄子選單 (精簡為 3 大核心頁籤) -->
         <div class="subnav-bar">
           <button type="button" class="subnav-btn active" data-sub="schedule">
@@ -463,6 +471,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=38.0"></script>
+  <script src="app.js?v=39.0"></script>
 </body>
 </html>

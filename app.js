@@ -598,6 +598,10 @@ function updatePresenceUI(count, users, serverTime) {
 // 3. 導覽列與子分頁切換
 // ==============================================================================
 window.switchMainTab = function(tabName, shouldScroll = false) {
+  // 隱藏起始畫面待命提示
+  const standbyPrompt = document.getElementById("tab-standby-prompt");
+  if (standbyPrompt) standbyPrompt.classList.add("hidden");
+
   const allTabs = document.querySelectorAll(".nav-tab");
   const allPanes = document.querySelectorAll(".tab-pane");
 
