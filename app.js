@@ -635,7 +635,7 @@ function initNavigations() {
           renderGoogleCalendar(currentCalYear, currentCalMonth);
         } else if (subType === "operations") {
           renderHeaderOverview(appData);
-          renderMonthlyReportAnalysis(currentReportView || "dept");
+          renderMonthlyReportAnalysis();
           // renderDeptChart removed
         } else if (subType === "guidelines") {
           renderGuidelines(appData.guidelines || []);
@@ -744,7 +744,7 @@ async function loadDashboardData() {
 
     renderHeaderOverview(appData);
     renderGoogleCalendar(currentCalYear, currentCalMonth);
-    renderMonthlyReportAnalysis(currentReportView || "dept");
+    renderMonthlyReportAnalysis();
     // renderDeptChart removed
     renderGuidelines(appData.guidelines || []);
     renderTemplates(appData.templates || []);
@@ -752,7 +752,7 @@ async function loadDashboardData() {
     renderSharepointPresentations(appData.sharepointPresentations || []);
     const spBadge = document.getElementById("badge-sp-count");
     if (spBadge) spBadge.textContent = (appData.sharepointPresentations || []).length;
-    renderWorkspaces(appData.projects || []);
+    renderWorkspaces((appData && appData.projects) ? appData.projects : []);
 
   } catch (err) {
     console.error("Load dashboard data failed:", err);
@@ -1045,7 +1045,7 @@ function renderGoogleCalendar(year, month) {
         <div class="day-events">
           ${dayEvents.map(evt => {
             const colors = getDeptChipClass(evt.dept);
-            const matchedProj = (appData.projects || []).find(p => normalizeSiteName(p.shortName) === normalizeSiteName(evt.site));
+            const matchedProj = ((appData && appData.projects) ? appData.projects : []).find(p => normalizeSiteName(p.shortName) === normalizeSiteName(evt.site));
             const projId = matchedProj ? matchedProj.id : "";
             
             const safeEvt = encodeURIComponent(JSON.stringify({
@@ -1170,20 +1170,12 @@ function getDeptChipClass(dept) {
 }
 
 // ==============================================================================
-// 6. 每月技術會議運作概況分析 (P10~P13)
+// 6. 每月技術會議運作概況分析 (P10~P13 - 一頁式全量下拉展示，P12 & P11 併排 2 欄)
 // ==============================================================================
-let currentReportView = "dept";
 window.currentCutoffDate = "2026-08-24";
 
 function initMonthlyReportTabs() {
-  document.querySelectorAll(".report-subtab-btn, .report-chip").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".report-subtab-btn, .report-chip").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentReportView = btn.dataset.reportView;
-      renderMonthlyReportAnalysis(currentReportView);
-    });
-  });
+  // 一頁式全量下拉視圖，無需分頁切換
 }
 
 window.applyCutoffDate = async function() {
@@ -1217,7 +1209,7 @@ window.applyCutoffDate = async function() {
     }
   }
 
-  // 【核心修復】前端全端即時動態精確重算 P13 統計表格數據 (GitHub Pages 靜態環境無縫支援)
+  // 前端全端即時動態精確重算 P13 統計表格數據 (GitHub Pages 靜態環境無縫支援)
   if (appData && appData.projects) {
     const parts = dateVal.split("-");
     const mmdd = parts.length >= 3 ? `${parts[1]}/${parts[2]}` : "08/24";
@@ -1228,15 +1220,15 @@ window.applyCutoffDate = async function() {
     let totalDue = 0;
     let totalC = 0;
 
-    const dynamicRows = (appData.projects || []).map(p => {
+    const dynamicRows = ((appData && appData.projects) ? appData.projects : []).map(p => {
       const normSite = normalizeSiteName(p.shortName);
       
       // A: 會議實際議題數
-      const issues = (appData.technicalIssues || []).filter(iss => normalizeSiteName(iss.site) === normSite);
+      const issues = ((appData && appData.technicalIssues) ? appData.technicalIssues : []).filter(iss => normalizeSiteName(iss.site) === normSite);
       const countA = issues.length;
 
       // B: 待辦追蹤事項數
-      const todos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
+      const todos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === normSite);
       const countB = todos.length;
 
       // C: 標註預定 (全案有排定預定產出日期之項目)
@@ -1271,7 +1263,7 @@ window.applyCutoffDate = async function() {
     };
   }
 
-  renderMonthlyReportAnalysis(currentReportView || "dept");
+  renderMonthlyReportAnalysis();
 
   if (statusEl) {
     statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald"></i> 已成功更新計算至基準日：${dateVal}`;
@@ -1285,238 +1277,241 @@ window.applyCutoffDate = async function() {
   }
 };
 
-function renderMonthlyReportAnalysis(viewType) {
+function renderMonthlyReportAnalysis() {
   const container = document.getElementById("monthly-report-dynamic-content");
   if (!container || !appData) return;
 
-  const rep = appData.monthlyReportAnalysis;
-  if (!rep) {
-    container.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-chart-pie"></i><p>暫無最新技術會議運作概況數據</p></div>`;
-    return;
-  }
+  const rep = appData.monthlyReportAnalysis || {};
 
-  if (viewType === "coverage") {
-    const p13 = rep.p13_coverage || { headers: [], rows: [], analysis: [] };
-    container.innerHTML = `
-      <div class="report-block">
-        <div class="report-block-title">
-          <i class="fa-solid fa-shield-halved text-cyan"></i>
-          <h4>全工區技術議題管控項目覆蓋率分析 (P13 統計)</h4>
-        </div>
-        <div class="table-responsive" style="margin-top: 10px;">
-          <table class="modern-table">
-            <thead>
-              <tr>
-                ${(p13.headers || []).map((h, hIdx) => `<th style="text-align: center; font-size: 17px;">${h}</th>`).join("")}
-              </tr>
-            </thead>
-            <tbody>
-              ${(p13.rows || []).map((row, idx) => `
-                <tr class="${idx === p13.rows.length - 1 ? 'total-row' : ''}">
-                  ${row.map((cell, cIdx) => `
-                    <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 17px; vertical-align: middle;">
-                      ${cell}
-                    </td>
-                  `).join("")}
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    `;
-  } else if (viewType === "dept") {
-    // 【核心動態計算】各工處待辦執行績效與燈號分析 (P12 統計 - 分母扣除後續辦理)
-    const deptMap = {};
-    (appData.projects || []).forEach(p => {
-      const d = p.dept || "其他工程處";
-      if (!deptMap[d]) {
-        deptMap[d] = { dept: d, total: 0, postponed: 0, active: 0, completed: 0, pending: 0 };
+  // -------------------------------------------------------------
+  // 1. P12: 各工處待辦執行績效與燈號分析 (扣除後續辦理)
+  // -------------------------------------------------------------
+  const deptMap = {};
+  ((appData && appData.projects) ? appData.projects : []).forEach(p => {
+    const d = p.dept || "其他工程處";
+    if (!deptMap[d]) {
+      deptMap[d] = { dept: d, total: 0, postponed: 0, active: 0, completed: 0, pending: 0 };
+    }
+    const norm = normalizeSiteName(p.shortName);
+    const todos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === norm);
+    todos.forEach(t => {
+      deptMap[d].total++;
+      if (t.status === "後續辦理") {
+        deptMap[d].postponed++;
+      } else {
+        deptMap[d].active++;
+        if (t.status === "已完成") deptMap[d].completed++;
+        else deptMap[d].pending++;
       }
-      const norm = normalizeSiteName(p.shortName);
-      const todos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === norm);
-      todos.forEach(t => {
-        deptMap[d].total++;
-        if (t.status === "後續辦理") {
-          deptMap[d].postponed++;
-        } else {
-          deptMap[d].active++;
-          if (t.status === "已完成") deptMap[d].completed++;
-          else deptMap[d].pending++;
-        }
-      });
     });
+  });
 
-    const deptList = Object.values(deptMap).map(d => {
-      const rateValNum = d.active > 0 ? (d.completed / d.active) * 100 : 0;
-      const rateStr = `${rateValNum.toFixed(1)}%`;
-      let lightPill = `<span class="proj-light-pill light-white">普通</span>`;
-      if (rateValNum >= 80) lightPill = `<span class="proj-light-pill light-green">優良</span>`;
-      else if (rateValNum >= 65) lightPill = `<span class="proj-light-pill light-yellow">尚可</span>`;
-      else if (rateValNum >= 50) lightPill = `<span class="proj-light-pill light-orange">警示</span>`;
-      else lightPill = `<span class="proj-light-pill light-red">落後</span>`;
+  const deptList = Object.values(deptMap).map(d => {
+    const rateValNum = d.active > 0 ? (d.completed / d.active) * 100 : 0;
+    const rateStr = `${rateValNum.toFixed(1)}%`;
+    let lightPill = `<span class="proj-light-pill light-white">普通</span>`;
+    if (rateValNum >= 80) lightPill = `<span class="proj-light-pill light-green">優良</span>`;
+    else if (rateValNum >= 65) lightPill = `<span class="proj-light-pill light-yellow">尚可</span>`;
+    else if (rateValNum >= 50) lightPill = `<span class="proj-light-pill light-orange">警示</span>`;
+    else lightPill = `<span class="proj-light-pill light-red">落後</span>`;
 
-      return {
-        dept: d.dept,
-        total: d.total,
-        postponed: d.postponed,
-        active: d.active,
-        completed: d.completed,
-        rateValNum,
-        rateStr,
-        lightPill
-      };
-    });
+    return {
+      dept: d.dept,
+      total: d.total,
+      postponed: d.postponed,
+      active: d.active,
+      completed: d.completed,
+      rateValNum,
+      rateStr,
+      lightPill
+    };
+  });
+  deptList.sort((a, b) => b.rateValNum - a.rateValNum);
 
-    // 【核心修正】依待辦完成率由高至低降序排序排名
-    deptList.sort((a, b) => b.rateValNum - a.rateValNum);
+  const deptRowsHtml = deptList.map((d, idx) => `
+    <tr>
+      <td style="text-align: center; font-size: 15.5px; font-weight: 700; color: ${idx < 3 ? '#a5f3fc' : 'var(--text-dim)'};">${idx + 1}</td>
+      <td class="text-cyan font-bold" style="text-align: center; font-size: 15.5px; vertical-align: middle;">${d.dept}</td>
+      <td style="text-align: center; font-size: 15.5px;">${d.total}</td>
+      <td style="text-align: center; font-size: 15.5px; color: #fbbf24;">${d.postponed}</td>
+      <td style="text-align: center; font-size: 15.5px; font-weight: 700;">${d.active}</td>
+      <td style="text-align: center; font-size: 15.5px; color: #34d399;">${d.completed}</td>
+      <td style="text-align: center; font-size: 15.5px; font-weight: 700;">${d.rateStr}</td>
+      <td style="text-align: center; font-size: 15.5px;">${d.lightPill}</td>
+    </tr>
+  `).join("");
 
-    const deptRows = deptList.map((d, idx) => [
-      `<span style="font-weight: 700; color: ${idx < 3 ? '#a5f3fc' : 'var(--text-dim)'};">${idx + 1}</span>`,
-      d.dept,
-      d.total,
-      d.postponed,
-      d.active,
-      d.completed,
-      d.rateStr,
-      d.lightPill
-    ]);
+  // -------------------------------------------------------------
+  // 2. P11: 各工地待辦執行績效排名 (扣除後續辦理)
+  // -------------------------------------------------------------
+  const siteStatsList = ((appData && appData.projects) ? appData.projects : []).map(p => {
+    const norm = normalizeSiteName(p.shortName);
+    const todos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === norm);
+    const total = todos.length;
+    const postponed = todos.filter(t => t.status === "後續辦理").length;
+    const active = total - postponed;
+    const completed = todos.filter(t => t.status === "已完成").length;
+    const rateVal = active > 0 ? (completed / active) * 100 : 0;
+    const rateStr = `${rateVal.toFixed(1)}%`;
+    const withResult = todos.filter(t => t.status === "已完成" && t.result && t.result.trim() !== "" && t.result.trim() !== "-").length;
+    const uploadStr = completed > 0 ? `${((withResult / completed) * 100).toFixed(1)}%` : "—";
 
-    container.innerHTML = `
+    return {
+      siteName: p.shortName,
+      total,
+      postponed,
+      active,
+      completed,
+      rateVal,
+      rateStr: `${rateStr}`,
+      uploadStr
+    };
+  });
+  siteStatsList.sort((a, b) => b.rateVal - a.rateVal);
+
+  const siteRowsHtml = siteStatsList.map((s, idx) => `
+    <tr>
+      <td style="text-align: center; font-size: 15.5px; font-weight: 700; color: ${idx < 3 ? '#a5f3fc' : 'var(--text-dim)'};">${idx + 1}</td>
+      <td class="text-cyan font-bold" style="text-align: center; font-size: 15.5px;">${s.siteName}</td>
+      <td style="text-align: center; font-size: 15.5px;">${s.total}</td>
+      <td style="text-align: center; font-size: 15.5px; color: #fbbf24;">${s.postponed}</td>
+      <td style="text-align: center; font-size: 15.5px; font-weight: 700;">${s.active}</td>
+      <td style="text-align: center; font-size: 15.5px; color: #34d399;">${s.completed}</td>
+      <td style="text-align: center; font-size: 15.5px; font-weight: 700;">${s.rateStr}</td>
+      <td style="text-align: center; font-size: 15.5px;">${s.uploadStr}</td>
+    </tr>
+  `).join("");
+
+  // -------------------------------------------------------------
+  // 3. P13: 全工區技術議題管控項目覆蓋率分析
+  // -------------------------------------------------------------
+  const p13 = rep.p13_coverage || { headers: [], rows: [], analysis: [] };
+  const p13RowsHtml = (p13.rows || []).map((row, idx) => `
+    <tr class="${idx === p13.rows.length - 1 ? 'total-row' : ''}">
+      ${row.map((cell, cIdx) => `
+        <td class="${cIdx === 0 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 16.5px; vertical-align: middle;">
+          ${cell}
+        </td>
+      `).join("")}
+    </tr>
+  `).join("");
+
+  // -------------------------------------------------------------
+  // 4. P10: 各工處每月技術會議召開場次統計
+  // -------------------------------------------------------------
+  const p10m = rep.p10_meetings || { headers: [], rows: [] };
+  const p10RowsHtml = (p10m.rows || []).map(row => `
+    <tr>
+      ${row.map((cell, cIdx) => `
+        <td class="${cIdx === 1 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 16px; vertical-align: middle;">${cell}</td>
+      `).join("")}
+    </tr>
+  `).join("");
+
+  // 組合一頁式全量下拉 HTML (P12 & P11 併排 2 欄，P13 與 P10 全寬展開)
+  container.innerHTML = `
+    <!-- 第 1 區塊：P12 分工處統計 與 P11 分工地績效 2 欄併排顯示 -->
+    <div class="report-two-col-grid">
+      <!-- 左欄：P12 分工處統計 -->
       <div class="report-block">
         <div class="report-block-title">
           <i class="fa-solid fa-sitemap text-amber"></i>
-          <h4>各工處待辦執行績效與燈號分析 (P12 統計 - 扣除後續辦理)</h4>
+          <h4>各工處待辦執行績效與燈號分析 (P12 統計)</h4>
         </div>
         <div class="table-responsive" style="margin-top: 10px;">
           <table class="modern-table">
             <thead>
               <tr>
-                <th style="width: 70px; text-align: center; font-size: 17px;">排名</th>
-                <th style="text-align: center; font-size: 17px;">工程處</th>
-                <th style="text-align: center; font-size: 17px;">待辦總數</th>
-                <th style="text-align: center; font-size: 17px;">後續辦理</th>
-                <th style="text-align: center; font-size: 17px;">應辦(分母)</th>
-                <th style="text-align: center; font-size: 17px;">已完成</th>
-                <th style="text-align: center; font-size: 17px;">待辦完成率</th>
-                <th style="text-align: center; font-size: 17px;">健康燈號</th>
+                <th style="width: 48px; text-align: center; font-size: 15px;">排名</th>
+                <th style="text-align: center; font-size: 15px;">工程處</th>
+                <th style="text-align: center; font-size: 15px;">待辦</th>
+                <th style="text-align: center; font-size: 15px;">後續</th>
+                <th style="text-align: center; font-size: 15px;">應辦</th>
+                <th style="text-align: center; font-size: 15px;">已完成</th>
+                <th style="text-align: center; font-size: 15px;">完成率</th>
+                <th style="text-align: center; font-size: 15px;">健康燈號</th>
               </tr>
             </thead>
             <tbody>
-              ${deptRows.map(row => `
-                <tr>
-                  ${row.map((cell, cIdx) => `
-                    <td class="${cIdx === 1 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 17px; vertical-align: middle;">${cell}</td>
-                  `).join("")}
-                </tr>
-              `).join("")}
+              ${deptRowsHtml}
             </tbody>
           </table>
         </div>
       </div>
-    `;
-  } else if (viewType === "site") {
-    // 【核心動態計算】各工地待辦執行績效排名 (P11 統計 - 分母扣除後續辦理)
-    const siteStatsList = (appData.projects || []).map(p => {
-      const norm = normalizeSiteName(p.shortName);
-      const todos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === norm);
-      const total = todos.length;
-      const postponed = todos.filter(t => t.status === "後續辦理").length;
-      const active = total - postponed;
-      const completed = todos.filter(t => t.status === "已完成").length;
-      const rateVal = active > 0 ? (completed / active) * 100 : 0;
-      const rateStr = `${rateVal.toFixed(1)}%`;
-      const withResult = todos.filter(t => t.status === "已完成" && t.result && t.result.trim() !== "" && t.result.trim() !== "-").length;
-      const uploadStr = completed > 0 ? `${((withResult / completed) * 100).toFixed(1)}%` : "—";
 
-      let lightDot = "⚪";
-      if (rateVal >= 80) lightDot = "🟢";
-      else if (rateVal >= 65) lightDot = "🟡";
-      else if (rateVal >= 50) lightDot = "🟠";
-      else lightDot = "🔴";
-
-      return {
-        siteName: p.shortName,
-        total,
-        postponed,
-        active,
-        completed,
-        rateVal,
-        rateStr: `${rateStr} ${lightDot}`,
-        uploadStr
-      };
-    });
-
-    // 依完成率高至低排序排名
-    siteStatsList.sort((a, b) => b.rateVal - a.rateVal);
-
-    container.innerHTML = `
+      <!-- 右欄：P11 分工地績效 -->
       <div class="report-block">
         <div class="report-block-title">
           <i class="fa-solid fa-cubes-stacked text-emerald"></i>
-          <h4>各工地待辦執行績效排名 (P11 統計 - 扣除後續辦理)</h4>
+          <h4>各工地待辦執行績效排名 (P11 統計)</h4>
         </div>
         <div class="table-responsive" style="margin-top: 10px;">
           <table class="modern-table">
             <thead>
               <tr>
-                <th style="width: 70px; text-align: center; font-size: 17px;">排名</th>
-                <th style="text-align: center; font-size: 17px;">工地名稱</th>
-                <th style="text-align: center; font-size: 17px;">待辦總數</th>
-                <th style="text-align: center; font-size: 17px;">後續辦理</th>
-                <th style="text-align: center; font-size: 17px;">應辦(分母)</th>
-                <th style="text-align: center; font-size: 17px;">已完成</th>
-                <th style="text-align: center; font-size: 17px;">待辦完成率</th>
-                <th style="text-align: center; font-size: 17px;">成果上傳率</th>
+                <th style="width: 48px; text-align: center; font-size: 15px;">排名</th>
+                <th style="text-align: center; font-size: 15px;">工地名稱</th>
+                <th style="text-align: center; font-size: 15px;">待辦</th>
+                <th style="text-align: center; font-size: 15px;">後續</th>
+                <th style="text-align: center; font-size: 15px;">應辦</th>
+                <th style="text-align: center; font-size: 15px;">已完成</th>
+                <th style="text-align: center; font-size: 15px;">完成率</th>
+                <th style="text-align: center; font-size: 15px;">成果上傳</th>
               </tr>
             </thead>
             <tbody>
-              ${siteStatsList.map((s, idx) => `
-                <tr>
-                  <td style="text-align: center; font-size: 17px; font-weight: 700; color: ${idx < 3 ? '#a5f3fc' : 'var(--text-dim)'};">${idx + 1}</td>
-                  <td class="text-cyan font-bold" style="text-align: center; font-size: 17px;">${s.siteName}</td>
-                  <td style="text-align: center; font-size: 17px;">${s.total}</td>
-                  <td style="text-align: center; font-size: 17px; color: #fbbf24;">${s.postponed}</td>
-                  <td style="text-align: center; font-size: 17px; font-weight: 700;">${s.active}</td>
-                  <td style="text-align: center; font-size: 17px; color: #34d399;">${s.completed}</td>
-                  <td style="text-align: center; font-size: 17px; font-weight: 700;">${s.rateStr}</td>
-                  <td style="text-align: center; font-size: 17px;">${s.uploadStr}</td>
-                </tr>
-              `).join("")}
+              ${siteRowsHtml}
             </tbody>
           </table>
         </div>
       </div>
-    `;
-  } else if (viewType === "meetings") {
-    const p10m = rep.p10_meetings || { headers: [], rows: [] };
-    container.innerHTML = `
-      <div class="report-block">
-        <div class="report-block-title">
-          <i class="fa-solid fa-handshake-angle text-purple"></i>
-          <h4>各工處每月技術會議召開場次 (P10 統計)</h4>
+    </div>
+
+    <!-- 第 2 區塊：P13 全工區技術議題管控項目覆蓋率分析 (全寬) -->
+    <div class="report-block" style="margin-top: 18px;">
+      <div class="report-block-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-shield-halved text-cyan"></i>
+          <h4>全工區技術議題管控項目覆蓋率分析 (P13 統計)</h4>
         </div>
-        <div class="table-responsive" style="margin-top: 10px;">
-          <table class="modern-table">
-            <thead>
-              <tr>
-                ${(p10m.headers || []).map(h => `<th>${h}</th>`).join("")}
-              </tr>
-            </thead>
-            <tbody>
-              ${(p10m.rows || []).map(row => `
-                <tr>
-                  ${row.map((cell, cIdx) => `
-                    <td class="${cIdx === 1 ? 'text-cyan font-bold' : ''}" style="text-align: center; font-size: 17px; vertical-align: middle;">${cell}</td>
-                  `).join("")}
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-        </div>
+        <span style="font-size: 13.5px; color: var(--text-dim);">
+          <i class="fa-solid fa-info-circle text-cyan"></i> 連動上方統計基準日即時動態重算
+        </span>
       </div>
-    `;
-  }
+      <div class="table-responsive" style="margin-top: 10px;">
+        <table class="modern-table">
+          <thead>
+            <tr>
+              ${(p13.headers || []).map(h => `<th style="text-align: center; font-size: 16.5px;">${h}</th>`).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${p13RowsHtml}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 第 3 區塊：P10 各工處每月技術會議召開場次 (全寬) -->
+    <div class="report-block" style="margin-top: 24px;">
+      <div class="report-block-title">
+        <i class="fa-solid fa-handshake-angle text-purple"></i>
+        <h4>各工處每月技術會議召開場次 (P10 統計)</h4>
+      </div>
+      <div class="table-responsive" style="margin-top: 10px;">
+        <table class="modern-table">
+          <thead>
+            <tr>
+              ${(p10m.headers || []).map(h => `<th>${h}</th>`).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${p10RowsHtml}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
 }
 
 // 渲染技術指引、模板、其他文件
@@ -1823,7 +1818,7 @@ function renderWorkspaces(projects) {
 
   grid.innerHTML = projects.map(p => {
     const normSite = normalizeSiteName(p.shortName);
-    const projTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
+    const projTodos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === normSite);
     const scheduledCtrlItems = (p.controlSheetItems || []).filter(isScheduledItem);
     const ctrlItemsCount = scheduledCtrlItems.length;
     const postponedCount = projTodos.filter(t => t.status === "後續辦理").length;
@@ -1873,11 +1868,7 @@ function renderWorkspaces(projects) {
           </div>
         </div>
 
-        <div style="margin-top: 10px; padding: 6px 10px; background: rgba(0,242,254,0.05); border: 1px solid rgba(0,242,254,0.15); border-radius: 6px; font-size: 13.5px; display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-user-gear text-amber"></i>
-          <span style="color: var(--text-dim);">會議窗口：</span>
-          <span style="color: #a5f3fc; font-weight: 600;">各專案規劃組及負責人</span>
-        </div>
+
 
         <button type="button" class="btn-proj-enter" onclick="event.stopPropagation(); openProjectDrawer('${p.id}')">
           進入作業區 <i class="fa-solid fa-arrow-right"></i>
@@ -1914,11 +1905,11 @@ window.openProjectDrawer = function(projectId) {
   const todoCountEl = document.getElementById("drawer-todo-count");
   const controlCountEl = document.getElementById("drawer-control-count");
 
-  if (deptEl) deptEl.innerHTML = `${proj.dept} <span style="margin-left: 8px; font-size: 13px; color: #fbbf24; font-weight: normal;"><i class="fa-solid fa-user-gear"></i> 技術會議窗口：各專案規劃組及負責人</span>`;
+  if (deptEl) deptEl.textContent = proj.dept;
   if (nameEl) nameEl.textContent = proj.shortName || proj.name;
 
   const normSite = normalizeSiteName(proj.shortName);
-  const drawerTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
+  const drawerTodos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === normSite);
   const drawerPostponed = drawerTodos.filter(t => t.status === "後續辦理").length;
   const drawerActive = drawerTodos.length - drawerPostponed;
   const drawerCompleted = drawerTodos.filter(t => t.status === "已完成").length;
@@ -1970,7 +1961,7 @@ function renderDrawerTabContent(tabType) {
   // 頁籤頂部狀態標籤動態更新
   const headerStatsContainer = document.getElementById("drawer-header-stats-container");
   const normSite = normalizeSiteName(proj.shortName);
-  const projTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
+  const projTodos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === normSite);
   const postponedTodos = projTodos.filter(t => t.status === '後續辦理');
   const activeTodos = projTodos.filter(t => t.status !== '後續辦理');
   const completedTodos = projTodos.filter(t => t.status === '已完成');
@@ -2233,7 +2224,7 @@ function renderDrawerTabContent(tabType) {
   // 頁籤 4: 專案待辦事項 (包含新纖南港總部 26 筆與各工區對齊)
   else if (tabType === "todos") {
     const normSite = normalizeSiteName(proj.shortName);
-    const projTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normSite);
+    const projTodos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === normSite);
     
     if (projTodos.length === 0) {
       content.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-check-double"></i><p>本案目前無待辦事項登錄紀錄</p></div>`;
@@ -2693,10 +2684,10 @@ function performGlobalSearch() {
 
   // A. 搜尋技術議題庫 (155 筆跨專案技術結晶)
   if (activeSearchType === "all" || activeSearchType === "issues") {
-    (appData.technicalIssues || []).forEach(issue => {
+    ((appData && appData.technicalIssues) ? appData.technicalIssues : []).forEach(issue => {
       const matchText = `${issue.dept} ${issue.site} ${issue.category} ${issue.title} ${issue.notes}`.toLowerCase();
       if (matchText.includes(query)) {
-        const matchedProj = (appData.projects || []).find(p => normalizeSiteName(p.shortName) === normalizeSiteName(issue.site));
+        const matchedProj = ((appData && appData.projects) ? appData.projects : []).find(p => normalizeSiteName(p.shortName) === normalizeSiteName(issue.site));
         let issueFileObj = null;
         if (matchedProj) {
           for (const m of (matchedProj.meetings || [])) {
@@ -2732,7 +2723,7 @@ function performGlobalSearch() {
 
   // B. 搜尋會議簡報檔案與指引模板
   if (activeSearchType === "all" || activeSearchType === "files" || activeSearchType === "guides") {
-    (appData.projects || []).forEach(p => {
+    ((appData && appData.projects) ? appData.projects : []).forEach(p => {
       (p.meetings || []).forEach(m => {
         (m.files || []).forEach(f => {
           if (f.name.toLowerCase().includes(query)) {
@@ -3075,7 +3066,7 @@ window.openTechnicalIssueModal = function(encodedIssue, encodedFile) {
     const issue = JSON.parse(decodeURIComponent(encodedIssue));
     const file = encodedFile ? JSON.parse(decodeURIComponent(encodedFile)) : null;
 
-    const matchedProj = (appData.projects || []).find(p => normalizeSiteName(p.shortName) === normalizeSiteName(issue.site));
+    const matchedProj = ((appData && appData.projects) ? appData.projects : []).find(p => normalizeSiteName(p.shortName) === normalizeSiteName(issue.site));
     const projId = matchedProj ? matchedProj.id : "";
 
     const fullPath = file ? file.fullPath : "\\\\\\\\192.168.1.221\\\\s5\\\\1003技術會議資料專區\\\\1.各專案作業區\\\\目錄-各工地歷次會議技術議題查詢.xlsx";

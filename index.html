@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=33.0">
+  <link rel="stylesheet" href="style.css?v=34.0">
 </head>
 <body>
   <!-- 背景發光粒子球體 (玻璃擬態質感) -->
@@ -258,22 +258,13 @@
           <div class="glass-card section-card" id="monthly-report-analysis-card">
             <div class="card-header">
               <div>
-                <h3><i class="fa-solid fa-chart-line text-cyan"></i> 每月技術會議運作概況分析</h3>
-                <span class="header-note" id="report-source-label"><i class="fa-solid fa-file-powerpoint text-orange"></i> 自動同步自 NAS 最新月報 PPTX (P10~P13)</span>
+                <h3><i class="fa-solid fa-chart-line text-cyan"></i> 每月技術會議運作概況分析 (一頁式全量下拉展示)</h3>
+                <span class="header-note" id="report-source-label"><i class="fa-solid fa-file-powerpoint text-orange"></i> 自動同步自 NAS 最新月報 PPTX (P10~P13) ｜ P12 工處與 P11 工地 2 欄併排 ｜ 連動基準日</span>
               </div>
-              <div class="report-tab-chips">
-                <button type="button" class="report-chip active" data-report-view="dept">
-                  <i class="fa-solid fa-building"></i> 分工處統計 (P12)
-                </button>
-                <button type="button" class="report-chip" data-report-view="site">
-                  <i class="fa-solid fa-helmet-safety"></i> 分工地績效 (P11)
-                </button>
-                <button type="button" class="report-chip" data-report-view="meetings">
-                  <i class="fa-solid fa-handshake"></i> 近3月開會與共同議題 (P10)
-                </button>
-                <button type="button" class="report-chip" data-report-view="coverage">
-                  <i class="fa-solid fa-diagram-next"></i> 議題排程覆蓋度比對 (P13)
-                </button>
+              <div class="header-right-badges">
+                <span class="badge-pill bg-cyan-glow" style="padding: 6px 14px; font-size: 13px; font-weight: 600; border-radius: 20px;">
+                  <i class="fa-solid fa-layer-group text-cyan"></i> 全量一頁式下拉視圖
+                </span>
               </div>
             </div>
 
@@ -556,6 +547,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=33.0"></script>
+  <script src="app.js?v=34.0"></script>
 </body>
 </html>
