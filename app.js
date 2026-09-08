@@ -3028,6 +3028,31 @@ window.openFileInExplorer = function(encodedPath) {
   });
 };
 
+window.toggleGuidelineFolder = function(headerEl) {
+  const card = headerEl.closest('.guideline-folder-card');
+  if (!card) return;
+  card.classList.toggle('collapsed');
+  const toggleText = card.querySelector('.toggle-text');
+  if (toggleText) {
+    toggleText.textContent = card.classList.contains('collapsed') ? '展開' : '收合';
+  }
+};
+
+window.toggleAllGuidelineFolders = function(expandAll) {
+  const cards = document.querySelectorAll('.guideline-folder-card');
+  cards.forEach(card => {
+    if (expandAll) {
+      card.classList.remove('collapsed');
+    } else {
+      card.classList.add('collapsed');
+    }
+    const toggleText = card.querySelector('.toggle-text');
+    if (toggleText) {
+      toggleText.textContent = expandAll ? '收合' : '展開';
+    }
+  });
+};
+
 window.toggleMeetingCard = function(headerEl) {
   const card = headerEl.closest('.meeting-accordion-card');
   if (card) {
