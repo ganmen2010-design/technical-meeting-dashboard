@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=40.0">
+  <link rel="stylesheet" href="style.css?v=41.0">
 </head>
 <body>
   <!-- 背景發光粒子球體 (玻璃擬態質感) -->
@@ -471,6 +471,128 @@
     </div>
   </div>
 
-  <script src="app.js?v=40.0"></script>
+  <!-- 技術議題管控項目新增與編輯彈窗 (支援寫入管控表與本機/伺服器持久化) -->
+  <div id="edit-control-modal" class="modal-overlay hidden">
+    <div class="modal-card glass-card" style="max-width: 680px; padding: 24px; border: 1px solid rgba(0, 242, 254, 0.35);">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 id="edit-ctrl-modal-title" style="font-size: 18px; color: #a5f3fc; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-pen-to-square text-cyan"></i> 編輯技術議題管控項目
+        </h3>
+        <button type="button" class="close-btn" onclick="closeEditControlModal()">&times;</button>
+      </div>
+
+      <form id="edit-control-form" onsubmit="handleSaveControlItem(event)" style="display: flex; flex-direction: column; gap: 14px;">
+        <input type="hidden" id="ctrl-item-index" value="-1">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label for="ctrl-stage" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">
+              <i class="fa-solid fa-layer-group text-cyan"></i> 工程階段 (Stage)
+            </label>
+            <input type="text" id="ctrl-stage" placeholder="例如：規劃設計 / 施工準備 / 地下結構" list="stage-datalist" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+            <datalist id="stage-datalist">
+              <option value="規劃設計">
+              <option value="發包作業">
+              <option value="施工準備">
+              <option value="地下結構">
+              <option value="地上結構">
+              <option value="機電工程">
+              <option value="裝修工程">
+              <option value="景觀公設">
+            </datalist>
+          </div>
+
+          <div class="form-group">
+            <label for="ctrl-category" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">
+              <i class="fa-solid fa-tag text-purple"></i> 工程類別 (Category)
+            </label>
+            <input type="text" id="ctrl-category" placeholder="例如：連續壁 / 模板 / 防水 / 鋼筋 / 泥作" list="category-datalist" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+            <datalist id="category-datalist">
+              <option value="連續壁">
+              <option value="模板">
+              <option value="防水">
+              <option value="鋼筋">
+              <option value="泥作">
+              <option value="地質改良">
+              <option value="安全支撐">
+              <option value="鋼構">
+              <option value="機電">
+              <option value="BIM">
+              <option value="品保">
+            </datalist>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ctrl-title" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">
+            <i class="fa-solid fa-list-check text-cyan"></i> 議題項目 (檢討內容) <span class="text-rose">*</span>
+          </label>
+          <textarea id="ctrl-title" rows="3" required placeholder="請輸入議題檢討項目及重點內容..." style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff; font-size: 14px; line-height: 1.5; resize: vertical;"></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label for="ctrl-assignee" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">
+              <i class="fa-solid fa-user text-amber"></i> 負責人 / 規劃組
+            </label>
+            <input type="text" id="ctrl-assignee" placeholder="負責人姓名" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+          </div>
+
+          <div class="form-group">
+            <label for="ctrl-due-date" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">
+              <i class="fa-solid fa-calendar-day text-cyan"></i> 預定產出日期
+            </label>
+            <input type="date" id="ctrl-due-date" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+          </div>
+
+          <div class="form-group">
+            <label for="ctrl-status" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">
+              <i class="fa-solid fa-traffic-light text-emerald"></i> 辦理狀態
+            </label>
+            <select id="ctrl-status" style="width: 100%; padding: 8px 12px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+              <option value="進行中">進行中</option>
+              <option value="已完成">已完成</option>
+              <option value="後續辦理">後續辦理</option>
+              <option value="未排定">未排定</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label for="ctrl-actual-date" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">
+              <i class="fa-solid fa-calendar-check text-emerald"></i> 實際產出日期
+            </label>
+            <input type="date" id="ctrl-actual-date" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+          </div>
+
+          <div class="form-group">
+            <label for="ctrl-deliverable" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">
+              <i class="fa-solid fa-paperclip text-cyan"></i> 成果說明 / NAS 附件路徑
+            </label>
+            <input type="text" id="ctrl-deliverable" placeholder="成果說明或 NAS 檔案路徑" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ctrl-progress" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">
+            <i class="fa-solid fa-comment-dots text-purple"></i> 辦理情形與進度說明
+          </label>
+          <textarea id="ctrl-progress" rows="2" placeholder="詳細辦理進度及會議決議要點..." style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff; font-size: 13px; resize: vertical;"></textarea>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end;">
+          <button type="button" class="btn-table-action" onclick="closeEditControlModal()" style="padding: 9px 18px; border-radius: 6px; background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15);">
+            取消
+          </button>
+          <button type="submit" class="btn-login" style="margin: 0; padding: 9px 24px; border-radius: 6px; background: linear-gradient(135deg, #00f2fe, #4facfe); color: #000; font-weight: 700;">
+            <i class="fa-solid fa-floppy-disk"></i> 儲存寫入管控表
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js?v=41.0"></script>
 </body>
 </html>

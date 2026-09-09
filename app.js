@@ -28,6 +28,9 @@ let activeSearchType = "all";
 let currentDrawerProject = null;
 let currentControlFilterMode = "due"; // 'due', 'all', 'no_assignee', 'no_deliverable'
 let currentControlSearchText = "";
+let currentControlStageFilter = "all";
+let currentControlCategoryFilter = "all";
+let currentControlStatusFilter = "all";
 
 // DOM 元件快取
 const loginModal = document.getElementById("login-modal");
@@ -87,6 +90,41 @@ function formatWesternDate(val) {
     } catch(e) {}
   }
   return s.replace(/-/g, '/');
+}
+
+// 格式化為 HTML input[type="date"] 接受的標準 YYYY-MM-DD
+function formatToInputDate(val) {
+  if (!val || val === '-' || val === '未排定' || val === '0') return '';
+  const s = String(val).trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+  if (/^\d{4}\/\d{2}\/\d{2}$/.test(s)) return s.replace(/\//g, '-');
+  if (/^\d{5}$/.test(s)) {
+    try {
+      const serial = parseInt(s, 10);
+      const dt = new Date((serial - 25569) * 86400 * 1000);
+      return dt.toISOString().slice(0, 10);
+    } catch(e) {}
+  }
+  const m = s.match(/^(\d{2,3})[./-](\d{1,2})[./-](\d{1,2})$/);
+  if (m) {
+    const y = parseInt(m[1], 10) + 1911;
+    const mo = String(m[2]).padStart(2, '0');
+    const d = String(m[3]).padStart(2, '0');
+    return `${y}-${mo}-${d}`;
+  }
+  return '';
+}
+
+// 取得專案管控項目（優先讀取本機 localStorage 修改覆蓋紀錄）
+function getProjectControlItems(proj) {
+  if (!proj) return [];
+  try {
+    const saved = localStorage.getItem(`fengyu_ctrl_override_${proj.id}`);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch(e) {}
+  return proj.controlSheetItems || [];
 }
 
 // ==============================================================================
@@ -1920,8 +1958,10 @@ function renderDrawerTabContent(tabType) {
     `;
   }
 
-  // 頁籤 2: 技術議題管控表 (比照待辦事項表格顯示 + 4大指標統計)
+  // 頁籤 2: 技術議題管控表 (支援即時多維篩選、寫入管控表、編輯/新增/刪除與 Excel 匯出)
   else if (tabType === "control") {
+    // 優先套用 localStorage 或本地儲存之修改紀錄
+    proj.controlSheetItems = getProjectControlItems(proj);
     const rawItems = proj.controlSheetItems || [];
     const controlFiles = (proj.categories && proj.categories["2.技術議題管控表(每月更新)"]) || [];
     const latestFile = controlFiles.length > 0 ? controlFiles[controlFiles.length - 1] : null;
@@ -1931,137 +1971,122 @@ function renderDrawerTabContent(tabType) {
       return;
     }
 
-    // 【核心優化】全案排定項目：嚴格篩選有排定預定產出日期之項目
-    const scheduledItems = rawItems.filter(isScheduledItem);
+    // 更新頂部唯一整合 KPI 按鈕列
+    updateControlHeaderRibbon();
 
-    // 計算 4 大指標 (以基準日/本日為篩選基準)
-    const cutoffDate = window.currentCutoffDate || new Date().toISOString().slice(0, 10);
-    const dueItems = scheduledItems.filter(it => it.dueDate && it.dueDate <= cutoffDate);
-    const completedDueItems = dueItems.filter(it => it.status === '已完成' || it.actualDate);
-    const noAssigneeItems = dueItems.filter(it => !it.assignee || it.assignee.trim() === '' || it.assignee === '未指定');
-    const noDeliverableItems = dueItems.filter(it => (it.status === '已完成' || it.actualDate) && (!it.deliverable || it.deliverable.trim() === ''));
-
-    // 【核心優化】切換至議題管控時，將抽屜頂部標籤直接替換為 4 大 KPI 標籤！
-    const headerStatsContainer = document.getElementById("drawer-header-stats-container");
-    if (headerStatsContainer) {
-      headerStatsContainer.innerHTML = `
-        <div class="control-header-ribbon">
-          <span class="kpi-mini-pill kpi-cyan"><i class="fa-solid fa-calendar-check"></i> 基準日應辦(${dueItems.length})</span>
-          <span class="kpi-mini-pill kpi-emerald"><i class="fa-solid fa-circle-check"></i> 已完成(${completedDueItems.length})</span>
-          <span class="kpi-mini-pill kpi-amber"><i class="fa-solid fa-user-xmark"></i> 未排負責人(${noAssigneeItems.length})</span>
-          <span class="kpi-mini-pill kpi-rose"><i class="fa-solid fa-link-slash"></i> 成果未填(${noDeliverableItems.length})</span>
-        </div>
-      `;
-    }
-
-    // 根據 currentControlFilterMode 進行過濾 (全部項目以全案有排定預定產出日期為準)
-    let displayItems = scheduledItems;
-    if (currentControlFilterMode === "due") {
-      displayItems = dueItems;
-    } else if (currentControlFilterMode === "no_assignee") {
-      displayItems = noAssigneeItems;
-    } else if (currentControlFilterMode === "no_deliverable") {
-      displayItems = noDeliverableItems;
-    } else if (currentControlFilterMode === "all_raw") {
-      displayItems = rawItems;
-    }
-
-    if (currentControlSearchText) {
-      const q = currentControlSearchText.toLowerCase();
-      displayItems = displayItems.filter(it => 
-        (it.title || '').toLowerCase().includes(q) ||
-        (it.category || '').toLowerCase().includes(q) ||
-        (it.assignee || '').toLowerCase().includes(q) ||
-        (it.progress || '').toLowerCase().includes(q)
-      );
-    }
+    // 收集所有不重複階段與類別
+    const allStages = Array.from(new Set(rawItems.map(it => (it.stage || '').trim()).filter(Boolean)));
+    const allCategories = Array.from(new Set(rawItems.map(it => (it.category || '').trim()).filter(Boolean)));
 
     content.innerHTML = `
-      <!-- 篩選與搜尋工具列 -->
-      <div class="control-filter-bar">
-        <div class="control-filter-tabs">
-          <button type="button" class="control-filter-chip ${currentControlFilterMode === 'due' ? 'active' : ''}" onclick="setControlFilter('due')">
-            <i class="fa-solid fa-clock"></i> 基準日前應辦 (${dueItems.length})
-          </button>
-          <button type="button" class="control-filter-chip ${currentControlFilterMode === 'all' ? 'active' : ''}" onclick="setControlFilter('all')">
-            <i class="fa-solid fa-list-check"></i> 全部排定項目 (${scheduledItems.length})
-          </button>
-          <button type="button" class="control-filter-chip ${currentControlFilterMode === 'no_assignee' ? 'active' : ''}" onclick="setControlFilter('no_assignee')">
-            <i class="fa-solid fa-user-slash"></i> 未排負責人 (${noAssigneeItems.length})
-          </button>
-          <button type="button" class="control-filter-chip ${currentControlFilterMode === 'no_deliverable' ? 'active' : ''}" onclick="setControlFilter('no_deliverable')">
-            <i class="fa-solid fa-file-circle-question"></i> 成果未填 (${noDeliverableItems.length})
-          </button>
+      <!-- 功能工具列：多維篩選、搜尋、新增與匯出 -->
+      <div class="control-toolbar-grid">
+        <div class="control-filters-group">
+          <input type="text" id="control-quick-search" class="control-search-input" placeholder="🔍 搜尋議題、說明、負責人、成果..." value="${currentControlSearchText}">
+          
+          <select id="control-stage-filter" class="control-select-filter">
+            <option value="all">📂 全部階段 (${allStages.length})</option>
+            ${allStages.map(st => `<option value="${st}" ${currentControlStageFilter === st ? 'selected' : ''}>${st}</option>`).join('')}
+          </select>
+
+          <select id="control-category-filter" class="control-select-filter">
+            <option value="all">🏷️ 全部類別 (${allCategories.length})</option>
+            ${allCategories.map(cat => `<option value="${cat}" ${currentControlCategoryFilter === cat ? 'selected' : ''}>${cat}</option>`).join('')}
+          </select>
+
+          <select id="control-status-filter" class="control-select-filter">
+            <option value="all" ${currentControlStatusFilter === 'all' ? 'selected' : ''}>⚡ 全部狀態</option>
+            <option value="進行中" ${currentControlStatusFilter === '進行中' ? 'selected' : ''}>進行中</option>
+            <option value="已完成" ${currentControlStatusFilter === '已完成' ? 'selected' : ''}>已完成</option>
+            <option value="後續辦理" ${currentControlStatusFilter === '後續辦理' ? 'selected' : ''}>後續辦理</option>
+            <option value="未排定" ${currentControlStatusFilter === '未排定' ? 'selected' : ''}>未排定</option>
+          </select>
         </div>
 
-        <div style="display: flex; gap: 8px; align-items: center;">
-          <input type="text" id="control-quick-search" placeholder="🔍 快速搜尋管控項目..." value="${currentControlSearchText}" oninput="handleControlSearch(this.value)" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px; color: #fff; font-size: 12px; outline: none;">
+        <div class="control-actions-group">
+          <button type="button" class="btn-add-control-item" onclick="openAddControlItemModal()">
+            <i class="fa-solid fa-plus"></i> 新增管控項目
+          </button>
+          <button type="button" class="btn-table-action" onclick="exportCurrentControlExcel()" title="匯出最新管控表 (CSV 格式，Excel 可直接開啟)">
+            <i class="fa-solid fa-file-export text-cyan"></i> 匯出管控表
+          </button>
           ${latestFile ? `
-            <a href="/api/download?path=${encodeURIComponent(latestFile.fullPath)}" target="_blank" download class="btn-table-action" style="padding: 6px 12px; font-size: 12px; white-space: nowrap;">
-              <i class="fa-solid fa-file-excel text-emerald"></i> 下載原始 Excel
+            <a href="/api/download?path=${encodeURIComponent(latestFile.fullPath)}" target="_blank" download class="btn-table-action" title="下載原始 Excel 檔">
+              <i class="fa-solid fa-file-excel text-emerald"></i> 原始 Excel
             </a>
           ` : ''}
         </div>
       </div>
 
       <!-- 逐項條列管控表（固定表頭） -->
-      <div class="table-responsive" style="max-height: 620px; overflow-y: auto;">
+      <div class="table-responsive" style="max-height: 590px; overflow-y: auto;">
         <table class="modern-table">
           <thead style="position: sticky; top: 0; background: #0c1322; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
             <tr>
               <th style="width: 45px; text-align: center;">項次</th>
-              <th style="width: 100px;">階段</th>
-              <th style="width: 120px;">類別</th>
+              <th style="width: 95px;">階段</th>
+              <th style="width: 110px;">類別</th>
               <th>議題項目 (檢討內容)</th>
-              <th style="width: 90px;">負責人</th>
-              <th style="width: 100px;">預定產出</th>
-              <th style="width: 100px;">實際產出</th>
-              <th style="width: 85px; text-align: center;">狀態</th>
-              <th style="width: 180px;">辦理情形與成果連結</th>
+              <th style="width: 85px;">負責人</th>
+              <th style="width: 95px;">預定產出</th>
+              <th style="width: 95px;">實際產出</th>
+              <th style="width: 80px; text-align: center;">狀態</th>
+              <th style="width: 170px;">辦理情形與成果連結</th>
+              <th style="width: 75px; text-align: center;">操作</th>
             </tr>
           </thead>
-          <tbody>
-            ${displayItems.length === 0 ? `
-              <tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 30px;">無符合篩選條件之管控項目</td></tr>
-            ` : displayItems.map((it, idx) => {
-              const isOverdue = it.dueDate && it.dueDate <= cutoffDate && it.status !== '已完成';
-              const isDoneNoDeliverable = (it.status === '已完成' || it.actualDate) && (!it.deliverable || it.deliverable.trim() === '');
-              
-              let statusPill = `<span class="proj-light-pill light-white">未排定</span>`;
-              if (it.status === '已完成') statusPill = `<span class="proj-light-pill light-green">已完成</span>`;
-              else if (it.status === '進行中') statusPill = `<span class="proj-light-pill light-yellow">進行中</span>`;
-              else if (it.status === '後續辦理') statusPill = `<span class="proj-light-pill light-orange">後續辦理</span>`;
-
-              return `
-                <tr>
-                  <td style="text-align: center; color: var(--text-dim);">${idx + 1}</td>
-                  <td><small class="text-cyan">${it.stage || '-'}</small></td>
-                  <td><small class="text-dim font-bold">${it.category || '-'}</small></td>
-                  <td style="line-height: 1.5; word-break: break-all;">
-                    ${it.title}
-                    ${isOverdue ? '<span style="display:inline-block; font-size:10px; background:rgba(244,63,94,0.15); color:#fda4af; border:1px solid rgba(244,63,94,0.3); border-radius:4px; padding:1px 4px; margin-left:6px;">逾期應辦</span>' : ''}
-                  </td>
-                  <td>
-                    ${it.assignee ? `<span class="text-white">${it.assignee}</span>` : '<small class="text-amber font-bold"><i class="fa-solid fa-triangle-exclamation"></i> 未指定</small>'}
-                  </td>
-                  <td><small class="${isOverdue ? 'text-rose font-bold' : 'text-muted'}">${formatWesternDate(it.dueDate)}</small></td>
-                  <td><small class="text-emerald">${formatWesternDate(it.actualDate)}</small></td>
-                  <td style="text-align: center;">${statusPill}</td>
-                  <td>
-                    ${it.deliverable ? `
-                      <div style="display: flex; align-items: center; gap: 4px; font-size: 11px;">
-                        <span class="text-cyan font-bold" title="${it.deliverable}"><i class="fa-solid fa-paperclip"></i> 已檢附成果</span>
-                        <button type="button" class="btn-table-action" style="padding: 2px 6px; font-size: 10px;" onclick="copyNasPath('${encodeURIComponent(it.deliverable)}')">複製</button>
-                      </div>
-                    ` : (isDoneNoDeliverable ? '<small class="text-rose"><i class="fa-solid fa-circle-exclamation"></i> 待補成果說明</small>' : `<small class="text-dim">${it.progress || '-'}</small>`)}
-                  </td>
-                </tr>
-              `;
-            }).join("")}
+          <tbody id="control-table-tbody">
+            <!-- 由 applyControlFilters() 動態生成 -->
           </tbody>
         </table>
       </div>
     `;
+
+    // 綁定非破壞式輸入事件 (不重新置換 input DOM 節點，保證注音與中文輸入法 100% 流暢)
+    const searchInput = document.getElementById("control-quick-search");
+    const stageSelect = document.getElementById("control-stage-filter");
+    const catSelect = document.getElementById("control-category-filter");
+    const statusSelect = document.getElementById("control-status-filter");
+
+    let isComposing = false;
+    if (searchInput) {
+      searchInput.addEventListener("compositionstart", () => { isComposing = true; });
+      searchInput.addEventListener("compositionend", () => {
+        isComposing = false;
+        currentControlSearchText = searchInput.value.trim();
+        applyControlFilters();
+      });
+      searchInput.addEventListener("input", () => {
+        if (!isComposing) {
+          currentControlSearchText = searchInput.value.trim();
+          applyControlFilters();
+        }
+      });
+    }
+
+    if (stageSelect) {
+      stageSelect.addEventListener("change", () => {
+        currentControlStageFilter = stageSelect.value;
+        applyControlFilters();
+      });
+    }
+
+    if (catSelect) {
+      catSelect.addEventListener("change", () => {
+        currentControlCategoryFilter = catSelect.value;
+        applyControlFilters();
+      });
+    }
+
+    if (statusSelect) {
+      statusSelect.addEventListener("change", () => {
+        currentControlStatusFilter = statusSelect.value;
+        applyControlFilters();
+      });
+    }
+
+    // 初次載入表格資料
+    applyControlFilters();
   }
 
   // 頁籤 3: 圖說契約進度表
@@ -2143,15 +2168,401 @@ function renderDrawerTabContent(tabType) {
   }
 }
 
+// 更新抽屜頂部唯一的整合式 KPI 篩選按鈕列
+function updateControlHeaderRibbon() {
+  const headerStatsContainer = document.getElementById("drawer-header-stats-container");
+  if (!headerStatsContainer || !currentDrawerProject) return;
+
+  const proj = currentDrawerProject;
+  const rawItems = getProjectControlItems(proj);
+  const scheduledItems = rawItems.filter(isScheduledItem);
+  const cutoffStr = "2026-09-08";
+
+  // 1. 基準日前應辦 (預定產出 <= 2026-09-08 且有效排定)
+  const dueItems = scheduledItems.filter(it => {
+    const dStr = formatToInputDate(it.dueDate);
+    return dStr && dStr <= cutoffStr;
+  });
+
+  // 2. 全部排定項目
+  const totalScheduled = scheduledItems.length;
+
+  // 3. 已完成
+  const completedCount = rawItems.filter(it => (it.status || '').trim() === '已完成').length;
+
+  // 4. 未排負責人
+  const noAssigneeCount = scheduledItems.filter(it => !it.assignee || it.assignee.trim() === '' || it.assignee.trim() === '-').length;
+
+  // 5. 成果未填 (已完成但未填成果說明)
+  const noDeliverableCount = scheduledItems.filter(it => {
+    const isDone = (it.status || '').trim() === '已完成';
+    const noDeliv = !it.deliverable || it.deliverable.trim() === '' || it.deliverable.trim() === '-' || it.deliverable.trim() === '待補';
+    return isDone && noDeliv;
+  }).length;
+
+  headerStatsContainer.innerHTML = `
+    <div class="control-header-ribbon">
+      <button type="button" class="kpi-mini-pill ${currentControlFilterMode === 'due' ? 'active' : ''}" onclick="setControlFilter('due')" title="篩選：基準日 2026/09/08 前應辦理之管控項目">
+        <i class="fa-solid fa-hourglass-half"></i> 基準日前應辦 (${dueItems.length})
+      </button>
+      <button type="button" class="kpi-mini-pill ${currentControlFilterMode === 'all' ? 'active' : ''}" onclick="setControlFilter('all')" title="顯示全部已排定預定產出日期之管控項目">
+        <i class="fa-solid fa-list-check"></i> 全部排定項目 (${totalScheduled})
+      </button>
+      <button type="button" class="kpi-mini-pill kpi-emerald ${currentControlFilterMode === 'completed' ? 'active' : ''}" onclick="setControlFilter('completed')" title="篩選：狀態為已完成之項目">
+        <i class="fa-solid fa-circle-check"></i> 已完成 (${completedCount})
+      </button>
+      <button type="button" class="kpi-mini-pill kpi-amber ${currentControlFilterMode === 'no_assignee' ? 'active' : ''}" onclick="setControlFilter('no_assignee')" title="篩選：尚未指定負責人或規劃組之項目">
+        <i class="fa-solid fa-user-xmark"></i> 未排負責人 (${noAssigneeCount})
+      </button>
+      <button type="button" class="kpi-mini-pill kpi-rose ${currentControlFilterMode === 'no_deliverable' ? 'active' : ''}" onclick="setControlFilter('no_deliverable')" title="篩選：已完成但成果說明/連結未填寫之項目">
+        <i class="fa-solid fa-link-slash"></i> 成果未填 (${noDeliverableCount})
+      </button>
+    </div>
+  `;
+}
+
+// 切換頂部 KPI 篩選模式
 window.setControlFilter = function(mode) {
   currentControlFilterMode = mode;
-  renderDrawerTabContent("control");
+  updateControlHeaderRibbon();
+  applyControlFilters();
 };
 
-window.handleControlSearch = function(text) {
-  currentControlSearchText = text.trim();
-  renderDrawerTabContent("control");
+// 執行管控表多維組合篩選並僅局部刷新 tbody (不銷毀搜尋框與下拉選單)
+function applyControlFilters() {
+  const tbody = document.getElementById("control-table-tbody");
+  if (!tbody || !currentDrawerProject) return;
+
+  const proj = currentDrawerProject;
+  const rawItems = getProjectControlItems(proj);
+  const cutoffStr = "2026-09-08";
+
+  // 1. KPI 頂部篩選條件
+  let filtered = rawItems.filter(it => {
+    if (currentControlFilterMode === "all") {
+      return isScheduledItem(it);
+    }
+    if (currentControlFilterMode === "due") {
+      if (!isScheduledItem(it)) return false;
+      const dStr = formatToInputDate(it.dueDate);
+      return dStr && dStr <= cutoffStr;
+    }
+    if (currentControlFilterMode === "completed") {
+      return (it.status || '').trim() === '已完成';
+    }
+    if (currentControlFilterMode === "no_assignee") {
+      if (!isScheduledItem(it)) return false;
+      return !it.assignee || it.assignee.trim() === '' || it.assignee.trim() === '-';
+    }
+    if (currentControlFilterMode === "no_deliverable") {
+      if (!isScheduledItem(it)) return false;
+      const isDone = (it.status || '').trim() === '已完成';
+      const noDeliv = !it.deliverable || it.deliverable.trim() === '' || it.deliverable.trim() === '-' || it.deliverable.trim() === '待補';
+      return isDone && noDeliv;
+    }
+    return true;
+  });
+
+  // 2. 下拉選單：階段篩選
+  if (currentControlStageFilter && currentControlStageFilter !== "all") {
+    filtered = filtered.filter(it => (it.stage || '').trim() === currentControlStageFilter);
+  }
+
+  // 3. 下拉選單：類別篩選
+  if (currentControlCategoryFilter && currentControlCategoryFilter !== "all") {
+    filtered = filtered.filter(it => (it.category || '').trim() === currentControlCategoryFilter);
+  }
+
+  // 4. 下拉選單：狀態篩選
+  if (currentControlStatusFilter && currentControlStatusFilter !== "all") {
+    filtered = filtered.filter(it => (it.status || '').trim() === currentControlStatusFilter);
+  }
+
+  // 5. 快速關鍵字全文檢索
+  if (currentControlSearchText) {
+    const q = currentControlSearchText.toLowerCase();
+    filtered = filtered.filter(it => {
+      const matchTopic = (it.topic || it.title || '').toLowerCase().includes(q);
+      const matchStage = (it.stage || '').toLowerCase().includes(q);
+      const matchCat = (it.category || '').toLowerCase().includes(q);
+      const matchAssignee = (it.assignee || '').toLowerCase().includes(q);
+      const matchProgress = (it.progress || '').toLowerCase().includes(q);
+      const matchDeliv = (it.deliverable || '').toLowerCase().includes(q);
+      const matchStatus = (it.status || '').toLowerCase().includes(q);
+      return matchTopic || matchStage || matchCat || matchAssignee || matchProgress || matchDeliv || matchStatus;
+    });
+  }
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="10" style="text-align: center; padding: 36px 12px; color: var(--text-dim);">
+          <i class="fa-solid fa-filter-circle-xmark" style="font-size: 28px; margin-bottom: 8px; display: block; color: #64748b;"></i>
+          無符合目前篩選條件之管控項目 (可嘗試切換 KPI 標籤或清除搜尋條件)
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map((it, idx) => {
+    // 找出在原始陣列中的真實 index
+    const realIndex = rawItems.indexOf(it);
+    const isDueItem = isScheduledItem(it) && formatToInputDate(it.dueDate) && formatToInputDate(it.dueDate) <= cutoffStr;
+    const isDone = (it.status || '').trim() === '已完成';
+    const isPostponed = (it.status || '').trim() === '後續辦理';
+
+    let statusPillClass = 'light-yellow';
+    if (isDone) statusPillClass = 'light-green';
+    else if (isPostponed) statusPillClass = 'light-orange';
+    else if (it.status === '進行中') statusPillClass = 'light-cyan';
+
+    const cleanDeliverable = (it.deliverable || '').trim();
+    const hasDeliverableLink = cleanDeliverable.startsWith('\\\\') || cleanDeliverable.startsWith('http');
+
+    return `
+      <tr>
+        <td style="text-align: center; color: var(--text-dim); font-size: 13px;">${idx + 1}</td>
+        <td><span class="badge-pill bg-purple-glow" style="font-size: 12px; padding: 2px 8px;">${it.stage || '-'}</span></td>
+        <td><span class="badge-pill bg-cyan-glow" style="font-size: 12px; padding: 2px 8px;">${it.category || '-'}</span></td>
+        <td style="line-height: 1.5; word-break: break-all; font-weight: 500;">
+          <div style="font-size: 14px; color: #f8fafc;">${it.topic || it.title || '-'}</div>
+          ${it.progress ? `<div style="font-size: 12.5px; color: #94a3b8; margin-top: 4px; line-height: 1.4;"><i class="fa-solid fa-arrow-turn-up text-cyan" style="transform: rotate(90deg); margin-right: 4px;"></i>${it.progress}</div>` : ''}
+        </td>
+        <td><span class="text-amber font-bold" style="font-size: 13.5px;">${it.assignee || '-'}</span></td>
+        <td>
+          <span style="font-size: 13px; font-weight: ${isDueItem ? '700' : '400'}; color: ${isDueItem ? '#f87171' : 'var(--text-muted)'};">
+            ${formatWesternDate(it.dueDate)}
+            ${isDueItem ? ' <small class="text-rose">(應辦)</small>' : ''}
+          </span>
+        </td>
+        <td><span class="text-muted" style="font-size: 13px;">${formatWesternDate(it.actualDate)}</span></td>
+        <td style="text-align: center;">
+          <span class="proj-light-pill ${statusPillClass}" style="font-size: 12px; padding: 2px 8px;">
+            ${it.status || '進行中'}
+          </span>
+        </td>
+        <td style="font-size: 12.5px; line-height: 1.4; word-break: break-all;">
+          ${hasDeliverableLink ? `
+            <a href="${cleanDeliverable.startsWith('http') ? cleanDeliverable : '#'}" onclick="${cleanDeliverable.startsWith('\\\\') ? `copyNasPath('${encodeURIComponent(cleanDeliverable)}'); return false;` : ''}" class="text-cyan font-bold" style="display: inline-flex; align-items: center; gap: 4px; text-decoration: underline;" title="${cleanDeliverable}">
+              <i class="fa-solid fa-paperclip"></i> ${cleanDeliverable.length > 25 ? cleanDeliverable.slice(0, 22) + '...' : cleanDeliverable}
+            </a>
+          ` : (cleanDeliverable || '<span class="text-dim">-</span>')}
+        </td>
+        <td style="text-align: center;">
+          <button type="button" class="btn-ctrl-action-edit" onclick="openEditControlModal(${realIndex})" title="編輯此管控項目並儲存寫入管控表">
+            <i class="fa-solid fa-pen-to-square"></i> 編輯
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+// 打開新增管控項目彈窗
+window.openAddControlItemModal = function() {
+  if (!currentDrawerProject) return;
+  const modal = document.getElementById("edit-control-modal");
+  const form = document.getElementById("edit-control-form");
+  const titleEl = document.getElementById("edit-ctrl-modal-title");
+  const idxInput = document.getElementById("ctrl-item-index");
+
+  if (!modal || !form) return;
+
+  if (titleEl) {
+    titleEl.innerHTML = `<i class="fa-solid fa-plus text-cyan"></i> 新增管控項目 (${currentDrawerProject.shortName})`;
+  }
+  if (idxInput) idxInput.value = "-1";
+
+  form.reset();
+  const statusEl = document.getElementById("ctrl-status");
+  if (statusEl) statusEl.value = "進行中";
+
+  modal.classList.remove("hidden");
 };
+
+// 打開編輯管控項目彈窗
+window.openEditControlModal = function(index) {
+  if (!currentDrawerProject) return;
+  const modal = document.getElementById("edit-control-modal");
+  const form = document.getElementById("edit-control-form");
+  const titleEl = document.getElementById("edit-ctrl-modal-title");
+  const idxInput = document.getElementById("ctrl-item-index");
+
+  const rawItems = getProjectControlItems(currentDrawerProject);
+  const item = rawItems[index];
+  if (!item || !modal || !form) return;
+
+  if (titleEl) {
+    titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square text-cyan"></i> 編輯管控項目：第 ${index + 1} 項 (${currentDrawerProject.shortName})`;
+  }
+  if (idxInput) idxInput.value = String(index);
+
+  document.getElementById("ctrl-stage").value = item.stage || "";
+  document.getElementById("ctrl-category").value = item.category || "";
+  document.getElementById("ctrl-title").value = item.topic || item.title || "";
+  document.getElementById("ctrl-assignee").value = item.assignee || "";
+  document.getElementById("ctrl-due-date").value = formatToInputDate(item.dueDate);
+  document.getElementById("ctrl-actual-date").value = formatToInputDate(item.actualDate);
+  document.getElementById("ctrl-status").value = item.status || "進行中";
+  document.getElementById("ctrl-deliverable").value = item.deliverable || "";
+  document.getElementById("ctrl-progress").value = item.progress || "";
+
+  modal.classList.remove("hidden");
+};
+
+// 關閉編輯彈窗
+window.closeEditControlModal = function() {
+  const modal = document.getElementById("edit-control-modal");
+  if (modal) modal.classList.add("hidden");
+};
+
+// 儲存寫入管控表 (支援 localStorage 即時覆蓋與後端 API 儲存)
+window.handleSaveControlItem = async function(event) {
+  if (event) event.preventDefault();
+  if (!currentDrawerProject) return;
+
+  const proj = currentDrawerProject;
+  const idxInput = document.getElementById("ctrl-item-index");
+  const editIndex = idxInput ? parseInt(idxInput.value, 10) : -1;
+
+  const updatedItem = {
+    stage: document.getElementById("ctrl-stage").value.trim(),
+    category: document.getElementById("ctrl-category").value.trim(),
+    topic: document.getElementById("ctrl-title").value.trim(),
+    title: document.getElementById("ctrl-title").value.trim(),
+    assignee: document.getElementById("ctrl-assignee").value.trim(),
+    dueDate: document.getElementById("ctrl-due-date").value.trim() || "-",
+    actualDate: document.getElementById("ctrl-actual-date").value.trim() || "-",
+    status: document.getElementById("ctrl-status").value.trim(),
+    deliverable: document.getElementById("ctrl-deliverable").value.trim(),
+    progress: document.getElementById("ctrl-progress").value.trim()
+  };
+
+  const rawItems = getProjectControlItems(proj);
+
+  if (editIndex >= 0 && editIndex < rawItems.length) {
+    rawItems[editIndex] = { ...rawItems[editIndex], ...updatedItem };
+  } else {
+    rawItems.push(updatedItem);
+  }
+
+  // 1. 本地 localStorage 持久化儲存 (確保離線或靜態部署皆能即時生效)
+  try {
+    localStorage.setItem(`fengyu_ctrl_override_${proj.id}`, JSON.stringify(rawItems));
+  } catch(e) {
+    console.error("Save to localStorage failed", e);
+  }
+
+  proj.controlSheetItems = rawItems;
+
+  // 2. 嘗試透過後端 API 同步至 nas_data.json
+  try {
+    await fetch("/api/update-control-item", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        projectId: proj.id,
+        items: rawItems
+      })
+    });
+  } catch(e) {
+    // 即使在靜態 GitHub Pages 模式後端 fetch 失敗，localStorage 亦能保證即時生效
+  }
+
+  closeEditControlModal();
+  updateControlHeaderRibbon();
+  applyControlFilters();
+
+  // 更新抽屜頂部管控計數
+  const controlCountEl = document.getElementById("drawer-control-count");
+  const scheduledCount = rawItems.filter(isScheduledItem).length;
+  if (controlCountEl) controlCountEl.textContent = scheduledCount;
+
+  // 提示成功訊息
+  showToastNotification(`管控項目已成功儲存並寫入 ${proj.shortName} 管控表！`);
+};
+
+// 匯出最新管控表 (Excel 相容之 CSV 格式，含 BOM UTF-8)
+window.exportCurrentControlExcel = function() {
+  if (!currentDrawerProject) return;
+  const proj = currentDrawerProject;
+  const rawItems = getProjectControlItems(proj);
+
+  if (rawItems.length === 0) {
+    alert("目前無管控項目可匯出");
+    return;
+  }
+
+  const headers = ["項次", "階段", "類別", "議題項目(檢討內容)", "負責人", "預定產出日期", "實際產出日期", "狀態", "成果說明/附件", "辦理情形與進度說明"];
+  
+  const csvRows = [
+    headers.join(","),
+    ...rawItems.map((it, idx) => {
+      const escapeCsv = (str) => `"${String(str || '').replace(/"/g, '""')}"`;
+      return [
+        idx + 1,
+        escapeCsv(it.stage),
+        escapeCsv(it.category),
+        escapeCsv(it.topic || it.title),
+        escapeCsv(it.assignee),
+        escapeCsv(formatWesternDate(it.dueDate)),
+        escapeCsv(formatWesternDate(it.actualDate)),
+        escapeCsv(it.status),
+        escapeCsv(it.deliverable),
+        escapeCsv(it.progress)
+      ].join(",");
+    })
+  ];
+
+  const csvContent = "\uFEFF" + csvRows.join("\r\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  const fileName = `${proj.shortName}_技術議題管控表_${new Date().toISOString().slice(0, 10)}.csv`;
+  link.setAttribute("href", url);
+  link.setAttribute("download", fileName);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
+// 輕量 Toast 提示框
+function showToastNotification(message) {
+  let toast = document.getElementById("dashboard-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "dashboard-toast";
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid #00f2fe;
+      color: #a5f3fc;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 242, 254, 0.3);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: opacity 0.3s ease;
+    `;
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald" style="font-size: 18px;"></i> ${message}`;
+  toast.style.opacity = "1";
+  toast.style.display = "flex";
+
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    setTimeout(() => { toast.style.display = "none"; }, 300);
+  }, 3000);
+}
 
 window.toggleMeetingCard = function(headerEl) {
   const card = headerEl.closest(".meeting-accordion-card");
