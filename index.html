@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=46.0">
+  <link rel="stylesheet" href="style.css?v=47.0">
 </head>
 <body>
   <!-- 背景發光粒子球體 (玻璃擬態質感) -->
@@ -80,8 +80,20 @@
         </div>
       </div>
 
-      <!-- 即時上線狀況指標 (不斷線 Heartbeat Monitor) -->
+      <!-- 即時上線狀況指標 (不斷線 Heartbeat Monitor) 與全域統計基準日 -->
       <div class="header-presence">
+        <!-- 統計基準日機動設定與即時更新工具列 (置於即時連線中左側) -->
+        <div class="header-cutoff-selector" id="header-cutoff-container" title="全域統計基準日：調整後點擊更新可即時全量計算月報概況與專案應辦">
+          <div class="header-cutoff-group">
+            <label for="cutoff-date-input"><i class="fa-solid fa-calendar-check text-cyan"></i> <span>基準日:</span></label>
+            <input type="date" id="cutoff-date-input" value="2026-08-24" class="custom-date-input header-date-input">
+            <button type="button" class="btn-table-action btn-header-cutoff" id="btn-update-cutoff-date" onclick="applyCutoffDate()">
+              <i class="fa-solid fa-arrows-rotate"></i> 更新計算數據
+            </button>
+          </div>
+          <span id="cutoff-update-status" class="text-emerald font-bold" style="display: none;"><i class="fa-solid fa-circle-check"></i> 已更新！</span>
+        </div>
+
         <div class="live-status-badge" id="btn-open-presence" title="點擊查看目前在線同仁名單">
           <span class="pulse-dot"></span>
           <span class="status-label">即時連線中 (不斷線)</span>
@@ -263,18 +275,6 @@
                   <i class="fa-solid fa-layer-group text-cyan"></i> 全量一頁式下拉視圖
                 </span>
               </div>
-            </div>
-
-            <!-- 統計基準日機動設定與即時更新工具列 -->
-            <div class="cutoff-date-selector-bar">
-              <div class="cutoff-input-group">
-                <label for="cutoff-date-input"><i class="fa-solid fa-calendar-check text-cyan"></i> <b>統計基準日：</b></label>
-                <input type="date" id="cutoff-date-input" value="2026-08-24" class="custom-date-input">
-                <button type="button" class="btn-table-action" id="btn-update-cutoff-date" onclick="applyCutoffDate()">
-                  <i class="fa-solid fa-arrows-rotate"></i> 更新計算數據
-                </button>
-              </div>
-              <span id="cutoff-update-status" class="text-emerald font-bold" style="display: none;"><i class="fa-solid fa-circle-check"></i> 數據已更新至所選基準日！</span>
             </div>
 
             <!-- 月報分析內容動態展示容器 -->
@@ -593,6 +593,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=46.0"></script>
+  <script src="app.js?v=47.0"></script>
 </body>
 </html>

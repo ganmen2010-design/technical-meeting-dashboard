@@ -26,7 +26,7 @@ let currentCalYear = 2026;
 let currentCalMonth = 9;
 let activeSearchType = "all";
 let currentDrawerProject = null;
-let currentControlFilterMode = "due"; // 'due', 'all', 'no_assignee', 'no_deliverable'
+let currentControlFilterMode = "all"; // 'all', 'due', 'completed', 'no_assignee', 'no_deliverable'
 let currentControlSearchText = "";
 let currentControlStageFilter = "all";
 let currentControlCategoryFilter = "all";
@@ -1410,6 +1410,12 @@ window.applyCutoffDate = async function() {
 
   renderMonthlyReportAnalysis();
 
+  // 若目前專案抽屜正在開啟且在管控表頁籤，即時重算抽屜頂部 KPI 按鈕數據與過濾
+  if (currentDrawerProject) {
+    updateControlHeaderRibbon();
+    applyControlFilters();
+  }
+
   if (statusEl) {
     statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald"></i> 已成功更新計算至基準日：${dateVal}`;
     statusEl.style.display = "inline-block";
@@ -2237,9 +2243,9 @@ function updateControlHeaderRibbon() {
   const proj = currentDrawerProject;
   const rawItems = getProjectControlItems(proj);
   const scheduledItems = rawItems.filter(isScheduledItem);
-  const cutoffStr = "2026-09-08";
+  const cutoffStr = window.currentCutoffDate || "2026-08-24";
 
-  // 1. 基準日前應辦 (預定產出 <= 2026-09-08 且有效排定)
+  // 1. 基準日前應辦 (預定產出 <= 統計基準日 且有效排定)
   const dueItems = scheduledItems.filter(it => {
     const dStr = formatToInputDate(it.dueDate);
     return dStr && dStr <= cutoffStr;
@@ -2263,11 +2269,11 @@ function updateControlHeaderRibbon() {
 
   headerStatsContainer.innerHTML = `
     <div class="control-header-ribbon">
-      <button type="button" class="kpi-mini-pill ${currentControlFilterMode === 'due' ? 'active' : ''}" onclick="setControlFilter('due')" title="篩選：基準日 2026/09/08 前應辦理之管控項目">
-        <i class="fa-solid fa-hourglass-half"></i> 基準日前應辦 (${dueItems.length})
-      </button>
       <button type="button" class="kpi-mini-pill ${currentControlFilterMode === 'all' ? 'active' : ''}" onclick="setControlFilter('all')" title="顯示全部已排定預定產出日期之管控項目">
         <i class="fa-solid fa-list-check"></i> 全部排定項目 (${totalScheduled})
+      </button>
+      <button type="button" class="kpi-mini-pill ${currentControlFilterMode === 'due' ? 'active' : ''}" onclick="setControlFilter('due')" title="篩選：基準日 ${cutoffStr} 前應辦理之管控項目">
+        <i class="fa-solid fa-hourglass-half"></i> 基準日前應辦 (${dueItems.length})
       </button>
       <button type="button" class="kpi-mini-pill kpi-emerald ${currentControlFilterMode === 'completed' ? 'active' : ''}" onclick="setControlFilter('completed')" title="篩選：狀態為已完成之項目">
         <i class="fa-solid fa-circle-check"></i> 已完成 (${completedCount})
@@ -2296,7 +2302,7 @@ function applyControlFilters() {
 
   const proj = currentDrawerProject;
   const rawItems = getProjectControlItems(proj);
-  const cutoffStr = "2026-09-08";
+  const cutoffStr = window.currentCutoffDate || "2026-08-24";
 
   // 1. KPI 頂部篩選條件
   let filtered = rawItems.filter(it => {
