@@ -119,9 +119,16 @@ function formatToInputDate(val) {
 function getProjectControlItems(proj) {
   if (!proj) return [];
   try {
-    const saved = localStorage.getItem(`fengyu_ctrl_override_${proj.id}`);
-    if (saved) {
-      return JSON.parse(saved);
+    const keysToTry = [
+      `fengyu_ctrl_override_${proj.id}`,
+      `fengyu_ctrl_override_${proj.shortName}`,
+      `fengyu_ctrl_override_${normalizeSiteName(proj.shortName)}`
+    ];
+    for (const k of keysToTry) {
+      const saved = localStorage.getItem(k);
+      if (saved) {
+        return JSON.parse(saved);
+      }
     }
   } catch(e) {}
   return proj.controlSheetItems || [];
@@ -828,6 +835,13 @@ async function loadDashboardData() {
 
     appData = await res.json();
     console.log("NAS Data Loaded successfully:", appData);
+
+    // 【核心修復】載入時即刻以 localStorage 覆蓋各專案管控表，確保重開/重新整理時修改不丟失
+    if (appData && appData.projects) {
+      appData.projects.forEach(p => {
+        p.controlSheetItems = getProjectControlItems(p);
+      });
+    }
 
     renderHeaderOverview(appData);
     renderGoogleCalendar(currentCalYear, currentCalMonth);
@@ -2451,9 +2465,12 @@ window.handleSaveControlItem = async function(event) {
     rawItems.push(updatedItem);
   }
 
-  // 1. 本地 localStorage 持久化儲存 (確保離線或靜態部署皆能即時生效)
+  // 1. 本地 localStorage 持久化儲存 (確保離線或靜態部署皆能即時生效，同時寫入多重別名鍵值)
   try {
-    localStorage.setItem(`fengyu_ctrl_override_${proj.id}`, JSON.stringify(rawItems));
+    const rawJson = JSON.stringify(rawItems);
+    localStorage.setItem(`fengyu_ctrl_override_${proj.id}`, rawJson);
+    if (proj.shortName) localStorage.setItem(`fengyu_ctrl_override_${proj.shortName}`, rawJson);
+    if (proj.shortName) localStorage.setItem(`fengyu_ctrl_override_${normalizeSiteName(proj.shortName)}`, rawJson);
   } catch(e) {
     console.error("Save to localStorage failed", e);
   }
@@ -2477,6 +2494,14 @@ window.handleSaveControlItem = async function(event) {
   closeEditControlModal();
   updateControlHeaderRibbon();
   applyControlFilters();
+
+  // 即時更新專案工作區卡片與 P13 統計表格數據
+  if (appData && appData.projects) {
+    renderWorkspaces(appData.projects);
+    if (typeof applyCutoffDate === "function") {
+      applyCutoffDate();
+    }
+  }
 
   // 更新抽屜頂部管控計數
   const controlCountEl = document.getElementById("drawer-control-count");
