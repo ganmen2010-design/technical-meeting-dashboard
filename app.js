@@ -1675,13 +1675,13 @@ function renderGuidelines(items) {
   `;
 
   const cardsHtml = Object.entries(groups).map(([folderName, fList], idx) => `
-    <div class="guideline-folder-card" id="guide-card-${idx}" style="margin-bottom: 16px;">
+    <div class="guideline-folder-card collapsed" id="guide-card-${idx}" style="margin-bottom: 16px;">
       <div class="guideline-folder-header" onclick="toggleGuidelineFolder(this)" style="cursor: pointer; user-select: none;">
         <span class="guideline-folder-title"><i class="fa-solid fa-folder-tree text-cyan"></i> ${folderName}</span>
         <div style="display: flex; align-items: center; gap: 12px;">
           <span class="files-badge" style="font-size: 14.5px; padding: 4px 12px;">${fList.length} 份指引檔案</span>
           <button type="button" class="btn-table-action" style="padding: 4px 12px; font-size: 14px; background: rgba(0,242,254,0.08); border-color: rgba(0,242,254,0.3); pointer-events: none;">
-            <i class="fa-solid fa-chevron-down text-cyan guideline-toggle-icon"></i> <span class="toggle-text">收合</span>
+            <i class="fa-solid fa-chevron-down text-cyan guideline-toggle-icon"></i> <span class="toggle-text">展開</span>
           </button>
         </div>
       </div>
@@ -2320,9 +2320,11 @@ function applyControlFilters() {
     const cleanDeliverable = (it.deliverable || '').trim();
     const hasDeliverableLink = cleanDeliverable.startsWith('\\\\') || cleanDeliverable.startsWith('http');
 
+    const rowNum = it.rowIdx !== undefined && it.rowIdx !== null ? it.rowIdx : (realIndex + 1);
+
     return `
       <tr>
-        <td style="text-align: center; color: var(--text-dim); font-size: 13px;">${idx + 1}</td>
+        <td style="text-align: center; color: var(--text-dim); font-size: 13px;" title="Excel 原始項次: ${rowNum}">${rowNum}</td>
         <td><span class="badge-pill bg-purple-glow" style="font-size: 12px; padding: 2px 8px;">${it.stage || '-'}</span></td>
         <td><span class="badge-pill bg-cyan-glow" style="font-size: 12px; padding: 2px 8px;">${it.category || '-'}</span></td>
         <td style="line-height: 1.5; word-break: break-all; font-weight: 500;">
@@ -2393,8 +2395,10 @@ window.openEditControlModal = function(index) {
   const item = rawItems[index];
   if (!item || !modal || !form) return;
 
+  const itemRowNum = item.rowIdx !== undefined && item.rowIdx !== null ? item.rowIdx : (index + 1);
+
   if (titleEl) {
-    titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square text-cyan"></i> 編輯管控項目：第 ${index + 1} 項 (${currentDrawerProject.shortName})`;
+    titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square text-cyan"></i> 編輯管控項目：第 ${itemRowNum} 項 (${currentDrawerProject.shortName})`;
   }
   if (idxInput) idxInput.value = String(index);
 

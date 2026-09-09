@@ -1736,6 +1736,50 @@ body {
   display: none !important;
 }
 
+/* 發布技術指引手風琴卡片樣式 */
+.guideline-folder-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: var(--transition-fast);
+}
+
+.guideline-folder-header {
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.04);
+  transition: var(--transition-fast);
+  user-select: none;
+}
+
+.guideline-folder-header:hover {
+  background: rgba(0, 242, 254, 0.08);
+}
+
+.guideline-folder-title {
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.guideline-toggle-icon {
+  transition: transform 0.2s ease;
+}
+
+.guideline-folder-card.collapsed .guideline-toggle-icon {
+  transform: rotate(-90deg);
+}
+
+.guideline-folder-card.collapsed .category-files-list {
+  display: none !important;
+}
+
 .m-title-text {
   font-size: 15px;
   font-weight: 600;
