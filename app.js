@@ -115,7 +115,7 @@ function formatToInputDate(val) {
   return '';
 }
 
-// 取得專案管控項目（優先讀取本機 localStorage 修改覆蓋紀錄）
+// 取得專案管控項目（優先讀取本機 localStorage 修改覆蓋紀錄，若與 NAS 最新檔案版本不同則以 NAS 最新為準）
 function getProjectControlItems(proj) {
   if (!proj) return [];
   try {
@@ -127,12 +127,58 @@ function getProjectControlItems(proj) {
     for (const k of keysToTry) {
       const saved = localStorage.getItem(k);
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          // 若 NAS 最新資料總筆數或最新檔名已更新（例如升級至 1150908 版），且本機快取為舊總筆數，則優先以 NAS 最新資料覆蓋
+          if (proj.controlSheetItems && Math.abs(parsed.length - proj.controlSheetItems.length) > 20) {
+            localStorage.removeItem(k);
+            return proj.controlSheetItems;
+          }
+          return parsed;
+        }
       }
     }
   } catch(e) {}
   return proj.controlSheetItems || [];
 }
+
+// 重設並同步回 NAS 最新原始管控表資料（清除本機自訂快取）
+window.resetProjectControlToNas = function() {
+  if (!currentDrawerProject) return;
+  const proj = currentDrawerProject;
+  if (confirm(`確定要重設【${proj.shortName}】管控表並同步至 NAS 最新版本嗎？\n（此動作將清除您在本機瀏覽器中所做的暫存覆蓋，改以 NAS 1150908 最新版檔案為準）`)) {
+    try {
+      localStorage.removeItem(`fengyu_ctrl_override_${proj.id}`);
+      localStorage.removeItem(`fengyu_ctrl_override_${proj.shortName}`);
+      localStorage.removeItem(`fengyu_ctrl_override_${normalizeSiteName(proj.shortName)}`);
+    } catch(e) {}
+
+    // 重新從 appData 原始載入之 controlSheetItems 重繪
+    if (appData && appData.projects) {
+      const origProj = appData.projects.find(p => p.id === proj.id);
+      if (origProj) {
+        proj.controlSheetItems = origProj.controlSheetItems;
+      }
+    }
+
+    updateControlHeaderRibbon();
+    applyControlFilters();
+
+    // 更新抽屜頂部管控計數
+    const controlCountEl = document.getElementById("drawer-control-count");
+    const scheduledCount = (proj.controlSheetItems || []).filter(isScheduledItem).length;
+    if (controlCountEl) controlCountEl.textContent = scheduledCount;
+
+    if (appData && appData.projects) {
+      renderWorkspaces(appData.projects);
+      if (typeof applyCutoffDate === "function") {
+        applyCutoffDate();
+      }
+    }
+
+    showToastNotification(`✅ 已成功重設並同步【${proj.shortName}】至 NAS 最新版管控表！`);
+  }
+};
 
 // ==============================================================================
 // 1. 初始化與 NAS 權限驗證 (支援統一初始帳號 FU@fengyu.com.tw 與自訂個人帳密)
@@ -2023,6 +2069,9 @@ function renderDrawerTabContent(tabType) {
           </button>
           <button type="button" class="btn-table-action" onclick="exportCurrentControlExcel()" title="匯出最新管控表 (CSV 格式，Excel 可直接開啟)">
             <i class="fa-solid fa-file-export text-cyan"></i> 匯出管控表
+          </button>
+          <button type="button" class="btn-table-action" onclick="resetProjectControlToNas()" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.35);" title="清除本機快取並同步 NAS 1150908 最新版">
+            <i class="fa-solid fa-arrows-rotate"></i> 同步 NAS 最新版
           </button>
           ${latestFile ? `
             <a href="/api/download?path=${encodeURIComponent(latestFile.fullPath)}" target="_blank" download class="btn-table-action" title="下載原始 Excel 檔">
