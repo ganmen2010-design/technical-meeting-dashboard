@@ -26,7 +26,8 @@ let currentCalYear = 2026;
 let currentCalMonth = 9;
 let activeSearchType = "all";
 let currentDrawerProject = null;
-let currentControlFilterMode = "all"; // 'all', 'due', 'completed', 'no_assignee', 'no_deliverable'
+let currentControlFilterMode = "all"; // 'all', 'due', 'completed', 'in_progress', 'no_assignee', 'no_deliverable'
+let currentTodoFilterMode = "all"; // 'all', 'completed', 'postponed', 'no_result', 'in_progress'
 let currentControlSearchText = "";
 let currentControlStageFilter = "all";
 let currentControlCategoryFilter = "all";
@@ -1410,10 +1411,12 @@ window.applyCutoffDate = async function() {
 
   renderMonthlyReportAnalysis();
 
-  // 若目前專案抽屜正在開啟且在管控表頁籤，即時重算抽屜頂部 KPI 按鈕數據與過濾
+  // 若目前專案抽屜正在開啟，即時重算抽屜頂部 KPI 按鈕數據與過濾
   if (currentDrawerProject) {
     updateControlHeaderRibbon();
     applyControlFilters();
+    updateTodoHeaderRibbon();
+    applyTodoFilters();
   }
 
   if (statusEl) {
@@ -1951,15 +1954,8 @@ function renderDrawerTabContent(tabType) {
     light: rateVal >= 80 ? "green" : (rateVal >= 65 ? "yellow" : (rateVal >= 50 ? "orange" : "red"))
   };
 
-  if (tabType === "todos" && headerStatsContainer) {
-    headerStatsContainer.innerHTML = `
-      <div class="control-header-ribbon">
-        <span class="drawer-stat-badge light-${todoStats.light || 'white'}">待辦完成率: ${todoStats.completionRate}%</span>
-        <span class="kpi-mini-pill kpi-emerald"><i class="fa-solid fa-circle-check"></i> 已完成(${completedTodos.length})</span>
-        <span class="kpi-mini-pill kpi-amber"><i class="fa-solid fa-clock-rotate-left"></i> 後續辦理(${postponedTodos.length})</span>
-        <span class="kpi-mini-pill kpi-rose"><i class="fa-solid fa-link-slash"></i> 成果未填(${noResultTodos.length})</span>
-      </div>
-    `;
+  if (tabType === "todos") {
+    updateTodoHeaderRibbon();
   } else if (tabType !== "control" && headerStatsContainer) {
     headerStatsContainer.innerHTML = `<span class="drawer-stat-badge light-${todoStats.light || 'white'}">待辦完成率: ${todoStats.completionRate}%</span>`;
   }
@@ -2188,7 +2184,7 @@ function renderDrawerTabContent(tabType) {
     `;
   }
 
-  // 頁籤 4: 專案待辦事項 (包含新纖南港總部 26 筆與各工區對齊)
+  // 頁籤 4: 專案待辦事項 (包含新纖南港總部 26 筆與各工區對齊，支援即時多狀態篩選)
   else if (tabType === "todos") {
     const normSite = normalizeSiteName(proj.shortName);
     const projTodos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === normSite);
@@ -2208,34 +2204,139 @@ function renderDrawerTabContent(tabType) {
               <th style="width: 100px;">提議者</th>
               <th>討論事項與決議內容</th>
               <th style="width: 110px;">預定完成日</th>
-              <th style="width: 95px;">辦理情形</th>
+              <th style="width: 95px; text-align: center;">辦理情形</th>
               <th style="width: 220px;">成果說明</th>
             </tr>
           </thead>
-          <tbody>
-            ${projTodos.map((td, idx) => `
-              <tr>
-                <td style="text-align: center; color: var(--text-dim);">${idx + 1}</td>
-                <td><small class="text-cyan font-bold">${formatWesternDate(td.meetDate)}</small></td>
-                <td>${td.proposer || '-'}</td>
-                <td style="line-height: 1.6; word-break: break-all;">${td.desc || '-'}</td>
-                <td><small class="text-muted">${formatWesternDate(td.dueDate)}</small></td>
-                <td>
-                  <span class="proj-light-pill ${td.status === '已完成' ? 'light-green' : (td.status === '後續辦理' ? 'light-orange' : 'light-yellow')}">
-                    ${td.status || '辦理中'}
-                  </span>
-                </td>
-                <td><small class="text-dim" style="word-break: break-all; line-height: 1.4;">${td.result || '-'}</small></td>
-              </tr>
-            `).join("")}
+          <tbody id="todo-table-tbody">
+            <!-- 由 applyTodoFilters() 動態生成 -->
           </tbody>
         </table>
       </div>
     `;
+
+    applyTodoFilters();
   }
 }
 
-// 更新抽屜頂部唯一的整合式 KPI 篩選按鈕列
+// ==========================================
+// 專案待辦事項 (Todos) 頂部狀態列與多狀態篩選
+// ==========================================
+function updateTodoHeaderRibbon() {
+  const headerStatsContainer = document.getElementById("drawer-header-stats-container");
+  if (!headerStatsContainer || !currentDrawerProject) return;
+
+  const proj = currentDrawerProject;
+  const normSite = normalizeSiteName(proj.shortName);
+  const projTodos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === normSite);
+
+  const postponedTodos = projTodos.filter(t => (t.status || '').trim() === '後續辦理');
+  const activeTodos = projTodos.filter(t => (t.status || '').trim() !== '後續辦理');
+  const completedTodos = projTodos.filter(t => (t.status || '').trim() === '已完成');
+  const noResultTodos = completedTodos.filter(t => !t.result || t.result.trim() === '' || t.result.trim() === '-' || t.result.trim() === '待補');
+  const inProgressTodos = projTodos.filter(t => {
+    const st = (t.status || '').trim();
+    return st === '進行中' || st === '辦理中' || (st !== '已完成' && st !== '後續辦理');
+  });
+
+  const rateVal = activeTodos.length > 0 ? ((completedTodos.length / activeTodos.length) * 100).toFixed(1) : 0;
+  const todoStats = {
+    completionRate: rateVal,
+    light: rateVal >= 80 ? "green" : (rateVal >= 65 ? "yellow" : (rateVal >= 50 ? "orange" : "red"))
+  };
+
+  headerStatsContainer.innerHTML = `
+    <div class="control-header-ribbon">
+      <span class="drawer-stat-badge light-${todoStats.light || 'white'}">待辦完成率: ${todoStats.completionRate}%</span>
+      <button type="button" class="kpi-mini-pill ${currentTodoFilterMode === 'all' ? 'active' : ''}" onclick="setTodoFilter('all')" title="顯示全部待辦事項 (${projTodos.length})">
+        <i class="fa-solid fa-list-check"></i> 全部待辦(${projTodos.length})
+      </button>
+      <button type="button" class="kpi-mini-pill kpi-emerald ${currentTodoFilterMode === 'completed' ? 'active' : ''}" onclick="setTodoFilter('completed')" title="篩選：狀態為已完成之項目 (${completedTodos.length})">
+        <i class="fa-solid fa-circle-check"></i> 已完成(${completedTodos.length})
+      </button>
+      <button type="button" class="kpi-mini-pill kpi-amber ${currentTodoFilterMode === 'postponed' ? 'active' : ''}" onclick="setTodoFilter('postponed')" title="篩選：狀態為後續辦理之項目 (${postponedTodos.length})">
+        <i class="fa-solid fa-clock-rotate-left"></i> 後續辦理(${postponedTodos.length})
+      </button>
+      <button type="button" class="kpi-mini-pill kpi-rose ${currentTodoFilterMode === 'no_result' ? 'active' : ''}" onclick="setTodoFilter('no_result')" title="篩選：已完成但成果說明未填寫之項目 (${noResultTodos.length})">
+        <i class="fa-solid fa-link-slash"></i> 成果未填(${noResultTodos.length})
+      </button>
+      <button type="button" class="kpi-mini-pill kpi-cyan ${currentTodoFilterMode === 'in_progress' ? 'active' : ''}" onclick="setTodoFilter('in_progress')" title="篩選：進行中/辦理中之待辦事項 (${inProgressTodos.length})">
+        <i class="fa-solid fa-spinner fa-spin-pulse"></i> 進行中(${inProgressTodos.length})
+      </button>
+    </div>
+  `;
+}
+
+// 切換待辦事項 KPI 篩選模式
+window.setTodoFilter = function(mode) {
+  currentTodoFilterMode = (currentTodoFilterMode === mode && mode !== 'all') ? 'all' : mode;
+  updateTodoHeaderRibbon();
+  applyTodoFilters();
+};
+
+// 執行待辦事項動態篩選
+function applyTodoFilters() {
+  const tbody = document.getElementById("todo-table-tbody");
+  if (!tbody || !currentDrawerProject) return;
+
+  const proj = currentDrawerProject;
+  const normSite = normalizeSiteName(proj.shortName);
+  const rawTodos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === normSite);
+
+  let filtered = rawTodos.filter(t => {
+    const st = (t.status || '').trim();
+    if (currentTodoFilterMode === 'completed') return st === '已完成';
+    if (currentTodoFilterMode === 'postponed') return st === '後續辦理';
+    if (currentTodoFilterMode === 'in_progress') return st === '進行中' || st === '辦理中' || (st !== '已完成' && st !== '後續辦理');
+    if (currentTodoFilterMode === 'no_result') {
+      const isDone = st === '已完成';
+      const noRes = !t.result || t.result.trim() === '' || t.result.trim() === '-' || t.result.trim() === '待補';
+      return isDone && noRes;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align: center; padding: 36px 12px; color: var(--text-dim);">
+          <i class="fa-solid fa-filter-circle-xmark" style="font-size: 28px; margin-bottom: 8px; display: block; color: #64748b;"></i>
+          無符合目前篩選條件之待辦事項 (可點擊「全部待辦」清除篩選)
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map((td, idx) => {
+    const realIdx = rawTodos.indexOf(td);
+    const st = (td.status || '').trim();
+    let pillClass = 'light-yellow';
+    if (st === '已完成') pillClass = 'light-green';
+    else if (st === '後續辦理') pillClass = 'light-orange';
+    else if (st === '進行中' || st === '辦理中') pillClass = 'light-cyan';
+
+    return `
+      <tr>
+        <td style="text-align: center; color: var(--text-dim);">${realIdx >= 0 ? realIdx + 1 : idx + 1}</td>
+        <td><small class="text-cyan font-bold">${formatWesternDate(td.meetDate)}</small></td>
+        <td>${td.proposer || '-'}</td>
+        <td style="line-height: 1.6; word-break: break-all; text-align: left;">${td.desc || '-'}</td>
+        <td><small class="text-muted">${formatWesternDate(td.dueDate)}</small></td>
+        <td style="text-align: center;">
+          <span class="proj-light-pill ${pillClass}">
+            ${st || '進行中'}
+          </span>
+        </td>
+        <td style="text-align: left;"><small class="text-dim" style="word-break: break-all; line-height: 1.4;">${td.result || '-'}</small></td>
+      </tr>
+    `;
+  }).join("");
+}
+
+// ==========================================
+// 技術議題管控表 (Control) 頂部狀態列與多維篩選
+// ==========================================
 function updateControlHeaderRibbon() {
   const headerStatsContainer = document.getElementById("drawer-header-stats-container");
   if (!headerStatsContainer || !currentDrawerProject) return;
@@ -2257,10 +2358,16 @@ function updateControlHeaderRibbon() {
   // 3. 已完成
   const completedCount = rawItems.filter(it => (it.status || '').trim() === '已完成').length;
 
-  // 4. 未排負責人
+  // 4. 進行中 / 檢討中
+  const inProgressCount = rawItems.filter(it => {
+    const st = (it.status || '').trim();
+    return st.includes('進行') || st.includes('檢討') || st.includes('後續');
+  }).length;
+
+  // 5. 未排負責人
   const noAssigneeCount = scheduledItems.filter(it => !it.assignee || it.assignee.trim() === '' || it.assignee.trim() === '-').length;
 
-  // 5. 成果未填 (已完成但未填成果說明)
+  // 6. 成果未填 (已完成但未填成果說明)
   const noDeliverableCount = scheduledItems.filter(it => {
     const isDone = (it.status || '').trim() === '已完成';
     const noDeliv = !it.deliverable || it.deliverable.trim() === '' || it.deliverable.trim() === '-' || it.deliverable.trim() === '待補';
@@ -2278,6 +2385,9 @@ function updateControlHeaderRibbon() {
       <button type="button" class="kpi-mini-pill kpi-emerald ${currentControlFilterMode === 'completed' ? 'active' : ''}" onclick="setControlFilter('completed')" title="篩選：狀態為已完成之項目">
         <i class="fa-solid fa-circle-check"></i> 已完成 (${completedCount})
       </button>
+      <button type="button" class="kpi-mini-pill kpi-cyan ${currentControlFilterMode === 'in_progress' ? 'active' : ''}" onclick="setControlFilter('in_progress')" title="篩選：進行中/檢討中之項目">
+        <i class="fa-solid fa-spinner fa-spin-pulse"></i> 進行中 (${inProgressCount})
+      </button>
       <button type="button" class="kpi-mini-pill kpi-amber ${currentControlFilterMode === 'no_assignee' ? 'active' : ''}" onclick="setControlFilter('no_assignee')" title="篩選：尚未指定負責人或規劃組之項目">
         <i class="fa-solid fa-user-xmark"></i> 未排負責人 (${noAssigneeCount})
       </button>
@@ -2290,7 +2400,7 @@ function updateControlHeaderRibbon() {
 
 // 切換頂部 KPI 篩選模式
 window.setControlFilter = function(mode) {
-  currentControlFilterMode = mode;
+  currentControlFilterMode = (currentControlFilterMode === mode && mode !== 'all') ? 'all' : mode;
   updateControlHeaderRibbon();
   applyControlFilters();
 };
@@ -2316,6 +2426,10 @@ function applyControlFilters() {
     }
     if (currentControlFilterMode === "completed") {
       return (it.status || '').trim() === '已完成';
+    }
+    if (currentControlFilterMode === "in_progress") {
+      const st = (it.status || '').trim();
+      return st.includes('進行') || st.includes('檢討') || st.includes('後續');
     }
     if (currentControlFilterMode === "no_assignee") {
       if (!isScheduledItem(it)) return false;
