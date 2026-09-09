@@ -2034,9 +2034,10 @@ function renderDrawerTabContent(tabType) {
     // 更新頂部唯一整合 KPI 按鈕列
     updateControlHeaderRibbon();
 
-    // 收集所有不重複階段與類別
+    // 收集所有不重複階段、類別與狀態 (完全對齊 Excel 原始管控表狀態，如：尚未進行、檢討中、已完成、無需求等)
     const allStages = Array.from(new Set(rawItems.map(it => (it.stage || '').trim()).filter(Boolean)));
     const allCategories = Array.from(new Set(rawItems.map(it => (it.category || '').trim()).filter(Boolean)));
+    const allStatuses = Array.from(new Set(rawItems.map(it => (it.status || '').trim()).filter(Boolean)));
 
     content.innerHTML = `
       <!-- 功能工具列：多維篩選、搜尋、新增與匯出 -->
@@ -2055,11 +2056,8 @@ function renderDrawerTabContent(tabType) {
           </select>
 
           <select id="control-status-filter" class="control-select-filter">
-            <option value="all" ${currentControlStatusFilter === 'all' ? 'selected' : ''}>⚡ 全部狀態</option>
-            <option value="進行中" ${currentControlStatusFilter === '進行中' ? 'selected' : ''}>進行中</option>
-            <option value="已完成" ${currentControlStatusFilter === '已完成' ? 'selected' : ''}>已完成</option>
-            <option value="後續辦理" ${currentControlStatusFilter === '後續辦理' ? 'selected' : ''}>後續辦理</option>
-            <option value="未排定" ${currentControlStatusFilter === '未排定' ? 'selected' : ''}>未排定</option>
+            <option value="all" ${currentControlStatusFilter === 'all' ? 'selected' : ''}>⚡ 全部狀態 (${allStatuses.length})</option>
+            ${allStatuses.map(st => `<option value="${st}" ${currentControlStatusFilter === st ? 'selected' : ''}>${st}</option>`).join('')}
           </select>
         </div>
 
@@ -2372,13 +2370,13 @@ function applyControlFilters() {
     // 找出在原始陣列中的真實 index
     const realIndex = rawItems.indexOf(it);
     const isDueItem = isScheduledItem(it) && formatToInputDate(it.dueDate) && formatToInputDate(it.dueDate) <= cutoffStr;
-    const isDone = (it.status || '').trim() === '已完成';
-    const isPostponed = (it.status || '').trim() === '後續辦理';
-
-    let statusPillClass = 'light-yellow';
-    if (isDone) statusPillClass = 'light-green';
-    else if (isPostponed) statusPillClass = 'light-orange';
-    else if (it.status === '進行中') statusPillClass = 'light-cyan';
+    const stText = (it.status || '').trim();
+    let statusPillClass = 'light-white';
+    if (stText.includes('已完成') || stText.includes('完成')) statusPillClass = 'light-green';
+    else if (stText.includes('後續') || stText.includes('尚未')) statusPillClass = 'light-orange';
+    else if (stText.includes('進行') || stText.includes('檢討')) statusPillClass = 'light-cyan';
+    else if (stText.includes('無需求') || stText.includes('不適用')) statusPillClass = 'light-dim';
+    else if (stText) statusPillClass = 'light-yellow';
 
     const cleanDeliverable = (it.deliverable || '').trim();
     const hasDeliverableLink = cleanDeliverable.startsWith('\\\\') || cleanDeliverable.startsWith('http');
