@@ -143,22 +143,46 @@ function getProjectControlItems(proj) {
   return proj.controlSheetItems || [];
 }
 
-// 重設並同步回 NAS 最新原始管控表資料（清除本機自訂快取）
-window.resetProjectControlToNas = function() {
+// 重設並同步回 NAS 最新原始管控表資料（清除本機自訂快取並重新載入 NAS 最新檔案）
+window.resetProjectControlToNas = async function() {
   if (!currentDrawerProject) return;
   const proj = currentDrawerProject;
-  if (confirm(`確定要重設【${proj.shortName}】管控表並同步至 NAS 最新版本嗎？\n（此動作將清除您在本機瀏覽器中所做的暫存覆蓋，改以 NAS 1150908 最新版檔案為準）`)) {
+  const latestFileName = proj.latestControlFile || "NAS 最新管控表";
+  
+  if (confirm(`確定要重設【${proj.shortName}】管控表並同步至 NAS 最新版本嗎？\n\n📌 目標檔案：${latestFileName}\n（此動作將清除您在本機瀏覽器中所做的暫存覆蓋，改以 NAS 實體最新版檔案為準）`)) {
     try {
       localStorage.removeItem(`fengyu_ctrl_override_${proj.id}`);
       localStorage.removeItem(`fengyu_ctrl_override_${proj.shortName}`);
       localStorage.removeItem(`fengyu_ctrl_override_${normalizeSiteName(proj.shortName)}`);
     } catch(e) {}
 
-    // 重新從 appData 原始載入之 controlSheetItems 重繪
-    if (appData && appData.projects) {
-      const origProj = appData.projects.find(p => p.id === proj.id);
-      if (origProj) {
-        proj.controlSheetItems = origProj.controlSheetItems;
+    const isLocalServer = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (isLocalServer) {
+      try {
+        showToastNotification(`🔄 正在連線 NAS 重新掃描最新檔案...`);
+        const rescanRes = await fetch("/api/rescan", { method: "POST" });
+        if (rescanRes.ok) {
+          const freshDataRes = await fetch("/api/nas-data");
+          if (freshDataRes.ok) {
+            appData = await freshDataRes.json();
+            const freshProj = (appData.projects || []).find(p => p.id === proj.id || p.shortName === proj.shortName);
+            if (freshProj) {
+              currentDrawerProject = freshProj;
+              proj.controlSheetItems = freshProj.controlSheetItems;
+              proj.latestControlFile = freshProj.latestControlFile;
+            }
+          }
+        }
+      } catch(err) {
+        console.warn("Live NAS rescan error, falling back to cached memory data:", err);
+      }
+    } else {
+      // 靜態環境 (GitHub Pages) 重新以 appData 原生資料重設
+      if (appData && appData.projects) {
+        const origProj = appData.projects.find(p => p.id === proj.id || p.shortName === proj.shortName);
+        if (origProj) {
+          proj.controlSheetItems = origProj.controlSheetItems;
+        }
       }
     }
 
@@ -177,7 +201,7 @@ window.resetProjectControlToNas = function() {
       }
     }
 
-    showToastNotification(`✅ 已成功重設並同步【${proj.shortName}】至 NAS 最新版管控表！`);
+    showToastNotification(`✅ 已成功重設並同步【${proj.shortName}】至 NAS 最新版管控表（${proj.latestControlFile || ''}）！`);
   }
 };
 
@@ -2070,7 +2094,7 @@ function renderDrawerTabContent(tabType) {
           <button type="button" class="btn-table-action" onclick="exportCurrentControlExcel()" title="匯出最新管控表 (CSV 格式，Excel 可直接開啟)">
             <i class="fa-solid fa-file-export text-cyan"></i> 匯出管控表
           </button>
-          <button type="button" class="btn-table-action" onclick="resetProjectControlToNas()" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.35);" title="清除本機快取並同步 NAS 1150908 最新版">
+          <button type="button" class="btn-table-action" onclick="resetProjectControlToNas()" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.35);" title="清除本機暫存並同步 NAS 實體最新版 (${proj.latestControlFile || '最新版'})">
             <i class="fa-solid fa-arrows-rotate"></i> 同步 NAS 最新版
           </button>
           ${latestFile ? `
