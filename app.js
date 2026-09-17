@@ -162,15 +162,21 @@ window.resetProjectControlToNas = async function() {
         showToastNotification(`🔄 正在連線 NAS 重新掃描最新檔案...`);
         const rescanRes = await fetch("/api/rescan", { method: "POST" });
         if (rescanRes.ok) {
-          const freshDataRes = await fetch("/api/nas-data");
-          if (freshDataRes.ok) {
-            appData = await freshDataRes.json();
-            const freshProj = (appData.projects || []).find(p => p.id === proj.id || p.shortName === proj.shortName);
-            if (freshProj) {
-              currentDrawerProject = freshProj;
-              proj.controlSheetItems = freshProj.controlSheetItems;
-              proj.latestControlFile = freshProj.latestControlFile;
+          const resJson = await rescanRes.json();
+          if (resJson.data) {
+            appData = resJson.data;
+          } else {
+            const freshDataRes = await fetch("/api/nas-data");
+            if (freshDataRes.ok) {
+              appData = await freshDataRes.json();
             }
+          }
+          const freshProj = (appData.projects || []).find(p => p.id === proj.id || p.shortName === proj.shortName);
+          if (freshProj) {
+            currentDrawerProject = freshProj;
+            proj.controlSheetItems = freshProj.controlSheetItems;
+            proj.latestControlFile = freshProj.latestControlFile;
+            proj.categories = freshProj.categories;
           }
         }
       } catch(err) {
@@ -1435,6 +1441,11 @@ window.applyCutoffDate = async function() {
 
   renderMonthlyReportAnalysis();
 
+  // 即時動態重新渲染 9 大專案作業區卡片指標（動態計算並展示「基準日前應辦 / 全案標註預定」）
+  if (appData && appData.projects) {
+    renderWorkspaces(appData.projects);
+  }
+
   // 若目前專案抽屜正在開啟，即時重算抽屜頂部 KPI 按鈕數據與過濾
   if (currentDrawerProject) {
     updateControlHeaderRibbon();
@@ -1822,11 +1833,20 @@ function renderWorkspaces(projects) {
     return;
   }
 
+  const cutoffStr = window.currentCutoffDate || (document.getElementById("cutoff-date-input") ? document.getElementById("cutoff-date-input").value : "2026-08-24") || "2026-08-24";
+
   grid.innerHTML = projects.map(p => {
     const normSite = normalizeSiteName(p.shortName);
     const projTodos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === normSite);
     const scheduledCtrlItems = (p.controlSheetItems || []).filter(isScheduledItem);
     const ctrlItemsCount = scheduledCtrlItems.length;
+
+    // 依全域基準日計算：基準日前應辦管控項目數
+    const dueCtrlItems = scheduledCtrlItems.filter(it => {
+      const dStr = formatToInputDate(it.dueDate);
+      return dStr && dStr <= cutoffStr;
+    });
+
     const postponedCount = projTodos.filter(t => t.status === "後續辦理").length;
     const activeCount = projTodos.length - postponedCount;
     const completedCount = projTodos.filter(t => t.status === "已完成").length;
@@ -1870,11 +1890,9 @@ function renderWorkspaces(projects) {
           </div>
           <div class="metric-item">
             <span class="metric-label">議題管控</span>
-            <span class="metric-val text-purple">${ctrlItemsCount} 項</span>
+            <span class="metric-val text-purple" title="基準日 ${cutoffStr} 前應辦 / 全案標註預定總數">${dueCtrlItems.length} / ${ctrlItemsCount} 項</span>
           </div>
         </div>
-
-
 
         <button type="button" class="btn-proj-enter" onclick="event.stopPropagation(); openProjectDrawer('${p.id}')">
           進入作業區 <i class="fa-solid fa-arrow-right"></i>
@@ -2050,7 +2068,8 @@ function renderDrawerTabContent(tabType) {
     proj.controlSheetItems = getProjectControlItems(proj);
     const rawItems = proj.controlSheetItems || [];
     const controlFiles = (proj.categories && proj.categories["2.技術議題管控表(每月更新)"]) || [];
-    const latestFile = controlFiles.length > 0 ? controlFiles[controlFiles.length - 1] : null;
+    const latestFile = (proj.latestControlFile && controlFiles.find(f => f.name === proj.latestControlFile)) || (controlFiles.length > 0 ? controlFiles[controlFiles.length - 1] : null);
+    const activeControlFileName = proj.latestControlFile || (latestFile ? latestFile.name : "最新管控表");
 
     if (rawItems.length === 0 && controlFiles.length === 0) {
       content.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-table"></i><p>目前尚無管控表項目</p></div>`;
@@ -2066,7 +2085,7 @@ function renderDrawerTabContent(tabType) {
     const allStatuses = Array.from(new Set(rawItems.map(it => (it.status || '').trim()).filter(Boolean)));
 
     content.innerHTML = `
-      <!-- 功能工具列：多維篩選、搜尋、新增與匯出 -->
+      <!-- 功能工具列：多維篩選、搜尋、新增、最新版標籤與匯出 -->
       <div class="control-toolbar-grid">
         <div class="control-filters-group">
           <input type="text" id="control-quick-search" class="control-search-input" placeholder="🔍 搜尋議題、說明、負責人、成果..." value="${currentControlSearchText}">
@@ -2088,18 +2107,21 @@ function renderDrawerTabContent(tabType) {
         </div>
 
         <div class="control-actions-group">
+          <span class="badge-source-file" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 6px; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); font-size: 12px; color: #38bdf8;" title="NAS 最新連結管控表檔案">
+            <i class="fa-solid fa-file-excel text-emerald"></i> ${activeControlFileName}
+          </span>
           <button type="button" class="btn-add-control-item" onclick="openAddControlItemModal()">
             <i class="fa-solid fa-plus"></i> 新增管控項目
           </button>
           <button type="button" class="btn-table-action" onclick="exportCurrentControlExcel()" title="匯出最新管控表 (CSV 格式，Excel 可直接開啟)">
             <i class="fa-solid fa-file-export text-cyan"></i> 匯出管控表
           </button>
-          <button type="button" class="btn-table-action" onclick="resetProjectControlToNas()" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.35);" title="清除本機暫存並同步 NAS 實體最新版 (${proj.latestControlFile || '最新版'})">
+          <button type="button" class="btn-table-action" onclick="resetProjectControlToNas()" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.35);" title="清除本機暫存並同步 NAS 實體最新版 (${activeControlFileName})">
             <i class="fa-solid fa-arrows-rotate"></i> 同步 NAS 最新版
           </button>
           ${latestFile ? `
-            <a href="/api/download?path=${encodeURIComponent(latestFile.fullPath)}" target="_blank" download class="btn-table-action" title="下載原始 Excel 檔">
-              <i class="fa-solid fa-file-excel text-emerald"></i> 原始 Excel
+            <a href="/api/download?path=${encodeURIComponent(latestFile.fullPath)}" target="_blank" download class="btn-table-action" title="下載原始 Excel 檔 (${latestFile.name})">
+              <i class="fa-solid fa-download text-emerald"></i> 下載 Excel
             </a>
           ` : ''}
         </div>
