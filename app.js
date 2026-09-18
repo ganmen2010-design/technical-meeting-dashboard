@@ -954,23 +954,46 @@ function renderHeaderOverview(data) {
   if (badgeProj) badgeProj.textContent = numProjects;
   if (kpiProj) kpiProj.textContent = `${numProjects} 案`;
 
-  // 【核心修正】待辦完成率：分母嚴格扣除狀態為「後續辦理」之筆數
+  // 【待辦總量與完成率計算】
   const allTodos = data.todoItems || [];
   const activeTodos = allTodos.filter(t => t.status !== "後續辦理");
   const compTodos = allTodos.filter(t => t.status === "已完成");
   const postponedTodos = allTodos.filter(t => t.status === "後續辦理");
   
-  const numActive = activeTodos.length; // 293 筆實際應考核
-  if (todoCount) todoCount.textContent = numActive;
-  if (kpiTodo) kpiTodo.textContent = `${numActive} 筆`;
+  const numActive = activeTodos.length; // 315 筆實際應考核
+  const totalCount = allTodos.length || (data.totalTodos || 353); // 353 筆共用區全量累計追蹤
+
+  if (todoCount) todoCount.textContent = totalCount;
+  if (kpiTodo) kpiTodo.textContent = `${totalCount} 筆`;
+
+  const kpiTodoSub = document.getElementById("kpi-todos-sub");
+  if (kpiTodoSub) {
+    kpiTodoSub.textContent = `共用區彙整追蹤 (應辦 ${numActive} / 後續 ${postponedTodos.length})`;
+  }
 
   const numIssues = data.totalIssues || (data.technicalIssues || []).length;
   if (issueCount) issueCount.textContent = numIssues;
   if (kpiIssue) kpiIssue.textContent = `${numIssues} 案`;
 
-  const overallRate = numActive > 0 ? ((compTodos.length / numActive) * 100).toFixed(1) : "67.6";
+  const overallRate = numActive > 0 ? ((compTodos.length / numActive) * 100).toFixed(1) : "69.2";
   if (compRate) compRate.textContent = `${overallRate}%`;
   if (kpiRate) kpiRate.textContent = `${overallRate}%`;
+
+  const kpiLightStatus = document.getElementById("kpi-light-status");
+  if (kpiLightStatus) {
+    const rateNum = parseFloat(overallRate);
+    if (rateNum >= 75) {
+      kpiLightStatus.textContent = "🟢 運作良好";
+      kpiLightStatus.style.color = "#34d399";
+    } else if (rateNum >= 65) {
+      kpiLightStatus.textContent = "🟡 穩健推動中";
+      kpiLightStatus.style.color = "#fbbf24";
+    } else {
+      kpiLightStatus.textContent = "🟠 警示需追蹤";
+      kpiLightStatus.style.color = "#fb923c";
+    }
+  }
+
   if (lastUpdate && data.updatedAt) lastUpdate.textContent = data.updatedAt;
 }
 
