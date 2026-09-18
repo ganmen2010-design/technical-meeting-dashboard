@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=52.0">
+  <link rel="stylesheet" href="style.css?v=53.0">
 </head>
 <body>
   <!-- 背景發光粒子球體 (玻璃擬態質感) -->
@@ -489,37 +489,18 @@
             <label for="ctrl-stage" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">
               <i class="fa-solid fa-layer-group text-cyan"></i> 工程階段 (Stage)
             </label>
-            <input type="text" id="ctrl-stage" placeholder="例如：規劃設計 / 施工準備 / 地下結構" list="stage-datalist" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
-            <datalist id="stage-datalist">
-              <option value="規劃設計">
-              <option value="發包作業">
-              <option value="施工準備">
-              <option value="地下結構">
-              <option value="地上結構">
-              <option value="機電工程">
-              <option value="裝修工程">
-              <option value="景觀公設">
-            </datalist>
+            <select id="ctrl-stage" style="width: 100%; padding: 8px 12px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+              <option value="">-- 請選擇工程階段 --</option>
+            </select>
           </div>
 
           <div class="form-group">
             <label for="ctrl-category" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">
               <i class="fa-solid fa-tag text-purple"></i> 工程類別 (Category)
             </label>
-            <input type="text" id="ctrl-category" placeholder="例如：連續壁 / 模板 / 防水 / 鋼筋 / 泥作" list="category-datalist" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
-            <datalist id="category-datalist">
-              <option value="連續壁">
-              <option value="模板">
-              <option value="防水">
-              <option value="鋼筋">
-              <option value="泥作">
-              <option value="地質改良">
-              <option value="安全支撐">
-              <option value="鋼構">
-              <option value="機電">
-              <option value="BIM">
-              <option value="品保">
-            </datalist>
+            <select id="ctrl-category" style="width: 100%; padding: 8px 12px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+              <option value="">-- 請選擇工程類別 --</option>
+            </select>
           </div>
         </div>
 
@@ -552,6 +533,9 @@
             <select id="ctrl-status" style="width: 100%; padding: 8px 12px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
               <option value="進行中">進行中</option>
               <option value="已完成">已完成</option>
+              <option value="尚未進行">尚未進行</option>
+              <option value="檢討中">檢討中</option>
+              <option value="無需求">無需求</option>
               <option value="後續辦理">後續辦理</option>
               <option value="未排定">未排定</option>
             </select>
@@ -593,6 +577,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=52.0"></script>
+  <script src="app.js?v=53.0"></script>
 </body>
 </html>

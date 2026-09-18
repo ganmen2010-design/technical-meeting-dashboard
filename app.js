@@ -2071,59 +2071,38 @@ function renderDrawerTabContent(tabType) {
     const latestFile = (proj.latestControlFile && controlFiles.find(f => f.name === proj.latestControlFile)) || (controlFiles.length > 0 ? controlFiles[controlFiles.length - 1] : null);
     const activeControlFileName = proj.latestControlFile || (latestFile ? latestFile.name : "最新管控表");
 
-    if (rawItems.length === 0 && controlFiles.length === 0) {
+    const scheduledItems = rawItems.filter(isScheduledItem);
+    const cutoffStr = window.currentCutoffDate || "2026-08-24";
+    const dueItems = scheduledItems.filter(it => {
+      const dStr = formatToInputDate(it.dueDate);
+      return dStr && dStr <= cutoffStr;
+    });
+    const totalScheduled = scheduledItems.length;
+
+    if (rawItems.length === 0) {
       content.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-table"></i><p>目前尚無管控表項目</p></div>`;
       return;
     }
 
-    // 更新頂部唯一整合 KPI 按鈕列
+    // 更新頂部上移後之搜尋與下拉選單 (原紅框位置改為橘框多維篩選)
     updateControlHeaderRibbon();
 
-    // 收集所有不重複階段、類別與狀態 (完全對齊 Excel 原始管控表狀態，如：尚未進行、檢討中、已完成、無需求等)
-    const allStages = Array.from(new Set(rawItems.map(it => (it.stage || '').trim()).filter(Boolean)));
-    const allCategories = Array.from(new Set(rawItems.map(it => (it.category || '').trim()).filter(Boolean)));
-    const allStatuses = Array.from(new Set(rawItems.map(it => (it.status || '').trim()).filter(Boolean)));
-
     content.innerHTML = `
-      <!-- 功能工具列：多維篩選、搜尋、新增、最新版標籤與匯出 -->
-      <div class="control-toolbar-grid">
-        <div class="control-filters-group">
-          <input type="text" id="control-quick-search" class="control-search-input" placeholder="🔍 搜尋議題、說明、負責人、成果..." value="${currentControlSearchText}">
-          
-          <select id="control-stage-filter" class="control-select-filter">
-            <option value="all">📂 全部階段 (${allStages.length})</option>
-            ${allStages.map(st => `<option value="${st}" ${currentControlStageFilter === st ? 'selected' : ''}>${st}</option>`).join('')}
-          </select>
-
-          <select id="control-category-filter" class="control-select-filter">
-            <option value="all">🏷️ 全部類別 (${allCategories.length})</option>
-            ${allCategories.map(cat => `<option value="${cat}" ${currentControlCategoryFilter === cat ? 'selected' : ''}>${cat}</option>`).join('')}
-          </select>
-
-          <select id="control-status-filter" class="control-select-filter">
-            <option value="all" ${currentControlStatusFilter === 'all' ? 'selected' : ''}>⚡ 全部狀態 (${allStatuses.length})</option>
-            ${allStatuses.map(st => `<option value="${st}" ${currentControlStatusFilter === st ? 'selected' : ''}>${st}</option>`).join('')}
-          </select>
+      <!-- 綠框功能區上移至原橘框位置：保留「新增管控項目」按鈕與全部排定/基準日前應辦快捷切換，其餘按鈕已刪除 -->
+      <div class="control-actions-toolbar" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding: 2px 0;">
+        <div class="control-quick-pills" style="display: flex; gap: 8px; align-items: center;">
+          <button type="button" id="btn-ctrl-filter-all" class="kpi-mini-pill ${currentControlFilterMode === 'all' ? 'active' : ''}" onclick="setControlFilter('all')" title="顯示全部已排定預定產出日期之管控項目">
+            <i class="fa-solid fa-list-check"></i> 全部排定項目 (${totalScheduled})
+          </button>
+          <button type="button" id="btn-ctrl-filter-due" class="kpi-mini-pill ${currentControlFilterMode === 'due' ? 'active' : ''}" onclick="setControlFilter('due')" title="篩選：基準日 ${cutoffStr} 前應辦理之管控項目">
+            <i class="fa-solid fa-hourglass-half"></i> 基準日前應辦 (${dueItems.length})
+          </button>
         </div>
 
         <div class="control-actions-group">
-          <span class="badge-source-file" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 6px; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); font-size: 12px; color: #38bdf8;" title="NAS 最新連結管控表檔案">
-            <i class="fa-solid fa-file-excel text-emerald"></i> ${activeControlFileName}
-          </span>
           <button type="button" class="btn-add-control-item" onclick="openAddControlItemModal()">
             <i class="fa-solid fa-plus"></i> 新增管控項目
           </button>
-          <button type="button" class="btn-table-action" onclick="exportCurrentControlExcel()" title="匯出最新管控表 (CSV 格式，Excel 可直接開啟)">
-            <i class="fa-solid fa-file-export text-cyan"></i> 匯出管控表
-          </button>
-          <button type="button" class="btn-table-action" onclick="resetProjectControlToNas()" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.35);" title="清除本機暫存並同步 NAS 實體最新版 (${activeControlFileName})">
-            <i class="fa-solid fa-arrows-rotate"></i> 同步 NAS 最新版
-          </button>
-          ${latestFile ? `
-            <a href="/api/download?path=${encodeURIComponent(latestFile.fullPath)}" target="_blank" download class="btn-table-action" title="下載原始 Excel 檔 (${latestFile.name})">
-              <i class="fa-solid fa-download text-emerald"></i> 下載 Excel
-            </a>
-          ` : ''}
         </div>
       </div>
 
@@ -2151,50 +2130,6 @@ function renderDrawerTabContent(tabType) {
       </div>
     `;
 
-    // 綁定非破壞式輸入事件 (不重新置換 input DOM 節點，保證注音與中文輸入法 100% 流暢)
-    const searchInput = document.getElementById("control-quick-search");
-    const stageSelect = document.getElementById("control-stage-filter");
-    const catSelect = document.getElementById("control-category-filter");
-    const statusSelect = document.getElementById("control-status-filter");
-
-    let isComposing = false;
-    if (searchInput) {
-      searchInput.addEventListener("compositionstart", () => { isComposing = true; });
-      searchInput.addEventListener("compositionend", () => {
-        isComposing = false;
-        currentControlSearchText = searchInput.value.trim();
-        applyControlFilters();
-      });
-      searchInput.addEventListener("input", () => {
-        if (!isComposing) {
-          currentControlSearchText = searchInput.value.trim();
-          applyControlFilters();
-        }
-      });
-    }
-
-    if (stageSelect) {
-      stageSelect.addEventListener("change", () => {
-        currentControlStageFilter = stageSelect.value;
-        applyControlFilters();
-      });
-    }
-
-    if (catSelect) {
-      catSelect.addEventListener("change", () => {
-        currentControlCategoryFilter = catSelect.value;
-        applyControlFilters();
-      });
-    }
-
-    if (statusSelect) {
-      statusSelect.addEventListener("change", () => {
-        currentControlStatusFilter = statusSelect.value;
-        applyControlFilters();
-      });
-    }
-
-    // 初次載入表格資料
     applyControlFilters();
   }
 
@@ -2381,7 +2316,7 @@ function applyTodoFilters() {
 }
 
 // ==========================================
-// 技術議題管控表 (Control) 頂部狀態列與多維篩選
+// 技術議題管控表 (Control) 頂部狀態列與多維篩選 (上移橘框至頂部，刪除重複紅框按鈕)
 // ==========================================
 function updateControlHeaderRibbon() {
   const headerStatsContainer = document.getElementById("drawer-header-stats-container");
@@ -2389,65 +2324,95 @@ function updateControlHeaderRibbon() {
 
   const proj = currentDrawerProject;
   const rawItems = getProjectControlItems(proj);
-  const scheduledItems = rawItems.filter(isScheduledItem);
-  const cutoffStr = window.currentCutoffDate || "2026-08-24";
 
-  // 1. 基準日前應辦 (預定產出 <= 統計基準日 且有效排定)
-  const dueItems = scheduledItems.filter(it => {
-    const dStr = formatToInputDate(it.dueDate);
-    return dStr && dStr <= cutoffStr;
+  // 收集所有不重複階段、類別與狀態 (完全對齊 Excel 原始管控表狀態，如：尚未進行、檢討中、已完成、無需求等)
+  const allStages = Array.from(new Set(rawItems.map(it => (it.stage || '').trim()).filter(Boolean)));
+  const allCategories = Array.from(new Set(rawItems.map(it => (it.category || '').trim()).filter(Boolean)));
+  
+  // 統計每種狀態出現的項目筆數，精確對齊議題管控表實際狀態
+  const statusCountMap = {};
+  rawItems.forEach(it => {
+    const st = (it.status || '').trim() || '未排定';
+    statusCountMap[st] = (statusCountMap[st] || 0) + 1;
   });
-
-  // 2. 全部排定項目
-  const totalScheduled = scheduledItems.length;
-
-  // 3. 已完成
-  const completedCount = rawItems.filter(it => (it.status || '').trim() === '已完成').length;
-
-  // 4. 進行中 / 檢討中
-  const inProgressCount = rawItems.filter(it => {
-    const st = (it.status || '').trim();
-    return st.includes('進行') || st.includes('檢討') || st.includes('後續');
-  }).length;
-
-  // 5. 未排負責人
-  const noAssigneeCount = scheduledItems.filter(it => !it.assignee || it.assignee.trim() === '' || it.assignee.trim() === '-').length;
-
-  // 6. 成果未填 (已完成但未填成果說明)
-  const noDeliverableCount = scheduledItems.filter(it => {
-    const isDone = (it.status || '').trim() === '已完成';
-    const noDeliv = !it.deliverable || it.deliverable.trim() === '' || it.deliverable.trim() === '-' || it.deliverable.trim() === '待補';
-    return isDone && noDeliv;
-  }).length;
+  const allStatuses = Object.keys(statusCountMap);
 
   headerStatsContainer.innerHTML = `
-    <div class="control-header-ribbon">
-      <button type="button" class="kpi-mini-pill ${currentControlFilterMode === 'all' ? 'active' : ''}" onclick="setControlFilter('all')" title="顯示全部已排定預定產出日期之管控項目">
-        <i class="fa-solid fa-list-check"></i> 全部排定項目 (${totalScheduled})
-      </button>
-      <button type="button" class="kpi-mini-pill ${currentControlFilterMode === 'due' ? 'active' : ''}" onclick="setControlFilter('due')" title="篩選：基準日 ${cutoffStr} 前應辦理之管控項目">
-        <i class="fa-solid fa-hourglass-half"></i> 基準日前應辦 (${dueItems.length})
-      </button>
-      <button type="button" class="kpi-mini-pill kpi-emerald ${currentControlFilterMode === 'completed' ? 'active' : ''}" onclick="setControlFilter('completed')" title="篩選：狀態為已完成之項目">
-        <i class="fa-solid fa-circle-check"></i> 已完成 (${completedCount})
-      </button>
-      <button type="button" class="kpi-mini-pill kpi-cyan ${currentControlFilterMode === 'in_progress' ? 'active' : ''}" onclick="setControlFilter('in_progress')" title="篩選：進行中/檢討中之項目">
-        <i class="fa-solid fa-spinner fa-spin-pulse"></i> 進行中 (${inProgressCount})
-      </button>
-      <button type="button" class="kpi-mini-pill kpi-amber ${currentControlFilterMode === 'no_assignee' ? 'active' : ''}" onclick="setControlFilter('no_assignee')" title="篩選：尚未指定負責人或規劃組之項目">
-        <i class="fa-solid fa-user-xmark"></i> 未排負責人 (${noAssigneeCount})
-      </button>
-      <button type="button" class="kpi-mini-pill kpi-rose ${currentControlFilterMode === 'no_deliverable' ? 'active' : ''}" onclick="setControlFilter('no_deliverable')" title="篩選：已完成但成果說明/連結未填寫之項目">
-        <i class="fa-solid fa-link-slash"></i> 成果未填 (${noDeliverableCount})
-      </button>
+    <div class="control-header-search-ribbon" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+      <input type="text" id="control-quick-search" class="control-search-input" placeholder="🔍 搜尋議題、說明、負責人、成果..." value="${currentControlSearchText || ''}" style="max-width: 220px; padding: 6px 12px; font-size: 13px; height: 34px;">
+      
+      <select id="control-stage-filter" class="control-select-filter" style="padding: 4px 10px; font-size: 12px; height: 34px;">
+        <option value="all">📂 全部階段 (${allStages.length})</option>
+        ${allStages.map(st => `<option value="${st}" ${currentControlStageFilter === st ? 'selected' : ''}>${st}</option>`).join('')}
+      </select>
+
+      <select id="control-category-filter" class="control-select-filter" style="padding: 4px 10px; font-size: 12px; height: 34px;">
+        <option value="all">🏷️ 全部類別 (${allCategories.length})</option>
+        ${allCategories.map(cat => `<option value="${cat}" ${currentControlCategoryFilter === cat ? 'selected' : ''}>${cat}</option>`).join('')}
+      </select>
+
+      <select id="control-status-filter" class="control-select-filter" style="padding: 4px 10px; font-size: 12px; height: 34px;">
+        <option value="all" ${currentControlStatusFilter === 'all' ? 'selected' : ''}>⚡ 全部狀態 (${rawItems.length})</option>
+        ${allStatuses.map(st => `<option value="${st}" ${currentControlStatusFilter === st ? 'selected' : ''}>${st} (${statusCountMap[st]})</option>`).join('')}
+      </select>
     </div>
   `;
+
+  bindControlFilterEvents();
 }
 
-// 切換頂部 KPI 篩選模式
+// 綁定頂部搜尋與下拉事件 (支援 IME composition 輸入法保護)
+function bindControlFilterEvents() {
+  const searchInput = document.getElementById("control-quick-search");
+  const stageSelect = document.getElementById("control-stage-filter");
+  const catSelect = document.getElementById("control-category-filter");
+  const statusSelect = document.getElementById("control-status-filter");
+
+  let isComposing = false;
+  if (searchInput) {
+    searchInput.addEventListener("compositionstart", () => { isComposing = true; });
+    searchInput.addEventListener("compositionend", () => {
+      isComposing = false;
+      currentControlSearchText = searchInput.value.trim();
+      applyControlFilters();
+    });
+    searchInput.addEventListener("input", () => {
+      if (!isComposing) {
+        currentControlSearchText = searchInput.value.trim();
+        applyControlFilters();
+      }
+    });
+  }
+
+  if (stageSelect) {
+    stageSelect.addEventListener("change", () => {
+      currentControlStageFilter = stageSelect.value;
+      applyControlFilters();
+    });
+  }
+
+  if (catSelect) {
+    catSelect.addEventListener("change", () => {
+      currentControlCategoryFilter = catSelect.value;
+      applyControlFilters();
+    });
+  }
+
+  if (statusSelect) {
+    statusSelect.addEventListener("change", () => {
+      currentControlStatusFilter = statusSelect.value;
+      applyControlFilters();
+    });
+  }
+}
+
+// 切換頂部快捷篩選模式
 window.setControlFilter = function(mode) {
   currentControlFilterMode = (currentControlFilterMode === mode && mode !== 'all') ? 'all' : mode;
-  updateControlHeaderRibbon();
+  const btnAll = document.getElementById("btn-ctrl-filter-all");
+  const btnDue = document.getElementById("btn-ctrl-filter-due");
+  if (btnAll) btnAll.className = `kpi-mini-pill ${currentControlFilterMode === 'all' ? 'active' : ''}`;
+  if (btnDue) btnDue.className = `kpi-mini-pill ${currentControlFilterMode === 'due' ? 'active' : ''}`;
   applyControlFilters();
 };
 
@@ -2598,14 +2563,41 @@ window.openAddControlItemModal = function() {
 
   if (!modal || !form) return;
 
+  const rawItems = getProjectControlItems(currentDrawerProject);
+  const allStages = Array.from(new Set(rawItems.map(it => (it.stage || '').trim()).filter(Boolean)));
+  const allCategories = Array.from(new Set(rawItems.map(it => (it.category || '').trim()).filter(Boolean)));
+  const allStatuses = Array.from(new Set(rawItems.map(it => (it.status || '').trim()).filter(Boolean)));
+
+  // 動態填入工程階段下拉選單 (精準對齊管控表實際階段)
+  const stageSelect = document.getElementById("ctrl-stage");
+  if (stageSelect) {
+    stageSelect.innerHTML = `<option value="">-- 請選擇工程階段 --</option>` +
+      allStages.map(st => `<option value="${st}">${st}</option>`).join("");
+  }
+
+  // 動態填入工程類別下拉選單 (精準對齊管控表實際類別)
+  const catSelect = document.getElementById("ctrl-category");
+  if (catSelect) {
+    catSelect.innerHTML = `<option value="">-- 請選擇工程類別 --</option>` +
+      allCategories.map(cat => `<option value="${cat}">${cat}</option>`).join("");
+  }
+
+  // 動態填入辦理狀態下拉選單 (精準對齊管控表實際狀態)
+  const statusSelect = document.getElementById("ctrl-status");
+  if (statusSelect) {
+    statusSelect.innerHTML = allStatuses.map(st => `<option value="${st}">${st}</option>`).join("");
+    statusSelect.value = allStatuses.includes("進行中") ? "進行中" : (allStatuses[0] || "進行中");
+  }
+
   if (titleEl) {
     titleEl.innerHTML = `<i class="fa-solid fa-plus text-cyan"></i> 新增管控項目 (${currentDrawerProject.shortName})`;
   }
   if (idxInput) idxInput.value = "-1";
 
   form.reset();
-  const statusEl = document.getElementById("ctrl-status");
-  if (statusEl) statusEl.value = "進行中";
+  if (statusSelect) {
+    statusSelect.value = allStatuses.includes("進行中") ? "進行中" : (allStatuses[0] || "進行中");
+  }
 
   modal.classList.remove("hidden");
 };
@@ -2622,6 +2614,42 @@ window.openEditControlModal = function(index) {
   const item = rawItems[index];
   if (!item || !modal || !form) return;
 
+  const allStages = Array.from(new Set(rawItems.map(it => (it.stage || '').trim()).filter(Boolean)));
+  const allCategories = Array.from(new Set(rawItems.map(it => (it.category || '').trim()).filter(Boolean)));
+  const allStatuses = Array.from(new Set(rawItems.map(it => (it.status || '').trim()).filter(Boolean)));
+
+  const stageSelect = document.getElementById("ctrl-stage");
+  if (stageSelect) {
+    let opts = `<option value="">-- 請選擇工程階段 --</option>` +
+      allStages.map(st => `<option value="${st}">${st}</option>`).join("");
+    if (item.stage && !allStages.includes(item.stage)) {
+      opts += `<option value="${item.stage}">${item.stage}</option>`;
+    }
+    stageSelect.innerHTML = opts;
+    stageSelect.value = item.stage || "";
+  }
+
+  const catSelect = document.getElementById("ctrl-category");
+  if (catSelect) {
+    let opts = `<option value="">-- 請選擇工程類別 --</option>` +
+      allCategories.map(cat => `<option value="${cat}">${cat}</option>`).join("");
+    if (item.category && !allCategories.includes(item.category)) {
+      opts += `<option value="${item.category}">${item.category}</option>`;
+    }
+    catSelect.innerHTML = opts;
+    catSelect.value = item.category || "";
+  }
+
+  const statusSelect = document.getElementById("ctrl-status");
+  if (statusSelect) {
+    let opts = allStatuses.map(st => `<option value="${st}">${st}</option>`).join("");
+    if (item.status && !allStatuses.includes(item.status)) {
+      opts += `<option value="${item.status}">${item.status}</option>`;
+    }
+    statusSelect.innerHTML = opts;
+    statusSelect.value = item.status || "進行中";
+  }
+
   const itemRowNum = item.rowIdx !== undefined && item.rowIdx !== null ? item.rowIdx : (index + 1);
 
   if (titleEl) {
@@ -2629,13 +2657,10 @@ window.openEditControlModal = function(index) {
   }
   if (idxInput) idxInput.value = String(index);
 
-  document.getElementById("ctrl-stage").value = item.stage || "";
-  document.getElementById("ctrl-category").value = item.category || "";
   document.getElementById("ctrl-title").value = item.topic || item.title || "";
   document.getElementById("ctrl-assignee").value = item.assignee || "";
   document.getElementById("ctrl-due-date").value = formatToInputDate(item.dueDate);
   document.getElementById("ctrl-actual-date").value = formatToInputDate(item.actualDate);
-  document.getElementById("ctrl-status").value = item.status || "進行中";
   document.getElementById("ctrl-deliverable").value = item.deliverable || "";
   document.getElementById("ctrl-progress").value = item.progress || "";
 
