@@ -116,9 +116,14 @@ function formatToInputDate(val) {
   return '';
 }
 
-// 取得專案管控項目（優先讀取本機 localStorage 修改覆蓋紀錄，若與 NAS 最新檔案版本不同則以 NAS 最新為準）
+// 取得專案管控項目（以 NAS 實體 Excel 最新資料為最高優先準則）
 function getProjectControlItems(proj) {
   if (!proj) return [];
+  // 1. 若後端專案物件已有完整的 controlSheetItems，直接以 NAS 資料為準
+  if (Array.isArray(proj.controlSheetItems) && proj.controlSheetItems.length > 0) {
+    return proj.controlSheetItems;
+  }
+  // 2. 僅在離線或後端尚未載入時，嘗試使用本機快取 fallback
   try {
     const keysToTry = [
       `fengyu_ctrl_override_${proj.id}`,
@@ -130,17 +135,12 @@ function getProjectControlItems(proj) {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // 若 NAS 最新資料總筆數或最新檔名已更新（例如升級至 1150908 版），且本機快取為舊總筆數，則優先以 NAS 最新資料覆蓋
-          if (proj.controlSheetItems && Math.abs(parsed.length - proj.controlSheetItems.length) > 20) {
-            localStorage.removeItem(k);
-            return proj.controlSheetItems;
-          }
           return parsed;
         }
       }
     }
   } catch(e) {}
-  return proj.controlSheetItems || [];
+  return [];
 }
 
 // 重設並同步回 NAS 最新原始管控表資料（清除本機自訂快取並重新載入 NAS 最新檔案）
@@ -2122,7 +2122,10 @@ function renderDrawerTabContent(tabType) {
           </button>
         </div>
 
-        <div class="control-actions-group">
+        <div class="control-actions-group" style="display: flex; gap: 8px; align-items: center;">
+          <button type="button" class="btn-ctrl-action" onclick="reloadProjectFromNas()" style="padding: 7px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8;" title="清除暫存並重新自 NAS 實體 Excel 讀取最新管制表">
+            <i class="fa-solid fa-arrows-rotate"></i> 重新載入 NAS
+          </button>
           <button type="button" class="btn-add-control-item" onclick="openAddControlItemModal()">
             <i class="fa-solid fa-plus"></i> 新增管控項目
           </button>
@@ -2719,37 +2722,69 @@ window.handleSaveControlItem = async function(event) {
   };
 
   const rawItems = getProjectControlItems(proj);
-
+  let targetRow = -1;
   if (editIndex >= 0 && editIndex < rawItems.length) {
-    rawItems[editIndex] = { ...rawItems[editIndex], ...updatedItem };
-  } else {
-    rawItems.push(updatedItem);
+    targetRow = rawItems[editIndex].rowIdx !== undefined ? rawItems[editIndex].rowIdx : (editIndex + 2);
   }
 
-  // 1. 本地 localStorage 持久化儲存 (確保離線或靜態部署皆能即時生效，同時寫入多重別名鍵值)
+  // 1. 呼叫後端 API 執行雙向寫入 (NAS 實體 Excel 檔案 + nas_data.json 資料庫)
+  let backendResponse = null;
   try {
-    const rawJson = JSON.stringify(rawItems);
-    localStorage.setItem(`fengyu_ctrl_override_${proj.id}`, rawJson);
-    if (proj.shortName) localStorage.setItem(`fengyu_ctrl_override_${proj.shortName}`, rawJson);
-    if (proj.shortName) localStorage.setItem(`fengyu_ctrl_override_${normalizeSiteName(proj.shortName)}`, rawJson);
-  } catch(e) {
-    console.error("Save to localStorage failed", e);
-  }
-
-  proj.controlSheetItems = rawItems;
-
-  // 2. 嘗試透過後端 API 同步至 nas_data.json
-  try {
-    await fetch("/api/update-control-item", {
+    const res = await fetch("/api/update-control-item", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        projectId: proj.id,
-        items: rawItems
+        projectId: proj.id || proj.shortName,
+        rowIdx: targetRow,
+        itemIndex: editIndex,
+        updatedItem: updatedItem
       })
     });
+    if (res.ok) {
+      backendResponse = await res.json();
+    }
   } catch(e) {
-    // 即使在靜態 GitHub Pages 模式後端 fetch 失敗，localStorage 亦能保證即時生效
+    console.warn("Backend API not reachable (offline/static mode)", e);
+  }
+
+  if (backendResponse && backendResponse.status === "success") {
+    // 成功獲得後端回應（已寫入實體 Excel 或由後端更新）
+    if (backendResponse.controlSheetItems && backendResponse.controlSheetItems.length > 0) {
+      proj.controlSheetItems = backendResponse.controlSheetItems;
+    } else {
+      updatedItem.rowIdx = backendResponse.rowIdx || targetRow;
+      if (editIndex >= 0 && editIndex < rawItems.length) {
+        rawItems[editIndex] = { ...rawItems[editIndex], ...updatedItem };
+      } else {
+        rawItems.push(updatedItem);
+      }
+      proj.controlSheetItems = rawItems;
+    }
+
+    // 清除舊的本機覆蓋快取，避免前端脫節
+    localStorage.removeItem(`fengyu_ctrl_override_${proj.id}`);
+    localStorage.removeItem(`fengyu_ctrl_override_${proj.shortName}`);
+    localStorage.removeItem(`fengyu_ctrl_override_${normalizeSiteName(proj.shortName)}`);
+
+    showToastNotification(backendResponse.message || "管控項目已成功儲存！");
+  } else {
+    // 離線或 GitHub Pages 靜態環境 fallback
+    if (editIndex >= 0 && editIndex < rawItems.length) {
+      rawItems[editIndex] = { ...rawItems[editIndex], ...updatedItem };
+    } else {
+      updatedItem.rowIdx = rawItems.length + 1;
+      rawItems.push(updatedItem);
+    }
+    proj.controlSheetItems = rawItems;
+
+    try {
+      const rawJson = JSON.stringify(rawItems);
+      localStorage.setItem(`fengyu_ctrl_override_${proj.id}`, rawJson);
+      if (proj.shortName) localStorage.setItem(`fengyu_ctrl_override_${proj.shortName}`, rawJson);
+      if (proj.shortName) localStorage.setItem(`fengyu_ctrl_override_${normalizeSiteName(proj.shortName)}`, rawJson);
+    } catch(err) {}
+
+    showToastNotification("已儲存至本機快取 (離線模式)；連線伺服器時將自動寫入 NAS 實體檔案。");
   }
 
   closeEditControlModal();
@@ -2766,11 +2801,39 @@ window.handleSaveControlItem = async function(event) {
 
   // 更新抽屜頂部管控計數
   const controlCountEl = document.getElementById("drawer-control-count");
-  const scheduledCount = rawItems.filter(isScheduledItem).length;
+  const scheduledCount = (proj.controlSheetItems || []).filter(isScheduledItem).length;
   if (controlCountEl) controlCountEl.textContent = scheduledCount;
+};
 
-  // 提示成功訊息
-  showToastNotification(`管控項目已成功儲存並寫入 ${proj.shortName} 管控表！`);
+// 重新自 NAS 讀取最新管制表（清除快取並同步最新檔案）
+window.reloadProjectFromNas = async function() {
+  if (!currentDrawerProject) return;
+  const proj = currentDrawerProject;
+
+  // 清除本機快取
+  localStorage.removeItem(`fengyu_ctrl_override_${proj.id}`);
+  localStorage.removeItem(`fengyu_ctrl_override_${proj.shortName}`);
+  localStorage.removeItem(`fengyu_ctrl_override_${normalizeSiteName(proj.shortName)}`);
+
+  showToastNotification(`正在向 NAS 重新讀取 ${proj.shortName} 最新管制表...`);
+
+  try {
+    const res = await fetch("/api/nas-data");
+    if (res.ok) {
+      const freshData = await res.json();
+      if (freshData && freshData.projects) {
+        const freshProj = freshData.projects.find(p => p.id === proj.id || p.shortName === proj.shortName);
+        if (freshProj && freshProj.controlSheetItems) {
+          proj.controlSheetItems = freshProj.controlSheetItems;
+          currentDrawerProject.controlSheetItems = freshProj.controlSheetItems;
+        }
+      }
+    }
+  } catch(e) {}
+
+  updateControlHeaderRibbon();
+  applyControlFilters();
+  showToastNotification(`✅ 已成功重新載入 ${proj.shortName} NAS 實體最新管制表！`);
 };
 
 // 匯出最新管控表 (Excel 相容之 CSV 格式，含 BOM UTF-8)
