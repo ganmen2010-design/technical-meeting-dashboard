@@ -30239,25 +30239,13 @@
         },
         {
           "rowIdx": 431,
-          "stage": "G景觀階段",
-          "category": "排水",
-          "title": "test",
-          "assignee": "test",
-          "dueDate": "2026-09-18",
-          "actualDate": "",
-          "status": "進行中",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
-          "rowIdx": 432,
           "stage": "",
           "category": "",
-          "title": "TEST",
+          "title": "CCCCCCCCCCC",
           "assignee": "",
-          "dueDate": "2026-09-19",
+          "dueDate": "2026-09-20",
           "actualDate": "",
-          "status": "進行中",
+          "status": "未排定",
           "progress": "",
           "deliverable": ""
         }
@@ -34331,7 +34319,7 @@
           "rowIdx": 82,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "穿樑圖(B3F)",
+          "title": "穿樑圖",
           "assignee": "正龍",
           "dueDate": "115/10/20",
           "actualDate": "",
@@ -34343,7 +34331,7 @@
           "rowIdx": 83,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "柱埋管圖(B3F)",
+          "title": "柱埋管圖",
           "assignee": "正龍",
           "dueDate": "115/10/20",
           "actualDate": "",
@@ -34355,7 +34343,7 @@
           "rowIdx": 84,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "管道配置圖(B3F)",
+          "title": "管道配置圖",
           "assignee": "正龍",
           "dueDate": "115/10/20",
           "actualDate": "",
@@ -34367,7 +34355,7 @@
           "rowIdx": 85,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "排管圖(B3F)",
+          "title": "排管圖",
           "assignee": "正龍",
           "dueDate": "115/10/20",
           "actualDate": "",
@@ -34379,7 +34367,7 @@
           "rowIdx": 86,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "端點圖(B3F)",
+          "title": "端點圖",
           "assignee": "正龍",
           "dueDate": "115/10/20",
           "actualDate": "",
@@ -34391,7 +34379,7 @@
           "rowIdx": 87,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "箱體整合圖(B3F)",
+          "title": "箱體整合圖",
           "assignee": "正龍",
           "dueDate": "115/10/20",
           "actualDate": "",
@@ -34403,7 +34391,7 @@
           "rowIdx": 88,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "設備配置圖(B3F)",
+          "title": "設備配置圖",
           "assignee": "正龍",
           "dueDate": "115/10/20",
           "actualDate": "",
@@ -34415,7 +34403,7 @@
           "rowIdx": 89,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "各分項施工圖(B3F)",
+          "title": "各分項施工圖",
           "assignee": "正龍",
           "dueDate": "115/10/20",
           "actualDate": "",
@@ -34427,7 +34415,7 @@
           "rowIdx": 90,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "穿樑圖(B2F)",
+          "title": "穿樑圖",
           "assignee": "正龍",
           "dueDate": "115/10/20",
           "actualDate": "",
@@ -34439,7 +34427,7 @@
           "rowIdx": 91,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "柱埋管圖(B2F)",
+          "title": "柱埋管圖",
           "assignee": "正龍",
           "dueDate": "2026-12-15",
           "actualDate": "",
@@ -34451,7 +34439,7 @@
           "rowIdx": 92,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "管道配置圖(B2F)",
+          "title": "管道配置圖",
           "assignee": "正龍",
           "dueDate": "2026-12-15",
           "actualDate": "",
@@ -34463,7 +34451,7 @@
           "rowIdx": 93,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "排管圖(B2F)",
+          "title": "排管圖",
           "assignee": "正龍",
           "dueDate": "2026-12-15",
           "actualDate": "",
@@ -34475,7 +34463,7 @@
           "rowIdx": 94,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "端點圖(B2F)",
+          "title": "端點圖",
           "assignee": "正龍",
           "dueDate": "2026-12-15",
           "actualDate": "",
@@ -34487,7 +34475,7 @@
           "rowIdx": 95,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "箱體整合圖(B2F)",
+          "title": "箱體整合圖",
           "assignee": "正龍",
           "dueDate": "2026-12-15",
           "actualDate": "",
@@ -34499,7 +34487,7 @@
           "rowIdx": 96,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "設備配置圖(B2F)",
+          "title": "設備配置圖",
           "assignee": "正龍",
           "dueDate": "2026-12-15",
           "actualDate": "",
@@ -34511,7 +34499,7 @@
           "rowIdx": 97,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "各分項施工圖(B2F)",
+          "title": "各分項施工圖",
           "assignee": "正龍",
           "dueDate": "115/12/15",
           "actualDate": "",
@@ -34523,7 +34511,7 @@
           "rowIdx": 98,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "穿樑圖(B1F)",
+          "title": "穿樑圖",
           "assignee": "正龍",
           "dueDate": "116/02/15",
           "actualDate": "",
@@ -34535,7 +34523,7 @@
           "rowIdx": 99,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "柱埋管圖(B1F)",
+          "title": "柱埋管圖",
           "assignee": "正龍",
           "dueDate": "116/02/15",
           "actualDate": "",
@@ -34547,7 +34535,7 @@
           "rowIdx": 100,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "管道配置圖(B1F)",
+          "title": "管道配置圖",
           "assignee": "正龍",
           "dueDate": "116/02/15",
           "actualDate": "",
@@ -34559,7 +34547,7 @@
           "rowIdx": 101,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "排管圖(B1F)",
+          "title": "排管圖",
           "assignee": "正龍",
           "dueDate": "116/02/15",
           "actualDate": "",
@@ -34571,7 +34559,7 @@
           "rowIdx": 102,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "端點圖(B1F)",
+          "title": "端點圖",
           "assignee": "正龍",
           "dueDate": "116/02/15",
           "actualDate": "",
@@ -34583,7 +34571,7 @@
           "rowIdx": 103,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "箱體整合圖(B1F)",
+          "title": "箱體整合圖",
           "assignee": "正龍",
           "dueDate": "116/02/15",
           "actualDate": "",
@@ -34595,7 +34583,7 @@
           "rowIdx": 104,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "設備配置圖(B1F)",
+          "title": "設備配置圖",
           "assignee": "正龍",
           "dueDate": "116/02/15",
           "actualDate": "",
@@ -34607,7 +34595,7 @@
           "rowIdx": 105,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
-          "title": "各分項施工圖(B1F)",
+          "title": "各分項施工圖",
           "assignee": "正龍",
           "dueDate": "116/02/15",
           "actualDate": "",
@@ -36073,9 +36061,9 @@
           "category": "地下層排水檢討",
           "title": "外壁周邊淺溝",
           "assignee": "暐勝",
-          "dueDate": "2027-02-09",
+          "dueDate": "",
           "actualDate": "",
-          "status": "進行中",
+          "status": "未排定",
           "progress": "",
           "deliverable": ""
         },
@@ -36085,9 +36073,9 @@
           "category": "地下層排水檢討",
           "title": "複壁排水檢討",
           "assignee": "暐勝",
-          "dueDate": "2027-02-09",
+          "dueDate": "",
           "actualDate": "",
-          "status": "進行中",
+          "status": "未排定",
           "progress": "",
           "deliverable": ""
         },
@@ -36097,9 +36085,9 @@
           "category": "地下層排水檢討",
           "title": "天井降板及排水",
           "assignee": "暐勝",
-          "dueDate": "2027-02-09",
+          "dueDate": "",
           "actualDate": "",
-          "status": "進行中",
+          "status": "未排定",
           "progress": "",
           "deliverable": ""
         },
@@ -38442,9 +38430,22 @@
           "status": "未排定",
           "progress": "",
           "deliverable": ""
+        },
+        {
+          "rowIdx": 425,
+          "stage": "",
+          "category": "",
+          "title": "AAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "assignee": "羅政韋",
+          "dueDate": "",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
         }
       ],
-      "latestControlFile": "0.管控表-CDC115.09.17.xlsx"
+      "latestControlFile": "0.管控表-CDC115.09.17.xlsx",
+      "latestControlFilePath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\2.技術議題管控表(每月更新)\\0.管控表-CDC115.09.17.xlsx"
     },
     {
       "id": "北區工程處-2.新光合纖南港總部",
@@ -54973,7 +54974,8 @@
           "deliverable": ""
         }
       ],
-      "latestControlFile": "0.管控表-新纖南港總部115.09.17.xlsx"
+      "latestControlFile": "0.管控表-新纖南港總部115.09.17.xlsx",
+      "latestControlFilePath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-2.新光合纖南港總部\\2.技術議題管控表(每月更新)\\0.管控表-新纖南港總部115.09.17.xlsx"
     },
     {
       "id": "北區工程處-3.公西聯合檔案庫房",
@@ -81420,7 +81422,8 @@
           "deliverable": ""
         }
       ],
-      "latestControlFile": "0.管控表-公西檔案庫房115.07.01.xlsx"
+      "latestControlFile": "0.管控表-公西檔案庫房115.09.18.xlsx",
+      "latestControlFilePath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-3.公西聯合檔案庫房\\2.技術議題管控表(每月更新)\\0.管控表-公西檔案庫房115.09.18.xlsx"
     },
     {
       "id": "台南工程處-1.平實安居",
@@ -96601,7 +96604,8 @@
           "deliverable": ""
         }
       ],
-      "latestControlFile": "技術議題管控表-平實安居1150901.xlsx"
+      "latestControlFile": "技術議題管控表-平實安居1150901.xlsx",
+      "latestControlFilePath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-1.平實安居\\2.技術議題管控表(每月更新)\\技術議題管控表-平實安居1150901.xlsx"
     },
     {
       "id": "台南工程處-2.台南崇明商場",
@@ -106180,7 +106184,8 @@
           "deliverable": ""
         }
       ],
-      "latestControlFile": "0.管控表-台南崇明商場115.09.14(甘).xlsx"
+      "latestControlFile": "0.管控表-台南崇明商場115.09.14(甘).xlsx",
+      "latestControlFilePath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\2.技術議題管控表(每月更新)\\0.管控表-台南崇明商場115.09.14(甘).xlsx"
     },
     {
       "id": "宜蘭工程處-1.坤門安居",
@@ -122137,7 +122142,8 @@
           "deliverable": ""
         }
       ],
-      "latestControlFile": "技術議題管控表(公司-廖)-坤門安居20260909.xlsx"
+      "latestControlFile": "技術議題管控表(公司)-坤門安居20260909.xlsx",
+      "latestControlFilePath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\宜蘭工程處-1.坤門安居\\2.技術議題管控表(每月更新)\\技術議題管控表(公司)-坤門安居20260909.xlsx"
     },
     {
       "id": "宜蘭工程處-2.立行倉儲物流",
@@ -126628,7 +126634,8 @@
           "deliverable": ""
         }
       ],
-      "latestControlFile": "0.管控表-立行115.07.01.xlsx"
+      "latestControlFile": "0.管控表-立行115.07.01.xlsx",
+      "latestControlFilePath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\宜蘭工程處-2.立行倉儲物流\\2.技術議題管控表(每月更新)\\0.管控表-立行115.07.01.xlsx"
     },
     {
       "id": "高屏工程處-1.中油綠能",
@@ -132777,7 +132784,8 @@
           "deliverable": ""
         }
       ],
-      "latestControlFile": "0.管控表-中油綠能115.09.8.xlsx"
+      "latestControlFile": "0.管控表-中油綠能115.09.8.xlsx",
+      "latestControlFilePath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\2.技術議題管控表(每月更新)\\0.管控表-中油綠能115.09.8.xlsx"
     }
   ],
   "guidelines": [
