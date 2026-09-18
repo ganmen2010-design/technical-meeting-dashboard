@@ -30248,6 +30248,18 @@
           "status": "進行中",
           "progress": "",
           "deliverable": ""
+        },
+        {
+          "rowIdx": 432,
+          "stage": "",
+          "category": "",
+          "title": "TEST",
+          "assignee": "",
+          "dueDate": "2026-09-19",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
         }
       ],
       "latestControlFile": "技術議題管控表-朴子安居1150917(含里程碑).xlsx",

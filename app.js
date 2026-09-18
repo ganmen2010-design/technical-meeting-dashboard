@@ -2805,35 +2805,55 @@ window.handleSaveControlItem = async function(event) {
   if (controlCountEl) controlCountEl.textContent = scheduledCount;
 };
 
-// 重新自 NAS 讀取最新管制表（清除快取並同步最新檔案）
+// 重新自 NAS 讀取最新管制表（清除快取並秒級熱同步實體 Excel 最新檔案）
 window.reloadProjectFromNas = async function() {
   if (!currentDrawerProject) return;
   const proj = currentDrawerProject;
 
-  // 清除本機快取
+  // 1. 清除本機快取
   localStorage.removeItem(`fengyu_ctrl_override_${proj.id}`);
   localStorage.removeItem(`fengyu_ctrl_override_${proj.shortName}`);
   localStorage.removeItem(`fengyu_ctrl_override_${normalizeSiteName(proj.shortName)}`);
 
-  showToastNotification(`正在向 NAS 重新讀取 ${proj.shortName} 最新管制表...`);
+  showToastNotification(`正在向 NAS 實體 Excel 讀取 ${proj.shortName} 最新管制表 (約需 1~2 秒)...`);
 
+  let loaded = false;
+  // 嘗試向後端即時單檔熱掃描 API 請求最新資料
   try {
-    const res = await fetch("/api/nas-data");
+    const res = await fetch(`/api/reload-project-excel?projectId=${encodeURIComponent(proj.shortName || proj.id)}`);
     if (res.ok) {
-      const freshData = await res.json();
-      if (freshData && freshData.projects) {
-        const freshProj = freshData.projects.find(p => p.id === proj.id || p.shortName === proj.shortName);
-        if (freshProj && freshProj.controlSheetItems) {
-          proj.controlSheetItems = freshProj.controlSheetItems;
-          currentDrawerProject.controlSheetItems = freshProj.controlSheetItems;
-        }
+      const result = await res.json();
+      if (result.status === "success" && Array.isArray(result.items)) {
+        proj.controlSheetItems = result.items;
+        currentDrawerProject.controlSheetItems = result.items;
+        loaded = true;
       }
     }
   } catch(e) {}
 
+  if (!loaded) {
+    // 備用：讀取全量 nas_data.json (帶 timestamp 防止瀏覽器 HTTP 快取)
+    try {
+      const res = await fetch(`data/nas_data.json?t=${Date.now()}`);
+      if (res.ok) {
+        const freshData = await res.json();
+        if (freshData && freshData.projects) {
+          const freshProj = freshData.projects.find(p => p.id === proj.id || p.shortName === proj.shortName || (proj.shortName && p.name.includes(proj.shortName)));
+          if (freshProj && freshProj.controlSheetItems) {
+            proj.controlSheetItems = freshProj.controlSheetItems;
+            currentDrawerProject.controlSheetItems = freshProj.controlSheetItems;
+            loaded = true;
+          }
+        }
+      }
+    } catch(e) {}
+  }
+
   updateControlHeaderRibbon();
   applyControlFilters();
-  showToastNotification(`✅ 已成功重新載入 ${proj.shortName} NAS 實體最新管制表！`);
+
+  const totalCount = (proj.controlSheetItems || []).length;
+  showToastNotification(`✅ 已成功重新載入 ${proj.shortName} NAS 實體最新管制表！共 ${totalCount} 項`);
 };
 
 // 匯出最新管控表 (Excel 相容之 CSV 格式，含 BOM UTF-8)
