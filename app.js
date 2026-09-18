@@ -26,7 +26,7 @@ let currentCalYear = 2026;
 let currentCalMonth = 9;
 let activeSearchType = "all";
 let currentDrawerProject = null;
-let currentControlFilterMode = "all"; // 'all', 'due', 'completed', 'in_progress', 'no_assignee', 'no_deliverable'
+let currentControlFilterMode = "all_total"; // 'all_total' (全部項目), 'scheduled' (全部排定), 'due' (基準日前應辦), 'completed', 'in_progress', 'no_assignee', 'no_deliverable'
 let currentTodoFilterMode = "all"; // 'all', 'completed', 'postponed', 'no_result', 'in_progress'
 let currentControlSearchText = "";
 let currentControlStageFilter = "all";
@@ -192,13 +192,11 @@ window.resetProjectControlToNas = async function() {
       }
     }
 
-    updateControlHeaderRibbon();
-    applyControlFilters();
+    renderDrawerTabContent("control");
 
-    // 更新抽屜頂部管控計數
+    // 更新抽屜頂部管控計數為真實總項目數
     const controlCountEl = document.getElementById("drawer-control-count");
-    const scheduledCount = (proj.controlSheetItems || []).filter(isScheduledItem).length;
-    if (controlCountEl) controlCountEl.textContent = scheduledCount;
+    if (controlCountEl) controlCountEl.textContent = (proj.controlSheetItems || []).length;
 
     if (appData && appData.projects) {
       renderWorkspaces(appData.projects);
@@ -1971,8 +1969,8 @@ window.openProjectDrawer = function(projectId) {
   }
 
   if (todoCountEl) todoCountEl.textContent = drawerTodos.length;
-  const scheduledCtrlItems = (proj.controlSheetItems || []).filter(isScheduledItem);
-  if (controlCountEl) controlCountEl.textContent = scheduledCtrlItems.length;
+  const totalCtrlItems = (proj.controlSheetItems || []).length;
+  if (controlCountEl) controlCountEl.textContent = totalCtrlItems;
 
   // 預設開啟第一個頁籤：歷次會議資料
   drawerTabs.forEach(b => b.classList.remove("active"));
@@ -2111,13 +2109,16 @@ function renderDrawerTabContent(tabType) {
     updateControlHeaderRibbon();
 
     content.innerHTML = `
-      <!-- 綠框功能區上移至原橘框位置：保留「新增管控項目」按鈕與全部排定/基準日前應辦快捷切換，其餘按鈕已刪除 -->
+      <!-- 功能列：全部項目(全量) / 全部排定 / 基準日前應辦 + 重新載入 NAS 與新增管控項目 -->
       <div class="control-actions-toolbar" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding: 2px 0;">
         <div class="control-quick-pills" style="display: flex; gap: 8px; align-items: center;">
-          <button type="button" id="btn-ctrl-filter-all" class="kpi-mini-pill ${currentControlFilterMode === 'all' ? 'active' : ''}" onclick="setControlFilter('all')" title="顯示全部已排定預定產出日期之管控項目">
-            <i class="fa-solid fa-list-check"></i> 全部排定項目 (${totalScheduled})
+          <button type="button" id="btn-ctrl-filter-all-total" class="kpi-mini-pill ${currentControlFilterMode === 'all_total' ? 'active' : ''}" onclick="setControlFilter('all_total')" title="顯示全部管控項目 (共 ${rawItems.length} 項，包含未排定預定產出日期之項目)">
+            <i class="fa-solid fa-list-ul"></i> 全部項目 (${rawItems.length})
           </button>
-          <button type="button" id="btn-ctrl-filter-due" class="kpi-mini-pill ${currentControlFilterMode === 'due' ? 'active' : ''}" onclick="setControlFilter('due')" title="篩選：基準日 ${cutoffStr} 前應辦理之管控項目">
+          <button type="button" id="btn-ctrl-filter-scheduled" class="kpi-mini-pill ${currentControlFilterMode === 'scheduled' || currentControlFilterMode === 'all' ? 'active' : ''}" onclick="setControlFilter('scheduled')" title="僅顯示已排定預定產出日期之管控項目 (共 ${totalScheduled} 項)">
+            <i class="fa-solid fa-list-check"></i> 全部排定 (${totalScheduled})
+          </button>
+          <button type="button" id="btn-ctrl-filter-due" class="kpi-mini-pill ${currentControlFilterMode === 'due' ? 'active' : ''}" onclick="setControlFilter('due')" title="篩選：基準日 ${cutoffStr} 前應辦理之管控項目 (共 ${dueItems.length} 項)">
             <i class="fa-solid fa-hourglass-half"></i> 基準日前應辦 (${dueItems.length})
           </button>
         </div>
@@ -2434,10 +2435,12 @@ function bindControlFilterEvents() {
 
 // 切換頂部快捷篩選模式
 window.setControlFilter = function(mode) {
-  currentControlFilterMode = (currentControlFilterMode === mode && mode !== 'all') ? 'all' : mode;
-  const btnAll = document.getElementById("btn-ctrl-filter-all");
+  currentControlFilterMode = mode;
+  const btnAllTotal = document.getElementById("btn-ctrl-filter-all-total");
+  const btnScheduled = document.getElementById("btn-ctrl-filter-scheduled");
   const btnDue = document.getElementById("btn-ctrl-filter-due");
-  if (btnAll) btnAll.className = `kpi-mini-pill ${currentControlFilterMode === 'all' ? 'active' : ''}`;
+  if (btnAllTotal) btnAllTotal.className = `kpi-mini-pill ${currentControlFilterMode === 'all_total' ? 'active' : ''}`;
+  if (btnScheduled) btnScheduled.className = `kpi-mini-pill ${currentControlFilterMode === 'scheduled' || currentControlFilterMode === 'all' ? 'active' : ''}`;
   if (btnDue) btnDue.className = `kpi-mini-pill ${currentControlFilterMode === 'due' ? 'active' : ''}`;
   applyControlFilters();
 };
@@ -2453,7 +2456,10 @@ function applyControlFilters() {
 
   // 1. KPI 頂部篩選條件
   let filtered = rawItems.filter(it => {
-    if (currentControlFilterMode === "all") {
+    if (currentControlFilterMode === "all_total") {
+      return true;
+    }
+    if (currentControlFilterMode === "scheduled" || currentControlFilterMode === "all") {
       return isScheduledItem(it);
     }
     if (currentControlFilterMode === "due") {
@@ -2788,8 +2794,11 @@ window.handleSaveControlItem = async function(event) {
   }
 
   closeEditControlModal();
-  updateControlHeaderRibbon();
-  applyControlFilters();
+  if (editIndex < 0) {
+    // 新增項目：自動切換至「全部項目」模式，確保立即可見
+    currentControlFilterMode = "all_total";
+  }
+  renderDrawerTabContent("control");
 
   // 即時更新專案工作區卡片與 P13 統計表格數據
   if (appData && appData.projects) {
@@ -2799,10 +2808,19 @@ window.handleSaveControlItem = async function(event) {
     }
   }
 
-  // 更新抽屜頂部管控計數
+  // 更新抽屜頂部管控計數為真實總項目數
   const controlCountEl = document.getElementById("drawer-control-count");
-  const scheduledCount = (proj.controlSheetItems || []).filter(isScheduledItem).length;
-  if (controlCountEl) controlCountEl.textContent = scheduledCount;
+  if (controlCountEl) controlCountEl.textContent = (proj.controlSheetItems || []).length;
+
+  // 若為新增項目，自動滾動至最底部
+  if (editIndex < 0) {
+    setTimeout(() => {
+      const tableContainer = document.querySelector(".table-responsive");
+      if (tableContainer) {
+        tableContainer.scrollTop = tableContainer.scrollHeight;
+      }
+    }, 150);
+  }
 };
 
 // 重新自 NAS 讀取最新管制表（清除快取並秒級熱同步實體 Excel 最新檔案）
@@ -2849,10 +2867,12 @@ window.reloadProjectFromNas = async function() {
     } catch(e) {}
   }
 
-  updateControlHeaderRibbon();
-  applyControlFilters();
+  renderDrawerTabContent("control");
 
   const totalCount = (proj.controlSheetItems || []).length;
+  const controlCountEl = document.getElementById("drawer-control-count");
+  if (controlCountEl) controlCountEl.textContent = totalCount;
+
   showToastNotification(`✅ 已成功重新載入 ${proj.shortName} NAS 實體最新管制表！共 ${totalCount} 項`);
 };
 
