@@ -1828,9 +1828,6 @@ function renderGuidelines(items) {
                 <button type="button" class="btn-table-action" style="padding: 8px 12px; font-size: 14px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')" title="複製 NAS 實體路徑">
                   <i class="fa-regular fa-copy"></i> 複製路徑
                 </button>
-                <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 8px 12px; font-size: 14px;" title="下載檔案">
-                  <i class="fa-solid fa-download"></i> 下載
-                </a>
               </div>
             </div>
           `;
@@ -2069,9 +2066,6 @@ function renderDrawerTabContent(tabType) {
                       <button type="button" class="btn-table-action" style="padding: 6px 10px; font-size: 12px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')" title="複製 NAS 實體路徑">
                         <i class="fa-regular fa-copy"></i> 複製路徑
                       </button>
-                      <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 6px 10px; font-size: 12px;" title="下載檔案">
-                        <i class="fa-solid fa-download"></i> 下載
-                      </a>
                     </div>
                   </div>
                 `;
@@ -4262,6 +4256,8 @@ window.openMeetingFileModal = function(encodedFile) {
 
     titleEl.innerHTML = `<i class="fa-solid ${getFileIcon(f.ext)}"></i> ${f.name}`;
     const fullPath = f.fullPath || "";
+    const isPdf = (f.ext || "").toLowerCase() === ".pdf";
+    const isImg = [".png", ".jpg", ".jpeg", ".gif", ".webp"].includes((f.ext || "").toLowerCase());
 
     bodyEl.innerHTML = `
       <div class="viewer-meta-box">
@@ -4275,18 +4271,21 @@ window.openMeetingFileModal = function(encodedFile) {
           <i class="fa-regular fa-copy"></i> 複製 NAS 完整實體路徑
         </button>
         <button type="button" class="btn-file-view" style="padding: 10px 18px; font-size: 14px; background: rgba(0,242,254,0.15); border-color: var(--primary);" onclick="openFileInExplorer('${encodeURIComponent(fullPath)}')">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i> 在檔案總管中開啟
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> 在檔案中開啟
         </button>
-        <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 10px 18px; font-size: 14px;">
-          <i class="fa-solid fa-download"></i> 串流下載此檔案
-        </a>
-        <a href="https://ncaio.fengyu.com.tw/f/8988" target="_blank" rel="noopener noreferrer" class="btn-table-action" style="padding: 10px 18px; font-size: 14px; background: rgba(0,242,254,0.12); border-color: var(--primary); color: #a5f3fc;">
-          <i class="fa-solid fa-cloud"></i> 豊譽雲端專區 (/f/8988)
-        </a>
-        <a href="https://app.notion.com/p/3aa1a56b88108148bf83e40fc03dad3b?v=3aa1a56b88108190916e000c1bb69a93" target="_blank" rel="noopener noreferrer" class="btn-table-action" style="padding: 10px 18px; font-size: 14px; background: rgba(245,158,11,0.12); border-color: #f59e0b; color: #fde68a;">
-          <i class="fa-solid fa-note-sticky"></i> Notion 知識庫開啟
-        </a>
       </div>
+
+      ${isPdf ? `
+        <div style="margin-top: 14px; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; overflow: hidden; height: 520px; background: #0b1120;">
+          <iframe src="/api/view-file?path=${encodeURIComponent(fullPath)}" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+      ` : ''}
+
+      ${isImg ? `
+        <div style="margin-top: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 12px; background: #0b1120;">
+          <img src="/api/view-file?path=${encodeURIComponent(fullPath)}" style="max-width: 100%; max-height: 500px; border-radius: 6px;">
+        </div>
+      ` : ''}
     `;
 
     fileViewerModal.classList.remove("hidden");
@@ -4298,7 +4297,7 @@ window.openMeetingFileModal = function(encodedFile) {
 window.copyNasPath = function(encodedPath) {
   const path = decodeURIComponent(encodedPath);
   navigator.clipboard.writeText(path).then(() => {
-    alert(`📋 已成功複製 NAS 實體路徑至剪貼簿：\n\n${path}\n\n您可直接貼入檔案總管或執行開啟。`);
+    alert(`📋 已成功複製 NAS 實體路徑至剪貼簿：\n\n${path}\n\n您可直接貼入 Windows 檔案總管網址列或「執行」(Win+R) 開啟。`);
   }).catch(() => {
     prompt("請按 Ctrl+C 複製以下 NAS 路徑：", path);
   });
@@ -4306,18 +4305,29 @@ window.copyNasPath = function(encodedPath) {
 
 window.openFileInExplorer = function(encodedPath) {
   const path = decodeURIComponent(encodedPath);
+
+  // 若使用者在 GitHub Pages 公網環境，無法直接調用本機 Windows Office 軟體
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    if (confirm("💡 提示：您目前正在使用 GitHub Pages 雲端版，因瀏覽器公網安全防護限制，無法直接喚起您本機的 Office 軟體開啟內網 NAS 檔案。\n\n是否立即切換至本機伺服器 (http://localhost:8090) 享受一鍵直接在 Word/PowerPoint 檢視檔案？\n\n(點擊『確定』切換至本機伺服器；點擊『取消』則為您複製 NAS 實體路徑)")) {
+      window.location.href = "http://localhost:8090";
+    } else {
+      copyNasPath(encodedPath);
+    }
+    return;
+  }
+
   fetch("/api/open-file", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ path: path })
   }).then(res => res.json()).then(data => {
     if (data.status === "success") {
-      alert("✅ 已送出開啟指令，請留意 Windows 工作列已彈出之應用程式。");
+      showToastNotification("✅ 已成功在 Windows 應用程式 (Word/PowerPoint/Excel) 中開啟檔案！");
     } else {
-      alert("⚠️ 本機伺服器開啟檔案回報：" + data.message);
+      alert("⚠️ 開啟檔案回報：" + data.message);
     }
   }).catch(err => {
-    alert("⚠️ 連線本機伺服器失敗，請確認於 http://localhost:8090 存取");
+    alert("⚠️ 連線本機伺服器失敗，請確認已於本機啟動伺服器並透過 http://localhost:8090 存取");
   });
 };
 
