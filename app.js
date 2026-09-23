@@ -895,6 +895,46 @@ function initNavigations() {
 // ==============================================================================
 // 4. 載入並渲染 NAS 彙整數據
 // ==============================================================================
+function applyLocalTodoOverrides(data) {
+  if (!data || !data.todoItems) return;
+  try {
+    const raw = localStorage.getItem("local_modified_todos");
+    if (!raw) return;
+    const localTodos = JSON.parse(raw);
+    if (!localTodos || typeof localTodos !== "object") return;
+
+    const modifiedList = Object.values(localTodos);
+    if (modifiedList.length === 0) return;
+
+    modifiedList.forEach(mod => {
+      if (!mod) return;
+      let matched = false;
+      if (mod.rowIdx && Number(mod.rowIdx) > 1) {
+        for (let i = 0; i < data.todoItems.length; i++) {
+          if (Number(data.todoItems[i].rowIdx) === Number(mod.rowIdx)) {
+            Object.assign(data.todoItems[i], mod);
+            matched = true;
+            break;
+          }
+        }
+      }
+      if (!matched && mod.site && mod.desc) {
+        const normModSite = normalizeSiteName(mod.site);
+        for (let i = 0; i < data.todoItems.length; i++) {
+          const item = data.todoItems[i];
+          if (normalizeSiteName(item.site) === normModSite && (item.desc === mod.desc || (item.itemNo && mod.itemNo && item.itemNo === mod.itemNo))) {
+            Object.assign(item, mod);
+            matched = true;
+            break;
+          }
+        }
+      }
+    });
+  } catch(e) {
+    console.error("Failed to apply local todo overrides:", e);
+  }
+}
+
 async function loadDashboardData() {
   try {
     let res = null;
@@ -917,6 +957,9 @@ async function loadDashboardData() {
         p.controlSheetItems = getProjectControlItems(p);
       });
     }
+
+    // 【核心修復】載入時即刻以 localStorage 覆蓋待辦追蹤彙整表，確保重開/重新整理時修改不丟失
+    applyLocalTodoOverrides(appData);
 
     renderHeaderOverview(appData);
     renderGoogleCalendar(currentCalYear, currentCalMonth);
@@ -1165,125 +1208,12 @@ const GOOGLE_CALENDAR_SCHEDULES_2026 = {
 };
 
 function renderGoogleCalendar(year, month) {
-  const titleEl = document.getElementById("cal-current-month-label") || document.getElementById("cal-current-month-title");
-  const daysGrid = document.getElementById("gcal-days-grid");
-  const gcalLinkBtn = document.getElementById("btn-open-gcal");
-  if (!titleEl || !daysGrid) return;
-
-  titleEl.textContent = `${year} 年 ${month} 月 (週一至週五)`;
-
-  if (gcalLinkBtn) {
-    gcalLinkBtn.onclick = () => {
-      window.open(`https://calendar.google.com/calendar/u/0/r/month/${year}/${month}/1`, '_blank');
-    };
+  const gcalOpenLink = document.querySelector('.btn-gcal-open');
+  if (gcalOpenLink) {
+    const y = year || 2026;
+    const m = month || 9;
+    gcalOpenLink.href = "https://calendar.google.com/calendar/u/0/r/month/" + y + "/" + m + "/1";
   }
-
-  const monthMeetings = {};
-  const monthKey = `${year}-${month}`;
-  const actualList = GOOGLE_CALENDAR_SCHEDULES_2026[monthKey] || [];
-
-  actualList.forEach(item => {
-    if (!monthMeetings[item.day]) monthMeetings[item.day] = [];
-    monthMeetings[item.day].push({
-      title: item.cycle && item.cycle.includes("月會") ? item.cycle : `月會-${item.site}`,
-      site: item.site,
-      time: item.time,
-      dept: item.dept,
-      contact: item.contact,
-      cycle: item.cycle
-    });
-  });
-
-  const firstDay = new Date(year, month - 1, 1);
-  const firstDayOfWeek = firstDay.getDay();
-  const totalDays = new Date(year, month, 0).getDate();
-
-  let cellsHtml = "";
-  let renderedCount = 0;
-
-  // 上個月墊底工作日
-  let leadingPadDays = 0;
-  if (firstDayOfWeek >= 1 && firstDayOfWeek <= 5) {
-    leadingPadDays = firstDayOfWeek - 1;
-  }
-
-  for (let i = leadingPadDays; i >= 1; i--) {
-    const prevDate = new Date(year, month - 1, 1 - i);
-    const d = prevDate.getDate();
-    cellsHtml += `
-      <div class="gcal-day-cell other-month">
-        <div class="day-header"><span class="day-num">${d}</span></div>
-        <div class="day-events"></div>
-      </div>
-    `;
-    renderedCount++;
-  }
-
-  // 本月工作日 (六、日不顯示)
-  const today = new Date();
-  const isCurrentRealMonth = (today.getFullYear() === year && (today.getMonth() + 1) === month);
-
-  for (let d = 1; d <= totalDays; d++) {
-    const curDate = new Date(year, month - 1, d);
-    const dayOfWeek = curDate.getDay();
-    if (dayOfWeek === 0 || dayOfWeek === 6) {
-      continue;
-    }
-
-    const isToday = isCurrentRealMonth && (today.getDate() === d);
-    const dayEvents = monthMeetings[d] || [];
-
-    cellsHtml += `
-      <div class="gcal-day-cell ${isToday ? 'is-today' : ''}">
-        <div class="day-header">
-          <span class="day-num">${d}</span>
-          ${isToday ? '<small class="text-cyan font-bold">今天</small>' : ''}
-        </div>
-        <div class="day-events">
-          ${dayEvents.map(evt => {
-            const colors = getDeptChipClass(evt.dept);
-            const matchedProj = ((appData && appData.projects) ? appData.projects : []).find(p => normalizeSiteName(p.shortName) === normalizeSiteName(evt.site));
-            const projId = matchedProj ? matchedProj.id : "";
-            
-            const safeEvt = encodeURIComponent(JSON.stringify({
-              title: evt.title,
-              site: evt.site,
-              dept: evt.dept,
-              time: evt.time,
-              cycle: evt.cycle,
-              contact: evt.contact,
-              year: year,
-              month: month,
-              day: d,
-              dateStr: `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
-              projId: projId
-            }));
-
-            return `
-              <div class="gcal-event-chip ${colors.chip}" onclick="showMeetingQuickCard('${safeEvt}')" title="${evt.time} ${evt.title} (${evt.dept}) - 點擊查看">
-                <span class="chip-time">${evt.time}</span>
-                <span>${evt.title}</span>
-              </div>
-            `;
-          }).join("")}
-        </div>
-      </div>
-    `;
-    renderedCount++;
-  }
-
-  // 下個月墊底補齊為 5 的倍數
-  const trailingPadDays = (renderedCount % 5 === 0) ? 0 : (5 - (renderedCount % 5));
-  for (let i = 1; i <= trailingPadDays; i++) {
-    cellsHtml += `
-      <div class="gcal-day-cell other-month">
-        <div class="day-header"><span class="day-num">${i}</span></div>
-        <div class="day-events"></div>
-      </div>
-    `;
-  }
-
-  daysGrid.innerHTML = cellsHtml;
 }
 
 window.showMeetingQuickCard = function(encodedData) {
@@ -2915,6 +2845,7 @@ window.reloadSharedTodoFromNas = async function() {
       if (result.status === "success" && Array.isArray(result.todoItems)) {
         if (appData) {
           appData.todoItems = result.todoItems;
+          applyLocalTodoOverrides(appData);
           appData.totalTodos = result.totalTodos;
           if (result.siteStats) appData.siteStats = result.siteStats;
           if (result.deptStats) appData.deptStats = result.deptStats;
@@ -2931,6 +2862,7 @@ window.reloadSharedTodoFromNas = async function() {
         const freshData = await res.json();
         if (freshData && freshData.todoItems) {
           appData = freshData;
+          applyLocalTodoOverrides(appData);
           loaded = true;
         }
       }
@@ -4247,6 +4179,18 @@ function initViewerModal() {
   }
 }
 
+window.togglePdfFullscreen = function() {
+  const iframe = document.getElementById("pdf-preview-iframe");
+  if (!iframe) return;
+  if (iframe.requestFullscreen) {
+    iframe.requestFullscreen();
+  } else if (iframe.webkitRequestFullscreen) {
+    iframe.webkitRequestFullscreen();
+  } else if (iframe.msRequestFullscreen) {
+    iframe.msRequestFullscreen();
+  }
+};
+
 window.openMeetingFileModal = function(encodedFile) {
   try {
     const f = JSON.parse(decodeURIComponent(encodedFile));
@@ -4256,8 +4200,12 @@ window.openMeetingFileModal = function(encodedFile) {
 
     titleEl.innerHTML = `<i class="fa-solid ${getFileIcon(f.ext)}"></i> ${f.name}`;
     const fullPath = f.fullPath || "";
-    const isPdf = (f.ext || "").toLowerCase() === ".pdf";
-    const isImg = [".png", ".jpg", ".jpeg", ".gif", ".webp"].includes((f.ext || "").toLowerCase());
+    const ext = (f.ext || "").toLowerCase();
+    const isPdf = ext === ".pdf";
+    const isPpt = ext === ".pptx" || ext === ".ppt";
+    const isWord = ext === ".docx" || ext === ".doc";
+    const isExcel = ext === ".xlsx" || ext === ".xls" || ext === ".csv";
+    const isImg = [".png", ".jpg", ".jpeg", ".gif", ".webp"].includes(ext);
 
     bodyEl.innerHTML = `
       <div class="viewer-meta-box">
@@ -4276,14 +4224,101 @@ window.openMeetingFileModal = function(encodedFile) {
       </div>
 
       ${isPdf ? `
-        <div style="margin-top: 14px; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; overflow: hidden; height: 520px; background: #0b1120;">
-          <iframe src="/api/view-file?path=${encodeURIComponent(fullPath)}" style="width: 100%; height: 100%; border: none;"></iframe>
+        <div style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px 8px 0 0; border-bottom: none;">
+          <span style="font-size: 13px; color: #38bdf8; font-weight: 600;"><i class="fa-solid fa-file-pdf"></i> PDF 線上預覽</span>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn-file-view" style="padding: 4px 12px; font-size: 12px; background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; color: #38bdf8; cursor: pointer;" onclick="togglePdfFullscreen()" title="將 PDF 展開為全螢幕簡報播放">
+              <i class="fa-solid fa-expand"></i> 🖥️ 全螢幕簡報模式
+            </button>
+            <a href="/api/view-file?path=${encodeURIComponent(fullPath)}" target="_blank" rel="noopener noreferrer" class="btn-file-view" style="padding: 4px 12px; font-size: 12px; text-decoration: none; color: #fff; display: inline-flex; align-items: center; gap: 4px;" title="在新分頁中直接檢視或簡報">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> 在新分頁獨立開啟 (可直接簡報)
+            </a>
+          </div>
+        </div>
+        <div style="border: 1px solid rgba(255,255,255,0.15); border-radius: 0 0 8px 8px; overflow: hidden; height: 560px; background: #0b1120;">
+          <iframe id="pdf-preview-iframe" src="/api/view-file?path=${encodeURIComponent(fullPath)}" style="width: 100%; height: 100%; border: none;" allow="fullscreen" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+        </div>
+      ` : ''}
+
+      ${isPpt ? `
+        <div style="margin-top: 18px; border: 1px dashed rgba(244, 63, 94, 0.45); border-radius: 12px; padding: 26px 20px; background: rgba(244, 63, 94, 0.05); text-align: center;">
+          <div style="font-size: 42px; color: #f43f5e; margin-bottom: 12px;"><i class="fa-solid fa-file-powerpoint"></i></div>
+          <h4 style="font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px;">PowerPoint 簡報檔案 (.pptx)</h4>
+          <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; max-width: 580px; margin: 0 auto 18px auto;">
+            💡 <b>為何瀏覽器未直接顯示投影片？</b><br>
+            瀏覽器原生僅支援 PDF 與圖片預覽；PowerPoint 簡報包含專有動畫與母片排版，網頁無法直接解碼。<br>
+            請點擊下方按鈕，系統將<b>直接呼叫電腦原生 Microsoft PowerPoint</b> 啟動全螢幕投影片放映，亦可下載至本機。
+          </p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14.5px; font-weight: 700; background: linear-gradient(135deg, #f43f5e, #e11d48); color: #fff; border: none; border-radius: 8px; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 8px;" onclick="openFileInExplorer('${encodeURIComponent(fullPath)}')">
+              <i class="fa-solid fa-play"></i> 立即在 PowerPoint 中開啟簡報
+            </button>
+            <a href="/api/download?path=${encodeURIComponent(fullPath)}" class="btn-file-view" style="padding: 10px 18px; font-size: 13.5px; text-decoration: none; color: #e2e8f0; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-download"></i> 下載此簡報檔 (.pptx)
+            </a>
+          </div>
+        </div>
+      ` : ''}
+
+      ${isWord ? `
+        <div style="margin-top: 18px; border: 1px dashed rgba(59, 130, 246, 0.45); border-radius: 12px; padding: 26px 20px; background: rgba(59, 130, 246, 0.05); text-align: center;">
+          <div style="font-size: 42px; color: #3b82f6; margin-bottom: 12px;"><i class="fa-solid fa-file-word"></i></div>
+          <h4 style="font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px;">Word 紀錄文件 (.docx)</h4>
+          <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; max-width: 580px; margin: 0 auto 18px auto;">
+            💡 <b>為何瀏覽器未直接顯示？</b><br>
+            Word 檔為專用排版文件，瀏覽器無法直接內嵌預覽。請點擊下方按鈕直接喚起本機 <b>Microsoft Word</b> 檢視與編輯，亦可下載檔案。
+          </p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14.5px; font-weight: 700; background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff; border: none; border-radius: 8px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 8px;" onclick="openFileInExplorer('${encodeURIComponent(fullPath)}')">
+              <i class="fa-solid fa-file-word"></i> 立即在 Word 中開啟文件
+            </button>
+            <a href="/api/download?path=${encodeURIComponent(fullPath)}" class="btn-file-view" style="padding: 10px 18px; font-size: 13.5px; text-decoration: none; color: #e2e8f0; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-download"></i> 下載此文件 (.docx)
+            </a>
+          </div>
+        </div>
+      ` : ''}
+
+      ${isExcel ? `
+        <div style="margin-top: 18px; border: 1px dashed rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 26px 20px; background: rgba(16, 185, 129, 0.05); text-align: center;">
+          <div style="font-size: 42px; color: #10b981; margin-bottom: 12px;"><i class="fa-solid fa-file-excel"></i></div>
+          <h4 style="font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px;">Excel 試算表 (.xlsx)</h4>
+          <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; max-width: 580px; margin: 0 auto 18px auto;">
+            💡 <b>為何瀏覽器未直接顯示？</b><br>
+            試算表包含多工作表與公式計算。請點擊下方按鈕直接喚起本機 <b>Microsoft Excel</b> 進行數據操作與查閱，亦可下載檔案。
+          </p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14.5px; font-weight: 700; background: linear-gradient(135deg, #059669, #10b981); color: #fff; border: none; border-radius: 8px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 8px;" onclick="openFileInExplorer('${encodeURIComponent(fullPath)}')">
+              <i class="fa-solid fa-file-excel"></i> 立即在 Excel 中開啟試算表
+            </button>
+            <a href="/api/download?path=${encodeURIComponent(fullPath)}" class="btn-file-view" style="padding: 10px 18px; font-size: 13.5px; text-decoration: none; color: #e2e8f0; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-download"></i> 下載此試算表 (.xlsx)
+            </a>
+          </div>
         </div>
       ` : ''}
 
       ${isImg ? `
         <div style="margin-top: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 12px; background: #0b1120;">
           <img src="/api/view-file?path=${encodeURIComponent(fullPath)}" style="max-width: 100%; max-height: 500px; border-radius: 6px;">
+        </div>
+      ` : ''}
+
+      ${(!isPdf && !isPpt && !isWord && !isExcel && !isImg) ? `
+        <div style="margin-top: 18px; border: 1px dashed rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 26px 20px; background: rgba(255, 255, 255, 0.03); text-align: center;">
+          <div style="font-size: 42px; color: #94a3b8; margin-bottom: 12px;"><i class="fa-solid fa-file-lines"></i></div>
+          <h4 style="font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px;">${f.name}</h4>
+          <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; max-width: 580px; margin: 0 auto 18px auto;">
+            此檔案類型（${f.ext || '未知'}）需使用對應之專用軟體開啟。
+          </p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14.5px; font-weight: 700; background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; color: #38bdf8; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;" onclick="openFileInExplorer('${encodeURIComponent(fullPath)}')">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> 在關聯應用程式中開啟
+            </button>
+            <a href="/api/download?path=${encodeURIComponent(fullPath)}" class="btn-file-view" style="padding: 10px 18px; font-size: 13.5px; text-decoration: none; color: #e2e8f0; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-download"></i> 下載此檔案
+            </a>
+          </div>
         </div>
       ` : ''}
     `;
