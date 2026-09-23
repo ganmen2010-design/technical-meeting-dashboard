@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-09-18 15:02:55",
+  "updatedAt": "2026-09-23 09:36:20",
   "totalProjects": 9,
   "totalTodos": 353,
-  "activeTodosCount": 315,
+  "activeTodosCount": 312,
   "totalIssues": 169,
   "siteStats": {
     "坤門安居": {
@@ -47,13 +47,13 @@
     },
     "CDC防疫中心": {
       "dept": "北區工程處",
-      "total": 38,
-      "completed": 28,
-      "uploaded": 26,
-      "pending": 10,
-      "postponed": 8,
-      "completionRate": 73.7,
-      "light": "orange"
+      "total": 35,
+      "completed": 33,
+      "uploaded": 30,
+      "pending": 2,
+      "postponed": 11,
+      "completionRate": 94.3,
+      "light": "green"
     },
     "新光合纖南港": {
       "dept": "北區工程處",
@@ -140,11 +140,11 @@
     "北區工程處": {
       "dept": "北區工程處",
       "sitesCount": 3,
-      "total": 76,
-      "completed": 49,
-      "uploaded": 41,
-      "pending": 27,
-      "completionRate": 64.5,
+      "total": 73,
+      "completed": 54,
+      "uploaded": 45,
+      "pending": 19,
+      "completionRate": 74.0,
       "light": "orange"
     }
   },
@@ -2065,8 +2065,8 @@
       "desc": "RC洗車台之配合修正：完成「拓寬2米斜口」施作、配管改為「3寸主管入水口、分叉處改1寸」之重製，並調整深井馬達功率；同步將洗車台、深水井（計畫書登記為解壓井）及沉澱池之實作圖說與整理缺點，完整留存建檔。",
       "proposer": "工務所",
       "dueDate": "2026-09-05",
-      "actualDate": "",
-      "status": "進行中",
+      "actualDate": "2026-09-22",
+      "status": "已完成",
       "result": "2026/06/18完成南側噴水頭，北側等滯洪池壓樑及假設鋪面完成施作。(收集洗車台配置案例與圖說，吸取水壓效果不佳的修正經驗，檢討現場洗車台寬度與整體後退讓出轉彎直線段)。上次提出8/15完成現在延至09/05完成鋪面"
     },
     {
@@ -2593,8 +2593,8 @@
       "desc": "與正龍召開會前小會溝通，並正式邀請正龍參加下次7月技術會議，針對地下一層之筏基配管、結構衝突檢討、路徑檢討、接地系統、預留牆體等進行說明。",
       "proposer": "工務所/正龍",
       "dueDate": "2026-09-23",
-      "actualDate": "",
-      "status": "進行中",
+      "actualDate": "2026-09-22",
+      "status": "已完成",
       "result": "待正龍回應處理(議題管控表)"
     },
     {
@@ -3096,9 +3096,9 @@
       "meetDate": "2026-07-15",
       "desc": "配合最新內控進度，將已完工及施作中項目填入實際時間，並於下個月提供最新版進度表 。同時針對地下結構體階段，細分拆解模板、鋼筋工班的分區工序能量與出工率管控規劃 。",
       "proposer": "工務所（魏志全 工地主任）",
-      "dueDate": "2026-10-01",
+      "dueDate": "2026-12-01",
       "actualDate": "",
-      "status": "進行中",
+      "status": "後續辦理",
       "result": "鋼筋模板工率管控規劃延至10月提出"
     },
     {
@@ -3108,7 +3108,7 @@
       "meetDate": "2026-07-15",
       "desc": "針對「太陽能獨立接地系統」之變更RFI回覆內容，將最新修正之接地施工圖說與施工計劃彙整完畢 ，並因應監造一次性審查要求，於115年9月15日前完成正式文投送審 。現階段之套繪成品應先提供予營造單位備查",
       "proposer": "正龍工務所（楊峻青 經理）",
-      "dueDate": "2026-09-23",
+      "dueDate": "2026-10-20",
       "actualDate": "",
       "status": "進行中",
       "result": "待正龍回應處理(議題管控表)"
@@ -3120,9 +3120,9 @@
       "meetDate": "2026-07-15",
       "desc": "因應接地工程及後續發電機機房、變電站等大件設備進場時程 ，機電需依現場實際進度，至少提前三個月完成材料商與工班之大宗備料及合約預定作業。請豐譽提供內控進度表與正龍，以掌控時程。",
       "proposer": "正龍工務所（楊峻青 經理）",
-      "dueDate": "2026-09-23",
+      "dueDate": "2026-12-15",
       "actualDate": "",
-      "status": "進行中",
+      "status": "後續辦理",
       "result": "待正龍回應處理(議題管控表)"
     },
     {
@@ -3132,9 +3132,9 @@
       "meetDate": "2026-07-15",
       "desc": "緩築需求與檢討結論：需彙整成正式的書面文件提供給工務所與監造單位，以便讓各方知悉整體設備配置、進場時程與土建介面的配合規劃 。",
       "proposer": "正龍工務所（楊峻青 經理）",
-      "dueDate": "2026-09-23",
+      "dueDate": "2026-12-15",
       "actualDate": "",
-      "status": "進行中",
+      "status": "後續辦理",
       "result": "待正龍回應處理(議題管控表)"
     },
     {
@@ -3145,8 +3145,8 @@
       "desc": "BIM未解列議題（B2F與B1F機電衝突）橫向協調整合：\n針對B2F廁所馬桶無UT箱 、車道排水管高程不足 、排氣百葉遮蔽 、排氣風管與停車位衝突 ，以及B1F行政棟廊道空間不足 、記者室天花板風管露明 等未解列議題，持續追蹤設計單位（建築師）於雙週RFI協調會中確認變更設計與修圖（如部分管路穿梁、縮小風管、利用防火時效取消部分消音百葉管路等具體改案） ，於下次會議（預定8月19日）追蹤產出具體變更圖說成果",
       "proposer": "工務所(BIM小組)",
       "dueDate": "2026-09-23",
-      "actualDate": "",
-      "status": "進行中",
+      "actualDate": "2026-09-22",
+      "status": "已完成",
       "result": "持續追蹤"
     },
     {
@@ -3157,8 +3157,8 @@
       "desc": "NAS資料夾超連結與核定版圖書建檔 ：重新檢視並修復技術會議資料專區內所有失效之文字超連結 ，將已核定之「基地抽排水施工計劃」 、過往歷史建物預壘樁套繪圖面及核定版圖書資料完整上傳至NAS系統存檔，以供各專案交叉參照 。",
       "proposer": "工務所（品管組）",
       "dueDate": "2026-09-23",
-      "actualDate": "",
-      "status": "進行中",
+      "actualDate": "2026-09-22",
+      "status": "已完成",
       "result": "請志全再整理"
     },
     {
@@ -4080,7 +4080,7 @@
       "meetDate": "2026-08-26",
       "desc": "BIM模型作業進度說明中，B3F建議增列機電設備基座及人孔尺寸/位置、緩築牆、車道+車位淨高(CSD套繪後)檢核項目",
       "proposer": "工務所",
-      "dueDate": "2026-09-23",
+      "dueDate": "2026-10-20",
       "actualDate": "",
       "status": "進行中",
       "result": ""
@@ -4092,9 +4092,9 @@
       "meetDate": "2026-08-26",
       "desc": "將BIM會議檢討議題與相關圖說進度時程，補建立於議題管控表上",
       "proposer": "工務所",
-      "dueDate": "2026-09-23",
-      "actualDate": "",
-      "status": "進行中",
+      "dueDate": "2026-09-22",
+      "actualDate": "2026-09-22",
+      "status": "已完成",
       "result": ""
     },
     {
@@ -33346,13 +33346,13 @@
       ],
       "stats": {
         "dept": "北區工程處",
-        "total": 38,
-        "completed": 28,
-        "uploaded": 26,
-        "pending": 10,
-        "postponed": 8,
-        "completionRate": 73.7,
-        "light": "orange"
+        "total": 35,
+        "completed": 33,
+        "uploaded": 30,
+        "pending": 2,
+        "postponed": 11,
+        "completionRate": 94.3,
+        "light": "green"
       },
       "controlSheetItems": [
         {
@@ -33419,7 +33419,7 @@
           "rowIdx": 7,
           "stage": "A前置及開工階段",
           "category": "整體施工構想",
-          "title": "開工一個月工作計畫",
+          "title": "工序及進度表",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -33431,7 +33431,7 @@
           "rowIdx": 8,
           "stage": "A前置及開工階段",
           "category": "整體施工構想",
-          "title": "初期工項計畫",
+          "title": "採發進度表",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -33443,7 +33443,7 @@
           "rowIdx": 9,
           "stage": "A前置及開工階段",
           "category": "整體施工構想",
-          "title": "工序及進度表",
+          "title": "職安/風險管理",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -33455,7 +33455,7 @@
           "rowIdx": 10,
           "stage": "A前置及開工階段",
           "category": "整體施工構想",
-          "title": "採發進度表",
+          "title": "專案願景",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -33467,54 +33467,6 @@
           "rowIdx": 11,
           "stage": "A前置及開工階段",
           "category": "整體施工構想",
-          "title": "預算管理",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
-          "rowIdx": 12,
-          "stage": "A前置及開工階段",
-          "category": "整體施工構想",
-          "title": "職安/風險管理",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
-          "rowIdx": 13,
-          "stage": "A前置及開工階段",
-          "category": "整體施工構想",
-          "title": "規劃技術會議列表",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
-          "rowIdx": 14,
-          "stage": "A前置及開工階段",
-          "category": "整體施工構想",
-          "title": "專案願景",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
-          "rowIdx": 15,
-          "stage": "A前置及開工階段",
-          "category": "整體施工構想",
           "title": "臨時水電計畫",
           "assignee": "",
           "dueDate": "",
@@ -33524,7 +33476,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 16,
+          "rowIdx": 12,
           "stage": "A前置及開工階段",
           "category": "圖說資料彙集",
           "title": "都審圖",
@@ -33536,7 +33488,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 17,
+          "rowIdx": 13,
           "stage": "A前置及開工階段",
           "category": "圖說資料彙集",
           "title": "建造圖與發包圖在結構部分是否有差異",
@@ -33548,7 +33500,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 18,
+          "rowIdx": 14,
           "stage": "A前置及開工階段",
           "category": "圖說資料彙集",
           "title": "水保圖",
@@ -33560,7 +33512,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 19,
+          "rowIdx": 15,
           "stage": "A前置及開工階段",
           "category": "圖說資料彙集",
           "title": "五大管線審圖",
@@ -33572,7 +33524,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 20,
+          "rowIdx": 16,
           "stage": "A前置及開工階段",
           "category": "圖說資料彙集",
           "title": "合約圖",
@@ -33584,19 +33536,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 21,
-          "stage": "A前置及開工階段",
-          "category": "圖說資料彙集",
-          "title": "家配圖",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
-          "rowIdx": 22,
+          "rowIdx": 17,
           "stage": "A前置及開工階段",
           "category": "圖說資料彙集",
           "title": "公裝圖",
@@ -33608,19 +33548,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 23,
-          "stage": "A前置及開工階段",
-          "category": "圖說資料彙集",
-          "title": "銷售圖",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
-          "rowIdx": 24,
+          "rowIdx": 18,
           "stage": "A前置及開工階段",
           "category": "圖說資料彙集",
           "title": "墨線圖",
@@ -33632,7 +33560,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 25,
+          "rowIdx": 19,
           "stage": "A前置及開工階段",
           "category": "測量放樣計畫",
           "title": "地政鑑界",
@@ -33644,7 +33572,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 26,
+          "rowIdx": 20,
           "stage": "A前置及開工階段",
           "category": "測量放樣計畫",
           "title": "控制點佈設",
@@ -33656,7 +33584,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 27,
+          "rowIdx": 21,
           "stage": "A前置及開工階段",
           "category": "測量放樣計畫",
           "title": "現地收測",
@@ -33668,7 +33596,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 28,
+          "rowIdx": 22,
           "stage": "A前置及開工階段",
           "category": "測量放樣計畫",
           "title": "建築放樣作法",
@@ -33680,7 +33608,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 29,
+          "rowIdx": 23,
           "stage": "A前置及開工階段",
           "category": "現地收測",
           "title": "地界",
@@ -33692,7 +33620,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 30,
+          "rowIdx": 24,
           "stage": "A前置及開工階段",
           "category": "現地收測",
           "title": "鄰房",
@@ -33704,7 +33632,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 31,
+          "rowIdx": 25,
           "stage": "A前置及開工階段",
           "category": "現地收測",
           "title": "高程",
@@ -33716,7 +33644,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 32,
+          "rowIdx": 26,
           "stage": "A前置及開工階段",
           "category": "現地收測",
           "title": "道路",
@@ -33728,7 +33656,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 33,
+          "rowIdx": 27,
           "stage": "A前置及開工階段",
           "category": "現地收測",
           "title": "人行道",
@@ -33740,7 +33668,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 34,
+          "rowIdx": 28,
           "stage": "A前置及開工階段",
           "category": "現地收測",
           "title": "水溝面及底",
@@ -33752,7 +33680,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 35,
+          "rowIdx": 29,
           "stage": "A前置及開工階段",
           "category": "建築基地檢討",
           "title": "地界檢討",
@@ -33764,7 +33692,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 36,
+          "rowIdx": 30,
           "stage": "A前置及開工階段",
           "category": "建築基地檢討",
           "title": "鄰接周邊檢討",
@@ -33776,7 +33704,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 37,
+          "rowIdx": 31,
           "stage": "A前置及開工階段",
           "category": "版次一致性",
           "title": "各系統圖說底圖版次",
@@ -33788,7 +33716,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 38,
+          "rowIdx": 32,
           "stage": "A前置及開工階段",
           "category": "版次一致性",
           "title": "柱LINE線一致性",
@@ -33800,7 +33728,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 39,
+          "rowIdx": 33,
           "stage": "A前置及開工階段",
           "category": "土建施工圖",
           "title": "放樣圖",
@@ -33812,7 +33740,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 40,
+          "rowIdx": 34,
           "stage": "A前置及開工階段",
           "category": "PMIS建置",
           "title": "進度系統-回報系統",
@@ -33824,7 +33752,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 41,
+          "rowIdx": 35,
           "stage": "A前置及開工階段",
           "category": "PMIS建置",
           "title": "建置品管系統",
@@ -33836,7 +33764,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 42,
+          "rowIdx": 36,
           "stage": "A前置及開工階段",
           "category": "PMIS建置",
           "title": "安衛系統",
@@ -33848,7 +33776,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 43,
+          "rowIdx": 37,
           "stage": "A前置及開工階段",
           "category": "PMIS建置",
           "title": "工務行政-公文管制",
@@ -33860,7 +33788,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 44,
+          "rowIdx": 38,
           "stage": "A前置及開工階段",
           "category": "PMIS建置",
           "title": "管理報表",
@@ -33872,7 +33800,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 45,
+          "rowIdx": 39,
           "stage": "B地工階段",
           "category": "鋼筋衝突檢討及綁紮要領",
           "title": "樑柱接頭鋼筋檢討",
@@ -33884,7 +33812,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 46,
+          "rowIdx": 40,
           "stage": "B地工階段",
           "category": "鋼筋衝突檢討及綁紮要領",
           "title": "機電穿樑補強",
@@ -33896,7 +33824,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 47,
+          "rowIdx": 41,
           "stage": "B地工階段",
           "category": "鋼筋衝突檢討及綁紮要領",
           "title": "角隅鋼筋補強",
@@ -33908,7 +33836,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 48,
+          "rowIdx": 42,
           "stage": "B地工階段",
           "category": "鋼筋衝突檢討及綁紮要領",
           "title": "高低板配筋",
@@ -33920,7 +33848,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 49,
+          "rowIdx": 43,
           "stage": "B地工階段",
           "category": "鋼筋衝突檢討及綁紮要領",
           "title": "擴梁及擴柱配筋",
@@ -33932,7 +33860,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 50,
+          "rowIdx": 44,
           "stage": "B地工階段",
           "category": "鋼筋衝突檢討及綁紮要領",
           "title": "帷幕/鋼構預埋件燒銲",
@@ -33944,7 +33872,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 51,
+          "rowIdx": 45,
           "stage": "B地工階段",
           "category": "擋土支撐檢討",
           "title": "施工構台施作順序、支撐施作順序及重點",
@@ -33956,7 +33884,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260520 CDC技術會議\\擋土支撐施工簡報(國廣)"
         },
         {
-          "rowIdx": 52,
+          "rowIdx": 46,
           "stage": "B地工階段",
           "category": "擋土支撐檢討",
           "title": "施工構台施作順序、支撐施作順序及重點",
@@ -33968,7 +33896,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260520 CDC技術會議\\擋土支撐施工簡報(國廣)"
         },
         {
-          "rowIdx": 53,
+          "rowIdx": 47,
           "stage": "B地工階段",
           "category": "擋土支撐檢討",
           "title": "施工構台施作順序、支撐施作順序及重點",
@@ -33980,7 +33908,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260520 CDC技術會議\\擋土支撐施工簡報(國廣)"
         },
         {
-          "rowIdx": 54,
+          "rowIdx": 48,
           "stage": "B地工階段",
           "category": "擋土支撐檢討",
           "title": "千斤頂、土壓計、安全監測位置",
@@ -33992,7 +33920,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260520 CDC技術會議\\擋土支撐施工簡報(國廣)"
         },
         {
-          "rowIdx": 55,
+          "rowIdx": 49,
           "stage": "B地工階段",
           "category": "擋土支撐檢討",
           "title": "構台上方欄杆高度及輪擋檢討",
@@ -34004,7 +33932,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260520 CDC技術會議\\擋土支撐施工簡報(國廣)"
         },
         {
-          "rowIdx": 56,
+          "rowIdx": 50,
           "stage": "B地工階段",
           "category": "擋土支撐檢討",
           "title": "中間樁工法討論",
@@ -34016,7 +33944,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260520 CDC技術會議\\擋土支撐施工簡報(國廣)"
         },
         {
-          "rowIdx": 57,
+          "rowIdx": 51,
           "stage": "B地工階段",
           "category": "擋土支撐檢討",
           "title": "建築、結構、中間樁套圖",
@@ -34028,7 +33956,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 58,
+          "rowIdx": 52,
           "stage": "B地工階段",
           "category": "擋土支撐檢討",
           "title": "斜撐長度及衝突檢討",
@@ -34040,7 +33968,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 59,
+          "rowIdx": 53,
           "stage": "B地工階段",
           "category": "建築基地檢討",
           "title": "GL層高程檢討\n1.建築圖套匯基地周邊收測高程。2.檢討建築和周邊之間的洩水坡度及無障礙空間 3.設定建物1FL高程及GL",
@@ -34052,7 +33980,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260211CDC技術會議"
         },
         {
-          "rowIdx": 60,
+          "rowIdx": 54,
           "stage": "B地工階段",
           "category": "建築基地檢討",
           "title": "水保圖套繪",
@@ -34064,7 +33992,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 61,
+          "rowIdx": 55,
           "stage": "B地工階段",
           "category": "建築基地檢討",
           "title": "景觀圖套繪",
@@ -34076,7 +34004,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\1.圖說契約進度表(如有新版請更新)\\1. 圖說-CDC防疫中心\\1140116釋疑圖說"
         },
         {
-          "rowIdx": 62,
+          "rowIdx": 56,
           "stage": "B地工階段",
           "category": "建築基地檢討",
           "title": "基地裝修高程檢討",
@@ -34088,7 +34016,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\2.技術會議運作指引(供查看及下載)\\99 BIM參考資料\\規劃議題"
         },
         {
-          "rowIdx": 63,
+          "rowIdx": 57,
           "stage": "B地工階段",
           "category": "建築基地檢討",
           "title": "基地洩水檢討",
@@ -34100,7 +34028,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 64,
+          "rowIdx": 58,
           "stage": "B地工階段",
           "category": "建築基地檢討",
           "title": "基地排水檢討",
@@ -34112,7 +34040,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 65,
+          "rowIdx": 59,
           "stage": "B地工階段",
           "category": "地工各分項計畫",
           "title": "排樁工程-排樁施工順序、排樁高程、帽梁土方支撐間介面討論",
@@ -34124,7 +34052,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260520 CDC技術會議"
         },
         {
-          "rowIdx": 66,
+          "rowIdx": 60,
           "stage": "B地工階段",
           "category": "地工各分項計畫",
           "title": "土方開挖及祛水-開挖施作順序、開挖面祛水、雨季颱風季應對措施",
@@ -34136,31 +34064,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260415 CDC技術會議"
         },
         {
-          "rowIdx": 67,
-          "stage": "B地工階段",
-          "category": "各系統初步套繪含機電",
-          "title": "建築結構套繪(筏基)",
-          "assignee": "正龍",
-          "dueDate": "115/09/15",
-          "actualDate": "",
-          "status": "檢討中",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
-          "rowIdx": 68,
-          "stage": "B地工階段",
-          "category": "各系統初步套繪含機電",
-          "title": "機電各系統套繪(筏基)",
-          "assignee": "正龍",
-          "dueDate": "115/09/15",
-          "actualDate": "",
-          "status": "進行中",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
-          "rowIdx": 69,
+          "rowIdx": 61,
           "stage": "B地工階段",
           "category": "各系統初步套繪含機電",
           "title": "建築結構水保套繪",
@@ -34172,7 +34076,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 70,
+          "rowIdx": 62,
           "stage": "B地工階段",
           "category": "各系統初步套繪含機電",
           "title": "建築結構套繪",
@@ -34184,19 +34088,19 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 71,
+          "rowIdx": 63,
           "stage": "B地工階段",
           "category": "各系統初步套繪含機電",
           "title": "結構、排樁、中間樁、水平支撐套繪",
           "assignee": "圖管組\n品管",
           "dueDate": "",
           "actualDate": "",
-          "status": "檢討中",
+          "status": "已完成",
           "progress": "擋土支撐計畫書初版4/17提送\n排樁施工計畫書修正一版核准",
           "deliverable": ""
         },
         {
-          "rowIdx": 72,
+          "rowIdx": 64,
           "stage": "B地工階段",
           "category": "各系統初步套繪含機電",
           "title": "建築結構套繪(行政棟 1-5樓)",
@@ -34208,7 +34112,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 73,
+          "rowIdx": 65,
           "stage": "B地工階段",
           "category": "外管線檢討",
           "title": "外管線套繪",
@@ -34220,7 +34124,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 74,
+          "rowIdx": 66,
           "stage": "B地工階段",
           "category": "外管線檢討",
           "title": "引進管介面",
@@ -34232,7 +34136,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 75,
+          "rowIdx": 67,
           "stage": "C開挖階段",
           "category": "各系統初步套繪含機電",
           "title": "建築結構機電套繪(實驗棟9-11樓)",
@@ -34244,7 +34148,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 76,
+          "rowIdx": 68,
           "stage": "C開挖階段",
           "category": "各系統初步套繪含機電",
           "title": "建築結構機電套繪(實驗棟1-3樓)",
@@ -34256,7 +34160,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 77,
+          "rowIdx": 69,
           "stage": "C開挖階段",
           "category": "各系統初步套繪含機電",
           "title": "建築裝修套匯(行政棟)B2F-6F",
@@ -34268,7 +34172,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 78,
+          "rowIdx": 70,
           "stage": "C開挖階段",
           "category": "各系統初步套繪含機電",
           "title": "建築結構機電套繪(實驗棟3-6樓)",
@@ -34280,7 +34184,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 79,
+          "rowIdx": 71,
           "stage": "C開挖階段",
           "category": "各系統初步套繪含機電",
           "title": "建築結構套繪(行政棟 6-11樓)",
@@ -34292,7 +34196,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 80,
+          "rowIdx": 72,
           "stage": "C開挖階段",
           "category": "各系統初步套繪含機電",
           "title": "建築裝修套匯(實驗棟)B3F-3F",
@@ -34304,7 +34208,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 81,
+          "rowIdx": 73,
           "stage": "C開挖階段",
           "category": "各系統初步套繪含機電",
           "title": "建築結構機電套繪(實驗棟6-9樓)",
@@ -34316,7 +34220,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 82,
+          "rowIdx": 74,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "穿樑圖(B3F)",
@@ -34328,7 +34232,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 83,
+          "rowIdx": 75,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "柱埋管圖(B3F)",
@@ -34340,7 +34244,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 84,
+          "rowIdx": 76,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "管道配置圖(B3F)",
@@ -34352,7 +34256,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 85,
+          "rowIdx": 77,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "排管圖(B3F)",
@@ -34364,7 +34268,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 86,
+          "rowIdx": 78,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "端點圖(B3F)",
@@ -34376,7 +34280,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 87,
+          "rowIdx": 79,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "箱體整合圖(B3F)",
@@ -34388,7 +34292,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 88,
+          "rowIdx": 80,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "設備配置圖(B3F)",
@@ -34400,7 +34304,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 89,
+          "rowIdx": 81,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "各分項施工圖(B3F)",
@@ -34412,7 +34316,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 90,
+          "rowIdx": 82,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "穿樑圖(B2F)",
@@ -34424,7 +34328,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 91,
+          "rowIdx": 83,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "柱埋管圖(B2F)",
@@ -34436,7 +34340,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 92,
+          "rowIdx": 84,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "管道配置圖(B2F)",
@@ -34448,7 +34352,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 93,
+          "rowIdx": 85,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "排管圖(B2F)",
@@ -34460,7 +34364,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 94,
+          "rowIdx": 86,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "端點圖(B2F)",
@@ -34472,7 +34376,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 95,
+          "rowIdx": 87,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "箱體整合圖(B2F)",
@@ -34484,7 +34388,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 96,
+          "rowIdx": 88,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "設備配置圖(B2F)",
@@ -34496,7 +34400,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 97,
+          "rowIdx": 89,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "各分項施工圖(B2F)",
@@ -34508,7 +34412,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 98,
+          "rowIdx": 90,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "穿樑圖(B1F)",
@@ -34520,7 +34424,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 99,
+          "rowIdx": 91,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "柱埋管圖(B1F)",
@@ -34532,7 +34436,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 100,
+          "rowIdx": 92,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "管道配置圖(B1F)",
@@ -34544,7 +34448,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 101,
+          "rowIdx": 93,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "排管圖(B1F)",
@@ -34556,7 +34460,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 102,
+          "rowIdx": 94,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "端點圖(B1F)",
@@ -34568,7 +34472,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 103,
+          "rowIdx": 95,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "箱體整合圖(B1F)",
@@ -34580,7 +34484,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 104,
+          "rowIdx": 96,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "設備配置圖(B1F)",
@@ -34592,7 +34496,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 105,
+          "rowIdx": 97,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "各分項施工圖(B1F)",
@@ -34604,7 +34508,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 106,
+          "rowIdx": 98,
           "stage": "D地下結構階段",
           "category": "機電施工圖",
           "title": "筏基配管圖 (系統接地總套圖)",
@@ -34616,7 +34520,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 107,
+          "rowIdx": 99,
           "stage": "D地下結構階段",
           "category": "機電各系統檢討",
           "title": "實驗室醫療氣體系統",
@@ -34628,7 +34532,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 108,
+          "rowIdx": 100,
           "stage": "D地下結構階段",
           "category": "機電各系統檢討",
           "title": "接地系統介面討論",
@@ -34640,7 +34544,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 109,
+          "rowIdx": 101,
           "stage": "D地下結構階段",
           "category": "機電各系統檢討",
           "title": "給排水系統",
@@ -34652,7 +34556,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 110,
+          "rowIdx": 102,
           "stage": "D地下結構階段",
           "category": "機電各系統檢討",
           "title": "汙水系統",
@@ -34664,7 +34568,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 111,
+          "rowIdx": 103,
           "stage": "D地下結構階段",
           "category": "機電各系統檢討",
           "title": "弱電系統",
@@ -34676,7 +34580,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 112,
+          "rowIdx": 104,
           "stage": "D地下結構階段",
           "category": "機電各系統檢討",
           "title": "消防系統",
@@ -34688,7 +34592,7 @@
           "deliverable": "../3.歷次會議資料(每月更新)/20260415%20CDC技術會議"
         },
         {
-          "rowIdx": 113,
+          "rowIdx": 105,
           "stage": "D地下結構階段",
           "category": "機電各系統檢討",
           "title": "空調系統",
@@ -34700,7 +34604,7 @@
           "deliverable": "../3.歷次會議資料(每月更新)/20260415%20CDC技術會議"
         },
         {
-          "rowIdx": 114,
+          "rowIdx": 106,
           "stage": "D地下結構階段",
           "category": "機電各系統檢討",
           "title": "智慧建築",
@@ -34712,7 +34616,7 @@
           "deliverable": "../3.歷次會議資料(每月更新)/20260415%20CDC技術會議"
         },
         {
-          "rowIdx": 115,
+          "rowIdx": 107,
           "stage": "D地下結構階段",
           "category": "機房空間檢討",
           "title": "受電室",
@@ -34724,7 +34628,7 @@
           "deliverable": "../3.歷次會議資料(每月更新)/20260415%20CDC技術會議"
         },
         {
-          "rowIdx": 116,
+          "rowIdx": 108,
           "stage": "D地下結構階段",
           "category": "機房空間檢討",
           "title": "發電機房 (發電機位置及進排氣檢討)",
@@ -34736,7 +34640,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 117,
+          "rowIdx": 109,
           "stage": "D地下結構階段",
           "category": "機房空間檢討",
           "title": "電信機房 (線架及ＭＤＦ線架位置檢討)",
@@ -34748,7 +34652,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 118,
+          "rowIdx": 110,
           "stage": "D地下結構階段",
           "category": "機房空間檢討",
           "title": "消防機房 (消防系統施工圖、消防機房泵浦)",
@@ -34760,7 +34664,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 119,
+          "rowIdx": 111,
           "stage": "D地下結構階段",
           "category": "機房空間檢討",
           "title": "空調機房 (圖)",
@@ -34772,7 +34676,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 120,
+          "rowIdx": 112,
           "stage": "D地下結構階段",
           "category": "機房空間檢討",
           "title": "自來水箱 (給水施工圖檢討)",
@@ -34784,7 +34688,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 121,
+          "rowIdx": 113,
           "stage": "D地下結構階段",
           "category": "機房空間檢討",
           "title": "汙水機房 (排水圖污水排放圖檢討)",
@@ -34796,7 +34700,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 122,
+          "rowIdx": 114,
           "stage": "D地下結構階段",
           "category": "機房空間檢討",
           "title": "雨水回收 (排水圖雨水排放圖檢討)",
@@ -34808,7 +34712,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 123,
+          "rowIdx": 115,
           "stage": "D地下結構階段",
           "category": "機房空間檢討",
           "title": "噴灌機房 (排水及給水圖雨水排放圖檢討)",
@@ -34820,7 +34724,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 124,
+          "rowIdx": 116,
           "stage": "D地下結構階段",
           "category": "機房空間檢討",
           "title": "大型設備動線及載重檢討",
@@ -34832,7 +34736,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 125,
+          "rowIdx": 117,
           "stage": "D地下結構階段",
           "category": "機房空間檢討",
           "title": "雨水回收 (排水圖雨水排放圖檢討)",
@@ -34844,7 +34748,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 126,
+          "rowIdx": 118,
           "stage": "D地下結構階段",
           "category": "機房空間檢討",
           "title": "噴灌機房 (排水及給水圖雨水排放圖檢討)",
@@ -34856,7 +34760,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 127,
+          "rowIdx": 119,
           "stage": "D地下結構階段",
           "category": "機房空間檢討",
           "title": "大型設備動線及載重檢討",
@@ -34868,7 +34772,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 128,
+          "rowIdx": 120,
           "stage": "D地下結構階段",
           "category": "機房空間檢討",
           "title": "汙水機房 (排水圖污水排放圖檢討)",
@@ -34880,7 +34784,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 129,
+          "rowIdx": 121,
           "stage": "D地下結構階段",
           "category": "整體施工構想",
           "title": "假設工程計畫(地下結構階段)",
@@ -34892,7 +34796,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 130,
+          "rowIdx": 122,
           "stage": "D地下結構階段",
           "category": "整體施工構想",
           "title": "假設工程-逆打地下室通風規劃",
@@ -34904,7 +34808,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 131,
+          "rowIdx": 123,
           "stage": "D地下結構階段",
           "category": "鋁模木模施工規劃",
           "title": "模板材質、工法確認",
@@ -34916,7 +34820,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 132,
+          "rowIdx": 124,
           "stage": "D地下結構階段",
           "category": "鋁模木模施工規劃",
           "title": "軀體圖說",
@@ -34928,7 +34832,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 133,
+          "rowIdx": 125,
           "stage": "D地下結構階段",
           "category": "鋁模木模施工規劃",
           "title": "配模計畫",
@@ -34940,7 +34844,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 134,
+          "rowIdx": 126,
           "stage": "D地下結構階段",
           "category": "鋁模木模施工規劃",
           "title": "拆模孔及人孔規劃",
@@ -34952,7 +34856,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 135,
+          "rowIdx": 127,
           "stage": "D地下結構階段",
           "category": "鋁模木模施工規劃",
           "title": "外牆分割計畫",
@@ -34964,7 +34868,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 136,
+          "rowIdx": 128,
           "stage": "D地下結構階段",
           "category": "鋁模木模施工規劃",
           "title": "置料區/傳料動線",
@@ -34976,7 +34880,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 137,
+          "rowIdx": 129,
           "stage": "D地下結構階段",
           "category": "鋁模木模施工規劃",
           "title": "鋼構/帷幕/格柵欄杆固定方式",
@@ -34988,7 +34892,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 138,
+          "rowIdx": 130,
           "stage": "D地下結構階段",
           "category": "鋁模木模施工規劃",
           "title": "模板清潔孔規劃",
@@ -35000,7 +34904,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 139,
+          "rowIdx": 131,
           "stage": "D地下結構階段",
           "category": "遮煙捲簾檢討",
           "title": "捲箱尺寸及檢修口留設",
@@ -35012,7 +34916,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 140,
+          "rowIdx": 132,
           "stage": "D地下結構階段",
           "category": "遮煙捲簾檢討",
           "title": "軌道位置",
@@ -35024,7 +34928,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 141,
+          "rowIdx": 133,
           "stage": "D地下結構階段",
           "category": "遮煙捲簾檢討",
           "title": "復規按鈕位置",
@@ -35036,7 +34940,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 142,
+          "rowIdx": 134,
           "stage": "D地下結構階段",
           "category": "遮煙捲簾檢討",
           "title": "消防連動確認",
@@ -35048,7 +34952,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 143,
+          "rowIdx": 135,
           "stage": "D地下結構階段",
           "category": "潛在漏水點檢討",
           "title": "結構施工縫",
@@ -35060,7 +34964,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 144,
+          "rowIdx": 136,
           "stage": "D地下結構階段",
           "category": "潛在漏水點檢討",
           "title": "建築與土接觸",
@@ -35072,7 +34976,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 145,
+          "rowIdx": 137,
           "stage": "D地下結構階段",
           "category": "潛在漏水點檢討",
           "title": "筏基回填區BS版、接地箱",
@@ -35084,7 +34988,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 146,
+          "rowIdx": 138,
           "stage": "D地下結構階段",
           "category": "潛在漏水點檢討",
           "title": "室內用水區域",
@@ -35096,7 +35000,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 147,
+          "rowIdx": 139,
           "stage": "D地下結構階段",
           "category": "樓梯檢討",
           "title": "淨高檢討",
@@ -35108,7 +35012,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 148,
+          "rowIdx": 140,
           "stage": "D地下結構階段",
           "category": "樓梯檢討",
           "title": "級深及級高",
@@ -35120,7 +35024,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 149,
+          "rowIdx": 141,
           "stage": "D地下結構階段",
           "category": "樓梯檢討",
           "title": "樓梯淨寬及迴轉半徑",
@@ -35132,7 +35036,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 150,
+          "rowIdx": 142,
           "stage": "D地下結構階段",
           "category": "樓梯檢討",
           "title": "裝修材質",
@@ -35144,7 +35048,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 151,
+          "rowIdx": 143,
           "stage": "D地下結構階段",
           "category": "樓梯檢討",
           "title": "扶手型式、尺寸及固定方式",
@@ -35156,7 +35060,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 152,
+          "rowIdx": 144,
           "stage": "D地下結構階段",
           "category": "樓梯檢討",
           "title": "無障礙法規(終端警示、扶手端部、扶手直徑)",
@@ -35168,7 +35072,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 153,
+          "rowIdx": 145,
           "stage": "D地下結構階段",
           "category": "端點及箱體檢討",
           "title": "開關插座整合檢討",
@@ -35180,7 +35084,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 154,
+          "rowIdx": 146,
           "stage": "D地下結構階段",
           "category": "端點及箱體檢討",
           "title": "箱體整合檢討",
@@ -35192,7 +35096,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 155,
+          "rowIdx": 147,
           "stage": "D地下結構階段",
           "category": "圖說資料彙集",
           "title": "空調圖",
@@ -35204,7 +35108,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 156,
+          "rowIdx": 148,
           "stage": "D地下結構階段",
           "category": "圖說資料彙集",
           "title": "建築照明",
@@ -35216,7 +35120,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 157,
+          "rowIdx": 149,
           "stage": "D地下結構階段",
           "category": "圖說資料彙集",
           "title": "空調圖",
@@ -35228,7 +35132,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 158,
+          "rowIdx": 150,
           "stage": "D地下結構階段",
           "category": "圖說資料彙集",
           "title": "建築照明",
@@ -35240,7 +35144,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 159,
+          "rowIdx": 151,
           "stage": "D地下結構階段",
           "category": "圖說資料彙集",
           "title": "客、貨電梯",
@@ -35252,7 +35156,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 160,
+          "rowIdx": 152,
           "stage": "D地下結構階段",
           "category": "圖說資料彙集",
           "title": "保全房控",
@@ -35264,7 +35168,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 161,
+          "rowIdx": 153,
           "stage": "D地下結構階段",
           "category": "圖說資料彙集",
           "title": "綠建築",
@@ -35276,7 +35180,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 162,
+          "rowIdx": 154,
           "stage": "D地下結構階段",
           "category": "圖說資料彙集",
           "title": "智慧建築",
@@ -35288,7 +35192,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 163,
+          "rowIdx": 155,
           "stage": "D地下結構階段",
           "category": "圖說資料彙集",
           "title": "耐震標章",
@@ -35300,7 +35204,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 164,
+          "rowIdx": 156,
           "stage": "D地下結構階段",
           "category": "電梯檢討",
           "title": "昇降道尺寸(PIT)",
@@ -35312,7 +35216,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 165,
+          "rowIdx": 157,
           "stage": "D地下結構階段",
           "category": "電梯檢討",
           "title": "機坑深度",
@@ -35324,7 +35228,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 166,
+          "rowIdx": 158,
           "stage": "D地下結構階段",
           "category": "電梯檢討",
           "title": "頂部安全距離(OH)",
@@ -35336,7 +35240,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 167,
+          "rowIdx": 159,
           "stage": "D地下結構階段",
           "category": "電梯檢討",
           "title": "開門方向",
@@ -35348,7 +35252,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 168,
+          "rowIdx": 160,
           "stage": "D地下結構階段",
           "category": "電梯檢討",
           "title": "框型檢討",
@@ -35360,7 +35264,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 169,
+          "rowIdx": 161,
           "stage": "D地下結構階段",
           "category": "電梯檢討",
           "title": "無障礙法規",
@@ -35372,7 +35276,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 170,
+          "rowIdx": 162,
           "stage": "D地下結構階段",
           "category": "電梯檢討",
           "title": "結構預埋燒銲",
@@ -35384,7 +35288,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 171,
+          "rowIdx": 163,
           "stage": "D地下結構階段",
           "category": "電梯檢討",
           "title": "用電需求確認",
@@ -35396,7 +35300,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 172,
+          "rowIdx": 164,
           "stage": "D地下結構階段",
           "category": "筏基連通管檢討",
           "title": "各功能池檢討",
@@ -35408,7 +35312,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 173,
+          "rowIdx": 165,
           "stage": "D地下結構階段",
           "category": "筏基連通管檢討",
           "title": "連通管位置數量高程檢討",
@@ -35420,7 +35324,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 174,
+          "rowIdx": 166,
           "stage": "D地下結構階段",
           "category": "捲門檢討",
           "title": "軌道安裝位置檢討",
@@ -35432,7 +35336,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 175,
+          "rowIdx": 167,
           "stage": "D地下結構階段",
           "category": "捲門檢討",
           "title": "捲箱尺寸及位置檢討",
@@ -35444,7 +35348,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 176,
+          "rowIdx": 168,
           "stage": "D地下結構階段",
           "category": "捲門檢討",
           "title": "天花維修孔留設檢討",
@@ -35456,7 +35360,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 177,
+          "rowIdx": 169,
           "stage": "D地下結構階段",
           "category": "捲門檢討",
           "title": "抗風壓計算",
@@ -35468,7 +35372,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 178,
+          "rowIdx": 170,
           "stage": "D地下結構階段",
           "category": "捲門檢討",
           "title": "結構體階段開關盒預埋",
@@ -35480,7 +35384,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 179,
+          "rowIdx": 171,
           "stage": "D地下結構階段",
           "category": "捲門檢討",
           "title": "車道紅外線感應位置檢討",
@@ -35492,7 +35396,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 180,
+          "rowIdx": 172,
           "stage": "D地下結構階段",
           "category": "捲門檢討",
           "title": "門檻留設或降板",
@@ -35504,7 +35408,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 181,
+          "rowIdx": 173,
           "stage": "D地下結構階段",
           "category": "捲門檢討",
           "title": "電源及消防連動",
@@ -35516,7 +35420,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 182,
+          "rowIdx": 174,
           "stage": "D地下結構階段",
           "category": "捲門檢討",
           "title": "消防需求(防火時效及遮煙性)",
@@ -35528,7 +35432,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 183,
+          "rowIdx": 175,
           "stage": "D地下結構階段",
           "category": "基地裝修高程檢討",
           "title": "裝修完成高度",
@@ -35540,7 +35444,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 184,
+          "rowIdx": 176,
           "stage": "D地下結構階段",
           "category": "基地裝修高程檢討",
           "title": "裝修厚度預降",
@@ -35552,7 +35456,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 185,
+          "rowIdx": 177,
           "stage": "D地下結構階段",
           "category": "基地裝修高程檢討",
           "title": "地坪介面(乾溼區、室內外)",
@@ -35564,7 +35468,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 186,
+          "rowIdx": 178,
           "stage": "D地下結構階段",
           "category": "基地裝修高程檢討",
           "title": "人孔預埋檢討",
@@ -35576,7 +35480,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 187,
+          "rowIdx": 179,
           "stage": "D地下結構階段",
           "category": "門類檢討",
           "title": "框型與牆面進出檢討",
@@ -35588,7 +35492,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 188,
+          "rowIdx": 180,
           "stage": "D地下結構階段",
           "category": "門類檢討",
           "title": "消防防火、阻熱及遮煙性、開門方向",
@@ -35600,7 +35504,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 189,
+          "rowIdx": 181,
           "stage": "D地下結構階段",
           "category": "門類檢討",
           "title": "鉸鍊及五金結構預埋及預降",
@@ -35612,7 +35516,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 190,
+          "rowIdx": 182,
           "stage": "D地下結構階段",
           "category": "門類檢討",
           "title": "門弓器型式/安裝方向",
@@ -35624,7 +35528,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 191,
+          "rowIdx": 183,
           "stage": "D地下結構階段",
           "category": "門類檢討",
           "title": "磁扣、陽極鎖預埋及弱電乾接點",
@@ -35636,7 +35540,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 192,
+          "rowIdx": 184,
           "stage": "D地下結構階段",
           "category": "門類檢討",
           "title": "門檻及地坪結構預降及完成面高程檢討",
@@ -35648,7 +35552,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 193,
+          "rowIdx": 185,
           "stage": "D地下結構階段",
           "category": "門類檢討",
           "title": "門擋位置",
@@ -35660,7 +35564,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 194,
+          "rowIdx": 186,
           "stage": "D地下結構階段",
           "category": "門類檢討",
           "title": "淨寬.淨高尺寸",
@@ -35672,7 +35576,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 195,
+          "rowIdx": 187,
           "stage": "D地下結構階段",
           "category": "明管管排檢討",
           "title": "管線衝突檢討",
@@ -35684,7 +35588,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 196,
+          "rowIdx": 188,
           "stage": "D地下結構階段",
           "category": "明管管排檢討",
           "title": "設備衝突檢討",
@@ -35696,7 +35600,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 197,
+          "rowIdx": 189,
           "stage": "D地下結構階段",
           "category": "明管管排檢討",
           "title": "配管順序、走向、高程檢討",
@@ -35708,7 +35612,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 198,
+          "rowIdx": 190,
           "stage": "D地下結構階段",
           "category": "明管管排檢討",
           "title": "引進、出管檢討",
@@ -35720,7 +35624,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 199,
+          "rowIdx": 191,
           "stage": "D地下結構階段",
           "category": "明管管排檢討",
           "title": "受電室、電錶箱配管檢討",
@@ -35732,7 +35636,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 200,
+          "rowIdx": 192,
           "stage": "D地下結構階段",
           "category": "明管管排檢討",
           "title": "穿樑檢討",
@@ -35744,7 +35648,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 201,
+          "rowIdx": 193,
           "stage": "D地下結構階段",
           "category": "車道檢討",
           "title": "斜率及超高檢討",
@@ -35756,7 +35660,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260415 CDC技術會議"
         },
         {
-          "rowIdx": 202,
+          "rowIdx": 194,
           "stage": "D地下結構階段",
           "category": "車道檢討",
           "title": "車道淨寬、淨高",
@@ -35768,7 +35672,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260415 CDC技術會議"
         },
         {
-          "rowIdx": 203,
+          "rowIdx": 195,
           "stage": "D地下結構階段",
           "category": "車道檢討",
           "title": "車道預留筋",
@@ -35780,7 +35684,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260415 CDC技術會議"
         },
         {
-          "rowIdx": 204,
+          "rowIdx": 196,
           "stage": "D地下結構階段",
           "category": "車道檢討",
           "title": "裝修材檢討(結構預降及分割)",
@@ -35792,7 +35696,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260415 CDC技術會議"
         },
         {
-          "rowIdx": 205,
+          "rowIdx": 197,
           "stage": "D地下結構階段",
           "category": "車道檢討",
           "title": "截水溝檢討",
@@ -35804,7 +35708,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260415 CDC技術會議"
         },
         {
-          "rowIdx": 206,
+          "rowIdx": 198,
           "stage": "D地下結構階段",
           "category": "車道檢討",
           "title": "柵欄機預埋管線、設備空間",
@@ -35816,7 +35720,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 207,
+          "rowIdx": 199,
           "stage": "D地下結構階段",
           "category": "車道檢討",
           "title": "車道捲門檢討-消防需求、捲門位置、捲箱尺寸位置、檢修口、電源需求",
@@ -35828,7 +35732,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260415 CDC技術會議"
         },
         {
-          "rowIdx": 208,
+          "rowIdx": 200,
           "stage": "D地下結構階段",
           "category": "車道檢討",
           "title": "擋水閘門收納空間檢討",
@@ -35840,7 +35744,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 209,
+          "rowIdx": 201,
           "stage": "D地下結構階段",
           "category": "車道檢討",
           "title": "壁燈結構預埋尺寸及高程",
@@ -35852,7 +35756,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 210,
+          "rowIdx": 202,
           "stage": "D地下結構階段",
           "category": "技術規則Review",
           "title": "各項法規尺寸",
@@ -35864,7 +35768,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 211,
+          "rowIdx": 203,
           "stage": "D地下結構階段",
           "category": "技術規則Review",
           "title": "無障礙檢討1-門淨寬淨高、開門方式",
@@ -35876,7 +35780,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 212,
+          "rowIdx": 204,
           "stage": "D地下結構階段",
           "category": "技術規則Review",
           "title": "無障礙檢討2-動線寬度、迴轉空間、無障礙斜坡",
@@ -35888,7 +35792,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 213,
+          "rowIdx": 205,
           "stage": "D地下結構階段",
           "category": "技術規則Review",
           "title": "無障礙檢討3-緊急求救開關",
@@ -35900,7 +35804,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 214,
+          "rowIdx": 206,
           "stage": "D地下結構階段",
           "category": "技術規則Review",
           "title": "無障礙檢討4-扶手高度、半徑極端部收頭檢討",
@@ -35912,7 +35816,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 215,
+          "rowIdx": 207,
           "stage": "D地下結構階段",
           "category": "技術規則Review",
           "title": "無障礙檢討5-衛生設備尺寸、安裝位置、求助鈴",
@@ -35924,7 +35828,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 216,
+          "rowIdx": 208,
           "stage": "D地下結構階段",
           "category": "汙水系統檢討",
           "title": "汙水池",
@@ -35936,7 +35840,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 217,
+          "rowIdx": 209,
           "stage": "D地下結構階段",
           "category": "汙水系統檢討",
           "title": "暫存池",
@@ -35948,7 +35852,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 218,
+          "rowIdx": 210,
           "stage": "D地下結構階段",
           "category": "汙水系統檢討",
           "title": "化糞池",
@@ -35960,7 +35864,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 219,
+          "rowIdx": 211,
           "stage": "D地下結構階段",
           "category": "汙水系統檢討",
           "title": "流量槽",
@@ -35972,7 +35876,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 220,
+          "rowIdx": 212,
           "stage": "D地下結構階段",
           "category": "汙水系統檢討",
           "title": "採樣井",
@@ -35984,7 +35888,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 221,
+          "rowIdx": 213,
           "stage": "D地下結構階段",
           "category": "汙水系統檢討",
           "title": "汙水管長度坡度檢討",
@@ -35996,7 +35900,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 222,
+          "rowIdx": 214,
           "stage": "D地下結構階段",
           "category": "汙水系統檢討",
           "title": "汙水馬達規格檢討",
@@ -36008,7 +35912,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 223,
+          "rowIdx": 215,
           "stage": "D地下結構階段",
           "category": "汙水系統檢討",
           "title": "人孔蓋位置  (避免在車位上)",
@@ -36020,7 +35924,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 224,
+          "rowIdx": 216,
           "stage": "D地下結構階段",
           "category": "地板順平檢討",
           "title": "使用需求檢討",
@@ -36032,7 +35936,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 225,
+          "rowIdx": 217,
           "stage": "D地下結構階段",
           "category": "地板順平檢討",
           "title": "樓板預降檢討",
@@ -36044,7 +35948,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 226,
+          "rowIdx": 218,
           "stage": "D地下結構階段",
           "category": "地板順平檢討",
           "title": "樓梯升降階、進退階檢討",
@@ -36056,7 +35960,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 227,
+          "rowIdx": 219,
           "stage": "D地下結構階段",
           "category": "地下層排水檢討",
           "title": "外壁周邊淺溝",
@@ -36068,7 +35972,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 228,
+          "rowIdx": 220,
           "stage": "D地下結構階段",
           "category": "地下層排水檢討",
           "title": "複壁排水檢討",
@@ -36080,7 +35984,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 229,
+          "rowIdx": 221,
           "stage": "D地下結構階段",
           "category": "地下層排水檢討",
           "title": "天井降板及排水",
@@ -36092,7 +35996,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 230,
+          "rowIdx": 222,
           "stage": "D地下結構階段",
           "category": "地下層排水檢討",
           "title": "機房排水",
@@ -36104,7 +36008,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 231,
+          "rowIdx": 223,
           "stage": "D地下結構階段",
           "category": "地下層各分項計畫",
           "title": "BF樓層混凝土澆置規劃",
@@ -36116,7 +36020,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 232,
+          "rowIdx": 224,
           "stage": "D地下結構階段",
           "category": "地下層各分項計畫",
           "title": "地下室外牆防水規劃-工法討論、施工順序、階段",
@@ -36128,7 +36032,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 233,
+          "rowIdx": 225,
           "stage": "D地下結構階段",
           "category": "友善廁所檢討",
           "title": "門寬、開向檢討",
@@ -36140,7 +36044,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 234,
+          "rowIdx": 226,
           "stage": "D地下結構階段",
           "category": "友善廁所檢討",
           "title": "動線寬度",
@@ -36152,7 +36056,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 235,
+          "rowIdx": 227,
           "stage": "D地下結構階段",
           "category": "友善廁所檢討",
           "title": "地板順平、門檻、截水",
@@ -36164,7 +36068,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 236,
+          "rowIdx": 228,
           "stage": "D地下結構階段",
           "category": "友善廁所檢討",
           "title": "扶手檢討",
@@ -36176,7 +36080,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 237,
+          "rowIdx": 229,
           "stage": "D地下結構階段",
           "category": "友善廁所檢討",
           "title": "地板止滑性",
@@ -36188,7 +36092,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 238,
+          "rowIdx": 230,
           "stage": "D地下結構階段",
           "category": "友善廁所檢討",
           "title": "緊急求救開關",
@@ -36200,7 +36104,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 239,
+          "rowIdx": 231,
           "stage": "D地下結構階段",
           "category": "公司標準Review",
           "title": "防水標準",
@@ -36212,7 +36116,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 240,
+          "rowIdx": 232,
           "stage": "D地下結構階段",
           "category": "公司標準Review",
           "title": "收頭標準",
@@ -36224,7 +36128,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 241,
+          "rowIdx": 233,
           "stage": "D地下結構階段",
           "category": "公司標準Review",
           "title": "配管標準",
@@ -36236,7 +36140,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 242,
+          "rowIdx": 234,
           "stage": "D地下結構階段",
           "category": "公司標準Review",
           "title": "結構標準",
@@ -36248,7 +36152,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 243,
+          "rowIdx": 235,
           "stage": "D地下結構階段",
           "category": "公司標準Review",
           "title": "鋁窗標準",
@@ -36260,7 +36164,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 244,
+          "rowIdx": 236,
           "stage": "D地下結構階段",
           "category": "公司標準Review",
           "title": "門寬標準",
@@ -36272,7 +36176,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 245,
+          "rowIdx": 237,
           "stage": "D地下結構階段",
           "category": "公司標準Review",
           "title": "材質標準",
@@ -36284,7 +36188,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 246,
+          "rowIdx": 238,
           "stage": "D地下結構階段",
           "category": "內部施工系統架檢討",
           "title": "施工架-結構階段內部工作架規劃",
@@ -36296,7 +36200,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 247,
+          "rowIdx": 239,
           "stage": "D地下結構階段",
           "category": "內部施工系統架檢討",
           "title": "施工圖及搭設範圍",
@@ -36308,7 +36212,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 248,
+          "rowIdx": 240,
           "stage": "D地下結構階段",
           "category": "內部施工系統架檢討",
           "title": "防墜、防護網設置",
@@ -36320,7 +36224,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 249,
+          "rowIdx": 241,
           "stage": "D地下結構階段",
           "category": "內部施工系統架檢討",
           "title": "上下設備位置",
@@ -36332,7 +36236,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 250,
+          "rowIdx": 242,
           "stage": "D地下結構階段",
           "category": "內部施工系統架檢討",
           "title": "結構計算",
@@ -36344,7 +36248,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 251,
+          "rowIdx": 243,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
           "title": "鋼構加工圖-國際會議廳及屋頂造型鋼構",
@@ -36356,20 +36260,404 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 252,
+          "rowIdx": 244,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
-          "title": "軀體圖繪製",
+          "title": "BIM檢討(FF見上/下)",
           "assignee": "BIM",
-          "dueDate": "115/11/15",
+          "dueDate": "115/6/15",
+          "actualDate": "",
+          "status": "已完成",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 245,
+          "stage": "D地下結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(FF見上/下)",
+          "assignee": "BIM",
+          "dueDate": "115/7/15",
+          "actualDate": "",
+          "status": "已完成",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 246,
+          "stage": "D地下結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(B3F見上)",
+          "assignee": "BIM",
+          "dueDate": "115/10/6",
           "actualDate": "",
           "status": "檢討中",
           "progress": "",
           "deliverable": ""
         },
         {
-          "rowIdx": 253,
+          "rowIdx": 247,
           "stage": "D地下結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(B3F見上)",
+          "assignee": "BIM",
+          "dueDate": "116/11/5",
+          "actualDate": "",
+          "status": "檢討中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 248,
+          "stage": "D地下結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(B2F見上)",
+          "assignee": "BIM",
+          "dueDate": "116/1/11",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 249,
+          "stage": "D地下結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(B2F見上)",
+          "assignee": "BIM",
+          "dueDate": "116/2/10",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 250,
+          "stage": "D地下結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(B1F見上)",
+          "assignee": "BIM",
+          "dueDate": "116/3/31",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 251,
+          "stage": "D地下結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(B1F見上)",
+          "assignee": "BIM",
+          "dueDate": "116/4/30",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 252,
+          "stage": "D地下結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(1F見上)",
+          "assignee": "BIM",
+          "dueDate": "116/7/8",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 253,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(1F見上)",
+          "assignee": "BIM",
+          "dueDate": "116/8/7",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 254,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(2F見上)",
+          "assignee": "BIM",
+          "dueDate": "116/9/18",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 255,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(2F見上)",
+          "assignee": "BIM",
+          "dueDate": "116/10/18",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 256,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(3F見上)",
+          "assignee": "BIM",
+          "dueDate": "116/10/26",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 257,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(3F見上)",
+          "assignee": "BIM",
+          "dueDate": "116/11/25",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 258,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(4F見上)",
+          "assignee": "BIM",
+          "dueDate": "116/12/5",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 259,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(4F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/1/4",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 260,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(5F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/1/7",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 261,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(5F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/2/6",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 262,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(6F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/2/9",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 263,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(6F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/3/10",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 264,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(7F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/3/12",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 265,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(7F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/4/11",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 266,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(8F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/4/13",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 267,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(8F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/5/13",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 268,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(9F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/5/17",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 269,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(9F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/6/16",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 270,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(10F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/6/18",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 271,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(10F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/7/18",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 272,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(11F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/10/11",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 273,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(11F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/11/10",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 274,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "BIM檢討(R1F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/10/11",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 275,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製(R1F見上)",
+          "assignee": "BIM",
+          "dueDate": "117/11/10",
+          "actualDate": "",
+          "status": "進行中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 276,
+          "stage": "E地上結構階段",
+          "category": "土建施工圖",
+          "title": "軀體圖繪製",
+          "assignee": "BIM",
+          "dueDate": "",
+          "actualDate": "",
+          "status": "未排定",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 277,
+          "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "地工鋼筋檢料討論",
           "assignee": "施工組",
@@ -36380,7 +36668,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 254,
+          "rowIdx": 278,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
           "title": "國際會議廳鋼構件預埋作法",
@@ -36392,7 +36680,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 255,
+          "rowIdx": 279,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
           "title": "止水帶作法討論",
@@ -36404,7 +36692,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 256,
+          "rowIdx": 280,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
           "title": "塑膠模支撐施工圖",
@@ -36416,7 +36704,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 257,
+          "rowIdx": 281,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
           "title": "磁磚分割圖",
@@ -36428,7 +36716,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 258,
+          "rowIdx": 282,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
           "title": "裝修分割圖",
@@ -36440,7 +36728,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 259,
+          "rowIdx": 283,
           "stage": "E地上結構階段",
           "category": "轉換層機電配管檢討",
           "title": "管道間檢討",
@@ -36452,7 +36740,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 260,
+          "rowIdx": 284,
           "stage": "E地上結構階段",
           "category": "轉換層機電配管檢討",
           "title": "轉折管路管排及高程檢討",
@@ -36464,7 +36752,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 261,
+          "rowIdx": 285,
           "stage": "E地上結構階段",
           "category": "轉換層機電配管檢討",
           "title": "汙排水匯流檢討",
@@ -36476,7 +36764,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 262,
+          "rowIdx": 286,
           "stage": "E地上結構階段",
           "category": "整體施工構想",
           "title": "揚昇設備-塔吊、施工電梯、吊料及垃圾管道",
@@ -36488,7 +36776,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 263,
+          "rowIdx": 287,
           "stage": "E地上結構階段",
           "category": "整體施工構想",
           "title": "工務所、臨時水電、照明、安衛設施",
@@ -36500,7 +36788,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 264,
+          "rowIdx": 288,
           "stage": "E地上結構階段",
           "category": "整體施工構想",
           "title": "假設工程-施工中斷水規劃",
@@ -36512,7 +36800,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 265,
+          "rowIdx": 289,
           "stage": "E地上結構階段",
           "category": "潛在漏水點檢討",
           "title": "外牆窗戶、帷幕",
@@ -36524,7 +36812,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 266,
+          "rowIdx": 290,
           "stage": "E地上結構階段",
           "category": "潛在漏水點檢討",
           "title": "鋼構RC交界",
@@ -36536,7 +36824,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 267,
+          "rowIdx": 291,
           "stage": "E地上結構階段",
           "category": "潛在漏水點檢討",
           "title": "建築外露面",
@@ -36548,7 +36836,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 268,
+          "rowIdx": 292,
           "stage": "E地上結構階段",
           "category": "潛在漏水點檢討",
           "title": "臨戶外門水密及截水",
@@ -36560,7 +36848,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 269,
+          "rowIdx": 293,
           "stage": "E地上結構階段",
           "category": "圖說資料彙集",
           "title": "景觀噴灌圖",
@@ -36572,7 +36860,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 270,
+          "rowIdx": 294,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "窗尺寸、台度、分割",
@@ -36584,7 +36872,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 271,
+          "rowIdx": 295,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "窗MO及門窗尺寸調整",
@@ -36596,7 +36884,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 272,
+          "rowIdx": 296,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "窗五金、把手高度",
@@ -36608,7 +36896,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 273,
+          "rowIdx": 297,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "窗材質",
@@ -36620,7 +36908,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 274,
+          "rowIdx": 298,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "窗框寬度、安裝進出",
@@ -36632,7 +36920,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 275,
+          "rowIdx": 299,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "逃生窗、排煙窗位置檢討",
@@ -36644,7 +36932,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 276,
+          "rowIdx": 300,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "玻璃厚度、顏色、規格",
@@ -36656,7 +36944,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 277,
+          "rowIdx": 301,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "性能測試-水密、氣密規範",
@@ -36668,7 +36956,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 278,
+          "rowIdx": 302,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "室內外斷水-企口規劃及塞水路位置",
@@ -36680,7 +36968,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 279,
+          "rowIdx": 303,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "管排及淨高檢討",
@@ -36692,7 +36980,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 280,
+          "rowIdx": 304,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "設備整合",
@@ -36704,7 +36992,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 281,
+          "rowIdx": 305,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "箱體整合",
@@ -36716,7 +37004,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 282,
+          "rowIdx": 306,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "電盤整合",
@@ -36728,7 +37016,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 283,
+          "rowIdx": 307,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "照明整合",
@@ -36740,7 +37028,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 284,
+          "rowIdx": 308,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "弱電整合",
@@ -36752,7 +37040,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 285,
+          "rowIdx": 309,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "消防整合",
@@ -36764,7 +37052,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 286,
+          "rowIdx": 310,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "開關整合",
@@ -36776,7 +37064,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 287,
+          "rowIdx": 311,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
           "title": "設備空間檢討",
@@ -36788,7 +37076,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 288,
+          "rowIdx": 312,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
           "title": "磁磚計畫",
@@ -36800,7 +37088,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 289,
+          "rowIdx": 313,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
           "title": "門、窗檢討",
@@ -36812,7 +37100,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 290,
+          "rowIdx": 314,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
           "title": "開關、插座、照明、弱電、給排水整合",
@@ -36824,7 +37112,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 291,
+          "rowIdx": 315,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
           "title": "公裝整合",
@@ -36836,7 +37124,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 292,
+          "rowIdx": 316,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
           "title": "異材質介面檢討",
@@ -36848,7 +37136,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 293,
+          "rowIdx": 317,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
           "title": "天花分割及高度檢討",
@@ -36860,7 +37148,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 294,
+          "rowIdx": 318,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
           "title": "公裝整合",
@@ -36872,7 +37160,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 295,
+          "rowIdx": 319,
           "stage": "E地上結構階段",
           "category": "捲門檢討",
           "title": "軌道安裝位置檢討",
@@ -36884,7 +37172,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 296,
+          "rowIdx": 320,
           "stage": "E地上結構階段",
           "category": "捲門檢討",
           "title": "捲箱尺寸及位置檢討",
@@ -36896,7 +37184,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 297,
+          "rowIdx": 321,
           "stage": "E地上結構階段",
           "category": "捲門檢討",
           "title": "天花維修孔留設檢討",
@@ -36908,7 +37196,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 298,
+          "rowIdx": 322,
           "stage": "E地上結構階段",
           "category": "捲門檢討",
           "title": "抗風壓計算",
@@ -36920,7 +37208,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 299,
+          "rowIdx": 323,
           "stage": "E地上結構階段",
           "category": "捲門檢討",
           "title": "結構體階段開關盒預埋",
@@ -36932,7 +37220,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 300,
+          "rowIdx": 324,
           "stage": "E地上結構階段",
           "category": "捲門檢討",
           "title": "車道紅外線感應位置檢討",
@@ -36944,7 +37232,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 301,
+          "rowIdx": 325,
           "stage": "E地上結構階段",
           "category": "捲門檢討",
           "title": "門檻留設或降板",
@@ -36956,7 +37244,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 302,
+          "rowIdx": 326,
           "stage": "E地上結構階段",
           "category": "捲門檢討",
           "title": "電源及消防連動",
@@ -36968,7 +37256,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 303,
+          "rowIdx": 327,
           "stage": "E地上結構階段",
           "category": "捲門檢討",
           "title": "消防需求(防火時效及遮煙性)",
@@ -36980,7 +37268,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 304,
+          "rowIdx": 328,
           "stage": "E地上結構階段",
           "category": "浴室、廚房六向整合檢討",
           "title": "設備空間檢討",
@@ -36992,7 +37280,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 305,
+          "rowIdx": 329,
           "stage": "E地上結構階段",
           "category": "浴室、廚房六向整合檢討",
           "title": "磁磚計畫",
@@ -37004,7 +37292,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 306,
+          "rowIdx": 330,
           "stage": "E地上結構階段",
           "category": "浴室、廚房六向整合檢討",
           "title": "門、窗檢討",
@@ -37016,7 +37304,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 307,
+          "rowIdx": 331,
           "stage": "E地上結構階段",
           "category": "浴室、廚房六向整合檢討",
           "title": "開關、插座、照明、弱電、給排水整合",
@@ -37028,7 +37316,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 308,
+          "rowIdx": 332,
           "stage": "E地上結構階段",
           "category": "浴室、廚房六向整合檢討",
           "title": "防水檢討",
@@ -37040,7 +37328,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 309,
+          "rowIdx": 333,
           "stage": "E地上結構階段",
           "category": "浴室、廚房六向整合檢討",
           "title": "異材質介面檢討",
@@ -37052,7 +37340,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 310,
+          "rowIdx": 334,
           "stage": "E地上結構階段",
           "category": "浴室、廚房六向整合檢討",
           "title": "天花分割及高度檢討",
@@ -37064,7 +37352,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 311,
+          "rowIdx": 335,
           "stage": "E地上結構階段",
           "category": "浴室、廚房、陽台機電整合",
           "title": "機能檢討",
@@ -37076,7 +37364,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 312,
+          "rowIdx": 336,
           "stage": "E地上結構階段",
           "category": "浴室、廚房、陽台機電整合",
           "title": "空間檢討",
@@ -37088,7 +37376,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 313,
+          "rowIdx": 337,
           "stage": "E地上結構階段",
           "category": "浴室、廚房、陽台機電整合",
           "title": "使用性檢討",
@@ -37100,7 +37388,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 314,
+          "rowIdx": 338,
           "stage": "E地上結構階段",
           "category": "施工電梯檢討",
           "title": "設備尺寸及設置位置、停靠樓層",
@@ -37112,7 +37400,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 315,
+          "rowIdx": 339,
           "stage": "E地上結構階段",
           "category": "施工電梯檢討",
           "title": "基座尺寸、材質及高度",
@@ -37124,7 +37412,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 316,
+          "rowIdx": 340,
           "stage": "E地上結構階段",
           "category": "施工電梯檢討",
           "title": "三腳架固定位置及固定方式",
@@ -37136,7 +37424,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 317,
+          "rowIdx": 341,
           "stage": "E地上結構階段",
           "category": "施工電梯檢討",
           "title": "用電需求",
@@ -37148,7 +37436,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 318,
+          "rowIdx": 342,
           "stage": "E地上結構階段",
           "category": "施工電梯檢討",
           "title": "結構計算",
@@ -37160,7 +37448,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 319,
+          "rowIdx": 343,
           "stage": "E地上結構階段",
           "category": "施工電梯檢討",
           "title": "施工架介面及踏板高程",
@@ -37172,7 +37460,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 320,
+          "rowIdx": 344,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
           "title": "水箱空間",
@@ -37184,7 +37472,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 321,
+          "rowIdx": 345,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
           "title": "設備基座",
@@ -37196,7 +37484,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 322,
+          "rowIdx": 346,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
           "title": "水錶空間",
@@ -37208,7 +37496,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 323,
+          "rowIdx": 347,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
           "title": "屋頂管排",
@@ -37220,7 +37508,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 324,
+          "rowIdx": 348,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
           "title": "透氣管、透氣墩座",
@@ -37232,7 +37520,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 325,
+          "rowIdx": 349,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
           "title": "落水頭、溢水管",
@@ -37244,7 +37532,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 326,
+          "rowIdx": 350,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
           "title": "避雷針",
@@ -37256,7 +37544,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 327,
+          "rowIdx": 351,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
           "title": "航空指示燈",
@@ -37268,7 +37556,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 328,
+          "rowIdx": 352,
           "stage": "E地上結構階段",
           "category": "屋頂層建築整合檢討",
           "title": "景觀、樹穴、花台\n尺寸、覆土深度、斷根版、綠覆率檢討",
@@ -37280,7 +37568,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 329,
+          "rowIdx": 353,
           "stage": "E地上結構階段",
           "category": "屋頂層建築整合檢討",
           "title": "泳池",
@@ -37292,7 +37580,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 330,
+          "rowIdx": 354,
           "stage": "E地上結構階段",
           "category": "屋頂層建築整合檢討",
           "title": "室內外地坪高差",
@@ -37304,7 +37592,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 331,
+          "rowIdx": 355,
           "stage": "E地上結構階段",
           "category": "屋頂層建築整合檢討",
           "title": "洩水、排水檢討",
@@ -37316,7 +37604,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 332,
+          "rowIdx": 356,
           "stage": "E地上結構階段",
           "category": "屋頂層建築整合檢討",
           "title": "屋突門、窗、百葉",
@@ -37328,7 +37616,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 333,
+          "rowIdx": 357,
           "stage": "E地上結構階段",
           "category": "屋頂層建築整合檢討",
           "title": "防水及壓層",
@@ -37340,7 +37628,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 334,
+          "rowIdx": 358,
           "stage": "E地上結構階段",
           "category": "屋頂層建築整合檢討",
           "title": "設備基座",
@@ -37352,7 +37640,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 335,
+          "rowIdx": 359,
           "stage": "E地上結構階段",
           "category": "屋頂層建築整合檢討",
           "title": "女兒牆淨高檢討",
@@ -37364,7 +37652,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 336,
+          "rowIdx": 360,
           "stage": "E地上結構階段",
           "category": "門類檢討",
           "title": "框型與牆面進出檢討",
@@ -37376,7 +37664,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 337,
+          "rowIdx": 361,
           "stage": "E地上結構階段",
           "category": "門類檢討",
           "title": "消防防火、阻熱及遮煙性、開門方向",
@@ -37388,7 +37676,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 338,
+          "rowIdx": 362,
           "stage": "E地上結構階段",
           "category": "門類檢討",
           "title": "鉸鍊及五金結構預埋及預降",
@@ -37400,7 +37688,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 339,
+          "rowIdx": 363,
           "stage": "E地上結構階段",
           "category": "門類檢討",
           "title": "門弓器型式/安裝方向",
@@ -37412,7 +37700,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 340,
+          "rowIdx": 364,
           "stage": "E地上結構階段",
           "category": "門類檢討",
           "title": "磁扣、陽極鎖預埋及弱電乾接點",
@@ -37424,7 +37712,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 341,
+          "rowIdx": 365,
           "stage": "E地上結構階段",
           "category": "門類檢討",
           "title": "門檻及地坪結構預降及完成面高程檢討",
@@ -37436,7 +37724,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 342,
+          "rowIdx": 366,
           "stage": "E地上結構階段",
           "category": "門類檢討",
           "title": "門擋位置",
@@ -37448,7 +37736,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 343,
+          "rowIdx": 367,
           "stage": "E地上結構階段",
           "category": "門類檢討",
           "title": "淨寬.淨高尺寸",
@@ -37460,7 +37748,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 344,
+          "rowIdx": 368,
           "stage": "E地上結構階段",
           "category": "地上層各分項計畫",
           "title": "各分項計畫",
@@ -37472,7 +37760,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 345,
+          "rowIdx": 369,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
           "title": "施工架於結構體階段與外飾裝修階段介面檢討",
@@ -37484,7 +37772,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 346,
+          "rowIdx": 370,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
           "title": "施工圖及搭設範圍",
@@ -37496,7 +37784,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 347,
+          "rowIdx": 371,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
           "title": "防塵網(公司標準)/防墜網",
@@ -37508,7 +37796,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 348,
+          "rowIdx": 372,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
           "title": "上下設備位置",
@@ -37520,7 +37808,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 349,
+          "rowIdx": 373,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
           "title": "壁拉桿、三角架、斜籬設置",
@@ -37532,7 +37820,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 350,
+          "rowIdx": 374,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
           "title": "荷重及樓層標示",
@@ -37544,7 +37832,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 351,
+          "rowIdx": 375,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
           "title": "結構計算",
@@ -37556,7 +37844,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 352,
+          "rowIdx": 376,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
           "title": "強化材料(防塵網帆布)防焰耐燃檢討",
@@ -37568,7 +37856,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 353,
+          "rowIdx": 377,
           "stage": "E地上結構階段",
           "category": "外飾材整合",
           "title": "外牆磁磚計畫",
@@ -37580,7 +37868,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 354,
+          "rowIdx": 378,
           "stage": "E地上結構階段",
           "category": "外飾材整合",
           "title": "外飾材分割、收頭、交界面",
@@ -37592,7 +37880,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 355,
+          "rowIdx": 379,
           "stage": "E地上結構階段",
           "category": "外飾材整合",
           "title": "窗戶分割",
@@ -37604,7 +37892,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 356,
+          "rowIdx": 380,
           "stage": "E地上結構階段",
           "category": "外飾材整合",
           "title": "全棟外觀模型",
@@ -37616,7 +37904,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 357,
+          "rowIdx": 381,
           "stage": "E地上結構階段",
           "category": "外飾材整合",
           "title": "排氣罩、換氣罩、排煙罩",
@@ -37628,7 +37916,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 358,
+          "rowIdx": 382,
           "stage": "E地上結構階段",
           "category": "一樓外圍門窗檢討",
           "title": "防風檢核",
@@ -37640,7 +37928,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 359,
+          "rowIdx": 383,
           "stage": "E地上結構階段",
           "category": "一樓外圍門窗檢討",
           "title": "防水檢討",
@@ -37652,7 +37940,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 360,
+          "rowIdx": 384,
           "stage": "E地上結構階段",
           "category": "一樓外圍門窗檢討",
           "title": "室內外斷水",
@@ -37664,7 +37952,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 361,
+          "rowIdx": 385,
           "stage": "E地上結構階段",
           "category": "一樓外圍門窗檢討",
           "title": "分割與裝修介面",
@@ -37676,7 +37964,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 362,
+          "rowIdx": 386,
           "stage": "E地上結構階段",
           "category": "一樓外圍門窗檢討",
           "title": "門窗材質與五金",
@@ -37688,7 +37976,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 363,
+          "rowIdx": 387,
           "stage": "F裝修階段",
           "category": "潛在漏水點檢討",
           "title": "外牆花崗石乾掛、氟碳烤漆鋁格柵 (RF)",
@@ -37700,7 +37988,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 364,
+          "rowIdx": 388,
           "stage": "F裝修階段",
           "category": "潛在漏水點檢討",
           "title": "外牆裝修採不填縫",
@@ -37712,7 +38000,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 365,
+          "rowIdx": 389,
           "stage": "F裝修階段",
           "category": "潛在漏水點檢討",
           "title": "外牆通風百葉",
@@ -37724,7 +38012,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 366,
+          "rowIdx": 390,
           "stage": "F裝修階段",
           "category": "潛在漏水點檢討",
           "title": "接地及外牆管",
@@ -37736,7 +38024,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 367,
+          "rowIdx": 391,
           "stage": "F裝修階段",
           "category": "潛在漏水點檢討",
           "title": "給排水管",
@@ -37748,7 +38036,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 368,
+          "rowIdx": 392,
           "stage": "F裝修階段",
           "category": "輕隔間檢討",
           "title": "下槽及止水墩放樣檢討",
@@ -37760,7 +38048,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 369,
+          "rowIdx": 393,
           "stage": "F裝修階段",
           "category": "輕隔間檢討",
           "title": "門窗開口介面及補強檢討",
@@ -37772,7 +38060,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 370,
+          "rowIdx": 394,
           "stage": "F裝修階段",
           "category": "輕隔間檢討",
           "title": "延板檢討",
@@ -37784,7 +38072,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 371,
+          "rowIdx": 395,
           "stage": "F裝修階段",
           "category": "輕隔間檢討",
           "title": "壁掛設備補強檢討",
@@ -37796,7 +38084,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 372,
+          "rowIdx": 396,
           "stage": "F裝修階段",
           "category": "輕隔間檢討",
           "title": "配合貼磚橫向補強料加密及倒板",
@@ -37808,7 +38096,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 373,
+          "rowIdx": 397,
           "stage": "F裝修階段",
           "category": "搗擺檢討",
           "title": "輕隔間鎖固補強",
@@ -37820,7 +38108,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 374,
+          "rowIdx": 398,
           "stage": "F裝修階段",
           "category": "搗擺檢討",
           "title": "門扇開關.走道淨寬檢討",
@@ -37832,7 +38120,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 375,
+          "rowIdx": 399,
           "stage": "F裝修階段",
           "category": "搗擺檢討",
           "title": "隔間位置與門窗/地板清潔孔衝突檢討",
@@ -37844,7 +38132,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 376,
+          "rowIdx": 400,
           "stage": "F裝修階段",
           "category": "防鏽蝕檢討",
           "title": "戶外與水接觸金屬",
@@ -37856,7 +38144,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 377,
+          "rowIdx": 401,
           "stage": "F裝修階段",
           "category": "防鏽蝕檢討",
           "title": "戶外高鹽分區域",
@@ -37868,7 +38156,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 378,
+          "rowIdx": 402,
           "stage": "F裝修階段",
           "category": "防鏽蝕檢討",
           "title": "室內用水或潮濕區域",
@@ -37880,7 +38168,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 379,
+          "rowIdx": 403,
           "stage": "F裝修階段",
           "category": "防臭味檢討",
           "title": "汙、廢水透氣管系統",
@@ -37892,7 +38180,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 380,
+          "rowIdx": 404,
           "stage": "F裝修階段",
           "category": "防臭味檢討",
           "title": "存水彎設置檢討",
@@ -37904,7 +38192,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 381,
+          "rowIdx": 405,
           "stage": "F裝修階段",
           "category": "防臭味檢討",
           "title": "密封蓋需求檢討",
@@ -37916,7 +38204,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 382,
+          "rowIdx": 406,
           "stage": "F裝修階段",
           "category": "防臭味檢討",
           "title": "補氣系統",
@@ -37928,7 +38216,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 383,
+          "rowIdx": 407,
           "stage": "F裝修階段",
           "category": "防臭味檢討",
           "title": "汙水池進排氣量檢討",
@@ -37940,7 +38228,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 384,
+          "rowIdx": 408,
           "stage": "F裝修階段",
           "category": "防臭味檢討",
           "title": "汙水池蓋密封方式",
@@ -37952,7 +38240,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 385,
+          "rowIdx": 409,
           "stage": "F裝修階段",
           "category": "防污染規劃",
           "title": "外牆汙染垂掛",
@@ -37964,7 +38252,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 386,
+          "rowIdx": 410,
           "stage": "F裝修階段",
           "category": "防污染規劃",
           "title": "懸挑底部滴水",
@@ -37976,7 +38264,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 387,
+          "rowIdx": 411,
           "stage": "F裝修階段",
           "category": "防污染規劃",
           "title": "底部水濺汙染",
@@ -37988,7 +38276,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 388,
+          "rowIdx": 412,
           "stage": "F裝修階段",
           "category": "防污染規劃",
           "title": "材料耐候性",
@@ -38000,7 +38288,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 389,
+          "rowIdx": 413,
           "stage": "F裝修階段",
           "category": "防白華檢討",
           "title": "外牆白華",
@@ -38012,7 +38300,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 390,
+          "rowIdx": 414,
           "stage": "F裝修階段",
           "category": "防白華檢討",
           "title": "戶外地板白華",
@@ -38024,7 +38312,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 391,
+          "rowIdx": 415,
           "stage": "F裝修階段",
           "category": "防白華檢討",
           "title": "戶外樓梯白華",
@@ -38036,7 +38324,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 392,
+          "rowIdx": 416,
           "stage": "E地上結構階段",
           "category": "各系統初步套繪含機電",
           "title": "建築裝修套匯(行政棟)6F-11F",
@@ -38048,7 +38336,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 393,
+          "rowIdx": 417,
           "stage": "E地上結構階段",
           "category": "各系統初步套繪含機電",
           "title": "建築裝修套匯(實驗棟)3F-7F",
@@ -38060,7 +38348,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 394,
+          "rowIdx": 418,
           "stage": "E地上結構階段",
           "category": "各系統初步套繪含機電",
           "title": "建築裝修套匯(實驗棟)7F-11F",
@@ -38072,7 +38360,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 395,
+          "rowIdx": 419,
           "stage": "F裝修階段",
           "category": "瓦斯管檢討",
           "title": "外牆幹管路徑檢討(含遮煙筏位置選定)",
@@ -38084,7 +38372,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 396,
+          "rowIdx": 420,
           "stage": "F裝修階段",
           "category": "瓦斯管檢討",
           "title": "工作陽台瓦斯錶位置、支管路徑",
@@ -38096,7 +38384,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 397,
+          "rowIdx": 421,
           "stage": "F裝修階段",
           "category": "公設裝修機電檢討",
           "title": "天花板淨高",
@@ -38108,7 +38396,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 398,
+          "rowIdx": 422,
           "stage": "F裝修階段",
           "category": "公設裝修機電檢討",
           "title": "設備空間",
@@ -38120,7 +38408,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 399,
+          "rowIdx": 423,
           "stage": "F裝修階段",
           "category": "公設裝修機電檢討",
           "title": "空調室外機、排水",
@@ -38132,7 +38420,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 400,
+          "rowIdx": 424,
           "stage": "F裝修階段",
           "category": "公設裝修機電檢討",
           "title": "端點檢討",
@@ -38144,7 +38432,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 401,
+          "rowIdx": 425,
           "stage": "F裝修階段",
           "category": "天花及設備檢討",
           "title": "天花設備整合-燈具、出風口、檢修口、消防設備、指標系統、窗簾盒套繪",
@@ -38156,7 +38444,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 402,
+          "rowIdx": 426,
           "stage": "F裝修階段",
           "category": "天花及設備檢討",
           "title": "天花分割計畫",
@@ -38168,7 +38456,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 403,
+          "rowIdx": 427,
           "stage": "F裝修階段",
           "category": "天花及設備檢討",
           "title": "設備補強檢討",
@@ -38180,7 +38468,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 404,
+          "rowIdx": 428,
           "stage": "F裝修階段",
           "category": "天花及設備檢討",
           "title": "完成面淨高檢討",
@@ -38192,7 +38480,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 405,
+          "rowIdx": 429,
           "stage": "F裝修階段",
           "category": "裝修木作檢討",
           "title": "不燃材料檢討",
@@ -38204,7 +38492,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 406,
+          "rowIdx": 430,
           "stage": "F裝修階段",
           "category": "裝修木作檢討",
           "title": "木皮、美耐板分割檢討",
@@ -38216,7 +38504,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 407,
+          "rowIdx": 431,
           "stage": "F裝修階段",
           "category": "裝修木作檢討",
           "title": "異材質收邊/導角檢討",
@@ -38228,7 +38516,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 408,
+          "rowIdx": 432,
           "stage": "F裝修階段",
           "category": "裝修木作檢討",
           "title": "踢腳介面檢討",
@@ -38240,7 +38528,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 409,
+          "rowIdx": 433,
           "stage": "G景觀階段",
           "category": "景觀鋪面",
           "title": "高程及斜率檢討",
@@ -38252,7 +38540,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 410,
+          "rowIdx": 434,
           "stage": "G景觀階段",
           "category": "景觀鋪面",
           "title": "鄰地高程順平",
@@ -38264,7 +38552,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 411,
+          "rowIdx": 435,
           "stage": "G景觀階段",
           "category": "景觀鋪面",
           "title": "工法及裝修厚度檢討",
@@ -38276,7 +38564,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 412,
+          "rowIdx": 436,
           "stage": "G景觀階段",
           "category": "景觀鋪面",
           "title": "異材質介面檢討",
@@ -38288,7 +38576,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 413,
+          "rowIdx": 437,
           "stage": "G景觀階段",
           "category": "景觀鋪面",
           "title": "緣石材質及型式",
@@ -38300,7 +38588,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 414,
+          "rowIdx": 438,
           "stage": "G景觀階段",
           "category": "景觀鋪面",
           "title": "防白華檢討",
@@ -38312,7 +38600,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 415,
+          "rowIdx": 439,
           "stage": "G景觀階段",
           "category": "植栽",
           "title": "防水及排水",
@@ -38324,7 +38612,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 416,
+          "rowIdx": 440,
           "stage": "G景觀階段",
           "category": "植栽",
           "title": "花台或樹穴尺寸",
@@ -38336,7 +38624,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 417,
+          "rowIdx": 441,
           "stage": "G景觀階段",
           "category": "植栽",
           "title": "覆土深度",
@@ -38348,7 +38636,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 418,
+          "rowIdx": 442,
           "stage": "G景觀階段",
           "category": "植栽",
           "title": "支撐架型式及花床分隔板/斷根板",
@@ -38360,7 +38648,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 419,
+          "rowIdx": 443,
           "stage": "G景觀階段",
           "category": "植栽",
           "title": "照明預留",
@@ -38372,7 +38660,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 420,
+          "rowIdx": 444,
           "stage": "G景觀階段",
           "category": "植栽",
           "title": "噴灌預留",
@@ -38384,7 +38672,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 421,
+          "rowIdx": 445,
           "stage": "G景觀階段",
           "category": "排水",
           "title": "水溝型式-明溝、暗溝、淺溝",
@@ -38396,7 +38684,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 422,
+          "rowIdx": 446,
           "stage": "G景觀階段",
           "category": "排水",
           "title": "排水斷面與斜率",
@@ -38408,7 +38696,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 423,
+          "rowIdx": 447,
           "stage": "G景觀階段",
           "category": "排水",
           "title": "陰井/清潔口尺寸及深度",
@@ -38420,7 +38708,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 424,
+          "rowIdx": 448,
           "stage": "G景觀階段",
           "category": "排水",
           "title": "水溝與鋪面、花台、樹穴介面",
@@ -38428,30 +38716,6 @@
           "dueDate": "",
           "actualDate": "",
           "status": "未排定",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
-          "rowIdx": 425,
-          "stage": "",
-          "category": "",
-          "title": "AAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "assignee": "羅政韋",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "進行中",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
-          "rowIdx": 426,
-          "stage": "",
-          "category": "",
-          "title": "ZZZZZZZZ",
-          "assignee": "羅政韋",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "進行中",
           "progress": "",
           "deliverable": ""
         }
@@ -140277,5 +140541,4 @@
       "analysis": []
     }
   }
-
 }

@@ -2271,6 +2271,9 @@ function updateTodoHeaderRibbon() {
       <button type="button" class="kpi-mini-pill kpi-cyan ${currentTodoFilterMode === 'in_progress' ? 'active' : ''}" onclick="setTodoFilter('in_progress')" title="篩選：進行中/辦理中之待辦事項 (${inProgressTodos.length})">
         <i class="fa-solid fa-spinner fa-spin-pulse"></i> 進行中(${inProgressTodos.length})
       </button>
+      <button type="button" class="btn-ctrl-action" onclick="reloadSharedTodoFromNas()" style="padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; margin-left: auto;" title="清除暫存並秒級重新自 NAS 共用區讀取最新待辦彙整表">
+        <i class="fa-solid fa-arrows-rotate"></i> 同步共用區待辦
+      </button>
     </div>
   `;
 }
@@ -2874,6 +2877,59 @@ window.reloadProjectFromNas = async function() {
   if (controlCountEl) controlCountEl.textContent = totalCount;
 
   showToastNotification(`✅ 已成功重新載入 ${proj.shortName} NAS 實體最新管制表！共 ${totalCount} 項`);
+};
+
+// 秒級熱同步 NAS 共用區待辦追蹤彙整表 (1~2 秒極速更新)
+window.reloadSharedTodoFromNas = async function() {
+  showToastNotification(`正在向 NAS 讀取最新【各工地議題-待辦追蹤彙整表】(約需 1~2 秒)...`);
+
+  let loaded = false;
+  try {
+    const res = await fetch(`/api/reload-todo-excel`);
+    if (res.ok) {
+      const result = await res.json();
+      if (result.status === "success" && Array.isArray(result.todoItems)) {
+        if (appData) {
+          appData.todoItems = result.todoItems;
+          appData.totalTodos = result.totalTodos;
+          if (result.siteStats) appData.siteStats = result.siteStats;
+          if (result.deptStats) appData.deptStats = result.deptStats;
+        }
+        loaded = true;
+      }
+    }
+  } catch(e) {}
+
+  if (!loaded) {
+    try {
+      const res = await fetch(`data/nas_data.json?t=${Date.now()}`);
+      if (res.ok) {
+        const freshData = await res.json();
+        if (freshData && freshData.todoItems) {
+          appData = freshData;
+          loaded = true;
+        }
+      }
+    } catch(e) {}
+  }
+
+  // 即時更新抽屜頂部待辦狀態列與表格
+  updateTodoHeaderRibbon();
+  applyTodoFilters();
+
+  // 更新專案工作區卡片與首頁總表統計
+  if (appData && appData.projects) {
+    renderWorkspaces(appData.projects);
+    renderOverview();
+  }
+
+  if (currentDrawerProject) {
+    const projTodos = (appData.todoItems || []).filter(t => normalizeSiteName(t.site) === normalizeSiteName(currentDrawerProject.shortName));
+    const todoCountEl = document.getElementById("drawer-todo-count");
+    if (todoCountEl) todoCountEl.textContent = projTodos.length;
+  }
+
+  showToastNotification(`✅ 已成功同步 NAS 共用區最新待辦追蹤彙整表！全公司共 ${appData.totalTodos || 353} 項`);
 };
 
 // 匯出最新管控表 (Excel 相容之 CSV 格式，含 BOM UTF-8)
