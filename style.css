@@ -1024,6 +1024,15 @@ body {
   display: none !important;
 }
 
+.meeting-accordion-card:not(.collapsed) .m-files-grid {
+  display: flex !important;
+}
+
+.control-row-interactive:hover,
+.todo-row-interactive:hover {
+  background: rgba(56, 189, 248, 0.08) !important;
+}
+
 /* === 模組 3：全域資料搜尋 === */
 .search-hero-card {
   padding: 32px;

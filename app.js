@@ -2051,7 +2051,7 @@ function renderDrawerTabContent(tabType) {
                 <i class="fa-solid fa-chevron-right meeting-toggle-arrow"></i>
               </div>
             </div>
-            <div class="m-files-grid" style="display: none;">
+            <div class="m-files-grid">
               ${(m.files || []).map(f => {
                 const safeF = encodeURIComponent(JSON.stringify(f));
                 const fullPath = f.fullPath || '';
@@ -2208,12 +2208,13 @@ function renderDrawerTabContent(tabType) {
           <thead style="position: sticky; top: 0; background: #0c1322; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
             <tr>
               <th style="width: 50px; text-align: center;">項次</th>
-              <th style="width: 110px;">會議日期</th>
-              <th style="width: 100px;">提議者</th>
+              <th style="width: 105px;">會議日期</th>
+              <th style="width: 95px;">提議者</th>
               <th>討論事項與決議內容</th>
-              <th style="width: 110px;">預定完成日</th>
-              <th style="width: 95px; text-align: center;">辦理情形</th>
-              <th style="width: 220px;">成果說明</th>
+              <th style="width: 105px;">預定完成日</th>
+              <th style="width: 90px; text-align: center;">辦理情形</th>
+              <th style="width: 200px;">成果說明</th>
+              <th style="width: 75px; text-align: center;">操作</th>
             </tr>
           </thead>
           <tbody id="todo-table-tbody">
@@ -2310,7 +2311,7 @@ function applyTodoFilters() {
   if (filtered.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="7" style="text-align: center; padding: 36px 12px; color: var(--text-dim);">
+        <td colspan="8" style="text-align: center; padding: 36px 12px; color: var(--text-dim);">
           <i class="fa-solid fa-filter-circle-xmark" style="font-size: 28px; margin-bottom: 8px; display: block; color: #64748b;"></i>
           無符合目前篩選條件之待辦事項 (可點擊「全部待辦」清除篩選)
         </td>
@@ -2328,10 +2329,10 @@ function applyTodoFilters() {
     else if (st === '進行中' || st === '辦理中') pillClass = 'light-cyan';
 
     return `
-      <tr>
+      <tr class="todo-row-interactive" onclick="highlightTodoRow(this, ${realIdx})" ondblclick="openEditTodoModal(${realIdx})" style="cursor: pointer; transition: background 0.15s ease;" title="💡 點擊選中此列，雙擊即可直接修改此待辦事項">
         <td style="text-align: center; color: var(--text-dim);">${realIdx >= 0 ? realIdx + 1 : idx + 1}</td>
         <td><small class="text-cyan font-bold">${formatWesternDate(td.meetDate)}</small></td>
-        <td>${td.proposer || '-'}</td>
+        <td><span class="text-amber font-bold" style="font-size: 13px;">${td.proposer || '-'}</span></td>
         <td style="line-height: 1.6; word-break: break-all; text-align: left;">${td.desc || '-'}</td>
         <td><small class="text-muted">${formatWesternDate(td.dueDate)}</small></td>
         <td style="text-align: center;">
@@ -2340,6 +2341,11 @@ function applyTodoFilters() {
           </span>
         </td>
         <td style="text-align: left;"><small class="text-dim" style="word-break: break-all; line-height: 1.4;">${td.result || '-'}</small></td>
+        <td style="text-align: center;">
+          <button type="button" class="btn-ctrl-action-edit" onclick="event.stopPropagation(); openEditTodoModal(${realIdx})" style="padding: 4px 10px; border-radius: 5px; font-size: 12px; font-weight: 600; background: rgba(56, 189, 248, 0.18); border: 1px solid rgba(56, 189, 248, 0.5); color: #38bdf8; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="修改此待辦事項並儲存寫入待辦追蹤彙整表">
+            <i class="fa-solid fa-pen-to-square"></i> 修改
+          </button>
+        </td>
       </tr>
     `;
   }).join("");
@@ -2954,6 +2960,174 @@ window.reloadSharedTodoFromNas = async function() {
   }
 
   showToastNotification(`✅ 已成功同步 NAS 共用區最新待辦追蹤彙整表！全公司共 ${appData.totalTodos || 353} 項`);
+};
+
+// 全域記錄目前待辦表格被點選的項目索引
+let selectedTodoRowIndex = -1;
+
+window.highlightTodoRow = function(rowEl, index) {
+  selectedTodoRowIndex = index;
+  document.querySelectorAll(".todo-row-interactive").forEach(r => {
+    r.style.background = "";
+  });
+  if (rowEl) {
+    rowEl.style.background = "rgba(56, 189, 248, 0.15)";
+  }
+};
+
+window.openEditTodoModal = function(index) {
+  if (!currentDrawerProject || !appData || !appData.todoItems) return;
+  const proj = currentDrawerProject;
+  const normSite = normalizeSiteName(proj.shortName);
+  const projTodos = appData.todoItems.filter(t => normalizeSiteName(t.site) === normSite);
+  const item = projTodos[index];
+  if (!item) return;
+
+  const modal = document.getElementById("edit-todo-modal");
+  const form = document.getElementById("edit-todo-form");
+  const titleEl = document.getElementById("edit-todo-modal-title");
+  const idxInput = document.getElementById("todo-item-index");
+  const rowIdxInput = document.getElementById("todo-item-row-idx");
+
+  if (!modal || !form) return;
+
+  if (titleEl) {
+    titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square text-cyan"></i> 修改待辦事項：第 ${index + 1} 項 (${proj.shortName})`;
+  }
+  if (idxInput) idxInput.value = String(index);
+  if (rowIdxInput) rowIdxInput.value = String(item.rowIdx || -1);
+
+  const siteInput = document.getElementById("todo-site-name");
+  if (siteInput) siteInput.value = item.rawSite || item.site || proj.shortName;
+
+  const proposerInput = document.getElementById("todo-proposer");
+  if (proposerInput) proposerInput.value = item.proposer || "";
+
+  const descInput = document.getElementById("todo-desc");
+  if (descInput) descInput.value = item.desc || "";
+
+  const meetDateInput = document.getElementById("todo-meet-date");
+  if (meetDateInput) meetDateInput.value = formatToInputDate(item.meetDate);
+
+  const dueDateInput = document.getElementById("todo-due-date");
+  if (dueDateInput) dueDateInput.value = formatToInputDate(item.dueDate);
+
+  const actualDateInput = document.getElementById("todo-actual-date");
+  if (actualDateInput) actualDateInput.value = formatToInputDate(item.actualDate);
+
+  const statusInput = document.getElementById("todo-status");
+  if (statusInput) statusInput.value = (item.status || "進行中").trim();
+
+  const resultInput = document.getElementById("todo-result");
+  if (resultInput) resultInput.value = item.result || "";
+
+  modal.classList.remove("hidden");
+};
+
+window.closeEditTodoModal = function() {
+  const modal = document.getElementById("edit-todo-modal");
+  if (modal) modal.classList.add("hidden");
+};
+
+window.saveTodoItem = async function(e) {
+  if (e) e.preventDefault();
+  if (!currentDrawerProject || !appData || !appData.todoItems) return;
+
+  const proj = currentDrawerProject;
+  const normSite = normalizeSiteName(proj.shortName);
+  const projTodos = appData.todoItems.filter(t => normalizeSiteName(t.site) === normSite);
+
+  const idxInput = document.getElementById("todo-item-index");
+  const rowIdxInput = document.getElementById("todo-item-row-idx");
+  const index = idxInput ? parseInt(idxInput.value, 10) : -1;
+  const targetRowIdx = rowIdxInput ? parseInt(rowIdxInput.value, 10) : -1;
+
+  const originalItem = (index >= 0 && index < projTodos.length) ? projTodos[index] : null;
+
+  const updatedItem = {
+    ...(originalItem || {}),
+    site: proj.shortName,
+    rawSite: (originalItem && originalItem.rawSite) || proj.shortName,
+    dept: (originalItem && originalItem.dept) || proj.dept || "",
+    proposer: document.getElementById("todo-proposer")?.value.trim() || "",
+    desc: document.getElementById("todo-desc")?.value.trim() || "",
+    meetDate: document.getElementById("todo-meet-date")?.value || "",
+    dueDate: document.getElementById("todo-due-date")?.value || "",
+    actualDate: document.getElementById("todo-actual-date")?.value || "",
+    status: document.getElementById("todo-status")?.value || "進行中",
+    result: document.getElementById("todo-result")?.value.trim() || "",
+    rowIdx: targetRowIdx > 1 ? targetRowIdx : (originalItem ? originalItem.rowIdx : -1)
+  };
+
+  if (!updatedItem.desc) {
+    alert("請填寫討論事項與決議內容！");
+    return;
+  }
+
+  // 1. 本地即時更新記憶體與 localStorage
+  if (originalItem) {
+    const globalIdx = appData.todoItems.indexOf(originalItem);
+    if (globalIdx >= 0) {
+      appData.todoItems[globalIdx] = updatedItem;
+    }
+  }
+
+  try {
+    const localTodos = JSON.parse(localStorage.getItem("local_modified_todos") || "{}");
+    const key = `${proj.id}_${updatedItem.rowIdx || index}`;
+    localTodos[key] = updatedItem;
+    localStorage.setItem("local_modified_todos", JSON.stringify(localTodos));
+  } catch(err) {}
+
+  closeEditTodoModal();
+  updateTodoHeaderRibbon();
+  applyTodoFilters();
+
+  showToastNotification(`💾 正在寫入 NAS 待辦追蹤彙整表...`);
+
+  // 2. 呼叫後端 API 寫入實體 Excel
+  try {
+    const res = await fetch("/api/update-todo-item", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        updatedItem: updatedItem,
+        rowIdx: updatedItem.rowIdx
+      })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data.status === "success") {
+        if (data.todoItems && Array.isArray(data.todoItems)) {
+          appData.todoItems = data.todoItems;
+        }
+        if (data.siteStats) appData.siteStats = data.siteStats;
+        if (data.deptStats) appData.deptStats = data.deptStats;
+        if (data.totalTodos) appData.totalTodos = data.totalTodos;
+
+        updateTodoHeaderRibbon();
+        applyTodoFilters();
+        if (appData.projects) {
+          renderWorkspaces(appData.projects);
+          renderOverview();
+        }
+
+        if (data.writtenToExcel) {
+          showToastNotification(`✅ 已成功修改待辦事項並同步寫入 NAS 實體待辦追蹤彙整表！`);
+        } else if (data.isLocked) {
+          showToastNotification(`⚠️ NAS 待辦彙整表正由人員開啟編輯中 (被鎖定)；資料已暫存寫入儀表板。`);
+        } else {
+          showToastNotification(`✅ 待辦事項已更新至雲端資料庫！`);
+        }
+        return;
+      }
+    }
+  } catch(err) {
+    console.log("Offline or remote mode, updated locally:", err);
+  }
+
+  showToastNotification(`✅ 待辦事項已儲存至雲端儀表板！`);
 };
 
 // 匯出最新管控表 (Excel 相容之 CSV 格式，含 BOM UTF-8)
@@ -4171,26 +4345,6 @@ window.toggleAllGuidelineFolders = function(expandAll) {
     }
   });
 };
-
-window.toggleMeetingCard = function(headerEl) {
-  const card = headerEl.closest('.meeting-accordion-card');
-  if (card) {
-    card.classList.toggle('collapsed');
-  }
-};
-
-window.toggleAllMeetingCards = function() {
-  const cards = document.querySelectorAll('.meeting-accordion-card');
-  const anyOpen = Array.from(cards).some(c => !c.classList.contains('collapsed'));
-  cards.forEach(c => {
-    if (anyOpen) {
-      c.classList.add('collapsed');
-    } else {
-      c.classList.remove('collapsed');
-    }
-  });
-};
-
 function openCustomModal(title, html) {
   const titleEl = document.getElementById("viewer-file-title");
   const bodyEl = document.getElementById("viewer-body");
