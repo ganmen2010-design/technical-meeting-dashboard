@@ -1915,14 +1915,9 @@ function renderWorkspaces(projects) {
           </div>
         </div>
 
-        <div style="display: flex; gap: 8px; margin-top: 14px;">
-          <button type="button" class="btn-proj-enter" onclick="event.stopPropagation(); openProjectDrawer('${p.id}')" style="flex: 1; margin-top: 0;">
-            進入作業區 <i class="fa-solid fa-arrow-right"></i>
-          </button>
-          <button type="button" class="btn-table-action" onclick="event.stopPropagation(); openProjectDrawerTab('${p.id}', 'control'); setTimeout(openModifyControlSelector, 350);" style="padding: 8px 12px; font-size: 13px; font-weight: 600; border-radius: 6px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.45); color: #fbbf24; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="直接開啟此專案管控表並修改項目">
-            <i class="fa-solid fa-pen-to-square"></i> 修改管控
-          </button>
-        </div>
+        <button type="button" class="btn-proj-enter" onclick="event.stopPropagation(); openProjectDrawer('${p.id}')">
+          進入作業區 <i class="fa-solid fa-arrow-right"></i>
+        </button>
       </div>
     `;
   }).join("");
@@ -2131,9 +2126,6 @@ function renderDrawerTabContent(tabType) {
         <div class="control-actions-group" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
           <button type="button" class="btn-ctrl-action" onclick="reloadProjectFromNas()" style="padding: 7px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8;" title="清除暫存並重新自 NAS 實體 Excel 讀取最新管制表">
             <i class="fa-solid fa-arrows-rotate"></i> 重新載入 NAS
-          </button>
-          <button type="button" class="btn-ctrl-action" onclick="openModifyControlSelector()" style="padding: 7px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.45); color: #fbbf24;" title="搜尋或選擇欲修改之管控項目 (亦可直接雙擊表格任一列)">
-            <i class="fa-solid fa-pen-to-square"></i> 修改管控項目
           </button>
           <button type="button" class="btn-add-control-item" onclick="openAddControlItemModal()">
             <i class="fa-solid fa-plus"></i> 新增管控項目
@@ -2608,102 +2600,6 @@ window.highlightControlRow = function(rowEl, index) {
   if (rowEl) {
     rowEl.style.background = "rgba(245, 158, 11, 0.15)";
   }
-};
-
-// 開啟選擇修改管控項目彈窗
-window.openModifyControlSelector = function() {
-  if (!currentDrawerProject) return;
-  const proj = currentDrawerProject;
-  const rawItems = getProjectControlItems(proj);
-
-  if (rawItems.length === 0) {
-    showToastNotification("⚠️ 目前專案尚無任何管控項目可供修改");
-    return;
-  }
-
-  // 若使用者已在表格中點選了某一列，直接進入該列的修改彈窗
-  if (selectedControlRowIndex >= 0 && selectedControlRowIndex < rawItems.length) {
-    openEditControlModal(selectedControlRowIndex);
-    return;
-  }
-
-  const modal = document.getElementById("select-modify-control-modal");
-  const titleEl = document.getElementById("select-modify-title");
-  const selectEl = document.getElementById("modify-item-select");
-  const searchInput = document.getElementById("modify-item-search");
-
-  if (!modal || !selectEl) return;
-
-  if (titleEl) {
-    titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square text-amber"></i> 選擇欲修改之管控項目 (${proj.shortName})`;
-  }
-
-  if (searchInput) searchInput.value = "";
-  renderModifySelectOptions(rawItems, "");
-
-  modal.classList.remove("hidden");
-  if (searchInput) setTimeout(() => searchInput.focus(), 120);
-};
-
-// 關閉選擇修改彈窗
-window.closeModifyControlSelector = function() {
-  const modal = document.getElementById("select-modify-control-modal");
-  if (modal) modal.classList.add("hidden");
-};
-
-// 動態渲染可供修改的下拉清單
-function renderModifySelectOptions(rawItems, query) {
-  const selectEl = document.getElementById("modify-item-select");
-  if (!selectEl) return;
-
-  const q = (query || "").toLowerCase().trim();
-  let html = "";
-  let firstIdx = -1;
-
-  rawItems.forEach((it, idx) => {
-    const rowNum = it.rowIdx !== undefined && it.rowIdx !== null ? it.rowIdx : (idx + 1);
-    const title = it.topic || it.title || "無標題";
-    const stage = it.stage || "-";
-    const cat = it.category || "-";
-    const assignee = it.assignee || "未指定";
-    const status = it.status || "未排定";
-
-    const searchStr = `${rowNum} ${title} ${stage} ${cat} ${assignee} ${status}`.toLowerCase();
-    if (!q || searchStr.includes(q)) {
-      if (firstIdx === -1) firstIdx = idx;
-      const displayTitle = title.length > 36 ? title.slice(0, 34) + "..." : title;
-      html += `<option value="${idx}" style="padding: 4px 6px;">第 ${String(rowNum).padStart(3, ' ')} 項 ｜ [${stage}/${cat}] ${displayTitle} (${assignee} ‧ ${status})</option>`;
-    }
-  });
-
-  if (!html) {
-    html = `<option value="-1" disabled style="padding: 6px; color: #94a3b8;">-- 無符合搜尋條件之管控項目 --</option>`;
-  }
-
-  selectEl.innerHTML = html;
-  if (firstIdx !== -1) {
-    selectEl.value = String(firstIdx);
-  }
-}
-
-// 快速過濾清單
-window.filterModifyItemList = function(query) {
-  if (!currentDrawerProject) return;
-  const rawItems = getProjectControlItems(currentDrawerProject);
-  renderModifySelectOptions(rawItems, query);
-};
-
-// 確認選擇並載入進入修改彈窗
-window.confirmModifySelectedControlItem = function() {
-  const selectEl = document.getElementById("modify-item-select");
-  if (!selectEl) return;
-  const selectedVal = parseInt(selectEl.value, 10);
-  if (isNaN(selectedVal) || selectedVal < 0) {
-    alert("請先選擇一筆欲修改的管控項目");
-    return;
-  }
-  closeModifyControlSelector();
-  openEditControlModal(selectedVal);
 };
 
 // 打開新增管控項目彈窗

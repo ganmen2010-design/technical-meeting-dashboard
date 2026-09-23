@@ -471,47 +471,6 @@
     </div>
   </div>
 
-  <!-- 選擇修改管控項目彈窗 -->
-  <div id="select-modify-control-modal" class="modal-overlay hidden">
-    <div class="modal-card glass-card" style="max-width: 680px; width: 95%; border: 1px solid rgba(245, 158, 11, 0.35); box-shadow: 0 10px 40px rgba(0,0,0,0.7);">
-      <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
-        <h3 id="select-modify-title" style="margin: 0; font-size: 18px; font-weight: 700; color: #fbbf24;">
-          <i class="fa-solid fa-pen-to-square text-amber"></i> 選擇欲修改之管控項目
-        </h3>
-        <button type="button" class="btn-close-modal" onclick="closeModifyControlSelector()">&times;</button>
-      </div>
-      <div class="modal-body" style="padding: 16px 20px;">
-        <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 13px; color: #fde047; line-height: 1.5;">
-          <i class="fa-solid fa-lightbulb text-amber"></i> <b>快捷提示：</b>您可在此搜尋並選擇要修改的項次；或直接在下方管控表中【雙擊任何一列】或點擊右側【修改】，即可直接編輯！
-        </div>
-
-        <div class="form-group" style="margin-bottom: 12px;">
-          <label for="modify-item-search" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">
-            <i class="fa-solid fa-magnifying-glass text-cyan"></i> 快速過濾項目 (輸入關鍵字、項次、負責人)
-          </label>
-          <input type="text" id="modify-item-search" placeholder="輸入關鍵字或項次篩選下方清單..." style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff; font-size: 13.5px;" oninput="filterModifyItemList(this.value)">
-        </div>
-
-        <div class="form-group" style="margin-bottom: 16px;">
-          <label for="modify-item-select" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">
-            <i class="fa-solid fa-list-ol text-amber"></i> 選擇要修改的管控項次與議題內容 (支援雙擊直達)
-          </label>
-          <select id="modify-item-select" size="9" style="width: 100%; padding: 6px; background: #0b1120; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: #f1f5f9; font-size: 13px; line-height: 1.8; max-height: 250px; font-family: monospace, sans-serif;" ondblclick="confirmModifySelectedControlItem()">
-            <!-- 動態生成 -->
-          </select>
-        </div>
-
-        <div style="display: flex; gap: 10px; justify-content: flex-end;">
-          <button type="button" class="btn-table-action" onclick="closeModifyControlSelector()" style="padding: 9px 18px; border-radius: 6px; background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15);">
-            取消
-          </button>
-          <button type="button" class="btn-login" onclick="confirmModifySelectedControlItem()" style="margin: 0; padding: 9px 24px; border-radius: 6px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 700;">
-            <i class="fa-solid fa-pen-to-square"></i> 載入並開始修改
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- 技術議題管控項目新增與編輯彈窗 (支援寫入管控表與本機/伺服器持久化) -->
   <div id="edit-control-modal" class="modal-overlay hidden">
@@ -619,6 +578,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=60.0"></script>
+  <script src="app.js?v=61.0"></script>
 </body>
 </html>
