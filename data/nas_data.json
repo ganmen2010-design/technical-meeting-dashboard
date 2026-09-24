@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-24 09:00:07",
+  "updatedAt": "2026-09-24 09:17:15",
   "totalProjects": 9,
   "totalTodos": 359,
   "activeTodosCount": 318,
@@ -4734,12 +4734,12 @@
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
       "meetDate": "2026/08/26",
-      "desc": "BIM模型作業進度說明中，B3F建議增列機電設備基座及人孔尺寸/位置、緩築牆、車道+車位淨高(CSD套繪後)檢核項目",
+      "desc": "BIM模型作業進度追蹤AB3F會議室上方管線設備定位及人體工學尺寸/位置、衛浴、機房(CSD及施工圖)檢討",
       "proposer": "工務所",
-      "dueDate": "2026/10/20",
+      "dueDate": "2026/09/30",
       "actualDate": "",
       "status": "進行中",
-      "result": "已提送專案會議討論"
+      "result": "提專案會議討論"
     },
     {
       "rowIdx": 330,

@@ -94,11 +94,15 @@
           <span id="cutoff-update-status" class="text-emerald font-bold" style="display: none;"><i class="fa-solid fa-circle-check"></i> 已更新！</span>
         </div>
 
-        <div class="live-status-badge" id="btn-open-presence" title="點擊查看目前在線同仁名單">
-          <span class="pulse-dot"></span>
-          <span class="status-label">即時連線中 (不斷線)</span>
+        <div class="live-status-badge" id="btn-open-presence" title="點擊查看目前連線與在線同仁名單">
+          <span class="pulse-dot" id="header-pulse-dot"></span>
+          <span class="status-label" id="header-status-label">即時連線中 (不斷線)</span>
           <span class="online-counter"><i class="fa-solid fa-users"></i> 在線 <b id="header-online-count">1</b> 人</span>
         </div>
+
+        <a id="btn-switch-localhost" href="http://localhost:8090" target="_blank" class="hidden" style="padding: 5px 12px; font-size: 12.5px; font-weight: 700; border-radius: 6px; background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(79, 172, 254, 0.35)); border: 1px solid rgba(0, 242, 254, 0.6); color: #00f2fe; text-decoration: none; display: none; align-items: center; gap: 6px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);" title="切換至本機伺服器以支援實體 NAS Excel 雙向寫入與本地應用程式開啟">
+          <i class="fa-solid fa-server"></i> 切換本機伺服器 (可寫入 NAS)
+        </a>
 
         <div class="user-profile-widget" id="user-profile-widget" title="點擊切換/修改豐譽個人帳密">
           <div class="user-avatar" id="user-avatar-icon">

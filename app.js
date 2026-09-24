@@ -32,6 +32,37 @@ let currentControlSearchText = "";
 let currentControlStageFilter = "all";
 let currentControlCategoryFilter = "all";
 let currentControlStatusFilter = "all";
+const isLocalServer = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+
+function initEnvironmentIndicator() {
+  const statusLabel = document.getElementById("header-status-label");
+  const switchBtn = document.getElementById("btn-switch-localhost");
+  const pulseDot = document.getElementById("header-pulse-dot");
+
+  if (isLocalServer) {
+    if (statusLabel) {
+      statusLabel.textContent = "本機伺服器 (即時寫入 NAS)";
+      statusLabel.title = "已連線至本機伺服器，所有編輯將即時雙向寫入 NAS 實體 Excel 與資料庫。";
+    }
+    if (switchBtn) switchBtn.style.display = "none";
+    if (pulseDot) {
+      pulseDot.style.background = "#10b981";
+      pulseDot.style.boxShadow = "0 0 10px #10b981";
+    }
+  } else {
+    if (statusLabel) {
+      statusLabel.textContent = "公網雲端版 (瀏覽器快取)";
+      statusLabel.title = "公網環境因網路安全限制無法直接穿透寫入公司內網 NAS；如需雙向寫入實體 Excel 請使用本機伺服器。";
+    }
+    if (switchBtn) {
+      switchBtn.style.display = "inline-flex";
+    }
+    if (pulseDot) {
+      pulseDot.style.background = "#f59e0b";
+      pulseDot.style.boxShadow = "0 0 10px #f59e0b";
+    }
+  }
+}
 
 // DOM 元件快取
 const loginModal = document.getElementById("login-modal");
@@ -218,6 +249,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initCalendarNavigation();
   initViewerModal();
   initMonthlyReportTabs();
+  initEnvironmentIndicator();
 
   // 1. 優先從 localStorage 讀取已建檔/修改後的個人帳密與身分 (永久記住)
   let savedUser = null;
@@ -2747,7 +2779,12 @@ window.handleSaveControlItem = async function(event) {
       if (proj.shortName) localStorage.setItem(`fengyu_ctrl_override_${normalizeSiteName(proj.shortName)}`, rawJson);
     } catch(err) {}
 
-    showToastNotification("已儲存至本機快取 (離線模式)；連線伺服器時將自動寫入 NAS 實體檔案。");
+    if (!isLocalServer) {
+      alert("⚠️【公網雲端版提示】\n\n您目前使用的是公網雲端版 (GitHub Pages)，受限於網路安全隔離政策，公網無法穿透寫入公司內網 NAS 實體 Excel！\n\n本次修改已先暫存於您的本機瀏覽器。\n若需直接雙向同步寫入 NAS 實體 Excel 檔案，請點選頂部「切換本機伺服器」或至本機 http://localhost:8090 操作。");
+      showToastNotification("⚠️ 已暫存至本機快取；實體 Excel 寫入請至本機伺服器 http://localhost:8090");
+    } else {
+      showToastNotification("已儲存至本機快取 (離線模式)；連線伺服器時將自動寫入 NAS 實體檔案。");
+    }
   }
 
   closeEditControlModal();
@@ -3053,7 +3090,12 @@ window.saveTodoItem = async function(e) {
     console.log("Offline or remote mode, updated locally:", err);
   }
 
-  showToastNotification(`✅ 待辦事項已儲存至雲端儀表板！`);
+  if (!isLocalServer) {
+    alert("⚠️【公網雲端版提示】\n\n您目前使用的是公網雲端版 (GitHub Pages)，受限於網路安全隔離政策，公網無法穿透寫入公司內網 NAS 實體 Excel！\n\n本次修改已先暫存於您的本機瀏覽器。\n若需直接雙向同步寫入 NAS 實體 Excel 檔案，請點選頂部「切換本機伺服器」或至本機 http://localhost:8090 操作。");
+    showToastNotification("⚠️ 已暫存至本機快取；實體 Excel 寫入請至本機伺服器 http://localhost:8090");
+  } else {
+    showToastNotification(`✅ 待辦事項已儲存至雲端儀表板！`);
+  }
 };
 
 // 匯出最新管控表 (Excel 相容之 CSV 格式，含 BOM UTF-8)
