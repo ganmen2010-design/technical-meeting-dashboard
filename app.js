@@ -776,10 +776,8 @@ window.switchMainTab = function(tabName, shouldScroll = false) {
   // 分頁切換後之動態即時渲染
   if (appData) {
     if (tabName === "announcements") {
-      const activeSub = document.querySelector(".subnav-btn.active")?.dataset.sub || "schedule";
-      if (activeSub === "schedule") {
-        renderGoogleCalendar(currentCalYear, currentCalMonth);
-      } else if (activeSub === "operations") {
+      const activeSub = document.querySelector(".subnav-btn.active")?.dataset.sub || "operations";
+      if (activeSub === "operations") {
         renderHeaderOverview(appData);
         renderMonthlyReportAnalysis();
       } else if (activeSub === "guidelines") {
@@ -828,18 +826,17 @@ function initNavigations() {
 
   subnavBtns.forEach(btn => {
     btn.addEventListener("click", () => {
+      const subType = btn.dataset.sub;
+      if (!subType) return; // a tag direct link
       subnavBtns.forEach(b => b.classList.remove("active"));
       subpanes.forEach(p => p.classList.add("hidden"));
 
       btn.classList.add("active");
-      const subType = btn.dataset.sub;
       const targetSub = document.getElementById(`sub-${subType}`);
       if (targetSub) targetSub.classList.remove("hidden");
 
       if (appData) {
-        if (subType === "schedule") {
-          renderGoogleCalendar(currentCalYear, currentCalMonth);
-        } else if (subType === "operations") {
+        if (subType === "operations") {
           renderHeaderOverview(appData);
           renderMonthlyReportAnalysis();
         } else if (subType === "guidelines") {
