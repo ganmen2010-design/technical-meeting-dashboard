@@ -2106,9 +2106,14 @@ function renderDrawerTabContent(tabType) {
         <span style="font-size: 13px; color: var(--text-muted);">
           <i class="fa-solid fa-folder-tree text-cyan"></i> 共 ${meetings.length} 場會議紀錄（預設收合，點擊單場標題可展開/收合）
         </span>
-        <button type="button" class="btn-table-action" onclick="toggleAllMeetingCards()">
-          <i class="fa-solid fa-arrows-up-down"></i> 全部展開 / 收合
-        </button>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button type="button" class="btn-ctrl-action" onclick="reloadProjectMeetingsFromNas()" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8;" title="立即自 NAS 重新掃描並同步本專案最新上傳之會議資料夾與檔案">
+            <i class="fa-solid fa-arrows-rotate"></i> 同步 NAS 最新會議
+          </button>
+          <button type="button" class="btn-table-action" onclick="toggleAllMeetingCards()">
+            <i class="fa-solid fa-arrows-up-down"></i> 全部展開 / 收合
+          </button>
+        </div>
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 14px;">
@@ -2980,6 +2985,37 @@ window.reloadProjectFromNas = async function() {
   if (controlCountEl) controlCountEl.textContent = totalCount;
 
   showToastNotification(`✅ 已成功重新載入 ${proj.shortName} NAS 實體最新管制表！共 ${totalCount} 項`);
+};
+
+// 秒級熱同步 NAS 專案歷次會議資料夾與檔案 (0.1 秒極速更新)
+window.reloadProjectMeetingsFromNas = async function() {
+  if (!currentDrawerProject) return;
+  const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+  if (!isLocal) {
+    alert("⚠️【公網雲端版提示】\n\n受限於公網與企業內網隔離，熱掃描 NAS 需透過本地伺服器執行。\n請切換至 http://localhost:8090 享受秒級自動同步 NAS 最新會議資料夾！");
+    return;
+  }
+
+  showToastNotification(`⏳ 正在同步 [${currentDrawerProject.shortName}] NAS 最新歷次會議資料...`);
+  try {
+    const res = await fetch(`/api/reload-project-meetings?projectId=${encodeURIComponent(currentDrawerProject.id)}`);
+    if (res.ok) {
+      const result = await res.json();
+      if (result.status === "success" && Array.isArray(result.meetings)) {
+        currentDrawerProject.meetings = result.meetings;
+        if (appData && appData.projects) {
+          const p = appData.projects.find(x => x.id === currentDrawerProject.id || x.shortName === currentDrawerProject.shortName);
+          if (p) p.meetings = result.meetings;
+        }
+        renderDrawerTabContent("meetings");
+        showToastNotification(`✅ 已成功同步 ${currentDrawerProject.shortName} 歷次會議！共 ${result.meetings.length} 場會議紀錄`);
+        return;
+      }
+    }
+    alert("同步失敗，請確認 NAS 連線狀態");
+  } catch(e) {
+    alert("連線本機伺服器失敗: " + e.message);
+  }
 };
 
 // 秒級熱同步 NAS 共用區待辦追蹤彙整表 (1~2 秒極速更新)
