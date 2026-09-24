@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-24 09:17:15",
+  "updatedAt": "2026-09-24 11:23:48",
   "totalProjects": 9,
   "totalTodos": 359,
   "activeTodosCount": 318,
@@ -58,12 +58,12 @@
     "新光合纖南港": {
       "dept": "北區工程處",
       "total": 26,
-      "completed": 18,
+      "completed": 20,
       "uploaded": 12,
-      "pending": 8,
+      "pending": 6,
       "postponed": 1,
-      "completionRate": 69.2,
-      "light": "orange"
+      "completionRate": 76.9,
+      "light": "yellow"
     },
     "立行倉儲物流": {
       "dept": "宜蘭工程處",
@@ -141,10 +141,10 @@
       "dept": "北區工程處",
       "sitesCount": 3,
       "total": 79,
-      "completed": 54,
+      "completed": 56,
       "uploaded": 45,
-      "pending": 25,
-      "completionRate": 68.4,
+      "pending": 23,
+      "completionRate": 70.9,
       "light": "orange"
     }
   },
@@ -4145,12 +4145,12 @@
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
-      "meetDate": "2026-07-23",
+      "meetDate": "2026/07/23",
       "desc": "車道截水溝 b10 小樑結構調整",
       "proposer": "工務所",
-      "dueDate": "2026-08-27",
+      "dueDate": "2026/08/27",
       "actualDate": "",
-      "status": "進行中",
+      "status": "已完成",
       "result": ""
     },
     {
@@ -4761,12 +4761,12 @@
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
-      "meetDate": "2026-08-27",
+      "meetDate": "2026/08/27",
       "desc": "結構圖說修正發行：追蹤結構技師針對樓板斷差處梁位調整及穿梁加大（G5、G11、B6、B9）之新版結構圖發行進度。",
       "proposer": "工務所/簡新豪",
-      "dueDate": "2026-09-15",
+      "dueDate": "2026/09/15",
       "actualDate": "",
-      "status": "進行中",
+      "status": "已完成",
       "result": ""
     },
     {
@@ -4817,10 +4817,10 @@
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
-      "meetDate": "2026-08-27",
+      "meetDate": "2026/08/27",
       "desc": "第二階段危評（危評二階）資料彙整：針對帷幕、施工架、塔吊等分項工程發包進度進行追蹤，加速協調採發處及協力廠商備齊施工計畫書，以利申報。(9月份啟動資料彙整，10月完成，11月初提送 )",
       "proposer": "工務所 / 採發單位",
-      "dueDate": "2026-09-24",
+      "dueDate": "2026/10/02",
       "actualDate": "",
       "status": "進行中",
       "result": ""
@@ -51217,12 +51217,12 @@
       "stats": {
         "dept": "北區工程處",
         "total": 26,
-        "completed": 18,
+        "completed": 20,
         "uploaded": 12,
-        "pending": 8,
+        "pending": 6,
         "postponed": 1,
-        "completionRate": 69.2,
-        "light": "orange"
+        "completionRate": 76.9,
+        "light": "yellow"
       },
       "controlSheetItems": [
         {

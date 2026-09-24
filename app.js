@@ -1697,6 +1697,52 @@ function groupFilesByFolder(files) {
   return groups;
 }
 
+// 下載會議或指引檔案
+window.downloadMeetingFile = function(encodedPath, encodedName) {
+  const path = decodeURIComponent(encodedPath);
+  const name = decodeURIComponent(encodedName || "");
+  const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+  if (isLocal) {
+    const link = document.createElement("a");
+    link.href = `/api/download?path=${encodeURIComponent(path)}`;
+    link.download = name || "download";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToastNotification(`⬇️ 正在下載：${name || '檔案'}...`);
+  } else {
+    alert(`⚠️【公網雲端版提示】\n\n受限於網路安全隔離，公網 GitHub Pages 無法直接下載公司內網 NAS 實體檔案。\n\n請切換至本機伺服器 http://localhost:8090 進行直接下載，或點選右側「複製路徑」貼入 Windows 檔案總管開啟。`);
+  }
+};
+
+// 配合檔案類型動態產生清單操作按鈕：PDF 顯示「查看/開啟」，PPT 顯示「下載簡報」，其他顯示「下載文件」
+function getFileActionButtonHtml(f, safeF, fullPath) {
+  const ext = (f.ext || "").toLowerCase();
+  const isPdf = ext === ".pdf";
+  const isPpt = ext === ".pptx" || ext === ".ppt";
+
+  if (isPdf) {
+    return `
+      <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')" title="線上預覽與開啟 PDF">
+        <i class="fa-solid fa-eye"></i> 查看/開啟
+      </button>
+    `;
+  } else if (isPpt) {
+    return `
+      <button type="button" class="btn-file-view" style="background: rgba(244, 63, 94, 0.18); border-color: rgba(244, 63, 94, 0.45); color: #fda4af;" onclick="downloadMeetingFile('${encodeURIComponent(fullPath)}', '${encodeURIComponent(f.name)}')" title="下載此 PowerPoint 簡報檔">
+        <i class="fa-solid fa-download"></i> 下載簡報
+      </button>
+    `;
+  } else {
+    // DOC, DOCX, XLS, XLSX 及其他文件檔案
+    return `
+      <button type="button" class="btn-file-view" style="background: rgba(59, 130, 246, 0.18); border-color: rgba(59, 130, 246, 0.45); color: #93c5fd;" onclick="downloadMeetingFile('${encodeURIComponent(fullPath)}', '${encodeURIComponent(f.name)}')" title="下載此文件檔案">
+        <i class="fa-solid fa-download"></i> 下載文件
+      </button>
+    `;
+  }
+}
+
 function renderGuidelines(items) {
   const list = document.getElementById("guidelines-list");
   if (!list) return;
@@ -1778,15 +1824,13 @@ function renderGuidelines(items) {
           const fullPath = f.fullPath || "";
           return `
             <div class="file-row-item">
-              <div class="file-left-info" title="${f.name}">
+              <div class="file-left-info" title="${f.name}" style="cursor: pointer;" onclick="openMeetingFileModal('${safeF}')">
                 <i class="fa-solid ${getFileIcon(f.ext)}" style="font-size: 22px;"></i>
                 <span class="file-name-text">${f.name}</span>
                 <small class="text-dim">(${(f.size/1024).toFixed(0)} KB ‧ ${f.lastModified})</small>
               </div>
               <div class="file-actions">
-                <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
-                  <i class="fa-solid fa-eye"></i> 查看/開啟
-                </button>
+                ${getFileActionButtonHtml(f, safeF, fullPath)}
                 <button type="button" class="btn-table-action" style="padding: 8px 12px; font-size: 14px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')" title="複製 NAS 實體路徑">
                   <i class="fa-regular fa-copy"></i> 複製路徑
                 </button>
@@ -2016,15 +2060,13 @@ function renderDrawerTabContent(tabType) {
                 const fullPath = f.fullPath || '';
                 return `
                   <div class="file-row-item">
-                    <div class="file-left-info" title="${f.name}">
+                    <div class="file-left-info" title="${f.name}" style="cursor: pointer;" onclick="openMeetingFileModal('${safeF}')">
                       <i class="fa-solid ${getFileIcon(f.ext)}"></i>
                       <span class="file-name-text">${f.name}</span>
                       <small class="text-dim">(${(f.size / 1024).toFixed(0)} KB)</small>
                     </div>
                     <div class="file-actions">
-                      <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
-                        <i class="fa-solid fa-file-powerpoint"></i> 查看/開啟
-                      </button>
+                      ${getFileActionButtonHtml(f, safeF, fullPath)}
                       <button type="button" class="btn-table-action" style="padding: 6px 10px; font-size: 12px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')" title="複製 NAS 實體路徑">
                         <i class="fa-regular fa-copy"></i> 複製路徑
                       </button>
@@ -2132,14 +2174,17 @@ function renderDrawerTabContent(tabType) {
             const safeF = encodeURIComponent(JSON.stringify(f));
             return `
               <div class="file-row-item">
-                <div class="file-left-info">
+                <div class="file-left-info" style="cursor: pointer;" onclick="openMeetingFileModal('${safeF}')">
                   <i class="fa-solid ${getFileIcon(f.ext)}"></i>
                   <span class="file-name-text">${f.name}</span>
                   <small class="text-dim">最後更新：${f.lastModified}</small>
                 </div>
-                <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')">
-                  <i class="fa-solid fa-eye"></i> 查看進度表
-                </button>
+                <div class="file-actions">
+                  ${getFileActionButtonHtml(f, safeF, f.fullPath || '')}
+                  <button type="button" class="btn-table-action" style="padding: 6px 10px; font-size: 12px;" onclick="copyNasPath('${encodeURIComponent(f.fullPath || '')}')" title="複製 NAS 實體路徑">
+                    <i class="fa-regular fa-copy"></i> 複製路徑
+                  </button>
+                </div>
               </div>
             `;
           }).join("")}
@@ -4256,28 +4301,29 @@ window.openMeetingFileModal = function(encodedFile) {
         <div><b>檔案大小：</b>${(f.size / 1024).toFixed(1)} KB ‧ <b>更新日期：</b>${f.lastModified || '未知'}</div>
       </div>
 
-      <div style="display: flex; gap: 10px; margin: 18px 0; flex-wrap: wrap;">
+      <div style="display: flex; gap: 12px; margin: 18px 0; flex-wrap: wrap;">
         <button type="button" class="btn-file-view" style="padding: 10px 18px; font-size: 14px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
           <i class="fa-regular fa-copy"></i> 複製 NAS 完整實體路徑
         </button>
-        <button type="button" class="btn-file-view" style="padding: 10px 18px; font-size: 14px; background: rgba(0,242,254,0.15); border-color: var(--primary);" onclick="openFileInExplorer('${encodeURIComponent(fullPath)}')">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i> 在檔案中開啟
-        </button>
+        ${isPdf ? `
+          <a href="/api/view-file?path=${encodeURIComponent(fullPath)}" target="_blank" rel="noopener noreferrer" class="btn-file-view" style="padding: 10px 18px; font-size: 14px; text-decoration: none; color: #fff; display: inline-flex; align-items: center; gap: 8px; background: rgba(56, 189, 248, 0.2); border-color: #38bdf8;" title="在新分頁中直接檢視或簡報">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> 在新分頁獨立開啟
+          </a>
+        ` : ''}
+        ${isPpt ? `
+          <button type="button" class="btn-file-view" style="padding: 10px 20px; font-size: 14px; font-weight: 600; text-decoration: none; color: #fff; background: linear-gradient(135deg, #f43f5e, #e11d48); border: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3); cursor: pointer;" onclick="downloadMeetingFile('${encodeURIComponent(fullPath)}', '${encodeURIComponent(f.name)}')">
+            <i class="fa-solid fa-download"></i> 下載此簡報檔
+          </button>
+        ` : ''}
+        ${(!isPdf && !isPpt && !isImg) ? `
+          <button type="button" class="btn-file-view" style="padding: 10px 20px; font-size: 14px; font-weight: 600; text-decoration: none; color: #fff; background: linear-gradient(135deg, #2563eb, #3b82f6); border: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); cursor: pointer;" onclick="downloadMeetingFile('${encodeURIComponent(fullPath)}', '${encodeURIComponent(f.name)}')">
+            <i class="fa-solid fa-download"></i> 下載此文件
+          </button>
+        ` : ''}
       </div>
 
       ${isPdf ? `
-        <div style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px 8px 0 0; border-bottom: none;">
-          <span style="font-size: 13px; color: #38bdf8; font-weight: 600;"><i class="fa-solid fa-file-pdf"></i> PDF 線上預覽</span>
-          <div style="display: flex; gap: 8px;">
-            <button type="button" class="btn-file-view" style="padding: 4px 12px; font-size: 12px; background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; color: #38bdf8; cursor: pointer;" onclick="togglePdfFullscreen()" title="將 PDF 展開為全螢幕簡報播放">
-              <i class="fa-solid fa-expand"></i> 🖥️ 全螢幕簡報模式
-            </button>
-            <a href="/api/view-file?path=${encodeURIComponent(fullPath)}" target="_blank" rel="noopener noreferrer" class="btn-file-view" style="padding: 4px 12px; font-size: 12px; text-decoration: none; color: #fff; display: inline-flex; align-items: center; gap: 4px;" title="在新分頁中直接檢視或簡報">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i> 在新分頁獨立開啟 (可直接簡報)
-            </a>
-          </div>
-        </div>
-        <div style="border: 1px solid rgba(255,255,255,0.15); border-radius: 0 0 8px 8px; overflow: hidden; height: 560px; background: #0b1120;">
+        <div style="border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; overflow: hidden; height: 580px; background: #0b1120;">
           <iframe id="pdf-preview-iframe" src="/api/view-file?path=${encodeURIComponent(fullPath)}" style="width: 100%; height: 100%; border: none;" allow="fullscreen" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
         </div>
       ` : ''}
@@ -4289,15 +4335,12 @@ window.openMeetingFileModal = function(encodedFile) {
           <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; max-width: 580px; margin: 0 auto 18px auto;">
             💡 <b>為何瀏覽器未直接顯示投影片？</b><br>
             瀏覽器原生僅支援 PDF 與圖片預覽；PowerPoint 簡報包含專有動畫與母片排版，網頁無法直接解碼。<br>
-            請點擊下方按鈕，系統將<b>直接呼叫電腦原生 Microsoft PowerPoint</b> 啟動全螢幕投影片放映，亦可下載至本機。
+            請點選上方或下方<b>「下載此簡報檔」</b>存至本機播放，或點選<b>「複製 NAS 完整實體路徑」</b>貼入檔案總管開啟。
           </p>
           <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14.5px; font-weight: 700; background: linear-gradient(135deg, #f43f5e, #e11d48); color: #fff; border: none; border-radius: 8px; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 8px;" onclick="openFileInExplorer('${encodeURIComponent(fullPath)}')">
-              <i class="fa-solid fa-play"></i> 立即在 PowerPoint 中開啟簡報
+            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14px; font-weight: 600; text-decoration: none; color: #fff; background: linear-gradient(135deg, #f43f5e, #e11d48); border: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3); cursor: pointer;" onclick="downloadMeetingFile('${encodeURIComponent(fullPath)}', '${encodeURIComponent(f.name)}')">
+              <i class="fa-solid fa-download"></i> 下載此簡報檔
             </button>
-            <a href="/api/download?path=${encodeURIComponent(fullPath)}" class="btn-file-view" style="padding: 10px 18px; font-size: 13.5px; text-decoration: none; color: #e2e8f0; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-download"></i> 下載此簡報檔 (.pptx)
-            </a>
           </div>
         </div>
       ` : ''}
@@ -4308,15 +4351,13 @@ window.openMeetingFileModal = function(encodedFile) {
           <h4 style="font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px;">Word 紀錄文件 (.docx)</h4>
           <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; max-width: 580px; margin: 0 auto 18px auto;">
             💡 <b>為何瀏覽器未直接顯示？</b><br>
-            Word 檔為專用排版文件，瀏覽器無法直接內嵌預覽。請點擊下方按鈕直接喚起本機 <b>Microsoft Word</b> 檢視與編輯，亦可下載檔案。
+            Word 檔為專用排版文件，瀏覽器無法直接內嵌預覽。<br>
+            請點選上方或下方<b>「下載此文件」</b>存至本機查閱與編輯，或點選<b>「複製 NAS 完整實體路徑」</b>貼入檔案總管開啟。
           </p>
           <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14.5px; font-weight: 700; background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff; border: none; border-radius: 8px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 8px;" onclick="openFileInExplorer('${encodeURIComponent(fullPath)}')">
-              <i class="fa-solid fa-file-word"></i> 立即在 Word 中開啟文件
+            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14px; font-weight: 600; text-decoration: none; color: #fff; background: linear-gradient(135deg, #2563eb, #3b82f6); border: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); cursor: pointer;" onclick="downloadMeetingFile('${encodeURIComponent(fullPath)}', '${encodeURIComponent(f.name)}')">
+              <i class="fa-solid fa-download"></i> 下載此文件
             </button>
-            <a href="/api/download?path=${encodeURIComponent(fullPath)}" class="btn-file-view" style="padding: 10px 18px; font-size: 13.5px; text-decoration: none; color: #e2e8f0; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-download"></i> 下載此文件 (.docx)
-            </a>
           </div>
         </div>
       ` : ''}
@@ -4327,15 +4368,13 @@ window.openMeetingFileModal = function(encodedFile) {
           <h4 style="font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px;">Excel 試算表 (.xlsx)</h4>
           <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; max-width: 580px; margin: 0 auto 18px auto;">
             💡 <b>為何瀏覽器未直接顯示？</b><br>
-            試算表包含多工作表與公式計算。請點擊下方按鈕直接喚起本機 <b>Microsoft Excel</b> 進行數據操作與查閱，亦可下載檔案。
+            試算表包含多工作表與公式計算，瀏覽器無法直接內嵌預覽。<br>
+            請點選上方或下方<b>「下載此文件」</b>存至本機查閱，或點選<b>「複製 NAS 完整實體路徑」</b>貼入檔案總管開啟。
           </p>
           <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14.5px; font-weight: 700; background: linear-gradient(135deg, #059669, #10b981); color: #fff; border: none; border-radius: 8px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 8px;" onclick="openFileInExplorer('${encodeURIComponent(fullPath)}')">
-              <i class="fa-solid fa-file-excel"></i> 立即在 Excel 中開啟試算表
+            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14px; font-weight: 600; text-decoration: none; color: #fff; background: linear-gradient(135deg, #059669, #10b981); border: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); cursor: pointer;" onclick="downloadMeetingFile('${encodeURIComponent(fullPath)}', '${encodeURIComponent(f.name)}')">
+              <i class="fa-solid fa-download"></i> 下載此文件
             </button>
-            <a href="/api/download?path=${encodeURIComponent(fullPath)}" class="btn-file-view" style="padding: 10px 18px; font-size: 13.5px; text-decoration: none; color: #e2e8f0; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-download"></i> 下載此試算表 (.xlsx)
-            </a>
           </div>
         </div>
       ` : ''}
@@ -4351,15 +4390,13 @@ window.openMeetingFileModal = function(encodedFile) {
           <div style="font-size: 42px; color: #94a3b8; margin-bottom: 12px;"><i class="fa-solid fa-file-lines"></i></div>
           <h4 style="font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px;">${f.name}</h4>
           <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; max-width: 580px; margin: 0 auto 18px auto;">
-            此檔案類型（${f.ext || '未知'}）需使用對應之專用軟體開啟。
+            此檔案類型（${f.ext || '未知'}）需使用對應之專用軟體開啟。<br>
+            請點選上方或下方<b>「下載此文件」</b>下載至本機，或點選<b>「複製 NAS 完整實體路徑」</b>貼入檔案總管開啟。
           </p>
           <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14.5px; font-weight: 700; background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; color: #38bdf8; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;" onclick="openFileInExplorer('${encodeURIComponent(fullPath)}')">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i> 在關聯應用程式中開啟
+            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14px; font-weight: 600; text-decoration: none; color: #fff; background: linear-gradient(135deg, #2563eb, #3b82f6); border: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); cursor: pointer;" onclick="downloadMeetingFile('${encodeURIComponent(fullPath)}', '${encodeURIComponent(f.name)}')">
+              <i class="fa-solid fa-download"></i> 下載此文件
             </button>
-            <a href="/api/download?path=${encodeURIComponent(fullPath)}" class="btn-file-view" style="padding: 10px 18px; font-size: 13.5px; text-decoration: none; color: #e2e8f0; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-download"></i> 下載此檔案
-            </a>
           </div>
         </div>
       ` : ''}
