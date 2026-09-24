@@ -1451,9 +1451,10 @@ function renderMonthlyReportAnalysis() {
   if (!container || !appData) return;
 
   const rep = appData.monthlyReportAnalysis || {};
+  const cutoffStr = window.currentCutoffDate || (document.getElementById("cutoff-date-input") ? document.getElementById("cutoff-date-input").value : "2026-08-24") || "2026-08-24";
 
   // -------------------------------------------------------------
-  // 1. P12: 各工處待辦執行績效與燈號分析 (扣除後續辦理)
+  // 1. P12: 各工處待辦執行績效與燈號分析 (連動基準日動態重算)
   // -------------------------------------------------------------
   const deptMap = {};
   ((appData && appData.projects) ? appData.projects : []).forEach(p => {
@@ -1464,13 +1465,26 @@ function renderMonthlyReportAnalysis() {
     const norm = normalizeSiteName(p.shortName);
     const todos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === norm);
     todos.forEach(t => {
+      // 基準日連動：若交付日期在基準日之後，排除於本次統計
+      const md = formatToInputDate(t.meetDate);
+      if (md && md > cutoffStr) return;
+
       deptMap[d].total++;
       if (t.status === "後續辦理") {
         deptMap[d].postponed++;
       } else {
         deptMap[d].active++;
-        if (t.status === "已完成") deptMap[d].completed++;
-        else deptMap[d].pending++;
+        // 已完成判定：狀態為已完成，且實際完成日需在基準日前（若填有實際完成日）
+        if (t.status === "已完成") {
+          const ad = formatToInputDate(t.actualDate);
+          if (!ad || ad <= cutoffStr) {
+            deptMap[d].completed++;
+          } else {
+            deptMap[d].pending++;
+          }
+        } else {
+          deptMap[d].pending++;
+        }
       }
     });
   });
@@ -1495,7 +1509,13 @@ function renderMonthlyReportAnalysis() {
       lightPill
     };
   });
-  deptList.sort((a, b) => b.rateValNum - a.rateValNum);
+  // 依完成率降冪排序，若同率則以已完成筆數排序
+  deptList.sort((a, b) => {
+    if (Math.abs(b.rateValNum - a.rateValNum) > 0.001) {
+      return b.rateValNum - a.rateValNum;
+    }
+    return b.completed - a.completed;
+  });
 
   const deptRowsHtml = deptList.map((d, idx) => `
     <tr>
@@ -1511,18 +1531,35 @@ function renderMonthlyReportAnalysis() {
   `).join("");
 
   // -------------------------------------------------------------
-  // 2. P11: 各工地待辦執行績效排名 (扣除後續辦理)
+  // 2. P11: 各工地待辦執行績效排名 (連動基準日動態重算)
   // -------------------------------------------------------------
   const siteStatsList = ((appData && appData.projects) ? appData.projects : []).map(p => {
     const norm = normalizeSiteName(p.shortName);
     const todos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === norm);
-    const total = todos.length;
-    const postponed = todos.filter(t => t.status === "後續辦理").length;
+    
+    // 基準日連動：排除交付日期在基準日之後之項目
+    const curTodos = todos.filter(t => {
+      const md = formatToInputDate(t.meetDate);
+      return !md || md <= cutoffStr;
+    });
+
+    const total = curTodos.length;
+    const postponed = curTodos.filter(t => t.status === "後續辦理").length;
     const active = total - postponed;
-    const completed = todos.filter(t => t.status === "已完成").length;
+
+    // 已完成判定：狀態為已完成，且實際完成日在基準日前
+    const completedItems = curTodos.filter(t => {
+      if (t.status !== "已完成") return false;
+      const ad = formatToInputDate(t.actualDate);
+      return !ad || ad <= cutoffStr;
+    });
+    const completed = completedItems.length;
+
     const rateVal = active > 0 ? (completed / active) * 100 : 0;
     const rateStr = `${rateVal.toFixed(1)}%`;
-    const withResult = todos.filter(t => t.status === "已完成" && t.result && t.result.trim() !== "" && t.result.trim() !== "-").length;
+
+    // 成果上傳：已完成且填寫成果說明者
+    const withResult = completedItems.filter(t => t.result && t.result.trim() !== "" && t.result.trim() !== "-").length;
     const uploadStr = completed > 0 ? `${((withResult / completed) * 100).toFixed(1)}%` : "—";
 
     return {
@@ -1536,7 +1573,13 @@ function renderMonthlyReportAnalysis() {
       uploadStr
     };
   });
-  siteStatsList.sort((a, b) => b.rateVal - a.rateVal);
+  // 依完成率降冪排序，若同率則以已完成筆數排序
+  siteStatsList.sort((a, b) => {
+    if (Math.abs(b.rateVal - a.rateVal) > 0.001) {
+      return b.rateVal - a.rateVal;
+    }
+    return b.completed - a.completed;
+  });
 
   const siteRowsHtml = siteStatsList.map((s, idx) => `
     <tr>
@@ -1583,9 +1626,14 @@ function renderMonthlyReportAnalysis() {
     <div class="report-two-col-grid">
       <!-- 左欄：P12 分工處統計 -->
       <div class="report-block">
-        <div class="report-block-title">
-          <i class="fa-solid fa-sitemap text-amber"></i>
-          <h4>各工處待辦執行績效與燈號分析 (P12 統計)</h4>
+        <div class="report-block-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-sitemap text-amber"></i>
+            <h4>各工處待辦執行績效與燈號分析 (P12 統計)</h4>
+          </div>
+          <span style="font-size: 13px; color: #fbbf24; font-weight: 600; background: rgba(251, 191, 36, 0.12); padding: 3px 9px; border-radius: 6px; border: 1px solid rgba(251, 191, 36, 0.3); display: inline-flex; align-items: center; gap: 5px;">
+            <i class="fa-regular fa-calendar-check"></i> 基準日：${cutoffStr}
+          </span>
         </div>
         <div class="table-responsive" style="margin-top: 10px;">
           <table class="modern-table">
@@ -1610,9 +1658,14 @@ function renderMonthlyReportAnalysis() {
 
       <!-- 右欄：P11 分工地績效 -->
       <div class="report-block">
-        <div class="report-block-title">
-          <i class="fa-solid fa-cubes-stacked text-emerald"></i>
-          <h4>各工地待辦執行績效排名 (P11 統計)</h4>
+        <div class="report-block-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-cubes-stacked text-emerald"></i>
+            <h4>各工地待辦執行績效排名 (P11 統計)</h4>
+          </div>
+          <span style="font-size: 13px; color: #34d399; font-weight: 600; background: rgba(52, 211, 153, 0.12); padding: 3px 9px; border-radius: 6px; border: 1px solid rgba(52, 211, 153, 0.3); display: inline-flex; align-items: center; gap: 5px;">
+            <i class="fa-regular fa-calendar-check"></i> 基準日：${cutoffStr}
+          </span>
         </div>
         <div class="table-responsive" style="margin-top: 10px;">
           <table class="modern-table">
