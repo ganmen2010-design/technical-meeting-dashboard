@@ -1810,7 +1810,13 @@ function renderGuidelines(items) {
 
   const nas00Path = "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\2.技術會議運作指引(供查看及下載)\\00發布區";
 
-  if (!items || items.length === 0) {
+  // 嚴格依規範：發布技術指引只連結與展示「00發布區」之檔案，其餘不顯示
+  const publishItems = (items || []).filter(f => {
+    const p = (f.relPath || f.fullPath || '').replace(/\\/g, '/');
+    return p.includes("00發布區");
+  });
+
+  if (!publishItems || publishItems.length === 0) {
     list.innerHTML = `
       <div class="glass-card section-card" style="margin-bottom: 20px;">
         <div class="card-header" style="flex-direction: column; align-items: flex-start; gap: 8px;">
@@ -1836,7 +1842,7 @@ function renderGuidelines(items) {
     return;
   }
 
-  const groups = groupFilesByFolder(items);
+  const groups = groupFilesByFolder(publishItems);
   const headerHtml = `
     <div class="glass-card section-card" style="margin-bottom: 20px;">
       <div class="card-header" style="flex-direction: column; align-items: flex-start; gap: 8px;">
@@ -1862,20 +1868,20 @@ function renderGuidelines(items) {
         </div>
         <div class="category-meta-badge" style="margin-top: 4px; font-size: 13.5px; color: #a5f3fc; background: rgba(0,242,254,0.08); padding: 6px 14px; border-radius: 6px; border: 1px solid rgba(0,242,254,0.2); width: 100%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
           <span><i class="fa-solid fa-server text-cyan"></i> <b>NAS 實體專區：</b>\\\\192.168.1.221\\s5\\1003技術會議資料專區\\2.技術會議運作指引(供查看及下載)\\00發布區</span>
-          <span class="badge-pill bg-cyan-glow" style="padding: 2px 10px; font-size: 12px;">共 ${items.length} 份發布文件</span>
+          <span class="badge-pill bg-cyan-glow" style="padding: 2px 10px; font-size: 12px; font-weight: 700;">共 ${publishItems.length} 份發布文件</span>
         </div>
       </div>
     </div>
   `;
 
   const cardsHtml = Object.entries(groups).map(([folderName, fList], idx) => `
-    <div class="guideline-folder-card collapsed" id="guide-card-${idx}" style="margin-bottom: 16px;">
+    <div class="guideline-folder-card" id="guide-card-${idx}" style="margin-bottom: 16px;">
       <div class="guideline-folder-header" onclick="toggleGuidelineFolder(this)" style="cursor: pointer; user-select: none;">
         <span class="guideline-folder-title"><i class="fa-solid fa-folder-tree text-cyan"></i> ${folderName}</span>
         <div style="display: flex; align-items: center; gap: 12px;">
-          <span class="files-badge" style="font-size: 14.5px; padding: 4px 12px;">${fList.length} 份指引檔案</span>
+          <span class="files-badge" style="font-size: 14.5px; padding: 4px 12px;">${fList.length} 份發布檔案</span>
           <button type="button" class="btn-table-action" style="padding: 4px 12px; font-size: 14px; background: rgba(0,242,254,0.08); border-color: rgba(0,242,254,0.3); pointer-events: none;">
-            <i class="fa-solid fa-chevron-down text-cyan guideline-toggle-icon"></i> <span class="toggle-text">展開</span>
+            <i class="fa-solid fa-chevron-down text-cyan guideline-toggle-icon"></i> <span class="toggle-text">收合</span>
           </button>
         </div>
       </div>
