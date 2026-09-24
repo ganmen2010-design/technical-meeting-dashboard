@@ -1715,7 +1715,18 @@ window.downloadMeetingFile = function(encodedPath, encodedName) {
   }
 };
 
-// 配合檔案類型動態產生清單操作按鈕：PDF 顯示「查看/開啟」，PPT 顯示「下載簡報」，其他顯示「下載文件」
+// 直接在新分頁開啟 PDF
+window.openPdfDirectly = function(encodedPath) {
+  const path = decodeURIComponent(encodedPath);
+  const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+  if (isLocal) {
+    window.open(`/api/view-file?path=${encodeURIComponent(path)}`, '_blank');
+  } else {
+    alert("⚠️【公網雲端版提示】\n\n受限於網路安全隔離，公網 GitHub Pages 無法直接讀取公司內網 NAS 實體 PDF 檔案。\n\n請切換至本機伺服器 http://localhost:8090 享受一鍵新分頁直接開啟 PDF，或點選右側「複製路徑」貼入 Windows 檔案總管開啟。");
+  }
+};
+
+// 配合檔案類型動態產生清單操作按鈕：PDF 顯示「在新分頁開啟」，PPT 顯示「下載簡報」，其他顯示「下載文件」
 function getFileActionButtonHtml(f, safeF, fullPath) {
   const ext = (f.ext || "").toLowerCase();
   const isPdf = ext === ".pdf";
@@ -1723,8 +1734,8 @@ function getFileActionButtonHtml(f, safeF, fullPath) {
 
   if (isPdf) {
     return `
-      <button type="button" class="btn-file-view" onclick="openMeetingFileModal('${safeF}')" title="線上預覽與開啟 PDF">
-        <i class="fa-solid fa-eye"></i> 查看/開啟
+      <button type="button" class="btn-file-view" onclick="openPdfDirectly('${encodeURIComponent(fullPath)}')" title="在新分頁直接開啟此 PDF (可直接簡報)">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> 在新分頁開啟
       </button>
     `;
   } else if (isPpt) {
