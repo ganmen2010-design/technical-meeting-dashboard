@@ -1875,13 +1875,13 @@ function renderGuidelines(items) {
   `;
 
   const cardsHtml = Object.entries(groups).map(([folderName, fList], idx) => `
-    <div class="guideline-folder-card" id="guide-card-${idx}" style="margin-bottom: 16px;">
+    <div class="guideline-folder-card collapsed" id="guide-card-${idx}" style="margin-bottom: 16px;">
       <div class="guideline-folder-header" onclick="toggleGuidelineFolder(this)" style="cursor: pointer; user-select: none;">
         <span class="guideline-folder-title"><i class="fa-solid fa-folder-tree text-cyan"></i> ${folderName}</span>
         <div style="display: flex; align-items: center; gap: 12px;">
           <span class="files-badge" style="font-size: 14.5px; padding: 4px 12px;">${fList.length} 份發布檔案</span>
           <button type="button" class="btn-table-action" style="padding: 4px 12px; font-size: 14px; background: rgba(0,242,254,0.08); border-color: rgba(0,242,254,0.3); pointer-events: none;">
-            <i class="fa-solid fa-chevron-down text-cyan guideline-toggle-icon"></i> <span class="toggle-text">收合</span>
+            <i class="fa-solid fa-chevron-down text-cyan guideline-toggle-icon"></i> <span class="toggle-text">展開</span>
           </button>
         </div>
       </div>
