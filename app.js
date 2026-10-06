@@ -4317,23 +4317,10 @@ window.openTechnicalIssueModal = function(encodedIssue, encodedFile) {
           <div><i class="fa-solid fa-folder-tree text-purple"></i> <b>來源檔案位置：</b><code>${fullPath}</code></div>
         </div>
 
-        <div style="display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap;">
-          <button type="button" class="btn-file-view" style="padding: 10px 18px; font-size: 14px;" onclick="copyNasPath('${encodeURIComponent(fullPath)}')">
-            <i class="fa-regular fa-copy"></i> 複製 NAS 實體路徑
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+          <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14px; font-weight: 600; background: rgba(0,242,254,0.18); border: 1px solid var(--primary); color: #fff; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;" onclick="openFileInExplorer('${encodeURIComponent(fullPath)}')">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> 在檔案中開啟
           </button>
-          <button type="button" class="btn-file-view" style="padding: 10px 18px; font-size: 14px; background: rgba(0,242,254,0.15); border-color: var(--primary);" onclick="openFileInExplorer('${encodeURIComponent(fullPath)}')">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i> 在檔案總管中開啟
-          </button>
-          ${file ? `
-            <a href="/api/download?path=${encodeURIComponent(fullPath)}" target="_blank" download class="btn-table-action" style="padding: 10px 18px; font-size: 14px;">
-              <i class="fa-solid fa-download"></i> 下載來源檔案
-            </a>
-          ` : ''}
-          ${projId ? `
-            <button type="button" class="btn-table-action" style="padding: 10px 18px; font-size: 14px; margin-left: auto;" onclick="openProjectDrawerTab('${projId}', 'meetings'); document.getElementById('file-viewer-modal').classList.add('hidden');">
-              <i class="fa-solid fa-folder-open"></i> 進入專案作業區歷次會議
-            </button>
-          ` : ''}
         </div>
       </div>
     `;
