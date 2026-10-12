@@ -1526,10 +1526,10 @@ body {
 
 /* === 專案詳細資料抽屜 (Project Drawer) === */
 .project-drawer-card {
-  max-width: 1040px;
-  width: 95%;
-  height: 88vh;
-  max-height: 88vh;
+  max-width: calc(100vw - 36px) !important;
+  width: calc(100vw - 36px) !important;
+  height: 92vh !important;
+  max-height: 92vh !important;
   display: flex;
   flex-direction: column;
   padding: 0;

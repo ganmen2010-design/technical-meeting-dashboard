@@ -1426,12 +1426,20 @@ window.applyCutoffDate = async function() {
     renderWorkspaces(appData.projects);
   }
 
-  // 若目前專案抽屜正在開啟，即時重算抽屜頂部 KPI 按鈕數據與過濾
+  // 若目前專案抽屜正在開啟，僅針對當前分頁更新頂部工具列與過濾（避免覆蓋第一~三頁籤）
   if (currentDrawerProject) {
-    updateControlHeaderRibbon();
-    applyControlFilters();
-    updateTodoHeaderRibbon();
-    applyTodoFilters();
+    const activeDrawerTab = document.querySelector(".drawer-tab-btn.active");
+    const activeTabType = activeDrawerTab ? activeDrawerTab.dataset.drawerTab : "meetings";
+    if (activeTabType === "control") {
+      updateControlHeaderRibbon();
+      applyControlFilters();
+    } else if (activeTabType === "todos") {
+      updateTodoHeaderRibbon();
+      applyTodoFilters();
+    } else {
+      const headerStatsContainer = document.getElementById("drawer-header-stats-container");
+      if (headerStatsContainer) headerStatsContainer.innerHTML = "";
+    }
   }
 
   if (statusEl) {
@@ -2016,7 +2024,6 @@ window.openProjectDrawer = function(projectId) {
 
   const deptEl = document.getElementById("drawer-project-dept");
   const nameEl = document.getElementById("drawer-project-name");
-  const lightEl = document.getElementById("drawer-project-light");
   const todoCountEl = document.getElementById("drawer-todo-count");
   const controlCountEl = document.getElementById("drawer-control-count");
 
@@ -2025,18 +2032,6 @@ window.openProjectDrawer = function(projectId) {
 
   const normSite = normalizeSiteName(proj.shortName);
   const drawerTodos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === normSite);
-  const drawerPostponed = drawerTodos.filter(t => t.status === "後續辦理").length;
-  const drawerActive = drawerTodos.length - drawerPostponed;
-  const drawerCompleted = drawerTodos.filter(t => t.status === "已完成").length;
-  const drawerRateVal = drawerActive > 0 ? ((drawerCompleted / drawerActive) * 100).toFixed(1) : 0;
-  const stats = {
-    completionRate: drawerRateVal,
-    light: drawerRateVal >= 80 ? "green" : (drawerRateVal >= 65 ? "yellow" : (drawerRateVal >= 50 ? "orange" : "red"))
-  };
-  if (lightEl) {
-    lightEl.className = `drawer-stat-badge light-${stats.light || 'white'}`;
-    lightEl.textContent = `待辦完成率: ${stats.completionRate}%`;
-  }
 
   if (todoCountEl) todoCountEl.textContent = drawerTodos.length;
   const totalCtrlItems = (proj.controlSheetItems || []).length;
@@ -2073,24 +2068,13 @@ function renderDrawerTabContent(tabType) {
 
   const proj = currentDrawerProject;
 
-  // 頁籤頂部狀態標籤動態更新
+  // 頁籤頂部狀態標籤動態更新（第一~三頁籤不顯示「待辦完成率」，僅第四頁籤待辦事項顯示）
   const headerStatsContainer = document.getElementById("drawer-header-stats-container");
-  const normSite = normalizeSiteName(proj.shortName);
-  const projTodos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === normSite);
-  const postponedTodos = projTodos.filter(t => t.status === '後續辦理');
-  const activeTodos = projTodos.filter(t => t.status !== '後續辦理');
-  const completedTodos = projTodos.filter(t => t.status === '已完成');
-  const noResultTodos = completedTodos.filter(t => !t.result || t.result.trim() === '' || t.result.trim() === '-' || t.result.trim() === '待補');
-  const rateVal = activeTodos.length > 0 ? ((completedTodos.length / activeTodos.length) * 100).toFixed(1) : 0;
-  const todoStats = {
-    completionRate: rateVal,
-    light: rateVal >= 80 ? "green" : (rateVal >= 65 ? "yellow" : (rateVal >= 50 ? "orange" : "red"))
-  };
 
   if (tabType === "todos") {
     updateTodoHeaderRibbon();
   } else if (tabType !== "control" && headerStatsContainer) {
-    headerStatsContainer.innerHTML = `<span class="drawer-stat-badge light-${todoStats.light || 'white'}">待辦完成率: ${todoStats.completionRate}%</span>`;
+    headerStatsContainer.innerHTML = "";
   }
 
   // 頁籤 1: 歷次會議資料 (預設為收合模式)
@@ -2204,20 +2188,20 @@ function renderDrawerTabContent(tabType) {
       </div>
 
       <!-- 逐項條列管控表（固定表頭） -->
-      <div class="table-responsive" style="max-height: 590px; overflow-y: auto;">
+      <div class="table-responsive" style="max-height: calc(92vh - 210px); overflow-y: auto;">
         <table class="modern-table">
           <thead style="position: sticky; top: 0; background: #0c1322; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
             <tr>
-              <th style="width: 45px; text-align: center;">項次</th>
-              <th style="width: 95px;">階段</th>
-              <th style="width: 110px;">類別</th>
+              <th style="width: 55px; text-align: center;">項次</th>
+              <th style="width: 140px;">階段</th>
+              <th style="width: 140px;">類別</th>
               <th>議題項目 (檢討內容)</th>
-              <th style="width: 85px;">負責人</th>
-              <th style="width: 95px;">預定產出</th>
-              <th style="width: 95px;">實際產出</th>
-              <th style="width: 80px; text-align: center;">狀態</th>
-              <th style="width: 170px;">辦理情形與成果連結</th>
-              <th style="width: 75px; text-align: center;">操作</th>
+              <th style="width: 95px;">負責人</th>
+              <th style="width: 110px;">預定產出</th>
+              <th style="width: 110px;">實際產出</th>
+              <th style="width: 90px; text-align: center;">狀態</th>
+              <th style="width: 240px;">辦理情形與成果連結</th>
+              <th style="width: 80px; text-align: center;">操作</th>
             </tr>
           </thead>
           <tbody id="control-table-tbody">
@@ -2276,18 +2260,18 @@ function renderDrawerTabContent(tabType) {
     }
 
     content.innerHTML = `
-      <div class="table-responsive" style="max-height: 620px; overflow-y: auto;">
+      <div class="table-responsive" style="max-height: calc(92vh - 170px); overflow-y: auto;">
         <table class="modern-table">
           <thead style="position: sticky; top: 0; background: #0c1322; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
             <tr>
-              <th style="width: 50px; text-align: center;">項次</th>
-              <th style="width: 105px;">會議日期</th>
-              <th style="width: 95px;">提議者</th>
+              <th style="width: 55px; text-align: center;">項次</th>
+              <th style="width: 115px;">會議日期</th>
+              <th style="width: 110px;">提議者</th>
               <th>討論事項與決議內容</th>
-              <th style="width: 105px;">預定完成日</th>
-              <th style="width: 90px; text-align: center;">辦理情形</th>
-              <th style="width: 200px;">成果說明</th>
-              <th style="width: 75px; text-align: center;">操作</th>
+              <th style="width: 115px;">預定完成日</th>
+              <th style="width: 95px; text-align: center;">辦理情形</th>
+              <th style="width: 280px;">成果說明</th>
+              <th style="width: 80px; text-align: center;">操作</th>
             </tr>
           </thead>
           <tbody id="todo-table-tbody">
