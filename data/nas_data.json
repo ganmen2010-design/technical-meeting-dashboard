@@ -1,48 +1,48 @@
 {
-  "updatedAt": "2026-09-30 08:15:41",
+  "updatedAt": "2026-10-13 17:34:02",
   "totalProjects": 9,
-  "totalTodos": 365,
-  "activeTodosCount": 324,
+  "totalTodos": 377,
+  "activeTodosCount": 340,
   "totalIssues": 174,
   "siteStats": {
     "坤門安居": {
       "dept": "宜蘭工程處",
-      "total": 38,
-      "completed": 31,
-      "uploaded": 22,
+      "total": 40,
+      "completed": 33,
+      "uploaded": 26,
       "pending": 7,
-      "postponed": 2,
-      "completionRate": 81.6,
+      "postponed": 0,
+      "completionRate": 82.5,
       "light": "yellow"
     },
     "中油綠能": {
       "dept": "高屏工程處",
-      "total": 58,
-      "completed": 36,
-      "uploaded": 28,
-      "pending": 22,
-      "postponed": 19,
-      "completionRate": 62.1,
+      "total": 62,
+      "completed": 46,
+      "uploaded": 37,
+      "pending": 16,
+      "postponed": 17,
+      "completionRate": 74.2,
       "light": "orange"
     },
     "朴子安居": {
       "dept": "中區工程處",
-      "total": 62,
-      "completed": 49,
-      "uploaded": 45,
-      "pending": 13,
+      "total": 67,
+      "completed": 57,
+      "uploaded": 53,
+      "pending": 10,
       "postponed": 0,
-      "completionRate": 79,
+      "completionRate": 85.1,
       "light": "yellow"
     },
     "平實安居": {
       "dept": "台南工程處",
-      "total": 40,
+      "total": 41,
       "completed": 24,
       "uploaded": 13,
-      "pending": 16,
+      "pending": 17,
       "postponed": 1,
-      "completionRate": 60,
+      "completionRate": 58.5,
       "light": "orange"
     },
     "CDC防疫中心": {
@@ -77,22 +77,22 @@
     },
     "台南崇明商場": {
       "dept": "台南工程處",
-      "total": 25,
-      "completed": 13,
-      "uploaded": 10,
-      "pending": 12,
+      "total": 24,
+      "completed": 17,
+      "uploaded": 14,
+      "pending": 7,
       "postponed": 7,
-      "completionRate": 52,
+      "completionRate": 70.8,
       "light": "orange"
     },
     "公西檔案庫房": {
       "dept": "北區工程處",
-      "total": 12,
-      "completed": 3,
+      "total": 17,
+      "completed": 4,
       "uploaded": 3,
-      "pending": 9,
+      "pending": 13,
       "postponed": 0,
-      "completionRate": 25,
+      "completionRate": 23.5,
       "light": "red"
     }
   },
@@ -100,51 +100,51 @@
     "宜蘭工程處": {
       "dept": "宜蘭工程處",
       "sitesCount": 2,
-      "total": 54,
-      "completed": 46,
-      "uploaded": 34,
+      "total": 56,
+      "completed": 48,
+      "uploaded": 38,
       "pending": 8,
-      "completionRate": 85.2,
+      "completionRate": 85.7,
       "light": "yellow"
     },
     "高屏工程處": {
       "dept": "高屏工程處",
       "sitesCount": 1,
-      "total": 58,
-      "completed": 36,
-      "uploaded": 28,
-      "pending": 22,
-      "completionRate": 62.1,
+      "total": 62,
+      "completed": 46,
+      "uploaded": 37,
+      "pending": 16,
+      "completionRate": 74.2,
       "light": "orange"
     },
     "中區工程處": {
       "dept": "中區工程處",
       "sitesCount": 1,
-      "total": 62,
-      "completed": 49,
-      "uploaded": 45,
-      "pending": 13,
-      "completionRate": 79,
+      "total": 67,
+      "completed": 57,
+      "uploaded": 53,
+      "pending": 10,
+      "completionRate": 85.1,
       "light": "yellow"
     },
     "台南工程處": {
       "dept": "台南工程處",
       "sitesCount": 2,
       "total": 65,
-      "completed": 37,
-      "uploaded": 23,
-      "pending": 28,
-      "completionRate": 56.9,
+      "completed": 41,
+      "uploaded": 27,
+      "pending": 24,
+      "completionRate": 63.1,
       "light": "orange"
     },
     "北區工程處": {
       "dept": "北區工程處",
       "sitesCount": 3,
-      "total": 85,
-      "completed": 56,
+      "total": 90,
+      "completed": 57,
       "uploaded": 45,
-      "pending": 29,
-      "completionRate": 65.9,
+      "pending": 33,
+      "completionRate": 63.3,
       "light": "orange"
     }
   },
@@ -284,9 +284,9 @@
       "meetDate": "2026-01-09",
       "desc": "土方開挖採「全面開挖、分區施工」策略 。A棟開挖完成打設PC後即推進B棟，持續評估若逢人力或動線瓶頸，考量將國際會議廳區域留作施工腹地。",
       "proposer": "規劃組/施工組",
-      "dueDate": "2026-10-10",
+      "dueDate": "2026-10-15",
       "actualDate": "",
-      "status": "後續辦理",
+      "status": "進行中",
       "result": "A棟已開挖完成，B區因東側為異味土，調整出土順序，改由西側往東側開挖，東側異味土區域作為出土放坡動線，待業主指示A4區可搬運後出土"
     },
     {
@@ -557,7 +557,7 @@
     },
     {
       "rowIdx": 31,
-      "itemNo": "1",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -565,13 +565,13 @@
       "desc": "室內降板高程檢討(分樓層管制)筏基OK",
       "proposer": "規劃組",
       "dueDate": "2026-10-12",
-      "actualDate": "",
-      "status": "進行中",
+      "actualDate": "2026-09-15",
+      "status": "已完成",
       "result": "於BIM建模時同步持續檢討中"
     },
     {
       "rowIdx": 32,
-      "itemNo": "2",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -579,13 +579,13 @@
       "desc": "重型支撐架規劃圖請‘’技師室‘’check",
       "proposer": "規劃組",
       "dueDate": "2026-10-12",
-      "actualDate": "",
-      "status": "進行中",
+      "actualDate": "2026-09-15",
+      "status": "已完成",
       "result": "主要用於B棟(買斷),A棟可用於梁下支撐"
     },
     {
       "rowIdx": 33,
-      "itemNo": "3",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -599,21 +599,21 @@
     },
     {
       "rowIdx": 34,
-      "itemNo": "4",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
       "meetDate": "2026-02-04",
       "desc": "模板精準結構達到策略（柱、梁、牆和樓梯）",
       "proposer": "規劃組/施工組",
-      "dueDate": "2026-10-12",
+      "dueDate": "2026-11-11",
       "actualDate": "",
       "status": "進行中",
-      "result": ""
+      "result": "柱、樑、牆精準模板,樓梯再評估"
     },
     {
       "rowIdx": 35,
-      "itemNo": "4",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -627,35 +627,35 @@
     },
     {
       "rowIdx": 36,
-      "itemNo": "5",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
       "meetDate": "2026-02-04",
       "desc": "室內臨時配電箱數量建議增加",
       "proposer": "規劃組/施工組",
-      "dueDate": "2026-10-12",
+      "dueDate": "2026-12-09",
       "actualDate": "",
       "status": "進行中",
       "result": "請正龍規劃配電盤(我方出材料,正龍出工)"
     },
     {
       "rowIdx": 37,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
       "meetDate": "2026-02-04",
       "desc": "施工人員車輛停放空間",
-      "proposer": "規劃組",
-      "dueDate": "2026-10-12",
+      "proposer": "規劃組/施工組",
+      "dueDate": "2026-12-09",
       "actualDate": "",
       "status": "進行中",
       "result": "工區東南角入口人員前置廣場規劃施工人員停車區域 / 地下室完成後車輛可停入地下室停車空間"
     },
     {
       "rowIdx": 38,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -669,7 +669,7 @@
     },
     {
       "rowIdx": 39,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -683,7 +683,7 @@
     },
     {
       "rowIdx": 40,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -697,7 +697,7 @@
     },
     {
       "rowIdx": 41,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -711,7 +711,7 @@
     },
     {
       "rowIdx": 42,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -725,7 +725,7 @@
     },
     {
       "rowIdx": 43,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -739,7 +739,7 @@
     },
     {
       "rowIdx": 44,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -753,7 +753,7 @@
     },
     {
       "rowIdx": 45,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -767,7 +767,7 @@
     },
     {
       "rowIdx": 46,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -781,7 +781,7 @@
     },
     {
       "rowIdx": 47,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -795,7 +795,7 @@
     },
     {
       "rowIdx": 48,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -809,7 +809,7 @@
     },
     {
       "rowIdx": 49,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -823,7 +823,7 @@
     },
     {
       "rowIdx": 50,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -837,7 +837,7 @@
     },
     {
       "rowIdx": 51,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -851,7 +851,7 @@
     },
     {
       "rowIdx": 52,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -865,7 +865,7 @@
     },
     {
       "rowIdx": 53,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -879,7 +879,7 @@
     },
     {
       "rowIdx": 54,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -893,7 +893,7 @@
     },
     {
       "rowIdx": 55,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -907,7 +907,7 @@
     },
     {
       "rowIdx": 56,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -921,7 +921,7 @@
     },
     {
       "rowIdx": 57,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -935,7 +935,7 @@
     },
     {
       "rowIdx": 58,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -949,7 +949,7 @@
     },
     {
       "rowIdx": 59,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -963,7 +963,7 @@
     },
     {
       "rowIdx": 60,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -977,7 +977,7 @@
     },
     {
       "rowIdx": 61,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -991,7 +991,7 @@
     },
     {
       "rowIdx": 62,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1005,7 +1005,7 @@
     },
     {
       "rowIdx": 63,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1019,7 +1019,7 @@
     },
     {
       "rowIdx": 64,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1033,7 +1033,7 @@
     },
     {
       "rowIdx": 65,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -1047,7 +1047,7 @@
     },
     {
       "rowIdx": 66,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -1061,7 +1061,7 @@
     },
     {
       "rowIdx": 67,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -1075,7 +1075,7 @@
     },
     {
       "rowIdx": 68,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -1089,7 +1089,7 @@
     },
     {
       "rowIdx": 69,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -1103,7 +1103,7 @@
     },
     {
       "rowIdx": 70,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -1117,7 +1117,7 @@
     },
     {
       "rowIdx": 71,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -1131,7 +1131,7 @@
     },
     {
       "rowIdx": 72,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -1145,7 +1145,7 @@
     },
     {
       "rowIdx": 73,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -1154,12 +1154,12 @@
       "proposer": "羅政韋",
       "dueDate": "持續進行",
       "actualDate": "",
-      "status": "進行中",
+      "status": "已完成",
       "result": "持續更新。"
     },
     {
       "rowIdx": 74,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -1173,7 +1173,7 @@
     },
     {
       "rowIdx": 75,
-      "itemNo": "6",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1187,35 +1187,35 @@
     },
     {
       "rowIdx": 76,
-      "itemNo": "7",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
       "meetDate": "2026-03-11",
       "desc": "留置基地內油污土方，持續要求業主最晚於5月前提供暫置區域，避免影響工進。",
       "proposer": "施工組/工務組",
-      "dueDate": "2026-10-01",
+      "dueDate": "2026-10-20",
       "actualDate": "",
       "status": "進行中",
-      "result": "目前業主有提出中油廠區內A4區可當異味土暫置區,待收測後確認可暫置量(目前訊息9月後才能收測)"
+      "result": "目前業主有提出中油廠區內A4區可當異味土暫置區,目前收測後異味土數量約6000方,帶業主確認A4區可暫置量及可運送時間(目前訊息10月中後能放置)"
     },
     {
       "rowIdx": 77,
-      "itemNo": "8",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
       "meetDate": "2026-03-11",
       "desc": "彙整高雄市場土方去化行情，向業主提報情事變更追加預算。",
       "proposer": "工務組",
-      "dueDate": "2026-08-30",
+      "dueDate": "2026-10-20",
       "actualDate": "",
       "status": "進行中",
-      "result": "依業主指示,目前土方及B5類以全面運往港務局為主;另如夾雜PVC管之B5類,則已運項光彌。\n相關變更及追加資料已提供業主,待回覆"
+      "result": "依業主指示,目前土方及B5類以全面運往港務局為主;另如夾雜PVC管之B5類,則已運項光彌。\n相關變更及追加資料與專管討論後已發文提送業主確認中。"
     },
     {
       "rowIdx": 78,
-      "itemNo": "8",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1225,11 +1225,11 @@
       "dueDate": "2026-07-30",
       "actualDate": "2026-08-12",
       "status": "已完成",
-      "result": "目前工區規劃共40口抽水井,抽水試驗第一階段完成,第二階段因觀測井有損壞修復中。"
+      "result": "目前工區規劃共40口抽水井,抽水試驗已完成"
     },
     {
       "rowIdx": 79,
-      "itemNo": "9",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1237,13 +1237,13 @@
       "desc": "筏基防水工法變更：以「矽酸質防水」取代1:2防水粉刷(重點在弱面含螺捍)，並將筏基頂板之木模變更為DECK(生銹，強度請技師協助檢核)。，包裝「免局限空間作業」及「結構安全」之優勢向業主/監造爭取變更。",
       "proposer": "規劃組",
       "dueDate": "2026-10-01",
-      "actualDate": "",
-      "status": "進行中",
-      "result": "已經完成釋疑流程經設計確認可行，待業主同意。"
+      "actualDate": "2026-10-05",
+      "status": "已完成",
+      "result": "業主已同意。"
     },
     {
       "rowIdx": 80,
-      "itemNo": "9",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1257,7 +1257,7 @@
     },
     {
       "rowIdx": 81,
-      "itemNo": "9",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1271,7 +1271,7 @@
     },
     {
       "rowIdx": 82,
-      "itemNo": "9",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1285,7 +1285,7 @@
     },
     {
       "rowIdx": 83,
-      "itemNo": "9",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1299,21 +1299,7 @@
     },
     {
       "rowIdx": 84,
-      "itemNo": "9",
-      "dept": "高屏工程處",
-      "site": "中油綠能",
-      "rawSite": "中油綠能",
-      "meetDate": "2026-03-11",
-      "desc": "檢討電梯機坑深度，向電梯廠商確認實際所需深度，爭取改淺機坑以利開挖。",
-      "proposer": "規劃組",
-      "dueDate": "2027-05-27",
-      "actualDate": "",
-      "status": "後續辦理",
-      "result": ""
-    },
-    {
-      "rowIdx": 85,
-      "itemNo": "9",
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1326,8 +1312,8 @@
       "result": "已列入釋疑擬定項目"
     },
     {
-      "rowIdx": 86,
-      "itemNo": "9",
+      "rowIdx": 85,
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1340,8 +1326,8 @@
       "result": ""
     },
     {
-      "rowIdx": 87,
-      "itemNo": "9",
+      "rowIdx": 86,
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1354,8 +1340,8 @@
       "result": "已列入釋疑擬定項目"
     },
     {
-      "rowIdx": 88,
-      "itemNo": "9",
+      "rowIdx": 87,
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1368,8 +1354,8 @@
       "result": ""
     },
     {
-      "rowIdx": 89,
-      "itemNo": "9",
+      "rowIdx": 88,
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1382,8 +1368,8 @@
       "result": ""
     },
     {
-      "rowIdx": 90,
-      "itemNo": "9",
+      "rowIdx": 89,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1396,8 +1382,8 @@
       "result": "已更新於nas簡報內\\\\192.168.1.221\\s5\\1003技術會議資料專區\\CDC防疫中心\\3.歷次會議資料(每月更新)\\20260318 cdc技術會議"
     },
     {
-      "rowIdx": 91,
-      "itemNo": "9",
+      "rowIdx": 90,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1410,8 +1396,8 @@
       "result": "密切追蹤餘土外運掛件進度，與承辦人員協調「台北港外運計畫會勘時間」，並提早規劃場內怪手與大卡車之動線，工地06/20開始外運，將持續追蹤"
     },
     {
-      "rowIdx": 92,
-      "itemNo": "9",
+      "rowIdx": 91,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1424,8 +1410,8 @@
       "result": "簡報於nas簡報內\\\\192.168.1.221\\s5\\1003技術會議資料專區\\CDC防疫中心\\3.歷次會議資料(每月更新)\\20260415cdc技術會議"
     },
     {
-      "rowIdx": 93,
-      "itemNo": "9",
+      "rowIdx": 92,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1438,8 +1424,8 @@
       "result": "機電協力廠商「正龍工程」目前預計採以鑽寶引孔施作，預計於 6 月 17 日(改至06/22)前提交正式計畫書。05/12機電回覆目前接地圖面正龍內部討論中"
     },
     {
-      "rowIdx": 94,
-      "itemNo": "9",
+      "rowIdx": 93,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1452,8 +1438,8 @@
       "result": "預計待結構體施作至4樓，休息區可移至結構體。該通道將可行駛車輛至北側做使用"
     },
     {
-      "rowIdx": 95,
-      "itemNo": "9",
+      "rowIdx": 94,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1466,8 +1452,8 @@
       "result": "已確定由冠皓承攬預計下周辦理議價。"
     },
     {
-      "rowIdx": 96,
-      "itemNo": "9",
+      "rowIdx": 95,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1480,8 +1466,8 @@
       "result": "目前正針對「宸峰」（400 噸吊車）與「冠澔」（300 噸吊車）兩套方案進行報價及評估。待方案及廠商定案後，再對北側車道板進行結構補強分析。"
     },
     {
-      "rowIdx": 97,
-      "itemNo": "9",
+      "rowIdx": 96,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1494,8 +1480,8 @@
       "result": "正龍目前檢討中，地下室部分預計6月中提出討論(正龍已出席7月會議)"
     },
     {
-      "rowIdx": 98,
-      "itemNo": "9",
+      "rowIdx": 97,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1508,8 +1494,8 @@
       "result": "檔案已放置於NAS\n\\\\192.168.1.221\\s5\\1003技術會議資料專區\\CDC防疫中心\\3.歷次會議資料(每月更新)\\20260415 CDC技術會議"
     },
     {
-      "rowIdx": 99,
-      "itemNo": "9",
+      "rowIdx": 98,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1522,8 +1508,8 @@
       "result": ""
     },
     {
-      "rowIdx": 100,
-      "itemNo": "9",
+      "rowIdx": 99,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1536,8 +1522,8 @@
       "result": "正龍目前檢討中"
     },
     {
-      "rowIdx": 101,
-      "itemNo": "9",
+      "rowIdx": 100,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1550,8 +1536,8 @@
       "result": "2026/4/15:電梯環梁以RC牆取代。\n目前電梯採發方向\n1.建築師設計依台灣帝森設計，若選擇台灣帝森需突破法規產地限制。\n2.富士達有那台3T貨梯，須調整升降道尺寸須先檢討是否有調整空間。\n(須注意備料時程)"
     },
     {
-      "rowIdx": 102,
-      "itemNo": "9",
+      "rowIdx": 101,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1564,8 +1550,8 @@
       "result": "2026/4/15:會先與結構技師私下溝通，完成後提出正式釋疑單。"
     },
     {
-      "rowIdx": 103,
-      "itemNo": "9",
+      "rowIdx": 102,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1578,8 +1564,8 @@
       "result": "2026/4/15:3.0mm_sus-304"
     },
     {
-      "rowIdx": 104,
-      "itemNo": "9",
+      "rowIdx": 103,
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -1588,12 +1574,12 @@
       "proposer": "工務所",
       "dueDate": "2026-10-31",
       "actualDate": "",
-      "status": "後續辦理",
+      "status": "進行中",
       "result": "傳料動線評估中"
     },
     {
-      "rowIdx": 105,
-      "itemNo": "9",
+      "rowIdx": 104,
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -1606,8 +1592,8 @@
       "result": "檔案置於2026/04/24工地提供檔案"
     },
     {
-      "rowIdx": 106,
-      "itemNo": "9",
+      "rowIdx": 105,
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -1620,8 +1606,8 @@
       "result": "檔案置於2026/04/24工地提供檔案"
     },
     {
-      "rowIdx": 107,
-      "itemNo": "10",
+      "rowIdx": 106,
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1629,13 +1615,13 @@
       "desc": "抽水試驗數據驗證（技師 vs 廠商建議）",
       "proposer": "魏技師 / 工務所",
       "dueDate": "2026-09-15",
-      "actualDate": "",
-      "status": "進行中",
-      "result": "目前工區規劃共40口抽水井,抽水試驗第一階段完成,第二階段因觀測井有損壞修復中。"
+      "actualDate": "2026-10-05",
+      "status": "已完成",
+      "result": "目前工區規劃共40口抽水井,抽水試驗已完成"
     },
     {
-      "rowIdx": 108,
-      "itemNo": "10",
+      "rowIdx": 107,
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1648,22 +1634,22 @@
       "result": "預6/16運送屏科(另安排做教育訓練)"
     },
     {
-      "rowIdx": 109,
-      "itemNo": "11",
+      "rowIdx": 108,
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
       "meetDate": "2026-04-08",
       "desc": "地下室樓板載重計算檢核（蜘蛛吊車、堆高機上樓）",
       "proposer": "工務所/技師室",
-      "dueDate": "2026-10-12",
+      "dueDate": "2026-11-11",
       "actualDate": "",
       "status": "進行中",
-      "result": ""
+      "result": "評估中(請技師協助確認)"
     },
     {
-      "rowIdx": 110,
-      "itemNo": "11",
+      "rowIdx": 109,
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -1676,8 +1662,8 @@
       "result": "技師已於5/6提出結構計算,規劃以80型閉口式DECK,底部皆進行支撐(1排間距1M)"
     },
     {
-      "rowIdx": 111,
-      "itemNo": "11",
+      "rowIdx": 110,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1690,8 +1676,8 @@
       "result": "依 BIM 檢討數據製作\n\"\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260617 CDC技術會議\\SB1 行政棟FS、實驗棟FS、行政棟B2FL、實驗棟B3FL 軀體圖 V1 .pdf\""
     },
     {
-      "rowIdx": 112,
-      "itemNo": "11",
+      "rowIdx": 111,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1704,8 +1690,8 @@
       "result": "已施作完成。洗車台運作中。施工照片已放置nas\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260415 CDC技術會議"
     },
     {
-      "rowIdx": 113,
-      "itemNo": "11",
+      "rowIdx": 112,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1718,8 +1704,8 @@
       "result": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\排樁工程資料"
     },
     {
-      "rowIdx": 114,
-      "itemNo": "11",
+      "rowIdx": 113,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -1732,8 +1718,8 @@
       "result": "全案議題項目須盡速討論建立清冊及項目負責人，責任分工，避免壓力全在規劃人員身上"
     },
     {
-      "rowIdx": 115,
-      "itemNo": "11",
+      "rowIdx": 114,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -1746,8 +1732,8 @@
       "result": ""
     },
     {
-      "rowIdx": 116,
-      "itemNo": "11",
+      "rowIdx": 115,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -1760,8 +1746,8 @@
       "result": "續接器與摩擦筋已完成100%"
     },
     {
-      "rowIdx": 117,
-      "itemNo": "11",
+      "rowIdx": 116,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -1774,8 +1760,8 @@
       "result": ""
     },
     {
-      "rowIdx": 118,
-      "itemNo": "11",
+      "rowIdx": 117,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -1788,8 +1774,8 @@
       "result": "1.3/20 已核准，待領取正式聯單,差國際聯單\n2.紅火蟻檢測工地已發文(台北港)"
     },
     {
-      "rowIdx": 119,
-      "itemNo": "11",
+      "rowIdx": 118,
+      "itemNo": "0",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -1802,8 +1788,8 @@
       "result": "115/5/4開工簡報"
     },
     {
-      "rowIdx": 120,
-      "itemNo": "11",
+      "rowIdx": 119,
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -1816,8 +1802,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\技術議題管控&待辦事項資料\\B.待辧事項\\260423\\20.重新放置加整體粉光人員表單"
     },
     {
-      "rowIdx": 121,
-      "itemNo": "11",
+      "rowIdx": 120,
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -1825,13 +1811,13 @@
       "desc": "[平整度檢測]: 第二層 PC 完成實收測回饋,檢測平整度。",
       "proposer": "楊振瑞",
       "dueDate": "",
-      "actualDate": "",
-      "status": "進行中",
-      "result": "俟第二層PC澆置後收測、回饋。"
+      "actualDate": "2026-09-28",
+      "status": "已完成",
+      "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20261008技術會議\\A.待辦事項追蹤\\基礎PC完成面高程收測-115.09.28.pdf"
     },
     {
-      "rowIdx": 122,
-      "itemNo": "11",
+      "rowIdx": 121,
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -1844,8 +1830,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\技術議題管控&待辦事項資料\\B.待辧事項\\260423\\22.提供窗框加固說明.梁增築箍筋加深圖檢核討.pptx"
     },
     {
-      "rowIdx": 123,
-      "itemNo": "11",
+      "rowIdx": 122,
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -1858,8 +1844,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\技術議題管控&待辦事項資料\\B.待辧事項\\260423\\23.朴子安居工地外牆二丁掛規畫原則討論20260513.pptx"
     },
     {
-      "rowIdx": 124,
-      "itemNo": "11",
+      "rowIdx": 123,
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -1872,8 +1858,8 @@
       "result": "檔案置於2026/05/29工地提供檔案"
     },
     {
-      "rowIdx": 125,
-      "itemNo": "11",
+      "rowIdx": 124,
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -1886,8 +1872,8 @@
       "result": "檔案置於2026/05/29工地提供檔案"
     },
     {
-      "rowIdx": 126,
-      "itemNo": "11",
+      "rowIdx": 125,
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -1900,8 +1886,8 @@
       "result": "檔案置於2026/05/29工地提供檔案"
     },
     {
-      "rowIdx": 127,
-      "itemNo": "11",
+      "rowIdx": 126,
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -1914,8 +1900,8 @@
       "result": "檔案置於2026/05/29工地提供檔案"
     },
     {
-      "rowIdx": 128,
-      "itemNo": "11",
+      "rowIdx": 127,
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -1928,8 +1914,8 @@
       "result": ""
     },
     {
-      "rowIdx": 129,
-      "itemNo": "11",
+      "rowIdx": 128,
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -1942,8 +1928,8 @@
       "result": ""
     },
     {
-      "rowIdx": 130,
-      "itemNo": "11",
+      "rowIdx": 129,
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -1956,8 +1942,8 @@
       "result": ""
     },
     {
-      "rowIdx": 131,
-      "itemNo": "11",
+      "rowIdx": 130,
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -1970,8 +1956,8 @@
       "result": ""
     },
     {
-      "rowIdx": 132,
-      "itemNo": "11",
+      "rowIdx": 131,
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -1984,8 +1970,8 @@
       "result": ""
     },
     {
-      "rowIdx": 133,
-      "itemNo": "11",
+      "rowIdx": 132,
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -1998,8 +1984,8 @@
       "result": "5/7發生擋土牆倒塌，先做初步整理，5/9用鋼軌樁先做支撐，5/12澆置穩固"
     },
     {
-      "rowIdx": 134,
-      "itemNo": "11",
+      "rowIdx": 133,
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -2012,8 +1998,8 @@
       "result": "善億已完成洗車台，惟設計不良，僅大車可通行，改善方式除土方配置水車，善億常駐水車清洗周邊道路，環保局巡查無意見"
     },
     {
-      "rowIdx": 135,
-      "itemNo": "11",
+      "rowIdx": 134,
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -2026,8 +2012,8 @@
       "result": "善億有備沙包，5/21水保檢查無缺失"
     },
     {
-      "rowIdx": 136,
-      "itemNo": "11",
+      "rowIdx": 135,
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -2040,8 +2026,8 @@
       "result": "6/5有再對業主追加10片鋼板及40之鋼軌"
     },
     {
-      "rowIdx": 137,
-      "itemNo": "11",
+      "rowIdx": 136,
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -2054,8 +2040,8 @@
       "result": "業主會議顧問有提及土方之安全、衛生為營造商負責"
     },
     {
-      "rowIdx": 138,
-      "itemNo": "11",
+      "rowIdx": 137,
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -2068,8 +2054,8 @@
       "result": "已於會後放置nas"
     },
     {
-      "rowIdx": 139,
-      "itemNo": "11",
+      "rowIdx": 138,
+      "itemNo": "0",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -2082,8 +2068,8 @@
       "result": ""
     },
     {
-      "rowIdx": 140,
-      "itemNo": "11",
+      "rowIdx": 139,
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2096,8 +2082,8 @@
       "result": "業主於會議中決議本案不採用低碳混凝土"
     },
     {
-      "rowIdx": 141,
-      "itemNo": "11",
+      "rowIdx": 140,
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2110,8 +2096,8 @@
       "result": "於業主會議中敘明規劃土方運送為兩處去向(港務局及光彌私人土資場),亦於會議上敘明全面運送港務局,其時間成本為最高;會議結論業主指示,目前以全面運往港務局為主,後續追加價金及工期"
     },
     {
-      "rowIdx": 142,
-      "itemNo": "11",
+      "rowIdx": 141,
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2124,8 +2110,8 @@
       "result": "以請塔吊技師挑整方式,目前以不影響地梁施作的放式提送"
     },
     {
-      "rowIdx": 143,
-      "itemNo": "12",
+      "rowIdx": 142,
+      "itemNo": "0",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2133,13 +2119,13 @@
       "desc": "抽水試驗數據分析及成果評估報告",
       "proposer": "工務所",
       "dueDate": "2026-09-15",
-      "actualDate": "",
-      "status": "進行中",
-      "result": "目前工區規劃共40口抽水井,抽水試驗第一階段完成,第二階段因觀測井有損壞修復中。"
+      "actualDate": "2026-10-05",
+      "status": "已完成",
+      "result": "目前工區規劃共40口抽水井,抽水試驗已完成"
     },
     {
-      "rowIdx": 144,
-      "itemNo": "12",
+      "rowIdx": 143,
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -2152,8 +2138,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\技術議題管控&待辦事項資料\\B.待辧事項\\260514\\24.朴子安居人員組織圖與專案人員系統表.pdf"
     },
     {
-      "rowIdx": 145,
-      "itemNo": "12",
+      "rowIdx": 144,
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -2166,8 +2152,8 @@
       "result": "6/22回覆建築中心第三次審查意見"
     },
     {
-      "rowIdx": 146,
-      "itemNo": "12",
+      "rowIdx": 145,
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -2180,8 +2166,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\技術議題管控&待辦事項資料\\B.待辧事項\\260514\\26.提供最新採購與發包進度表.xlsx"
     },
     {
-      "rowIdx": 147,
-      "itemNo": "12",
+      "rowIdx": 146,
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -2194,8 +2180,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\技術議題管控&待辦事項資料\\B.待辧事項\\260514\\27.朴子安居外牆二丁掛磁磚規畫議題_1150610.pdf"
     },
     {
-      "rowIdx": 148,
-      "itemNo": "12",
+      "rowIdx": 147,
+      "itemNo": "0",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -2208,8 +2194,8 @@
       "result": "持續追蹤。"
     },
     {
-      "rowIdx": 149,
-      "itemNo": "12",
+      "rowIdx": 148,
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -2222,8 +2208,8 @@
       "result": "..\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\02基礎鋼筋優化"
     },
     {
-      "rowIdx": 150,
-      "itemNo": "12",
+      "rowIdx": 149,
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -2236,8 +2222,8 @@
       "result": ""
     },
     {
-      "rowIdx": 151,
-      "itemNo": "12",
+      "rowIdx": 150,
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -2250,8 +2236,8 @@
       "result": "鋼板樁IV型換Ⅲ型."
     },
     {
-      "rowIdx": 152,
-      "itemNo": "12",
+      "rowIdx": 151,
+      "itemNo": "0",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -2264,8 +2250,8 @@
       "result": ""
     },
     {
-      "rowIdx": 153,
-      "itemNo": "12",
+      "rowIdx": 152,
+      "itemNo": "1",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -2273,13 +2259,13 @@
       "desc": "針對地下水位 (GL-1.0m) 計算排水量與防止底板上浮之配重機制。(抽排水計劃-停止抽水時機)",
       "proposer": "工務所",
       "dueDate": "2026-10-13",
-      "actualDate": "",
-      "status": "進行中",
-      "result": "基地內共32支點井抽水，目前已關16支啟動16支抽水，地下水位約在8.5-9.5\n確認結構體重量與上浮力檢討，抗浮力計算與停抽水標準建立"
+      "actualDate": "2026-10-13",
+      "status": "已完成",
+      "result": "基地內共32支點井抽水，目前已關16支啟動16支抽水，地下水位約在8.5-9.5，技師已計算成果\n整理地下水位的計算報告與停止抽水之階段評估（施工至二樓後可停止持續抽水）。"
     },
     {
-      "rowIdx": 154,
-      "itemNo": "12",
+      "rowIdx": 153,
+      "itemNo": "1",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -2292,8 +2278,8 @@
       "result": "結案(但有航高限制,R2FL須另行考慮)"
     },
     {
-      "rowIdx": 155,
-      "itemNo": "12",
+      "rowIdx": 154,
+      "itemNo": "1",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -2306,8 +2292,8 @@
       "result": "預計7月底前安裝完成"
     },
     {
-      "rowIdx": 156,
-      "itemNo": "12",
+      "rowIdx": 155,
+      "itemNo": "1",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -2320,8 +2306,8 @@
       "result": ""
     },
     {
-      "rowIdx": 157,
-      "itemNo": "12",
+      "rowIdx": 156,
+      "itemNo": "1",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -2334,8 +2320,8 @@
       "result": ""
     },
     {
-      "rowIdx": 158,
-      "itemNo": "12",
+      "rowIdx": 157,
+      "itemNo": "1",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -2348,8 +2334,8 @@
       "result": ""
     },
     {
-      "rowIdx": 159,
-      "itemNo": "12",
+      "rowIdx": 158,
+      "itemNo": "1",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -2362,8 +2348,8 @@
       "result": ""
     },
     {
-      "rowIdx": 160,
-      "itemNo": "12",
+      "rowIdx": 159,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -2376,8 +2362,8 @@
       "result": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\1.圖說契約進度表(如有新版請更新)\\3.進度表"
     },
     {
-      "rowIdx": 161,
-      "itemNo": "12",
+      "rowIdx": 160,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -2390,8 +2376,8 @@
       "result": "2026/06/18完成南側噴水頭，北側等滯洪池壓樑及假設鋪面完成施作。(收集洗車台配置案例與圖說，吸取水壓效果不佳的修正經驗，檢討現場洗車台寬度與整體後退讓出轉彎直線段)。上次提出8/15完成現在延至09/05完成鋪面"
     },
     {
-      "rowIdx": 162,
-      "itemNo": "12",
+      "rowIdx": 161,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -2404,8 +2390,8 @@
       "result": "目前園柱試體28天報告結果，共有三組 ，管頭平均為329KGF/CM2，管尾為270KGF/CM2，現場取樣為219KGF/CM2。詳附件。"
     },
     {
-      "rowIdx": 163,
-      "itemNo": "12",
+      "rowIdx": 162,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -2418,8 +2404,8 @@
       "result": "經分析後，錯位10cm不足以造成剪力破壞，但帽樑鋼筋綁紮時增加斜向鋼筋及剪力箍筋。"
     },
     {
-      "rowIdx": 164,
-      "itemNo": "12",
+      "rowIdx": 163,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -2432,8 +2418,8 @@
       "result": "檢核排樁替代工法之結構計算書後，確認無安全問題"
     },
     {
-      "rowIdx": 165,
-      "itemNo": "12",
+      "rowIdx": 164,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -2446,8 +2432,8 @@
       "result": "國廣當天有派員出席。詳見附件。\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260617"
     },
     {
-      "rowIdx": 166,
-      "itemNo": "12",
+      "rowIdx": 165,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -2460,8 +2446,8 @@
       "result": "05/29國廣技師當天回覆，於計算時已有將摩擦因素代入。故不需要螺旋箍筋"
     },
     {
-      "rowIdx": 167,
-      "itemNo": "12",
+      "rowIdx": 166,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -2474,8 +2460,8 @@
       "result": "已完成更新於國廣簡報內。\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\3.歷次會議資料(每月更新)\\20260520 CDC技術會議\\擋土支撐施工簡報(國廣)"
     },
     {
-      "rowIdx": 168,
-      "itemNo": "12",
+      "rowIdx": 167,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -2488,8 +2474,8 @@
       "result": "回填料3~5cm粒徑"
     },
     {
-      "rowIdx": 169,
-      "itemNo": "12",
+      "rowIdx": 168,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -2502,8 +2488,8 @@
       "result": ""
     },
     {
-      "rowIdx": 170,
-      "itemNo": "12",
+      "rowIdx": 169,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -2516,8 +2502,8 @@
       "result": "115/06/25會議簡報"
     },
     {
-      "rowIdx": 171,
-      "itemNo": "12",
+      "rowIdx": 170,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -2530,8 +2516,8 @@
       "result": "115/06/25會議簡報"
     },
     {
-      "rowIdx": 172,
-      "itemNo": "12",
+      "rowIdx": 171,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -2544,8 +2530,8 @@
       "result": "115/06/25會議簡報"
     },
     {
-      "rowIdx": 173,
-      "itemNo": "12",
+      "rowIdx": 172,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -2558,8 +2544,8 @@
       "result": "預算有編列防火閘板"
     },
     {
-      "rowIdx": 174,
-      "itemNo": "12",
+      "rowIdx": 173,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -2572,8 +2558,8 @@
       "result": "115/06/25會議簡報"
     },
     {
-      "rowIdx": 175,
-      "itemNo": "12",
+      "rowIdx": 174,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -2586,8 +2572,8 @@
       "result": "0.管控表-新纖南港總部115.04.14"
     },
     {
-      "rowIdx": 176,
-      "itemNo": "12",
+      "rowIdx": 175,
+      "itemNo": "1",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -2596,12 +2582,12 @@
       "proposer": "工務所",
       "dueDate": "2026-10-31",
       "actualDate": "",
-      "status": "後續辦理",
+      "status": "進行中",
       "result": ""
     },
     {
-      "rowIdx": 177,
-      "itemNo": "12",
+      "rowIdx": 176,
+      "itemNo": "1",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -2614,8 +2600,8 @@
       "result": ""
     },
     {
-      "rowIdx": 178,
-      "itemNo": "12",
+      "rowIdx": 177,
+      "itemNo": "1",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -2628,8 +2614,8 @@
       "result": ""
     },
     {
-      "rowIdx": 179,
-      "itemNo": "12",
+      "rowIdx": 178,
+      "itemNo": "1",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -2642,8 +2628,8 @@
       "result": "廠商無法提出施工規範要求之相關測報，且此新材料尚未有大型集合住宅使用案例，是否運用於社宅再行評估。"
     },
     {
-      "rowIdx": 180,
-      "itemNo": "12",
+      "rowIdx": 179,
+      "itemNo": "1",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -2656,8 +2642,8 @@
       "result": ""
     },
     {
-      "rowIdx": 181,
-      "itemNo": "12",
+      "rowIdx": 180,
+      "itemNo": "1",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2670,8 +2656,8 @@
       "result": ""
     },
     {
-      "rowIdx": 182,
-      "itemNo": "12",
+      "rowIdx": 181,
+      "itemNo": "1",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2684,8 +2670,8 @@
       "result": "目前工區規劃共40口抽水井,因豪雨鋼板樁位移事件\n評估增加樁外抽水井數量"
     },
     {
-      "rowIdx": 183,
-      "itemNo": "12",
+      "rowIdx": 182,
+      "itemNo": "1",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2698,8 +2684,8 @@
       "result": "已依鋼板樁考量重新配置"
     },
     {
-      "rowIdx": 184,
-      "itemNo": "12",
+      "rowIdx": 183,
+      "itemNo": "1",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2712,8 +2698,8 @@
       "result": ""
     },
     {
-      "rowIdx": 185,
-      "itemNo": "12",
+      "rowIdx": 184,
+      "itemNo": "1",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2726,8 +2712,8 @@
       "result": "外爬式"
     },
     {
-      "rowIdx": 186,
-      "itemNo": "12",
+      "rowIdx": 185,
+      "itemNo": "1",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2740,22 +2726,8 @@
       "result": "採用鋼筋彎折固定"
     },
     {
-      "rowIdx": 187,
-      "itemNo": "13",
-      "dept": "高屏工程處",
-      "site": "中油綠能",
-      "rawSite": "中油綠能",
-      "meetDate": "2026-06-10",
-      "desc": "設計變更流程與計價問題持續與業主溝通​。",
-      "proposer": "工務所",
-      "dueDate": "2026-10-12",
-      "actualDate": "",
-      "status": "進行中",
-      "result": "持續溝通中"
-    },
-    {
-      "rowIdx": 188,
-      "itemNo": "13",
+      "rowIdx": 186,
+      "itemNo": "1",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2768,8 +2740,8 @@
       "result": "已完成"
     },
     {
-      "rowIdx": 189,
-      "itemNo": "13",
+      "rowIdx": 187,
+      "itemNo": "1",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2782,8 +2754,8 @@
       "result": "已完成"
     },
     {
-      "rowIdx": 190,
-      "itemNo": "13",
+      "rowIdx": 188,
+      "itemNo": "1",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2796,8 +2768,8 @@
       "result": "正龍已啟動執行中"
     },
     {
-      "rowIdx": 191,
-      "itemNo": "13",
+      "rowIdx": 189,
+      "itemNo": "1",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2810,8 +2782,8 @@
       "result": ""
     },
     {
-      "rowIdx": 192,
-      "itemNo": "14",
+      "rowIdx": 190,
+      "itemNo": "1",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -2824,8 +2796,8 @@
       "result": ""
     },
     {
-      "rowIdx": 193,
-      "itemNo": "14",
+      "rowIdx": 191,
+      "itemNo": "1",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -2838,8 +2810,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\技術議題管控&待辦事項連結資料\\B.待辧事項\\260910\\FY-2Q01-01-採購XXX工程發包工程合約附則.docx"
     },
     {
-      "rowIdx": 194,
-      "itemNo": "14",
+      "rowIdx": 192,
+      "itemNo": "1",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -2847,13 +2819,13 @@
       "desc": "補強材料送審進度：「鋁門窗」待發包完成即送審",
       "proposer": "工務所",
       "dueDate": "2026-09-23",
-      "actualDate": "",
-      "status": "進行中",
-      "result": "原預定於8/31提出材料送審，因電動開窗機亦屬鋁門窗承攬範疇，故增列該項材料，致送審作業有所延宕。目前已請廠商儘速提送相關資料，以利後續送審作業。"
+      "actualDate": "2026-09-23",
+      "status": "已完成",
+      "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20261008技術會議\\B.彙報議題\\鋁門窗材料暨廠商資料送審發文.pdf"
     },
     {
-      "rowIdx": 195,
-      "itemNo": "14",
+      "rowIdx": 193,
+      "itemNo": "1",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -2866,8 +2838,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\技術議題管控&待辦事項連結資料\\B.待辧事項\\260611\\31.複核格柵天花管線空間_1150710.pptx"
     },
     {
-      "rowIdx": 196,
-      "itemNo": "14",
+      "rowIdx": 194,
+      "itemNo": "1",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -2880,8 +2852,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\技術議題管控&待辦事項連結資料\\B.待辧事項\\260611\\32.土方交換區第一開發區控制點座標.txt"
     },
     {
-      "rowIdx": 197,
-      "itemNo": "14",
+      "rowIdx": 195,
+      "itemNo": "1",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -2894,8 +2866,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\技術議題管控&待辦事項連結資料\\B.待辧事項\\260611\\33.地形圖-第一開發區(套圍籬範圍)放樣用(大門側偏移2M版) - 土方收方用.dwg"
     },
     {
-      "rowIdx": 198,
-      "itemNo": "14",
+      "rowIdx": 196,
+      "itemNo": "1",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -2908,7 +2880,7 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20260910技術會議\\A.待辦事項追蹤\\機電工程結構體配管整體進度表-2026.09.06.xlsx"
     },
     {
-      "rowIdx": 199,
+      "rowIdx": 197,
       "itemNo": "35",
       "dept": "中區工程處",
       "site": "朴子安居",
@@ -2922,7 +2894,7 @@
       "result": "正龍由趙正亞與會討論。"
     },
     {
-      "rowIdx": 200,
+      "rowIdx": 198,
       "itemNo": "36",
       "dept": "中區工程處",
       "site": "朴子安居",
@@ -2936,7 +2908,7 @@
       "result": "豐譽:廖振達，正龍:張長益。"
     },
     {
-      "rowIdx": 201,
+      "rowIdx": 199,
       "itemNo": "37",
       "dept": "中區工程處",
       "site": "朴子安居",
@@ -2950,7 +2922,7 @@
       "result": "於7/15更新完成。"
     },
     {
-      "rowIdx": 202,
+      "rowIdx": 200,
       "itemNo": "38",
       "dept": "中區工程處",
       "site": "朴子安居",
@@ -2964,7 +2936,7 @@
       "result": "於7/15更新完成。"
     },
     {
-      "rowIdx": 203,
+      "rowIdx": 201,
       "itemNo": "39",
       "dept": "中區工程處",
       "site": "朴子安居",
@@ -2978,8 +2950,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20260813技術會議\\A.待辧事項追蹤\\20260807-工程進度表-工地版(調整排程).pdf"
     },
     {
-      "rowIdx": 204,
-      "itemNo": "14",
+      "rowIdx": 202,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -2992,8 +2964,8 @@
       "result": "已給機電廠商正龍。"
     },
     {
-      "rowIdx": 205,
-      "itemNo": "14",
+      "rowIdx": 203,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -3006,8 +2978,8 @@
       "result": "待正龍回應處理(議題管控表)"
     },
     {
-      "rowIdx": 206,
-      "itemNo": "14",
+      "rowIdx": 204,
+      "itemNo": "1",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -3020,8 +2992,8 @@
       "result": "..\\1.各專案作業區\\北區工程處-1.CDC防疫中心\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\各項計劃書"
     },
     {
-      "rowIdx": 207,
-      "itemNo": "14",
+      "rowIdx": 205,
+      "itemNo": "1",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -3034,8 +3006,8 @@
       "result": "已於會後放置nas"
     },
     {
-      "rowIdx": 208,
-      "itemNo": "14",
+      "rowIdx": 206,
+      "itemNo": "1",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -3048,8 +3020,8 @@
       "result": "已於會後放置nas"
     },
     {
-      "rowIdx": 209,
-      "itemNo": "14",
+      "rowIdx": 207,
+      "itemNo": "1",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -3062,8 +3034,8 @@
       "result": "善億回覆洗車台僅供土車行走，小車由警衛沖洗"
     },
     {
-      "rowIdx": 210,
-      "itemNo": "14",
+      "rowIdx": 208,
+      "itemNo": "1",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -3076,8 +3048,8 @@
       "result": "目前依進度安排調度"
     },
     {
-      "rowIdx": 211,
-      "itemNo": "14",
+      "rowIdx": 209,
+      "itemNo": "1",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -3090,8 +3062,8 @@
       "result": "已向工程中心提出申請,已口頭核准"
     },
     {
-      "rowIdx": 212,
-      "itemNo": "14",
+      "rowIdx": 210,
+      "itemNo": "1",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -3104,8 +3076,8 @@
       "result": "康達已完成台糖送審,現場已順利出土"
     },
     {
-      "rowIdx": 213,
-      "itemNo": "14",
+      "rowIdx": 211,
+      "itemNo": "1",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -3118,22 +3090,22 @@
       "result": ""
     },
     {
-      "rowIdx": 214,
-      "itemNo": "14",
+      "rowIdx": 212,
+      "itemNo": "2",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
       "meetDate": "2026-06-23",
-      "desc": "電梯與手扶梯採購定案：確認統一精工與原設計圖說相符性，辦理發包決標。(評估通用與統一精工之規格、工期及實績，完成議價與合約簽訂，並著手檢討昇降道尺寸、Pit 與 Overhead 高度。)",
+      "desc": "1.電梯與手扶梯採購定案：確認統一精工與原設計圖說相符性，辦理發包決標。(評估通用與統一精工之規格、工期及實績，完成議價與合約簽訂，並著手檢討昇降道尺寸、Pit 與 Overhead 高度。)\n2.彙整並提供電扶梯廠商大樣需求資料，交由建築師及結構技師確認鋼梁配置後完成軀體圖套繪",
       "proposer": "工務所/競研",
       "dueDate": "2026-10-31",
       "actualDate": "",
       "status": "進行中",
-      "result": "電梯 OH 淨高與門高加高需求確認\n與業主及採購確認賣場電梯門高是否加高；若加高需檢討頂部 OH 是否不足並協調建築師變更。"
+      "result": "電梯 OH 淨高與門高加高需求確認，與業主及採購確認賣場電梯門高是否加高；若加高需檢討頂部 OH 是否不足並協調建築師變更。"
     },
     {
-      "rowIdx": 215,
-      "itemNo": "14",
+      "rowIdx": 213,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -3141,13 +3113,13 @@
       "desc": "全區臨時水電配置圖繪製(分階段提送)",
       "proposer": "工務所",
       "dueDate": "2026-10-13",
-      "actualDate": "",
-      "status": "進行中",
+      "actualDate": "2026-10-13",
+      "status": "已完成",
       "result": "地下室階段全區臨時水電、配電盤、抽水馬達及塔吊電源配置圖"
     },
     {
-      "rowIdx": 216,
-      "itemNo": "14",
+      "rowIdx": 214,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -3160,8 +3132,8 @@
       "result": "變更不同意"
     },
     {
-      "rowIdx": 217,
-      "itemNo": "14",
+      "rowIdx": 215,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -3174,8 +3146,8 @@
       "result": ""
     },
     {
-      "rowIdx": 218,
-      "itemNo": "14",
+      "rowIdx": 216,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -3188,8 +3160,8 @@
       "result": "115/07/14已經送出初版送監造審查。"
     },
     {
-      "rowIdx": 219,
-      "itemNo": "14",
+      "rowIdx": 217,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -3202,8 +3174,8 @@
       "result": "針對 B3F 車道（淨高至少2.5m）及車位（淨高至少2.3m）管線衝突處（B基地5項、C基地3項），依電上水下原則調整消防管、排水壓力管及 TRAY 路徑與高程。\n已提出調整方案，後續更新模型與圖說"
     },
     {
-      "rowIdx": 220,
-      "itemNo": "14",
+      "rowIdx": 218,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -3216,8 +3188,8 @@
       "result": "已設置特別相簿歸檔鄰近重車輾壓沉陷點的影像記錄，以利於後續監測數值變化的比對。"
     },
     {
-      "rowIdx": 221,
-      "itemNo": "14",
+      "rowIdx": 219,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -3230,8 +3202,8 @@
       "result": "本案無地改樁。"
     },
     {
-      "rowIdx": 222,
-      "itemNo": "14",
+      "rowIdx": 220,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -3244,8 +3216,8 @@
       "result": "已檢討完畢，另詳。"
     },
     {
-      "rowIdx": 223,
-      "itemNo": "14",
+      "rowIdx": 221,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -3258,8 +3230,8 @@
       "result": "機房原則不做緩築牆，直接加大門扇。"
     },
     {
-      "rowIdx": 224,
-      "itemNo": "14",
+      "rowIdx": 222,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -3272,8 +3244,8 @@
       "result": "與承商通溝後因構台下空間問題難以加設托盤"
     },
     {
-      "rowIdx": 225,
-      "itemNo": "14",
+      "rowIdx": 223,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -3286,8 +3258,8 @@
       "result": ""
     },
     {
-      "rowIdx": 226,
-      "itemNo": "14",
+      "rowIdx": 224,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -3300,8 +3272,8 @@
       "result": "目前提供B3-3F的軀體圖給廠商評估中。\n廠商評估報告書已完成，持續核對細設三階結構尺寸 。"
     },
     {
-      "rowIdx": 227,
-      "itemNo": "14",
+      "rowIdx": 225,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -3314,8 +3286,8 @@
       "result": "115/07/22已更新至最新版。"
     },
     {
-      "rowIdx": 228,
-      "itemNo": "14",
+      "rowIdx": 226,
+      "itemNo": "3",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -3328,8 +3300,8 @@
       "result": "..\\1.各專案作業區\\北區工程處-2.新光合纖南港總部\\3.歷次會議資料(每月更新)\\1150723技術會議\\1150723技術會議簡報.pptx"
     },
     {
-      "rowIdx": 229,
-      "itemNo": "14",
+      "rowIdx": 227,
+      "itemNo": "3",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -3342,8 +3314,8 @@
       "result": "..\\1.各專案作業區\\北區工程處-2.新光合纖南港總部\\3.歷次會議資料(每月更新)\\1150723技術會議\\1150723技術會議簡報.pptx"
     },
     {
-      "rowIdx": 230,
-      "itemNo": "14",
+      "rowIdx": 228,
+      "itemNo": "3",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -3356,8 +3328,8 @@
       "result": ""
     },
     {
-      "rowIdx": 231,
-      "itemNo": "14",
+      "rowIdx": 229,
+      "itemNo": "3",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -3370,8 +3342,8 @@
       "result": ""
     },
     {
-      "rowIdx": 232,
-      "itemNo": "14",
+      "rowIdx": 230,
+      "itemNo": "3",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -3384,8 +3356,8 @@
       "result": "外牆施工架先行搭設，後續施工電梯安裝同時調整踏板高程。"
     },
     {
-      "rowIdx": 233,
-      "itemNo": "14",
+      "rowIdx": 231,
+      "itemNo": "3",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -3398,8 +3370,8 @@
       "result": "經確認車道範圍無機電吊管"
     },
     {
-      "rowIdx": 234,
-      "itemNo": "14",
+      "rowIdx": 232,
+      "itemNo": "3",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -3412,8 +3384,8 @@
       "result": "後續軀體車道頂板範圍調整"
     },
     {
-      "rowIdx": 235,
-      "itemNo": "14",
+      "rowIdx": 233,
+      "itemNo": "3",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -3426,8 +3398,8 @@
       "result": "配合審查意見要求\n全面調整為硬底施作"
     },
     {
-      "rowIdx": 236,
-      "itemNo": "14",
+      "rowIdx": 234,
+      "itemNo": "3",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -3437,11 +3409,11 @@
       "dueDate": "2026-08-07",
       "actualDate": "2026-08-07",
       "status": "已完成",
-      "result": ""
+      "result": "已檢討調整部分柱筋數量及號數、上層梁筋排列方式等，並經設計單位同意條調整後，繪製鋼筋施工圖送審"
     },
     {
-      "rowIdx": 237,
-      "itemNo": "14",
+      "rowIdx": 235,
+      "itemNo": "3",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -3451,11 +3423,11 @@
       "dueDate": "2026-08-07",
       "actualDate": "2026-08-07",
       "status": "已完成",
-      "result": ""
+      "result": "已上傳"
     },
     {
-      "rowIdx": 238,
-      "itemNo": "14",
+      "rowIdx": 236,
+      "itemNo": "3",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -3468,8 +3440,8 @@
       "result": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\宜蘭工程處-1.坤門安居\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)"
     },
     {
-      "rowIdx": 239,
-      "itemNo": "14",
+      "rowIdx": 237,
+      "itemNo": "3",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -3482,8 +3454,8 @@
       "result": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\宜蘭工程處-1.坤門安居\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\地改"
     },
     {
-      "rowIdx": 240,
-      "itemNo": "14",
+      "rowIdx": 238,
+      "itemNo": "3",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -3496,8 +3468,8 @@
       "result": "7/18已完成A棟出土作業，B棟待異味土暫置區，才有辦法出土"
     },
     {
-      "rowIdx": 241,
-      "itemNo": "15",
+      "rowIdx": 239,
+      "itemNo": "3",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -3505,13 +3477,13 @@
       "desc": "主動與監造單位召開橫向溝通會議，針對合約及帷幕規範中提及之 3D 模型深度（300/400 階階段）及 4D 開挖動畫要求進行白紙黑字解讀與談判。確認後續各樓層（如一樓結構、維幕外牆線）僅針對高難度衝突轉角或大樣出具局部模擬圖與 2D 圖說送審，避免全棟盲目建模造成基層同仁過大勞務負擔。",
       "proposer": "工務所",
       "dueDate": "BIM 9月會前",
-      "actualDate": "",
-      "status": "進行中",
-      "result": "9月BIM會議與監造進行討論"
+      "actualDate": "2026-09-15",
+      "status": "已完成",
+      "result": "9月BIM會議與監造進行討論同意僅針對高難度衝突轉角或大樣出具局部模擬圖與 2D 圖說送審，避免全棟盲目建模造成基層同仁過大勞務負擔。"
     },
     {
-      "rowIdx": 242,
-      "itemNo": "16",
+      "rowIdx": 240,
+      "itemNo": "3",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -3519,13 +3491,13 @@
       "desc": "針對鋼筋工班與模板工班至今未有任何人員辦理進場作業之情況，於 8/12 專案會議前，要求協力廠商依據工序進度表，具體推算出各分區每層樓所需出工之穩定人力（基本目標須達 80～100 人具有工作證），並全面清查並盤點其進場能量是否足夠。",
       "proposer": "工務所",
       "dueDate": "2026-09-15",
-      "actualDate": "",
-      "status": "進行中",
+      "actualDate": "2026-09-15",
+      "status": "已完成",
       "result": "鋼筋工班目前提報123人,已取得工作證為87人(71%)\n模板工班目前提報65人,已取得工作證為61人(93%)"
     },
     {
-      "rowIdx": 243,
-      "itemNo": "16",
+      "rowIdx": 241,
+      "itemNo": "3",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -3538,8 +3510,8 @@
       "result": "目前移工共33人皆已取得工作證及職安卡"
     },
     {
-      "rowIdx": 244,
-      "itemNo": "16",
+      "rowIdx": 242,
+      "itemNo": "3",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -3552,8 +3524,8 @@
       "result": "目前移工共33人皆已取得工作證及職安卡"
     },
     {
-      "rowIdx": 245,
-      "itemNo": "16",
+      "rowIdx": 243,
+      "itemNo": "3",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -3566,8 +3538,8 @@
       "result": ""
     },
     {
-      "rowIdx": 246,
-      "itemNo": "16",
+      "rowIdx": 244,
+      "itemNo": "3",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -3580,8 +3552,8 @@
       "result": ""
     },
     {
-      "rowIdx": 247,
-      "itemNo": "16",
+      "rowIdx": 245,
+      "itemNo": "3",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -3594,8 +3566,8 @@
       "result": "鋼筋模板工率管控規劃延至10月提出"
     },
     {
-      "rowIdx": 248,
-      "itemNo": "16",
+      "rowIdx": 246,
+      "itemNo": "3",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -3608,8 +3580,8 @@
       "result": "待正龍回應處理(議題管控表)"
     },
     {
-      "rowIdx": 249,
-      "itemNo": "16",
+      "rowIdx": 247,
+      "itemNo": "3",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -3622,8 +3594,8 @@
       "result": "待正龍回應處理(議題管控表)"
     },
     {
-      "rowIdx": 250,
-      "itemNo": "16",
+      "rowIdx": 248,
+      "itemNo": "3",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -3636,8 +3608,8 @@
       "result": "待正龍回應處理(議題管控表)"
     },
     {
-      "rowIdx": 251,
-      "itemNo": "16",
+      "rowIdx": 249,
+      "itemNo": "3",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -3650,8 +3622,8 @@
       "result": "持續追蹤"
     },
     {
-      "rowIdx": 252,
-      "itemNo": "16",
+      "rowIdx": 250,
+      "itemNo": "3",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -3664,8 +3636,8 @@
       "result": "請志全再整理"
     },
     {
-      "rowIdx": 253,
-      "itemNo": "16",
+      "rowIdx": 251,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3678,8 +3650,8 @@
       "result": "7/29細部設計成果報告書 (初版)書圖文件提送。"
     },
     {
-      "rowIdx": 254,
-      "itemNo": "16",
+      "rowIdx": 252,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3692,8 +3664,8 @@
       "result": "建築師回覆尚有零星圖面須修正，書類也還有資料須補用印，還要再對一次圖。"
     },
     {
-      "rowIdx": 255,
-      "itemNo": "16",
+      "rowIdx": 253,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3706,8 +3678,8 @@
       "result": "顧問公司建議取分事項：電梯豎井防墜落偵測(紅外線對射柵欄、高分貝雙色聲光警鈴、固定式紅外線防水攝影機、管理軟體及儲存設備)、地下水位偵測(水壓計、水位警報、連動設備、管理軟體及儲存設備)。"
     },
     {
-      "rowIdx": 256,
-      "itemNo": "16",
+      "rowIdx": 254,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3720,8 +3692,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20260910技術會議\\A.待辦事項追蹤\\機電-送審管制總表-115.09.08(工地).xls"
     },
     {
-      "rowIdx": 257,
-      "itemNo": "16",
+      "rowIdx": 255,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3734,8 +3706,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20260813技術會議\\A.待辧事項追蹤\\機電項目簡介及檢討813.pptx"
     },
     {
-      "rowIdx": 258,
-      "itemNo": "16",
+      "rowIdx": 256,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3748,8 +3720,8 @@
       "result": "正龍：依設計單線圖表明本案走TRAY的線材為XLPE。"
     },
     {
-      "rowIdx": 259,
-      "itemNo": "16",
+      "rowIdx": 257,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3762,8 +3734,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20260813技術會議\\A.待辧事項追蹤\\正龍回覆.pptx"
     },
     {
-      "rowIdx": 260,
-      "itemNo": "16",
+      "rowIdx": 258,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3776,8 +3748,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20260813技術會議\\A.待辧事項追蹤\\正龍回覆.pptx"
     },
     {
-      "rowIdx": 261,
-      "itemNo": "16",
+      "rowIdx": 259,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3790,8 +3762,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20260813技術會議\\A.待辧事項追蹤\\正龍回覆.pptx"
     },
     {
-      "rowIdx": 262,
-      "itemNo": "16",
+      "rowIdx": 260,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3804,8 +3776,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20260813技術會議\\A.待辧事項追蹤\\正龍回覆.pptx"
     },
     {
-      "rowIdx": 263,
-      "itemNo": "16",
+      "rowIdx": 261,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3818,8 +3790,8 @@
       "result": "正龍：正龍圖控人員已經於8/11(基座位置、平面尺寸與剖面尺寸)(給政韋)。"
     },
     {
-      "rowIdx": 264,
-      "itemNo": "16",
+      "rowIdx": 262,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3832,8 +3804,8 @@
       "result": "正龍：會有獨立分項計畫，施工圖會於該樓層一併送審討論。"
     },
     {
-      "rowIdx": 265,
-      "itemNo": "16",
+      "rowIdx": 263,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3846,8 +3818,8 @@
       "result": "正龍：正龍設計部施工圖繪製人員回覆(目前還沒處理到戶內，但看消防設計圖探測器位置都是在單位房的中間，離冷氣都有1.5米以上)，正龍會持續依據此原則確認施工圖。。"
     },
     {
-      "rowIdx": 266,
-      "itemNo": "16",
+      "rowIdx": 264,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3860,8 +3832,8 @@
       "result": "正龍：暫依預算及設計執行，請東仁案提供雨水回收系統配置相關資料，敝司於檢討後提出更詳方案進行後續討論。"
     },
     {
-      "rowIdx": 267,
-      "itemNo": "16",
+      "rowIdx": 265,
+      "itemNo": "3",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -3874,8 +3846,8 @@
       "result": "正龍：已通知施工廠商參考，持續與協力廠商溝通。"
     },
     {
-      "rowIdx": 268,
-      "itemNo": "16",
+      "rowIdx": 266,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -3888,8 +3860,8 @@
       "result": "9/23~10/7 公開招標15日\n10/8 開標"
     },
     {
-      "rowIdx": 269,
-      "itemNo": "16",
+      "rowIdx": 267,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -3902,8 +3874,8 @@
       "result": "洗車台已完成,目前使用中"
     },
     {
-      "rowIdx": 270,
-      "itemNo": "16",
+      "rowIdx": 268,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -3916,8 +3888,8 @@
       "result": "基地周邊30點沉陷點已完成"
     },
     {
-      "rowIdx": 271,
-      "itemNo": "16",
+      "rowIdx": 269,
+      "itemNo": "3",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -3930,22 +3902,22 @@
       "result": "確認採用堆高機配合吊車至屋頂進行小構件吊裝 。總部提醒工務所發包時應明訂堆高機作業安全防護機制與風險評估 。"
     },
     {
-      "rowIdx": 272,
-      "itemNo": "16",
+      "rowIdx": 270,
+      "itemNo": "4",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
       "meetDate": "2026-07-21",
       "desc": "按筏基、地下二層、地下一層逐層產出放樣圖，並向平行包索取穿樑圖與管線衝突檢討",
       "proposer": "工務所",
-      "dueDate": "2026-10-01",
+      "dueDate": "2026-10-31",
       "actualDate": "",
       "status": "進行中",
-      "result": ""
+      "result": "放樣圖已完成,待機電討論"
     },
     {
-      "rowIdx": 273,
-      "itemNo": "16",
+      "rowIdx": 271,
+      "itemNo": "4",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -3958,8 +3930,8 @@
       "result": "智慧門禁系統已安裝完成"
     },
     {
-      "rowIdx": 274,
-      "itemNo": "16",
+      "rowIdx": 272,
+      "itemNo": "5",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -3967,27 +3939,27 @@
       "desc": "遵循公司政策，室內及結構施工全面評估採用系統架（SPS/達爾文架）替代傳統框式架",
       "proposer": "工務所",
       "dueDate": "2026-10-13",
-      "actualDate": "",
-      "status": "進行中",
+      "actualDate": "2026-10-13",
+      "status": "已完成",
       "result": "預計本案新購置系統架"
     },
     {
-      "rowIdx": 275,
-      "itemNo": "16",
+      "rowIdx": 273,
+      "itemNo": "6",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
       "meetDate": "2026-07-21",
       "desc": "參考 CDC/朴子案範例，檢討地下車道轉彎區超高、設置 1m～1.5m 之緩衝區微調超高斜率，以防低底盤車輛刮底，並檢討車道頂板淨高與管線高程衝突。",
       "proposer": "工務所",
-      "dueDate": "2026-10-13",
+      "dueDate": "2026-10-31",
       "actualDate": "",
       "status": "進行中",
-      "result": ""
+      "result": "彎道處有正交樑,需提早檢討"
     },
     {
-      "rowIdx": 276,
-      "itemNo": "16",
+      "rowIdx": 274,
+      "itemNo": "6",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -4000,8 +3972,8 @@
       "result": ""
     },
     {
-      "rowIdx": 277,
-      "itemNo": "16",
+      "rowIdx": 275,
+      "itemNo": "6",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4014,8 +3986,8 @@
       "result": "B基地發電機進場路徑淨高不足（部分路徑淨高300cm，但機房淨高僅280cm），且發電機高度與發電機房高度衝突，後續發電機房需重新調整變更位置；將請發電機廠商提供設備圖後，再行研議確認機房位置修改。 \nC基地發電機進場路徑及出入口開口方式與尺寸，亦將俟發電機廠商圖面確認後再行檢討定案。"
     },
     {
-      "rowIdx": 278,
-      "itemNo": "16",
+      "rowIdx": 276,
+      "itemNo": "6",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4028,8 +4000,8 @@
       "result": "開口調整，閃過結構柱範圍"
     },
     {
-      "rowIdx": 279,
-      "itemNo": "16",
+      "rowIdx": 277,
+      "itemNo": "6",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4042,8 +4014,8 @@
       "result": "已套匯閥基負載圖說"
     },
     {
-      "rowIdx": 280,
-      "itemNo": "16",
+      "rowIdx": 278,
+      "itemNo": "6",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4056,8 +4028,8 @@
       "result": "Ｂ基地電梯機房的開口偏移及機房預留孔卡梁，圖說會再與事務所溝通。圖說修正"
     },
     {
-      "rowIdx": 281,
-      "itemNo": "16",
+      "rowIdx": 279,
+      "itemNo": "6",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4070,8 +4042,8 @@
       "result": "待三階圖說確認，辦理釋疑修改圖說施作項目"
     },
     {
-      "rowIdx": 282,
-      "itemNo": "16",
+      "rowIdx": 280,
+      "itemNo": "6",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4084,8 +4056,8 @@
       "result": "接地系統圖說及放樣控制點已繪製完成，後續會規劃安全支撐與開挖施工前說明會\n已核定計畫需上傳至技術會議資料夾(拆B.C基地)"
     },
     {
-      "rowIdx": 283,
-      "itemNo": "16",
+      "rowIdx": 281,
+      "itemNo": "6",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4098,8 +4070,8 @@
       "result": "內控進度調整後更新"
     },
     {
-      "rowIdx": 284,
-      "itemNo": "16",
+      "rowIdx": 282,
+      "itemNo": "6",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -4112,8 +4084,8 @@
       "result": ""
     },
     {
-      "rowIdx": 285,
-      "itemNo": "16",
+      "rowIdx": 283,
+      "itemNo": "6",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -4126,8 +4098,8 @@
       "result": ""
     },
     {
-      "rowIdx": 286,
-      "itemNo": "16",
+      "rowIdx": 284,
+      "itemNo": "6",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -4140,8 +4112,8 @@
       "result": ""
     },
     {
-      "rowIdx": 287,
-      "itemNo": "16",
+      "rowIdx": 285,
+      "itemNo": "6",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -4154,8 +4126,8 @@
       "result": ""
     },
     {
-      "rowIdx": 288,
-      "itemNo": "16",
+      "rowIdx": 286,
+      "itemNo": "6",
       "dept": "北區工程處",
       "site": "公西檔案庫房",
       "rawSite": "公西檔案庫房",
@@ -4168,50 +4140,50 @@
       "result": "設計單位提供CAD與發包圖有差異，目前結構事務所已提供更新之CAD檔案。經釐清電梯機坑內集水坑為二次增築加打施作100×100×50cm之尺寸。"
     },
     {
-      "rowIdx": 289,
-      "itemNo": "16",
+      "rowIdx": 287,
+      "itemNo": "6",
       "dept": "北區工程處",
       "site": "公西檔案庫房",
       "rawSite": "公西檔案庫房",
       "meetDate": "2026-07-24",
       "desc": "加快筏基與B1牆面穿牆管、地樑連通管及樓板預留孔之套繪確認",
       "proposer": "工務所",
-      "dueDate": "2026-09-30",
+      "dueDate": "2026-11-02",
       "actualDate": "",
       "status": "進行中",
-      "result": "1.東元8/25已提供筏基層圖面，待監造審查通過後可提供位置及數量完成鋼筋及模板相關圖面\n2.目前要求東元針對B1F層SEM開孔正確圖說於9/30提供，後續可套匯審查版軀體圖提供現場施工圖用途與機電介面以該圖為依據"
+      "result": "1. 東元已提供筏基層圖面，將於10/16前進行最終簽認後據以套圖至土建軀體圖，以為雙方認定基準。\n2. B1F牆面開口部分已有初版，東元持續檢討中。\n3. B1F設備基座尺寸，東元檢討中。"
     },
     {
-      "rowIdx": 290,
-      "itemNo": "16",
+      "rowIdx": 288,
+      "itemNo": "6",
       "dept": "北區工程處",
       "site": "公西檔案庫房",
       "rawSite": "公西檔案庫房",
       "meetDate": "2026-07-24",
       "desc": "確認接地銅棒打設深度與位置，10m 接地鋼棒若遭遇卵礫石層無法擊入，應即刻改採鑽孔機具應變。",
       "proposer": "工務所",
-      "dueDate": "2026-09-30",
+      "dueDate": "2026-11-02",
       "actualDate": "",
       "status": "進行中",
       "result": "目前與東元討論待工區一區開挖至預定深度，進行接地試打工項\n1.單純人工施作接地銅棒，主要判斷進度、銅棒施作困難度\n2.機械輔助:與人工進度差異、打銅棒順暢度\n3.當第二項工法也遇困難時即可判斷改採探鑽工法"
     },
     {
-      "rowIdx": 291,
-      "itemNo": "16",
+      "rowIdx": 289,
+      "itemNo": "6",
       "dept": "北區工程處",
       "site": "公西檔案庫房",
       "rawSite": "公西檔案庫房",
       "meetDate": "2026-07-24",
       "desc": "確認1F樓版抗壓強度（需達295kgf/cm²）、鋼筋加強配筋及吊車作業安全防護",
       "proposer": "工務所",
-      "dueDate": "2026-09-30",
+      "dueDate": "2026-11-02",
       "actualDate": "",
       "status": "進行中",
       "result": ""
     },
     {
-      "rowIdx": 292,
-      "itemNo": "16",
+      "rowIdx": 290,
+      "itemNo": "6",
       "dept": "北區工程處",
       "site": "公西檔案庫房",
       "rawSite": "公西檔案庫房",
@@ -4224,22 +4196,22 @@
       "result": "新光合纖工地採8×8cm方管施作，其淨距約14cm，公西採H30×30cm型鋼施作，淨距約10cm，其餘非單元式洗車台位置採覆工板滿鋪，應較無踩穿風險。"
     },
     {
-      "rowIdx": 293,
-      "itemNo": "16",
+      "rowIdx": 291,
+      "itemNo": "6",
       "dept": "北區工程處",
       "site": "公西檔案庫房",
       "rawSite": "公西檔案庫房",
       "meetDate": "2026-07-24",
       "desc": "8月啟動建模，「2D先行、3D追趕」原則，確保施工圖交付無縫銜接。",
       "proposer": "工務所",
-      "dueDate": "2026-09-30",
+      "dueDate": "2026-11-02",
       "actualDate": "",
       "status": "進行中",
-      "result": "模型進度：預計08月底全棟結構柱、梁、牆、版模型元件初步建置完成，截至08/21已完成筏基層及地下一樓模型含MO開口建置(包含B1FL及1FL版高程確認及調整)。"
+      "result": "雙周進行BIM會議，目前進度已逐漸追趕上\n結構軀體模型進度沒有問題，後續須針對機電整合檢討、土建裝修檢討"
     },
     {
-      "rowIdx": 294,
-      "itemNo": "16",
+      "rowIdx": 292,
+      "itemNo": "6",
       "dept": "北區工程處",
       "site": "公西檔案庫房",
       "rawSite": "公西檔案庫房",
@@ -4252,22 +4224,22 @@
       "result": "經釋疑後因台電配電場所規定其上方不得覆土等規定，設計單位釋疑不得取消複版結構，工地預計採中空(填塞保麗龍方式)一次澆置，以確保防水性能。"
     },
     {
-      "rowIdx": 295,
-      "itemNo": "16",
+      "rowIdx": 293,
+      "itemNo": "6",
       "dept": "北區工程處",
       "site": "公西檔案庫房",
       "rawSite": "公西檔案庫房",
       "meetDate": "2026-07-24",
       "desc": "將各項議題狀態（已完成/進行中）及NAS檔案超連結補齊，文字顏色統一為黑色",
       "proposer": "工務所",
-      "dueDate": "2026-09-30",
+      "dueDate": "2026-11-02",
       "actualDate": "",
       "status": "進行中",
-      "result": ""
+      "result": "尚未進行"
     },
     {
-      "rowIdx": 296,
-      "itemNo": "16",
+      "rowIdx": 294,
+      "itemNo": "6",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -4280,8 +4252,8 @@
       "result": ""
     },
     {
-      "rowIdx": 297,
-      "itemNo": "16",
+      "rowIdx": 295,
+      "itemNo": "6",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -4294,8 +4266,8 @@
       "result": ""
     },
     {
-      "rowIdx": 298,
-      "itemNo": "16",
+      "rowIdx": 296,
+      "itemNo": "6",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -4308,8 +4280,8 @@
       "result": "8月計價，PCM核准"
     },
     {
-      "rowIdx": 299,
-      "itemNo": "16",
+      "rowIdx": 297,
+      "itemNo": "6",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -4322,8 +4294,8 @@
       "result": "8/291-7LINE澆置完成"
     },
     {
-      "rowIdx": 300,
-      "itemNo": "16",
+      "rowIdx": 298,
+      "itemNo": "6",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -4336,8 +4308,8 @@
       "result": "車輛動線、壓送車人員及機具配置於2026八月份會議簡報說明(\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\宜蘭工程處-1.坤門安居\\3.歷次會議資料(每月更新)\\技術會議\\2026.08.07坤門技術會議)，並提送施工計畫供監造單位審查，後續待澆製前召開協調會，並向轄區相關單位報備。"
     },
     {
-      "rowIdx": 301,
-      "itemNo": "16",
+      "rowIdx": 299,
+      "itemNo": "6",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -4350,8 +4322,8 @@
       "result": "考量施工性及統需書要求，已調整為1.0mm防水膜直向鋪貼，維持上折50cm以上，後續牆面防水搭接8~10cm處，以釘槍先行固定，後續以專用防水膠進行搭接觸貼合。"
     },
     {
-      "rowIdx": 302,
-      "itemNo": "16",
+      "rowIdx": 300,
+      "itemNo": "6",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -4364,8 +4336,8 @@
       "result": "地下室外牆及水箱等位置依細設三階圖說防水大樣設置止水帶，柱筋範圍以符合結構配筋為優先考量，以膨脹性止水條取代止水帶。"
     },
     {
-      "rowIdx": 303,
-      "itemNo": "16",
+      "rowIdx": 301,
+      "itemNo": "6",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -4373,27 +4345,27 @@
       "desc": "開挖通風風機噪音防範與安全維護\n檢討北側鄰房風機運轉噪音防範措施，並確認風管隨拆撐調升時之臨高作業安全防護。",
       "proposer": "工務所",
       "dueDate": "2026-09-11",
-      "actualDate": "",
-      "status": "進行中",
-      "result": ""
+      "actualDate": "2026-10-01",
+      "status": "已完成",
+      "result": "通風機架設位置於連續壁側，鄰近甲種圍籬及隔音帆布，並配置施工架供風管拆裝作業"
     },
     {
-      "rowIdx": 304,
-      "itemNo": "16",
+      "rowIdx": 302,
+      "itemNo": "6",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
       "meetDate": "2026-08-07",
       "desc": "室內系統式施工架（達爾文）需求規劃\n檢討地下室結構至地上層室內作業（柱筋綁紮、牆面施工等）之系統架需求數量，避免使用傳統門型架並提出採購需求。",
       "proposer": "工務所",
-      "dueDate": "2026-09-11",
+      "dueDate": "2026-10-11",
       "actualDate": "",
       "status": "進行中",
       "result": "已先行採購兩組施工架，供現場搭設教育訓練，及評估後續使用數量。"
     },
     {
-      "rowIdx": 305,
-      "itemNo": "16",
+      "rowIdx": 303,
+      "itemNo": "6",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -4406,8 +4378,8 @@
       "result": "已設置"
     },
     {
-      "rowIdx": 306,
-      "itemNo": "16",
+      "rowIdx": 304,
+      "itemNo": "6",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -4420,8 +4392,8 @@
       "result": ""
     },
     {
-      "rowIdx": 307,
-      "itemNo": "17",
+      "rowIdx": 305,
+      "itemNo": "6",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -4429,27 +4401,27 @@
       "desc": "筏基進度管控：\n製作三週細排進度表,依分區逐日列出各部位施工順序",
       "proposer": "豐譽工務所/施工組",
       "dueDate": "2026-09-09",
-      "actualDate": "",
-      "status": "進行中",
+      "actualDate": "2026-10-07",
+      "status": "已完成",
       "result": ""
     },
     {
-      "rowIdx": 308,
-      "itemNo": "18",
+      "rowIdx": 306,
+      "itemNo": "6",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
       "meetDate": "2026-08-12",
-      "desc": "BF外牆夾板黏貼：\n施工前進行試驗,確認黏著效果",
+      "desc": "B1F外牆夾板黏貼：\n施工前進行試驗,確認黏著效果",
       "proposer": "協力廠商及施工組",
-      "dueDate": "2026-10-12",
+      "dueDate": "2026-11-11",
       "actualDate": "",
       "status": "進行中",
       "result": ""
     },
     {
-      "rowIdx": 309,
-      "itemNo": "18",
+      "rowIdx": 307,
+      "itemNo": "6",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -4459,11 +4431,11 @@
       "dueDate": "2026-10-08",
       "actualDate": "",
       "status": "進行中",
-      "result": "8/11掛件並與建管單位第一次對圖，9/08再與建管單位第二次對圖。"
+      "result": "115.09.29 提送”交評變更”電子檔資料予建管承辦審查，預估時程約1-2週"
     },
     {
-      "rowIdx": 310,
-      "itemNo": "18",
+      "rowIdx": 308,
+      "itemNo": "6",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -4476,8 +4448,8 @@
       "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\技術議題管控&待辦事項連結資料\\B.待辧事項\\260910\\無障礙廁所.浴廁尺寸檢討-20260826.pptx"
     },
     {
-      "rowIdx": 311,
-      "itemNo": "18",
+      "rowIdx": 309,
+      "itemNo": "6",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -4490,22 +4462,22 @@
       "result": ""
     },
     {
-      "rowIdx": 312,
-      "itemNo": "18",
+      "rowIdx": 310,
+      "itemNo": "7",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
       "meetDate": "2026-08-18",
       "desc": "議題管控表產出日期（F 欄）全面梳理：\n依據工程進度排程，將 NAS 專案管控表中所有議題預定產出日期完整填列，特別優先標註黃色重點項目（無障礙浴廁、機電設備機房、鋼筋衝突檢討、結構體分項計畫等）。",
       "proposer": "工務所",
-      "dueDate": "2026-10-13",
+      "dueDate": "2026-10-31",
       "actualDate": "",
       "status": "進行中",
       "result": "持續更新"
     },
     {
-      "rowIdx": 313,
-      "itemNo": "18",
+      "rowIdx": 311,
+      "itemNo": "8",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
@@ -4513,27 +4485,27 @@
       "desc": "完成模板工程（鋁木結合代工方案）發包，依公司標準作業指引編寫結構體分項施工計畫並送審。",
       "proposer": "工務所",
       "dueDate": "2026-10-15",
-      "actualDate": "",
-      "status": "進行中",
+      "actualDate": "2026-10-13",
+      "status": "已完成",
       "result": "模板採用鋁木結合工法施作\n10/15提出模板分項計畫"
     },
     {
-      "rowIdx": 314,
-      "itemNo": "18",
+      "rowIdx": 312,
+      "itemNo": "9",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
       "meetDate": "2026-08-18",
       "desc": "督促平行機電廠商提供地下二層機房設備配置、污水池管線連通及人孔蓋開孔尺寸，於 10 月前完成結構圖套繪。",
       "proposer": "工務所",
-      "dueDate": "2026-10-01",
+      "dueDate": "2026-11-17",
       "actualDate": "",
       "status": "進行中",
-      "result": "土建與機電人孔數量有重複,9月週會已列入會議記錄,須檢討調整施工數量(建議由豐譽規畫施作)"
+      "result": "土建與機電人孔數量有重複,9月週會已列入會議記錄,須檢討調整施工數量(建議由豐譽規畫施作)\n10月底以前須完成"
     },
     {
-      "rowIdx": 315,
-      "itemNo": "18",
+      "rowIdx": 313,
+      "itemNo": "9",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4546,8 +4518,8 @@
       "result": ""
     },
     {
-      "rowIdx": 316,
-      "itemNo": "18",
+      "rowIdx": 314,
+      "itemNo": "9",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4560,8 +4532,8 @@
       "result": "待廠商檢討後回復"
     },
     {
-      "rowIdx": 317,
-      "itemNo": "18",
+      "rowIdx": 315,
+      "itemNo": "9",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4574,8 +4546,8 @@
       "result": "待廠商檢討後回復"
     },
     {
-      "rowIdx": 318,
-      "itemNo": "18",
+      "rowIdx": 316,
+      "itemNo": "9",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4588,8 +4560,8 @@
       "result": "待廠商檢討後回復"
     },
     {
-      "rowIdx": 319,
-      "itemNo": "18",
+      "rowIdx": 317,
+      "itemNo": "9",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4602,8 +4574,8 @@
       "result": "待廠商檢討後回復"
     },
     {
-      "rowIdx": 320,
-      "itemNo": "18",
+      "rowIdx": 318,
+      "itemNo": "9",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4616,8 +4588,8 @@
       "result": "比照辦理\n備註：\n將等筏基脫模孔與中間樁套匯繪整合圖說完成後，再行檢討設備基礎座位置"
     },
     {
-      "rowIdx": 321,
-      "itemNo": "18",
+      "rowIdx": 319,
+      "itemNo": "9",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4630,8 +4602,8 @@
       "result": "比照辦理，將埰全面套疊，確認圖說沒問題後，再各案提送施工圖說"
     },
     {
-      "rowIdx": 322,
-      "itemNo": "18",
+      "rowIdx": 320,
+      "itemNo": "9",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4644,8 +4616,8 @@
       "result": "已針對套房A/B/C、二房A/B/C、無障礙二房型及無障礙三房型等各戶型之玄關/陽台吸頂燈、客餐廳簡約吸頂燈、廚房嵌燈、火警偵測器與燃氣偵測器進行全面套疊；確認機電相關位置後，於施工圖說獨立立案辦理送審。"
     },
     {
-      "rowIdx": 323,
-      "itemNo": "18",
+      "rowIdx": 321,
+      "itemNo": "9",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4658,8 +4630,8 @@
       "result": "參考東仁安居雨水流程設計經驗，針對陽台排水、屋頂排水、水錶室排水及連續壁排水進行管路分流與回收檢討。 \n平實安居規劃採「1F排水溝→雨水緩衝池（攔汙網）→雨水沉砂池（攔汙網）→雨水滯洪排放池→雨水排放消能陰井→基地外水溝」，並結合噴灌系統再利用；地下室及連續壁滲漏水則引流至雨水排放池後經消能陰井排至基地外水溝。"
     },
     {
-      "rowIdx": 324,
-      "itemNo": "18",
+      "rowIdx": 322,
+      "itemNo": "9",
       "dept": "台南工程處",
       "site": "平實安居",
       "rawSite": "平實安居",
@@ -4672,50 +4644,50 @@
       "result": "預計配合深層排水工法施作，將請廠商尋找合適材料辦理送審嘗試；雖材料廠商未在統包需求書資格名單內，但比照東仁安居同等品審查模式推動辦理。"
     },
     {
-      "rowIdx": 325,
-      "itemNo": "18",
+      "rowIdx": 323,
+      "itemNo": "9",
       "dept": "北區工程處",
       "site": "公西檔案庫房",
       "rawSite": "公西檔案庫房",
       "meetDate": "2026-08-25",
       "desc": "彙整洗車台廠商型鋼配置與沉澱池加深之完整圖說與建置資料，並上傳至資料夾 。(需索取廠商圖說並完成回饋資料 )",
       "proposer": "工務所",
-      "dueDate": "2026-09-29",
+      "dueDate": "2026-11-02",
       "actualDate": "",
       "status": "進行中",
-      "result": ""
+      "result": "尚未進行"
     },
     {
-      "rowIdx": 326,
-      "itemNo": "18",
+      "rowIdx": 324,
+      "itemNo": "9",
       "dept": "北區工程處",
       "site": "公西檔案庫房",
       "rawSite": "公西檔案庫房",
       "meetDate": "2026-08-25",
       "desc": "針對全封模樓梯製作圖說、鐵檔固定工法、踏步倒角及專用混凝土配比與模板廠商完成研討 。(參考既有工程案型並提送施工大樣)",
       "proposer": "工務所",
-      "dueDate": "2026-09-29",
+      "dueDate": "2026-11-02",
       "actualDate": "",
       "status": "進行中",
-      "result": ""
+      "result": "預計10/08與模板廠商討論\n研討全封模樓梯灌漿順序、抗上浮力措施及梯背雙路鐵角材穿牆螺桿拉結機制。"
     },
     {
-      "rowIdx": 327,
-      "itemNo": "18",
+      "rowIdx": 325,
+      "itemNo": "9",
       "dept": "北區工程處",
       "site": "公西檔案庫房",
       "rawSite": "公西檔案庫房",
       "meetDate": "2026-08-25",
       "desc": "評估內部結構體施工架採用「系統架」之可行性並辦理採購。",
       "proposer": "工務所",
-      "dueDate": "2026-09-29",
+      "dueDate": "2026-11-02",
       "actualDate": "",
       "status": "進行中",
-      "result": ""
+      "result": "尚未進行"
     },
     {
-      "rowIdx": 328,
-      "itemNo": "18",
+      "rowIdx": 326,
+      "itemNo": "9",
       "dept": "北區工程處",
       "site": "公西檔案庫房",
       "rawSite": "公西檔案庫房",
@@ -4723,13 +4695,13 @@
       "desc": "擋土支撐及構台施工計畫送審資料上傳",
       "proposer": "工務所",
       "dueDate": "2026-09-29",
-      "actualDate": "",
-      "status": "進行中",
+      "actualDate": "2026-09-28",
+      "status": "已完成",
       "result": ""
     },
     {
-      "rowIdx": 329,
-      "itemNo": "18",
+      "rowIdx": 327,
+      "itemNo": "9",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -4742,8 +4714,8 @@
       "result": "提專案會議討論"
     },
     {
-      "rowIdx": 330,
-      "itemNo": "18",
+      "rowIdx": 328,
+      "itemNo": "9",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -4756,8 +4728,8 @@
       "result": ""
     },
     {
-      "rowIdx": 331,
-      "itemNo": "18",
+      "rowIdx": 329,
+      "itemNo": "9",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -4770,8 +4742,8 @@
       "result": ""
     },
     {
-      "rowIdx": 332,
-      "itemNo": "18",
+      "rowIdx": 330,
+      "itemNo": "9",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -4784,8 +4756,8 @@
       "result": ""
     },
     {
-      "rowIdx": 333,
-      "itemNo": "18",
+      "rowIdx": 331,
+      "itemNo": "9",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -4798,8 +4770,8 @@
       "result": ""
     },
     {
-      "rowIdx": 334,
-      "itemNo": "18",
+      "rowIdx": 332,
+      "itemNo": "9",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -4812,8 +4784,8 @@
       "result": ""
     },
     {
-      "rowIdx": 335,
-      "itemNo": "18",
+      "rowIdx": 333,
+      "itemNo": "9",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -4826,8 +4798,8 @@
       "result": ""
     },
     {
-      "rowIdx": 336,
-      "itemNo": "18",
+      "rowIdx": 334,
+      "itemNo": "9",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -4840,8 +4812,8 @@
       "result": ""
     },
     {
-      "rowIdx": 337,
-      "itemNo": "18",
+      "rowIdx": 335,
+      "itemNo": "9",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -4854,8 +4826,8 @@
       "result": ""
     },
     {
-      "rowIdx": 338,
-      "itemNo": "18",
+      "rowIdx": 336,
+      "itemNo": "9",
       "dept": "宜蘭工程處",
       "site": "立行倉儲物流",
       "rawSite": "立行倉儲物流",
@@ -4868,8 +4840,8 @@
       "result": ""
     },
     {
-      "rowIdx": 339,
-      "itemNo": "19",
+      "rowIdx": 337,
+      "itemNo": "9",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -4877,13 +4849,13 @@
       "desc": "鋼板樁背拉計算書修正與管理值重提：\n指出針對變位管理值為10公分無意見，但因目前鋼板樁形式為從原設計IV型調整成III型，因此針對東側鄰近歷史建物側，考量建物安全，須提出針對鋼板樁補強方式，後提供設計技師確認。",
       "proposer": "工務所",
       "dueDate": "2026-10-07",
-      "actualDate": "",
-      "status": "進行中",
-      "result": ""
+      "actualDate": "2026-09-11",
+      "status": "已完成",
+      "result": "已請總公司技師針對工地提出之補強方式重新計算,並經設計技師確認評估可行"
     },
     {
-      "rowIdx": 340,
-      "itemNo": "20",
+      "rowIdx": 338,
+      "itemNo": "9",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
@@ -4891,41 +4863,41 @@
       "desc": "壁外傾斜管增設數量與效益評估：\n檢討東側及南側增設壁外傾斜觀測管之具體需求，擬請 技師評估最適數量與設置效益，提報預算可行性",
       "proposer": "工務所",
       "dueDate": "2026-10-07",
-      "actualDate": "",
-      "status": "進行中",
-      "result": ""
+      "actualDate": "2026-09-29",
+      "status": "已完成",
+      "result": "技師評估依據需求增設,目前與業主討論,於西側及南側各增設1支傳統式壁外傾斜觀測管(每日監測)"
     },
     {
-      "rowIdx": 341,
-      "itemNo": "21",
+      "rowIdx": 339,
+      "itemNo": "9",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
       "meetDate": "2026-09-09",
       "desc": "塔吊安裝吊車站位與地盤承載方案檢討：\n檢討重型吊車作業站位平面圖，規劃站腳RC鋪設/鋼板分散載重、擴大吊距，以及結構縫隙回填CLSM頂住方案，送技師複核",
       "proposer": "工務所",
-      "dueDate": "2026-10-07",
+      "dueDate": "2026-11-11",
       "actualDate": "",
       "status": "進行中",
-      "result": ""
+      "result": "評估中"
     },
     {
-      "rowIdx": 342,
-      "itemNo": "22",
+      "rowIdx": 340,
+      "itemNo": "9",
       "dept": "高屏工程處",
       "site": "中油綠能",
       "rawSite": "中油綠能",
       "meetDate": "2026-09-09",
       "desc": "機電與BIM待釐清項目（RFI）清理：\n針對一樓設備基座量體、風管穿樑及天花板淨高衝突等累積之30~40項RFI，協調設計與監造單位優先於9月份筏基施工期完成釐清結案",
       "proposer": "工務所",
-      "dueDate": "2026-10-07",
+      "dueDate": "2026-11-11",
       "actualDate": "",
       "status": "進行中",
       "result": ""
     },
     {
-      "rowIdx": 343,
-      "itemNo": "22",
+      "rowIdx": 341,
+      "itemNo": "9",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -4933,13 +4905,13 @@
       "desc": "NO.8、NO.9 機房地坪落差修平方案評估：\n針對管道頂板因 OH 需求抬高 20cm 衍生周邊地坪相對較低問題，研擬輕質混凝土填平或局部樓板抬升方案",
       "proposer": "工務所",
       "dueDate": "2026-10-08",
-      "actualDate": "",
-      "status": "進行中",
-      "result": ""
+      "actualDate": "2026-10-07",
+      "status": "已完成",
+      "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20261008技術會議\\A.待辦事項追蹤\\技術會議-分項工程施工規劃用_待辦事項(電梯+鋼筋).pdf"
     },
     {
-      "rowIdx": 344,
-      "itemNo": "22",
+      "rowIdx": 342,
+      "itemNo": "9",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -4947,13 +4919,13 @@
       "desc": "NO.8、NO.9 電梯機房外牆防雨與排水管路增設檢討：\n檢討側邊百葉窗進水風險，圖說現無排水規劃，協調機電配合增設專用排水管路與洩水坡度",
       "proposer": "工務所",
       "dueDate": "2026-10-08",
-      "actualDate": "",
-      "status": "進行中",
-      "result": ""
+      "actualDate": "2026-10-07",
+      "status": "已完成",
+      "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20261008技術會議\\A.待辦事項追蹤\\技術會議-分項工程施工規劃用_待辦事項(電梯+鋼筋).pdf"
     },
     {
-      "rowIdx": 345,
-      "itemNo": "22",
+      "rowIdx": 343,
+      "itemNo": "9",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -4961,13 +4933,13 @@
       "desc": "電梯 OH 尺寸標註與圖面勘誤修正：\n針對 NO.3~NO.5 簡報製圖（490cm誤植）及 NO.8、NO.9 剖面標註（OH需為440cm、淨高250cm等）與日立永大圖說進行一致性複核並更新",
       "proposer": "工務所",
       "dueDate": "2026-10-08",
-      "actualDate": "",
-      "status": "進行中",
-      "result": ""
+      "actualDate": "2026-10-07",
+      "status": "已完成",
+      "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20261008技術會議\\A.待辦事項追蹤\\技術會議-分項工程施工規劃用_待辦事項(電梯+鋼筋).pdf"
     },
     {
-      "rowIdx": 346,
-      "itemNo": "22",
+      "rowIdx": 344,
+      "itemNo": "9",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -4975,13 +4947,13 @@
       "desc": "消防查驗電梯乘場開口配置協調：\n針對緊急召回紐、消防操作介面與現地消防隊動線要求，洽詢電梯廠商歷來消檢抽查經驗，防範現場查驗與送審圖不一致衍生之敲改風險",
       "proposer": "工務所",
       "dueDate": "2026-10-08",
-      "actualDate": "",
-      "status": "進行中",
-      "result": ""
+      "actualDate": "2026-10-07",
+      "status": "已完成",
+      "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20261008技術會議\\A.待辦事項追蹤\\技術會議-分項工程施工規劃用_待辦事項(電梯+鋼筋).pdf"
     },
     {
-      "rowIdx": 347,
-      "itemNo": "22",
+      "rowIdx": 345,
+      "itemNo": "9",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -4989,13 +4961,13 @@
       "desc": "鋼筋工程現場查驗機制與自主檢查頻率制定：\n規劃現場行動裝置（平板）或圖面責任分區標註機制，落實柱梁牆版各項管理標準與檢查頻率",
       "proposer": "工務所",
       "dueDate": "2026-10-08",
-      "actualDate": "",
-      "status": "進行中",
-      "result": ""
+      "actualDate": "2026-10-07",
+      "status": "已完成",
+      "result": "..\\1.各專案作業區\\中區工程處-1.朴子安居\\3.歷次會議資料(每月更新)\\20261008技術會議\\A.待辦事項追蹤\\技術會議-分項工程施工規劃用_待辦事項(電梯+鋼筋).pdf"
     },
     {
-      "rowIdx": 348,
-      "itemNo": "22",
+      "rowIdx": 346,
+      "itemNo": "9",
       "dept": "中區工程處",
       "site": "朴子安居",
       "rawSite": "朴子安居",
@@ -5008,8 +4980,8 @@
       "result": ""
     },
     {
-      "rowIdx": 349,
-      "itemNo": "22",
+      "rowIdx": 347,
+      "itemNo": "9",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -5017,13 +4989,13 @@
       "desc": "確定地下室停車場與梯廳地坪（硬底貼磚高差約1.5~2cm）之收邊方案（採異型不銹鋼門檻或樹脂砂漿地坪順平）",
       "proposer": "工務所",
       "dueDate": "2026-10-30",
-      "actualDate": "",
-      "status": "進行中",
-      "result": ""
+      "actualDate": "2026-10-30",
+      "status": "已完成",
+      "result": "採不鏽鋼門檻"
     },
     {
-      "rowIdx": 350,
-      "itemNo": "22",
+      "rowIdx": 348,
+      "itemNo": "9",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -5033,11 +5005,11 @@
       "dueDate": "2026-10-30",
       "actualDate": "",
       "status": "進行中",
-      "result": ""
+      "result": "已提供建議方案與設計單位，後續以釋疑方式回覆辦理"
     },
     {
-      "rowIdx": 351,
-      "itemNo": "22",
+      "rowIdx": 349,
+      "itemNo": "9",
       "dept": "宜蘭工程處",
       "site": "坤門安居",
       "rawSite": "坤門安居",
@@ -5050,39 +5022,39 @@
       "result": ""
     },
     {
-      "rowIdx": 352,
-      "itemNo": "22",
+      "rowIdx": 350,
+      "itemNo": "10",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
       "meetDate": "2026-09-15",
-      "desc": "地下室土方開挖與斜撐施工規劃：檢討各向（東、西、北向）實際開挖動線、支撐及機具高程、斜坡度及斜撐反力座實際套繪圖說。",
+      "desc": "地下室土方開挖與斜撐施工規劃：檢討各向（東、西、北向）實際開挖動線、支撐及機具高程、斜坡度及斜撐反力座實際套繪、平剖圖產出。",
       "proposer": "工務所",
-      "dueDate": "2026-10-13",
+      "dueDate": "2026-11-17",
       "actualDate": "",
       "status": "進行中",
-      "result": ""
+      "result": "板樁施工後續討論(施工構台,取土口,島式斜撐,安全支撐固定點、拆撐動線)、山貓/小怪手配合推土作業及取土口構台延伸方案。"
     },
     {
-      "rowIdx": 353,
-      "itemNo": "22",
+      "rowIdx": 351,
+      "itemNo": "11",
       "dept": "台南工程處",
       "site": "台南崇明商場",
       "rawSite": "台南崇明商場",
       "meetDate": "2026-09-15",
       "desc": "地下室梯廳地坪高低差與預降檢討\n檢討梯廳 5 cm 砂漿貼磚與停車場地坪之界面高低差，確認結構體是否採預降高程施作或施作順坡。",
       "proposer": "工務所",
-      "dueDate": "2026-10-13",
+      "dueDate": "2026-11-17",
       "actualDate": "",
       "status": "進行中",
-      "result": ""
+      "result": "已提釋疑,建築師尚未回覆10/13"
     },
     {
-      "rowIdx": 354,
-      "itemNo": "22",
+      "rowIdx": 352,
+      "itemNo": "11",
       "dept": "台南工程處",
-      "site": "台南崇明商場",
-      "rawSite": "台南崇明商場",
+      "site": "平實安居",
+      "rawSite": "平實安居",
       "meetDate": "2026-09-16",
       "desc": "檢討構台挖土機作業免拆安全欄杆方案（確認挖土機型號轉盤淨高、迴轉半徑與構台欄杆高度匹配設計）",
       "proposer": "工務所",
@@ -5092,8 +5064,8 @@
       "result": ""
     },
     {
-      "rowIdx": 355,
-      "itemNo": "22",
+      "rowIdx": 353,
+      "itemNo": "11",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -5106,8 +5078,8 @@
       "result": ""
     },
     {
-      "rowIdx": 356,
-      "itemNo": "22",
+      "rowIdx": 354,
+      "itemNo": "11",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -5120,8 +5092,8 @@
       "result": ""
     },
     {
-      "rowIdx": 357,
-      "itemNo": "22",
+      "rowIdx": 355,
+      "itemNo": "11",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -5134,8 +5106,8 @@
       "result": ""
     },
     {
-      "rowIdx": 358,
-      "itemNo": "22",
+      "rowIdx": 356,
+      "itemNo": "11",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -5148,8 +5120,8 @@
       "result": ""
     },
     {
-      "rowIdx": 359,
-      "itemNo": "22",
+      "rowIdx": 357,
+      "itemNo": "11",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -5162,8 +5134,8 @@
       "result": ""
     },
     {
-      "rowIdx": 360,
-      "itemNo": "22",
+      "rowIdx": 358,
+      "itemNo": "11",
       "dept": "北區工程處",
       "site": "CDC防疫中心",
       "rawSite": "CDC防疫中心",
@@ -5176,8 +5148,8 @@
       "result": ""
     },
     {
-      "rowIdx": 361,
-      "itemNo": "22",
+      "rowIdx": 359,
+      "itemNo": "11",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -5190,8 +5162,8 @@
       "result": ""
     },
     {
-      "rowIdx": 362,
-      "itemNo": "22",
+      "rowIdx": 360,
+      "itemNo": "11",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -5204,8 +5176,8 @@
       "result": ""
     },
     {
-      "rowIdx": 363,
-      "itemNo": "22",
+      "rowIdx": 361,
+      "itemNo": "11",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -5218,8 +5190,8 @@
       "result": ""
     },
     {
-      "rowIdx": 364,
-      "itemNo": "22",
+      "rowIdx": 362,
+      "itemNo": "11",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -5232,8 +5204,8 @@
       "result": ""
     },
     {
-      "rowIdx": 365,
-      "itemNo": "22",
+      "rowIdx": 363,
+      "itemNo": "11",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -5246,8 +5218,8 @@
       "result": ""
     },
     {
-      "rowIdx": 366,
-      "itemNo": "22",
+      "rowIdx": 364,
+      "itemNo": "11",
       "dept": "北區工程處",
       "site": "新光合纖南港",
       "rawSite": "新纖南港總部",
@@ -5255,6 +5227,202 @@
       "desc": "議題管控總表更新、分工派任 ：依公司最新版完成各分項（門、窗、機電、系統架等）劉副理指派負責人、簡新豪主任更新預定檢討完成日，並於 NAS 系統同步存檔",
       "proposer": "工務所",
       "dueDate": "2026-10-29",
+      "actualDate": "",
+      "status": "進行中",
+      "result": ""
+    },
+    {
+      "rowIdx": 365,
+      "itemNo": "11",
+      "dept": "北區工程處",
+      "site": "公西檔案庫房",
+      "rawSite": "公西檔案庫房",
+      "meetDate": "2026-10-06",
+      "desc": "確認台電機房下方及 3 座電梯機坑周邊取消回填之「空筏基坑」溢水口與連通口設置方案，及二次澆置面止水帶/止水墩之施工圖面確認，避免滲水積水影響電梯坑及BF版",
+      "proposer": "工務所",
+      "dueDate": "2026-11-02",
+      "actualDate": "",
+      "status": "進行中",
+      "result": ""
+    },
+    {
+      "rowIdx": 366,
+      "itemNo": "11",
+      "dept": "北區工程處",
+      "site": "公西檔案庫房",
+      "rawSite": "公西檔案庫房",
+      "meetDate": "2026-10-06",
+      "desc": "與台泥預拌混凝土廠確認試拌及增加 19mm（6分石）備用配比，以利後續牆體或密集鋼筋部位施工使用",
+      "proposer": "工務所",
+      "dueDate": "2026-11-02",
+      "actualDate": "",
+      "status": "進行中",
+      "result": ""
+    },
+    {
+      "rowIdx": 367,
+      "itemNo": "11",
+      "dept": "北區工程處",
+      "site": "公西檔案庫房",
+      "rawSite": "公西檔案庫房",
+      "meetDate": "2026-10-06",
+      "desc": "針對移動式檔案櫃埋軌工法軌道架設與壓送粉光配合方案：確定埋軌角鐵/方管固定機制，並於合約規範隨打隨測專人配置及正負6mm高程精度要求。",
+      "proposer": "工務所",
+      "dueDate": "2026-11-02",
+      "actualDate": "",
+      "status": "進行中",
+      "result": ""
+    },
+    {
+      "rowIdx": 368,
+      "itemNo": "11",
+      "dept": "北區工程處",
+      "site": "公西檔案庫房",
+      "rawSite": "公西檔案庫房",
+      "meetDate": "2026-10-06",
+      "desc": "鋼筋檢料原則與保護層/馬椅筋計算圖冊彙整：整理鋼筋檢料標準、馬椅筋高程計算式（地樑雙高低尺寸）、加筋延伸/彎鉤收頭原則及斜面段/深坑施工圖，確立邊柱/中央柱依 S704 圖說執行。",
+      "proposer": "工務所",
+      "dueDate": "2026-11-02",
+      "actualDate": "",
+      "status": "進行中",
+      "result": ""
+    },
+    {
+      "rowIdx": 369,
+      "itemNo": "11",
+      "dept": "北區工程處",
+      "site": "公西檔案庫房",
+      "rawSite": "公西檔案庫房",
+      "meetDate": "2026-10-06",
+      "desc": "參考朴子案例架構完成平面工序與動線檢討，於 11 月大底施工前，邀集技師及現場施工班組辦理施工前教育訓練與品質說明會",
+      "proposer": "工務所",
+      "dueDate": "2026-11-02",
+      "actualDate": "",
+      "status": "進行中",
+      "result": ""
+    },
+    {
+      "rowIdx": 370,
+      "itemNo": "11",
+      "dept": "高屏工程處",
+      "site": "中油綠能",
+      "rawSite": "中油綠能",
+      "meetDate": "2026-10-07",
+      "desc": "針對柱模吊裝鋼筋干涉研擬釋放腳或分段吊裝工法，並於爬升架進場後於示範區完成試組裝演練評估",
+      "proposer": "工務所",
+      "dueDate": "115/11/11",
+      "actualDate": "",
+      "status": "進行中",
+      "result": ""
+    },
+    {
+      "rowIdx": 371,
+      "itemNo": "11",
+      "dept": "高屏工程處",
+      "site": "中油綠能",
+      "rawSite": "中油綠能",
+      "meetDate": "2026-10-07",
+      "desc": "查核地梁避雷接地銅線出線高度（地梁中心約1.5公尺處），落實管路絕緣包覆及止水密實度，防範地下水毛細滲漏",
+      "proposer": "工務所",
+      "dueDate": "115/11/11",
+      "actualDate": "",
+      "status": "進行中",
+      "result": ""
+    },
+    {
+      "rowIdx": 372,
+      "itemNo": "11",
+      "dept": "高屏工程處",
+      "site": "中油綠能",
+      "rawSite": "中油綠能",
+      "meetDate": "2026-10-07",
+      "desc": "於基地東側景觀內溝是否全面鋪設夾板維持通行安全，並妥善規劃管料及置物欄擺放動線",
+      "proposer": "工務所",
+      "dueDate": "115/10/15",
+      "actualDate": "",
+      "status": "進行中",
+      "result": ""
+    },
+    {
+      "rowIdx": 373,
+      "itemNo": "11",
+      "dept": "高屏工程處",
+      "site": "中油綠能",
+      "rawSite": "中油綠能",
+      "meetDate": "2026-10-07",
+      "desc": "安排機電團隊（正龍 / 黃經理）於下次會議進行地下室機電管線與水箱蓋套圖界面檢討之專題提報",
+      "proposer": "工務所/機電團隊",
+      "dueDate": "115/11/11",
+      "actualDate": "",
+      "status": "進行中",
+      "result": ""
+    },
+    {
+      "rowIdx": 374,
+      "itemNo": "11",
+      "dept": "中區工程處",
+      "site": "朴子安居",
+      "rawSite": "朴子安居",
+      "meetDate": "2026-10-08",
+      "desc": "車道出入口（GL加28公分處）與基地外路面高程順接檢討，確認車輛出入動線無擦撞底盤疑慮。",
+      "proposer": "朴子安居工務所",
+      "dueDate": "115/11/12前",
+      "actualDate": "",
+      "status": "進行中",
+      "result": ""
+    },
+    {
+      "rowIdx": 375,
+      "itemNo": "11",
+      "dept": "中區工程處",
+      "site": "朴子安居",
+      "rawSite": "朴子安居",
+      "meetDate": "2026-10-08",
+      "desc": "結構體臨時照明及電盤架高配置確實落實工安標示，臨時廁所與小便斗周邊止水墩及排水改善規劃。",
+      "proposer": "正龍工務所、朴子安居工務所",
+      "dueDate": "結構體施作期間常態執行",
+      "actualDate": "",
+      "status": "進行中",
+      "result": ""
+    },
+    {
+      "rowIdx": 376,
+      "itemNo": "11",
+      "dept": "中區工程處",
+      "site": "朴子安居",
+      "rawSite": "朴子安居",
+      "meetDate": "2026-10-08",
+      "desc": "確認無障礙昇降機呼叫鈕前地坪「無障礙警示帶」之選用材質（止滑磚或其他材質）。",
+      "proposer": "朴子安居工務所（規劃組）",
+      "dueDate": "施工圖定案前",
+      "actualDate": "",
+      "status": "進行中",
+      "result": ""
+    },
+    {
+      "rowIdx": 377,
+      "itemNo": "11",
+      "dept": "中區工程處",
+      "site": "朴子安居",
+      "rawSite": "朴子安居",
+      "meetDate": "2026-10-08",
+      "desc": "A棟NO.8及NO.9電梯機房增設2處地板排水路徑套入施工圖，並將電梯及鋼筋規劃檢討補充資料套回第一版簡報格式，並將資料回饋技術中心。",
+      "proposer": "朴子安居工務所、正龍工務所",
+      "dueDate": "115/11/12前",
+      "actualDate": "",
+      "status": "進行中",
+      "result": ""
+    },
+    {
+      "rowIdx": 378,
+      "itemNo": "11",
+      "dept": "中區工程處",
+      "site": "朴子安居",
+      "rawSite": "朴子安居",
+      "meetDate": "2026-10-08",
+      "desc": "鋼筋進場分批管制、水平支撐構台堆置載重管制（單格不超過6.6公噸），作業前須取得經技師簽認之結構分析資料，並存放工務所備查。",
+      "proposer": "朴子安居工務所",
+      "dueDate": "115/11/12前",
       "actualDate": "",
       "status": "進行中",
       "result": ""
@@ -26012,12 +26180,12 @@
       ],
       "stats": {
         "dept": "中區工程處",
-        "total": 62,
-        "completed": 49,
-        "uploaded": 45,
-        "pending": 13,
+        "total": 67,
+        "completed": 57,
+        "uploaded": 53,
+        "pending": 10,
         "postponed": 0,
-        "completionRate": 79,
+        "completionRate": 85.1,
         "light": "yellow"
       },
       "controlSheetItems": [
@@ -27334,10 +27502,11 @@
           "stage": "B地工階段",
           "category": "外管線檢討",
           "title": "引進管介面",
+          "topic": "引進管介面",
           "assignee": "正龍工程",
           "dueDate": "2026-08-20",
-          "actualDate": "",
-          "status": "檢討中",
+          "actualDate": "-",
+          "status": "已完成",
           "progress": "",
           "deliverable": ""
         },
@@ -78710,6 +78879,20 @@
       },
       "meetings": [
         {
+          "meetingName": "1151006技術會議",
+          "fileCount": 1,
+          "files": [
+            {
+              "name": "技術會議簡報-公西檔案庫房1151006.pptx",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\北區工程處-3.公西聯合檔案庫房\\3.歷次會議資料(每月更新)\\1151006技術會議\\技術會議簡報-公西檔案庫房1151006.pptx",
+              "relPath": "北區工程處-3.公西聯合檔案庫房\\3.歷次會議資料(每月更新)\\1151006技術會議\\技術會議簡報-公西檔案庫房1151006.pptx",
+              "size": 61081874,
+              "lastModified": "2026-10-05",
+              "ext": ".pptx"
+            }
+          ]
+        },
+        {
           "meetingName": "1150825技術會議",
           "fileCount": 3,
           "files": [
@@ -78896,12 +79079,12 @@
       ],
       "stats": {
         "dept": "北區工程處",
-        "total": 12,
-        "completed": 3,
+        "total": 17,
+        "completed": 4,
         "uploaded": 3,
-        "pending": 9,
+        "pending": 13,
         "postponed": 0,
-        "completionRate": 25,
+        "completionRate": 23.5,
         "light": "red"
       },
       "controlSheetItems": [
@@ -93186,12 +93369,12 @@
       ],
       "stats": {
         "dept": "台南工程處",
-        "total": 40,
+        "total": 41,
         "completed": 24,
         "uploaded": 13,
-        "pending": 16,
+        "pending": 17,
         "postponed": 1,
-        "completionRate": 60,
+        "completionRate": 58.5,
         "light": "orange"
       },
       "controlSheetItems": [
@@ -103204,8 +103387,142 @@
       },
       "meetings": [
         {
+          "meetingName": "20261013技術會議",
+          "fileCount": 16,
+          "files": [
+            {
+              "name": "S1-P01_地下二層(基礎層)結構平面圖1011.dwg",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\002軀體圖\\S1-P01_地下二層(基礎層)結構平面圖1011.dwg",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\002軀體圖\\S1-P01_地下二層(基礎層)結構平面圖1011.dwg",
+              "size": 891403,
+              "lastModified": "2026-10-12",
+              "ext": ".dwg"
+            },
+            {
+              "name": "S1-P01_地下二層(基礎層)結構平面圖1011.dwl",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\002軀體圖\\S1-P01_地下二層(基礎層)結構平面圖1011.dwl",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\002軀體圖\\S1-P01_地下二層(基礎層)結構平面圖1011.dwl",
+              "size": 56,
+              "lastModified": "2026-10-12",
+              "ext": ".dwl"
+            },
+            {
+              "name": "S1-P01_地下二層(基礎層)結構平面圖1011.dwl2",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\002軀體圖\\S1-P01_地下二層(基礎層)結構平面圖1011.dwl2",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\002軀體圖\\S1-P01_地下二層(基礎層)結構平面圖1011.dwl2",
+              "size": 213,
+              "lastModified": "2026-10-12",
+              "ext": ".dwl2"
+            },
+            {
+              "name": "S1-P02_地下一層結構平面圖-1011.dwg",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\002軀體圖\\S1-P02_地下一層結構平面圖-1011.dwg",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\002軀體圖\\S1-P02_地下一層結構平面圖-1011.dwg",
+              "size": 1416838,
+              "lastModified": "2026-10-12",
+              "ext": ".dwg"
+            },
+            {
+              "name": "S1-P03_一層結構平面圖-1011.dwg",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\002軀體圖\\S1-P03_一層結構平面圖-1011.dwg",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\002軀體圖\\S1-P03_一層結構平面圖-1011.dwg",
+              "size": 1537870,
+              "lastModified": "2026-10-12",
+              "ext": ".dwg"
+            },
+            {
+              "name": "20261013台南崇明商場技術會議紀錄.docx",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\20261013台南崇明商場技術會議紀錄.docx",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\20261013台南崇明商場技術會議紀錄.docx",
+              "size": 49807,
+              "lastModified": "2026-10-13",
+              "ext": ".docx"
+            },
+            {
+              "name": "260924家樂福放樣基準點座標(結構轉正假設座標).dwg",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\260924家樂福放樣基準點座標(結構轉正假設座標).dwg",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\260924家樂福放樣基準點座標(結構轉正假設座標).dwg",
+              "size": 139367,
+              "lastModified": "2026-10-09",
+              "ext": ".dwg"
+            },
+            {
+              "name": "台南工程處-模板鋁木結合2.1.pptx",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\台南工程處-模板鋁木結合2.1.pptx",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\台南工程處-模板鋁木結合2.1.pptx",
+              "size": 12219865,
+              "lastModified": "2026-10-07",
+              "ext": ".pptx"
+            },
+            {
+              "name": "基地假設配置圖(臨時電盤 台水)1008.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\基地假設配置圖(臨時電盤 台水)1008.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\基地假設配置圖(臨時電盤 台水)1008.pdf",
+              "size": 3242127,
+              "lastModified": "2026-10-08",
+              "ext": ".pdf"
+            },
+            {
+              "name": "室內系統架計算-牆+柱.xlsx",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\室內系統架計算-牆+柱.xlsx",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\室內系統架計算-牆+柱.xlsx",
+              "size": 583665,
+              "lastModified": "2026-10-08",
+              "ext": ".xlsx"
+            },
+            {
+              "name": "康達-模板討論20260917.pptx",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\康達-模板討論20260917.pptx",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\康達-模板討論20260917.pptx",
+              "size": 13979198,
+              "lastModified": "2026-09-17",
+              "ext": ".pptx"
+            },
+            {
+              "name": "技術會議簡報格式-115V2 1013.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\技術會議簡報格式-115V2 1013.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\技術會議簡報格式-115V2 1013.pdf",
+              "size": 1118653,
+              "lastModified": "2026-10-13",
+              "ext": ".pdf"
+            },
+            {
+              "name": "技術會議簡報格式-115V2 1013.pptx",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\技術會議簡報格式-115V2 1013.pptx",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\技術會議簡報格式-115V2 1013.pptx",
+              "size": 27198323,
+              "lastModified": "2026-10-13",
+              "ext": ".pptx"
+            },
+            {
+              "name": "擋土措施.pptx",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\擋土措施.pptx",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\擋土措施.pptx",
+              "size": 356296,
+              "lastModified": "2026-10-12",
+              "ext": ".pptx"
+            },
+            {
+              "name": "系統架-柱 示意圖.dwg",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\系統架-柱 示意圖.dwg",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\系統架-柱 示意圖.dwg",
+              "size": 125502,
+              "lastModified": "2026-10-13",
+              "ext": ".dwg"
+            },
+            {
+              "name": "點井拔井時間.xlsx",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\點井拔井時間.xlsx",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20261013技術會議\\點井拔井時間.xlsx",
+              "size": 495603,
+              "lastModified": "2026-10-12",
+              "ext": ".xlsx"
+            }
+          ]
+        },
+        {
           "meetingName": "20260915技術會議",
-          "fileCount": 11,
+          "fileCount": 13,
           "files": [
             {
               "name": "115.08.26沉陷觀測資料.pdf",
@@ -103288,6 +103605,22 @@
               "ext": ".rar"
             },
             {
+              "name": "0002逕流廢水削減計畫(未簽名).pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260915技術會議\\逕流廢水\\0002逕流廢水削減計畫(未簽名).pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260915技術會議\\逕流廢水\\0002逕流廢水削減計畫(未簽名).pdf",
+              "size": 276970,
+              "lastModified": "2026-04-17",
+              "ext": ".pdf"
+            },
+            {
+              "name": "06 D115D11008-1逕流廢水判定表.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260915技術會議\\逕流廢水\\06 D115D11008-1逕流廢水判定表.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260915技術會議\\逕流廢水\\06 D115D11008-1逕流廢水判定表.pdf",
+              "size": 120199,
+              "lastModified": "2026-03-16",
+              "ext": ".pdf"
+            },
+            {
               "name": "開工會議簡報(康達盛通)0519.pptx",
               "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260915技術會議\\開工會議簡報(康達盛通)0519.pptx",
               "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260915技術會議\\開工會議簡報(康達盛通)0519.pptx",
@@ -103353,7 +103686,7 @@
         },
         {
           "meetingName": "20260721技術會議",
-          "fileCount": 6,
+          "fileCount": 14,
           "files": [
             {
               "name": "1150508台南家樂福工務所檔土樁穩定檢核.pdf",
@@ -103370,6 +103703,70 @@
               "size": 51010,
               "lastModified": "2026-07-21",
               "ext": ".docx"
+            },
+            {
+              "name": "北側帆布示意_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\北側帆布示意_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\北側帆布示意_0.png",
+              "size": 1757356,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "南側帆布示意_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\南側帆布示意_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\南側帆布示意_0.png",
+              "size": 1871689,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "安全標語1_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\安全標語1_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\安全標語1_0.png",
+              "size": 2394013,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "安全標語2_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\安全標語2_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\安全標語2_0.png",
+              "size": 2047466,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "東側帆布示意_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\東側帆布示意_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\東側帆布示意_0.png",
+              "size": 2093505,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "西側圍籬帆布示意_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\西側圍籬帆布示意_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\西側圍籬帆布示意_0.png",
+              "size": 1975179,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "豐譽企業團隊x康達盛通logo(彩色)_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\豐譽企業團隊x康達盛通logo(彩色)_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\豐譽企業團隊x康達盛通logo(彩色)_0.png",
+              "size": 753657,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "豐譽企業團隊x康達盛通生活有限公司 logo(彩色)_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\豐譽企業團隊x康達盛通生活有限公司 logo(彩色)_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260721技術會議\\帆布\\豐譽企業團隊x康達盛通生活有限公司 logo(彩色)_0.png",
+              "size": 753724,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
             },
             {
               "name": "康達盛通主管會議簡報1150721.pdf",
@@ -103407,8 +103804,272 @@
         },
         {
           "meetingName": "20260623技術會議",
-          "fileCount": 3,
+          "fileCount": 36,
           "files": [
+            {
+              "name": "1150508台南家樂福工務所檔土樁穩定檢核.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\01擋土措施(鋼板樁)\\1150508台南家樂福工務所檔土樁穩定檢核.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\01擋土措施(鋼板樁)\\1150508台南家樂福工務所檔土樁穩定檢核.pdf",
+              "size": 461326,
+              "lastModified": "2026-05-18",
+              "ext": ".pdf"
+            },
+            {
+              "name": "鋼板樁III型vsIV型.jpg",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\01擋土措施(鋼板樁)\\鋼板樁III型vsIV型.jpg",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\01擋土措施(鋼板樁)\\鋼板樁III型vsIV型.jpg",
+              "size": 145490,
+              "lastModified": "2026-06-23",
+              "ext": ".jpg"
+            },
+            {
+              "name": "基礎鋼筋優化方案.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\02基礎鋼筋優化\\基礎鋼筋優化方案.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\02基礎鋼筋優化\\基礎鋼筋優化方案.pdf",
+              "size": 1215829,
+              "lastModified": "2026-06-23",
+              "ext": ".pdf"
+            },
+            {
+              "name": "基礎鋼筋優化方案.pptx",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\02基礎鋼筋優化\\基礎鋼筋優化方案.pptx",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\02基礎鋼筋優化\\基礎鋼筋優化方案.pptx",
+              "size": 3005604,
+              "lastModified": "2026-05-13",
+              "ext": ".pptx"
+            },
+            {
+              "name": "康達盛通台南崇明商場釋疑單01(1150518大彥回覆).pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\02基礎鋼筋優化\\康達盛通台南崇明商場釋疑單01(1150518大彥回覆).pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\02基礎鋼筋優化\\康達盛通台南崇明商場釋疑單01(1150518大彥回覆).pdf",
+              "size": 621385,
+              "lastModified": "2026-05-18",
+              "ext": ".pdf"
+            },
+            {
+              "name": "技師室技術支援申請單箱涵配筋_筏基FS板鋼筋變更檢核_1150505.docx",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\02基礎鋼筋優化\\技師室技術支援申請單箱涵配筋_筏基FS板鋼筋變更檢核_1150505.docx",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\02基礎鋼筋優化\\技師室技術支援申請單箱涵配筋_筏基FS板鋼筋變更檢核_1150505.docx",
+              "size": 16192,
+              "lastModified": "2026-05-12",
+              "ext": ".docx"
+            },
+            {
+              "name": "臺南崇明商場_筏基FS板鋼筋變更檢核.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\02基礎鋼筋優化\\臺南崇明商場_筏基FS板鋼筋變更檢核.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\02基礎鋼筋優化\\臺南崇明商場_筏基FS板鋼筋變更檢核.pdf",
+              "size": 142302,
+              "lastModified": "2026-05-05",
+              "ext": ".pdf"
+            },
+            {
+              "name": "塔吊位置平面圖-建議規劃更新0515a.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\03塔吊檢討\\塔吊位置平面圖-建議規劃更新0515a.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\03塔吊檢討\\塔吊位置平面圖-建議規劃更新0515a.pdf",
+              "size": 572873,
+              "lastModified": "2026-06-15",
+              "ext": ".pdf"
+            },
+            {
+              "name": "康達-豐譽塔吊-施工計劃書1150525.doc",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\03塔吊檢討\\康達-豐譽塔吊-施工計劃書1150525.doc",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\03塔吊檢討\\康達-豐譽塔吊-施工計劃書1150525.doc",
+              "size": 8137728,
+              "lastModified": "2026-06-05",
+              "ext": ".doc"
+            },
+            {
+              "name": "[完成]土方計畫書115.06.05.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\[完成]土方計畫書115.06.05.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\[完成]土方計畫書115.06.05.pdf",
+              "size": 20715281,
+              "lastModified": "2026-06-05",
+              "ext": ".pdf"
+            },
+            {
+              "name": "台糖土方暫置同意書0603.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\台糖土方暫置同意書0603.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\台糖土方暫置同意書0603.pdf",
+              "size": 4400794,
+              "lastModified": "2026-06-03",
+              "ext": ".pdf"
+            },
+            {
+              "name": "圍籬補強2.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\圍籬補強2.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\圍籬補強2.pdf",
+              "size": 30947,
+              "lastModified": "2026-06-16",
+              "ext": ".pdf"
+            },
+            {
+              "name": "土方評估.xlsx",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\土方評估.xlsx",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\土方評估.xlsx",
+              "size": 264899,
+              "lastModified": "2026-04-01",
+              "ext": ".xlsx"
+            },
+            {
+              "name": "家樂福開挖剖立面圖_20260601.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\家樂福開挖剖立面圖_20260601.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\家樂福開挖剖立面圖_20260601.pdf",
+              "size": 27928,
+              "lastModified": "2026-06-01",
+              "ext": ".pdf"
+            },
+            {
+              "name": "康達土方數量(家宇計算).xlsx",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\康達土方數量(家宇計算).xlsx",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\康達土方數量(家宇計算).xlsx",
+              "size": 32218,
+              "lastModified": "2026-06-11",
+              "ext": ".xlsx"
+            },
+            {
+              "name": "洗車台2.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\洗車台2.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\洗車台2.pdf",
+              "size": 80055,
+              "lastModified": "2026-06-16",
+              "ext": ".pdf"
+            },
+            {
+              "name": "現況高程.xlsx",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\現況高程.xlsx",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\現況高程.xlsx",
+              "size": 14057,
+              "lastModified": "2026-05-18",
+              "ext": ".xlsx"
+            },
+            {
+              "name": "現況高程04.17.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\現況高程04.17.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\04土方開挖檢討\\現況高程04.17.pdf",
+              "size": 68902,
+              "lastModified": "2026-04-17",
+              "ext": ".pdf"
+            },
+            {
+              "name": "20260519_寬河圍籬輸出.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\20260519_寬河圍籬輸出.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\20260519_寬河圍籬輸出.pdf",
+              "size": 849054,
+              "lastModified": "2026-06-17",
+              "ext": ".pdf"
+            },
+            {
+              "name": "北側帆布示意_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\北側帆布示意_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\北側帆布示意_0.png",
+              "size": 1757356,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "南側帆布示意_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\南側帆布示意_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\南側帆布示意_0.png",
+              "size": 1871689,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "安全標語1_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\安全標語1_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\安全標語1_0.png",
+              "size": 2394013,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "安全標語2_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\安全標語2_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\安全標語2_0.png",
+              "size": 2047466,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "東側帆布示意_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\東側帆布示意_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\東側帆布示意_0.png",
+              "size": 2093505,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "東立面一樓部分.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\東立面一樓部分.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\東立面一樓部分.pdf",
+              "size": 4807583,
+              "lastModified": "2026-06-17",
+              "ext": ".pdf"
+            },
+            {
+              "name": "西側圍籬帆布示意_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\西側圍籬帆布示意_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\西側圍籬帆布示意_0.png",
+              "size": 1975179,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "豐譽企業團隊x康達盛通logo(彩色)_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\豐譽企業團隊x康達盛通logo(彩色)_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\豐譽企業團隊x康達盛通logo(彩色)_0.png",
+              "size": 753657,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "豐譽企業團隊x康達盛通生活有限公司 logo(彩色)_0.png",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\豐譽企業團隊x康達盛通生活有限公司 logo(彩色)_0.png",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\05圍籬美化\\豐譽企業團隊x康達盛通生活有限公司 logo(彩色)_0.png",
+              "size": 753724,
+              "lastModified": "2026-05-05",
+              "ext": ".png"
+            },
+            {
+              "name": "EXP-A002d-19-00243-567-PSD 1518-FengYu-Tainan shopping mall-Garage Deck 0515.dwg",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\06PERI規劃\\EXP-A002d-19-00243-567-PSD 1518-FengYu-Tainan shopping mall-Garage Deck 0515.dwg",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\06PERI規劃\\EXP-A002d-19-00243-567-PSD 1518-FengYu-Tainan shopping mall-Garage Deck 0515.dwg",
+              "size": 12669016,
+              "lastModified": "2026-05-18",
+              "ext": ".dwg"
+            },
+            {
+              "name": "PSD1518-豐譽-Garage Deck銷售報價-20260328.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\06PERI規劃\\PSD1518-豐譽-Garage Deck銷售報價-20260328.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\06PERI規劃\\PSD1518-豐譽-Garage Deck銷售報價-20260328.pdf",
+              "size": 334720,
+              "lastModified": "2026-03-31",
+              "ext": ".pdf"
+            },
+            {
+              "name": "S1-P02_地下一層結構平面圖.dwg",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\06PERI規劃\\S1-P02_地下一層結構平面圖.dwg",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\06PERI規劃\\S1-P02_地下一層結構平面圖.dwg",
+              "size": 454606,
+              "lastModified": "2026-06-12",
+              "ext": ".dwg"
+            },
+            {
+              "name": "圖2.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\06PERI規劃\\圖2.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\06PERI規劃\\圖2.pdf",
+              "size": 7414672,
+              "lastModified": "2026-06-12",
+              "ext": ".pdf"
+            },
+            {
+              "name": "系統模板統計0520.pdf",
+              "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\06PERI規劃\\系統模板統計0520.pdf",
+              "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\06PERI規劃\\系統模板統計0520.pdf",
+              "size": 715586,
+              "lastModified": "2026-06-01",
+              "ext": ".pdf"
+            },
             {
               "name": "1.台南崇明工地議題-待辦追蹤彙整表115.pdf",
               "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\1.台南崇明工地議題-待辦追蹤彙整表115.pdf",
@@ -103430,7 +104091,7 @@
               "fullPath": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\3.歷次會議資料(每月更新).lnk",
               "relPath": "台南工程處-2.台南崇明商場\\3.歷次會議資料(每月更新)\\20260623技術會議\\3.歷次會議資料(每月更新).lnk",
               "size": 2342,
-              "lastModified": "2026-06-23",
+              "lastModified": "2026-06-22",
               "ext": ".lnk"
             }
           ]
@@ -103498,12 +104159,12 @@
       ],
       "stats": {
         "dept": "台南工程處",
-        "total": 25,
-        "completed": 13,
-        "uploaded": 10,
-        "pending": 12,
+        "total": 24,
+        "completed": 17,
+        "uploaded": 14,
+        "pending": 7,
         "postponed": 7,
-        "completionRate": 52,
+        "completionRate": 70.8,
         "light": "orange"
       },
       "controlSheetItems": [
@@ -121608,12 +122269,12 @@
       ],
       "stats": {
         "dept": "宜蘭工程處",
-        "total": 38,
-        "completed": 31,
-        "uploaded": 22,
+        "total": 40,
+        "completed": 33,
+        "uploaded": 26,
         "pending": 7,
-        "postponed": 2,
-        "completionRate": 81.6,
+        "postponed": 0,
+        "completionRate": 82.5,
         "light": "yellow"
       },
       "controlSheetItems": [
@@ -130702,12 +131363,12 @@
       ],
       "stats": {
         "dept": "高屏工程處",
-        "total": 58,
-        "completed": 36,
-        "uploaded": 28,
-        "pending": 22,
-        "postponed": 19,
-        "completionRate": 62.1,
+        "total": 62,
+        "completed": 46,
+        "uploaded": 37,
+        "pending": 16,
+        "postponed": 17,
+        "completionRate": 74.2,
         "light": "orange"
       },
       "controlSheetItems": [
@@ -131401,7 +132062,7 @@
           "category": "建築基地檢討",
           "title": "景觀水溝高成及出入流井高程檢討",
           "assignee": "規劃",
-          "dueDate": "2026-10-07",
+          "dueDate": "2026-11-11",
           "actualDate": "",
           "status": "檢討中",
           "progress": "",
@@ -132731,11 +133392,11 @@
           "rowIdx": 170,
           "stage": "D地下結構階段",
           "category": "門類檢討",
-          "title": "門弓器型式/安裝方向",
-          "assignee": "",
-          "dueDate": "",
+          "title": "防火門弓器型式/安裝方向",
+          "assignee": "規劃",
+          "dueDate": "2026-11-11",
           "actualDate": "",
-          "status": "未排定",
+          "status": "檢討中",
           "progress": "",
           "deliverable": ""
         },
@@ -132779,11 +133440,11 @@
           "rowIdx": 174,
           "stage": "D地下結構階段",
           "category": "門類檢討",
-          "title": "淨寬.淨高尺寸",
-          "assignee": "",
-          "dueDate": "",
+          "title": "防火門淨寬.淨高尺寸",
+          "assignee": "規劃",
+          "dueDate": "2026-11-11",
           "actualDate": "",
-          "status": "未排定",
+          "status": "檢討中",
           "progress": "",
           "deliverable": ""
         },
@@ -132899,11 +133560,11 @@
           "rowIdx": 184,
           "stage": "D地下結構階段",
           "category": "車道檢討",
-          "title": "裝修材檢討(結構預降及分割)",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
+          "title": "裝修材高程檢討",
+          "assignee": "規劃",
+          "dueDate": "2026-09-01",
+          "actualDate": "2026-09-10",
+          "status": "已完成",
           "progress": "",
           "deliverable": ""
         },
@@ -132912,7 +133573,7 @@
           "stage": "D地下結構階段",
           "category": "車道檢討",
           "title": "截水溝檢討",
-          "assignee": "規劃",
+          "assignee": "",
           "dueDate": "2026-08-30",
           "actualDate": "2026-07-20",
           "status": "已完成",
@@ -132936,10 +133597,10 @@
           "stage": "D地下結構階段",
           "category": "車道檢討",
           "title": "車道捲門檢討-消防需求、捲門位置、捲箱尺寸位置、檢修口、電源需求",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
+          "assignee": "規劃",
+          "dueDate": "2026-11-11",
+          "actualDate": "2026-09-30",
+          "status": "已完成",
           "progress": "",
           "deliverable": ""
         },
@@ -133190,8 +133851,8 @@
           "title": "複壁排水檢討",
           "assignee": "規劃",
           "dueDate": "2026-10-07",
-          "actualDate": "",
-          "status": "檢討中",
+          "actualDate": "2026-10-01",
+          "status": "已完成",
           "progress": "",
           "deliverable": ""
         },
@@ -133200,10 +133861,10 @@
           "stage": "D地下結構階段",
           "category": "地下層排水檢討",
           "title": "天井降板及排水",
-          "assignee": "",
-          "dueDate": "",
+          "assignee": "規劃",
+          "dueDate": "2026-11-11",
           "actualDate": "",
-          "status": "未排定",
+          "status": "進行中",
           "progress": "",
           "deliverable": ""
         },
@@ -133214,8 +133875,8 @@
           "title": "機房排水",
           "assignee": "規劃",
           "dueDate": "2026-10-07",
-          "actualDate": "",
-          "status": "檢討中",
+          "actualDate": "2026-10-01",
+          "status": "已完成",
           "progress": "",
           "deliverable": ""
         },
@@ -133228,7 +133889,7 @@
           "dueDate": "2026-10-07",
           "actualDate": "",
           "status": "檢討中",
-          "progress": "",
+          "progress": "出入流井高程檢討無問題,景觀陰井繼續檢討中",
           "deliverable": ""
         },
         {
@@ -133523,49 +134184,49 @@
           "rowIdx": 236,
           "stage": "D地下結構階段",
           "category": "內部施工系統架檢討",
-          "title": "設備型式",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
+          "title": "達爾文施工架形式",
+          "assignee": "規劃",
+          "dueDate": "2026-10-20",
+          "actualDate": "2026-10-01",
+          "status": "已完成",
           "progress": "",
-          "deliverable": ""
+          "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\施工架\\室內系統架(達爾文)"
         },
         {
           "rowIdx": 237,
           "stage": "D地下結構階段",
           "category": "內部施工系統架檢討",
-          "title": "施工圖及搭設範圍",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
+          "title": "達爾文施工架施工圖",
+          "assignee": "規劃",
+          "dueDate": "2026-10-20",
+          "actualDate": "2026-10-01",
+          "status": "已完成",
           "progress": "",
-          "deliverable": ""
+          "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\施工架\\室內系統架(達爾文)"
         },
         {
           "rowIdx": 238,
           "stage": "D地下結構階段",
           "category": "內部施工系統架檢討",
-          "title": "防墜、防護網設置",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
+          "title": "達爾文施工架防墜、防護網設置",
+          "assignee": "規劃",
+          "dueDate": "2026-10-20",
+          "actualDate": "2026-10-01",
+          "status": "已完成",
           "progress": "",
-          "deliverable": ""
+          "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\施工架\\室內系統架(達爾文)"
         },
         {
           "rowIdx": 239,
           "stage": "D地下結構階段",
           "category": "內部施工系統架檢討",
-          "title": "上下設備位置",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
+          "title": "達爾文施工架施工圖",
+          "assignee": "規劃",
+          "dueDate": "2026-10-20",
+          "actualDate": "2026-10-01",
+          "status": "已完成",
           "progress": "",
-          "deliverable": ""
+          "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\施工架\\室內系統架(達爾文)"
         },
         {
           "rowIdx": 240,
@@ -133622,8 +134283,8 @@
           "title": "筏基層鋼筋施工圖(B棟)",
           "assignee": "規劃",
           "dueDate": "2026-08-31",
-          "actualDate": "",
-          "status": "檢討中",
+          "actualDate": "2026-09-30",
+          "status": "已完成",
           "progress": "",
           "deliverable": ""
         },
@@ -133655,18 +134316,6 @@
           "rowIdx": 247,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
-          "title": "停車位淨寬會因粉刷厚度寬度不足，與柱及牆衝突，建議再檢討相關規則",
-          "assignee": "規劃",
-          "dueDate": "2026-09-30",
-          "actualDate": "",
-          "status": "檢討中",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
-          "rowIdx": 248,
-          "stage": "D地下結構階段",
-          "category": "土建施工圖",
           "title": "大底及地下室外牆防水",
           "assignee": "規劃",
           "dueDate": "2026-07-13",
@@ -133676,7 +134325,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\防水工程\\施工圖"
         },
         {
-          "rowIdx": 249,
+          "rowIdx": 248,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
           "title": "筏基坑防水及止水帶",
@@ -133688,7 +134337,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\防水工程\\施工圖"
         },
         {
-          "rowIdx": 250,
+          "rowIdx": 249,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
           "title": "筏基層軀體圖",
@@ -133700,7 +134349,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 251,
+          "rowIdx": 250,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
           "title": "B1F軀體圖",
@@ -133712,12 +134361,24 @@
           "deliverable": ""
         },
         {
+          "rowIdx": 251,
+          "stage": "D地下結構階段",
+          "category": "土建施工圖",
+          "title": "A棟1F軀體圖",
+          "assignee": "規劃",
+          "dueDate": "2026-09-24",
+          "actualDate": "2026-09-20",
+          "status": "已完成",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
           "rowIdx": 252,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
-          "title": "1F軀體圖",
+          "title": "A棟2F軀體圖",
           "assignee": "規劃",
-          "dueDate": "",
+          "dueDate": "2026-10-19",
           "actualDate": "",
           "status": "檢討中",
           "progress": "",
@@ -133727,9 +134388,9 @@
           "rowIdx": 253,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
-          "title": "2F軀體圖",
+          "title": "A棟3F軀體圖",
           "assignee": "規劃",
-          "dueDate": "",
+          "dueDate": "2026-11-20",
           "actualDate": "",
           "status": "檢討中",
           "progress": "",
@@ -133739,9 +134400,9 @@
           "rowIdx": 254,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
-          "title": "3F軀體圖",
+          "title": "A棟4F軀體圖",
           "assignee": "規劃",
-          "dueDate": "",
+          "dueDate": "2026-12-20",
           "actualDate": "",
           "status": "檢討中",
           "progress": "",
@@ -133751,9 +134412,9 @@
           "rowIdx": 255,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
-          "title": "4F軀體圖",
+          "title": "A棟5F軀體圖",
           "assignee": "規劃",
-          "dueDate": "",
+          "dueDate": "2027-02-05",
           "actualDate": "",
           "status": "檢討中",
           "progress": "",
@@ -133763,9 +134424,9 @@
           "rowIdx": 256,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
-          "title": "5F軀體圖",
+          "title": "A棟6F軀體圖",
           "assignee": "規劃",
-          "dueDate": "",
+          "dueDate": "2027-03-05",
           "actualDate": "",
           "status": "檢討中",
           "progress": "",
@@ -133775,9 +134436,9 @@
           "rowIdx": 257,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
-          "title": "6F軀體圖",
+          "title": "A棟7F軀體圖",
           "assignee": "規劃",
-          "dueDate": "",
+          "dueDate": "2027-04-05",
           "actualDate": "",
           "status": "檢討中",
           "progress": "",
@@ -133787,9 +134448,9 @@
           "rowIdx": 258,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
-          "title": "7F軀體圖",
+          "title": "B棟1F軀體圖",
           "assignee": "規劃",
-          "dueDate": "",
+          "dueDate": "2026-10-19",
           "actualDate": "",
           "status": "檢討中",
           "progress": "",
@@ -133799,9 +134460,9 @@
           "rowIdx": 259,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
-          "title": "模板清潔孔規劃",
-          "assignee": "施工/規劃",
-          "dueDate": "2026-08-20",
+          "title": "B棟2F軀體圖",
+          "assignee": "規劃",
+          "dueDate": "2026-11-01",
           "actualDate": "",
           "status": "檢討中",
           "progress": "",
@@ -133809,6 +134470,42 @@
         },
         {
           "rowIdx": 260,
+          "stage": "D地下結構階段",
+          "category": "土建施工圖",
+          "title": "B棟3F軀體圖",
+          "assignee": "規劃",
+          "dueDate": "2026-12-18",
+          "actualDate": "",
+          "status": "檢討中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 261,
+          "stage": "D地下結構階段",
+          "category": "土建施工圖",
+          "title": "B棟4F軀體圖",
+          "assignee": "規劃",
+          "dueDate": "2027-02-05",
+          "actualDate": "",
+          "status": "檢討中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 262,
+          "stage": "D地下結構階段",
+          "category": "土建施工圖",
+          "title": "模板清潔孔規劃",
+          "assignee": "施工/規劃",
+          "dueDate": "2026-11-10",
+          "actualDate": "",
+          "status": "檢討中",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 263,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
           "title": "塑膠模支撐施工圖",
@@ -133820,43 +134517,19 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 261,
-          "stage": "D地下結構階段",
-          "category": "土建施工圖",
-          "title": "施工架施工圖",
-          "assignee": "施工/規劃",
-          "dueDate": "2026-10-07",
-          "actualDate": "",
-          "status": "檢討中",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
-          "rowIdx": 262,
-          "stage": "D地下結構階段",
-          "category": "土建施工圖",
-          "title": "施工架-結構階段內部工作架規劃",
-          "assignee": "施工/規劃",
-          "dueDate": "2026-10-30",
-          "actualDate": "",
-          "status": "檢討中",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
-          "rowIdx": 263,
+          "rowIdx": 264,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
           "title": "鋼構製造圖",
           "assignee": "規劃",
-          "dueDate": "2026-10-07",
+          "dueDate": "2026-10-20",
           "actualDate": "",
           "status": "檢討中",
           "progress": "",
           "deliverable": ""
         },
         {
-          "rowIdx": 264,
+          "rowIdx": 265,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
           "title": "磁磚分割圖",
@@ -133868,7 +134541,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 265,
+          "rowIdx": 266,
           "stage": "D地下結構階段",
           "category": "土建施工圖",
           "title": "裝修分割圖",
@@ -133880,7 +134553,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 266,
+          "rowIdx": 267,
           "stage": "E地上結構階段",
           "category": "轉換層機電配管檢討",
           "title": "管道間檢討",
@@ -133892,7 +134565,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 267,
+          "rowIdx": 268,
           "stage": "E地上結構階段",
           "category": "轉換層機電配管檢討",
           "title": "轉折管路管排及高程檢討",
@@ -133904,7 +134577,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 268,
+          "rowIdx": 269,
           "stage": "E地上結構階段",
           "category": "轉換層機電配管檢討",
           "title": "汙排水匯流檢討",
@@ -133916,7 +134589,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 269,
+          "rowIdx": 270,
           "stage": "E地上結構階段",
           "category": "整體施工構想",
           "title": "假設工程計畫(地上結構階段)",
@@ -133928,7 +134601,7 @@
           "deliverable": "列入開工會議簡報"
         },
         {
-          "rowIdx": 270,
+          "rowIdx": 271,
           "stage": "E地上結構階段",
           "category": "潛在漏水點檢討",
           "title": "鋼構RC交界",
@@ -133940,7 +134613,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 271,
+          "rowIdx": 272,
           "stage": "E地上結構階段",
           "category": "潛在漏水點檢討",
           "title": "建築外露面",
@@ -133952,7 +134625,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 272,
+          "rowIdx": 273,
           "stage": "E地上結構階段",
           "category": "潛在漏水點檢討",
           "title": "臨戶外門水密及截水",
@@ -133964,7 +134637,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 273,
+          "rowIdx": 274,
           "stage": "E地上結構階段",
           "category": "潛在漏水點檢討",
           "title": "外牆窗戶、帷幕",
@@ -133976,7 +134649,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 274,
+          "rowIdx": 275,
           "stage": "E地上結構階段",
           "category": "圖說資料彙集",
           "title": "綠建築取分說明及與契約差異",
@@ -133988,7 +134661,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\標章取得"
         },
         {
-          "rowIdx": 275,
+          "rowIdx": 276,
           "stage": "E地上結構階段",
           "category": "圖說資料彙集",
           "title": "綠建築",
@@ -134000,7 +134673,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 276,
+          "rowIdx": 277,
           "stage": "E地上結構階段",
           "category": "圖說資料彙集",
           "title": "智慧建築計畫",
@@ -134012,31 +134685,31 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 277,
-          "stage": "E地上結構階段",
-          "category": "窗類檢討",
-          "title": "門窗圖說數量與標單數量檢討",
-          "assignee": "規劃",
-          "dueDate": "2026-10-15",
-          "actualDate": "",
-          "status": "檢討中",
-          "progress": "釋疑中",
-          "deliverable": ""
-        },
-        {
           "rowIdx": 278,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
-          "title": "門窗尺寸確認",
+          "title": "防火門圖說數量與標單數量檢討",
           "assignee": "規劃",
           "dueDate": "2026-10-15",
-          "actualDate": "",
-          "status": "檢討中",
-          "progress": "釋疑中",
+          "actualDate": "2026-10-01",
+          "status": "已完成",
+          "progress": "",
           "deliverable": ""
         },
         {
           "rowIdx": 279,
+          "stage": "E地上結構階段",
+          "category": "窗類檢討",
+          "title": "防火門窗尺寸確認",
+          "assignee": "規劃",
+          "dueDate": "2026-10-15",
+          "actualDate": "",
+          "status": "檢討中",
+          "progress": "釋疑中",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 280,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "門窗MO及門窗尺寸調整",
@@ -134048,7 +134721,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 280,
+          "rowIdx": 281,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "窗五金、把手高度",
@@ -134060,7 +134733,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 281,
+          "rowIdx": 282,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "門窗材質",
@@ -134072,7 +134745,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 282,
+          "rowIdx": 283,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "窗框寬度、安裝進出",
@@ -134084,7 +134757,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 283,
+          "rowIdx": 284,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "逃生窗、排煙窗位置檢討",
@@ -134096,7 +134769,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 284,
+          "rowIdx": 285,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "玻璃厚度、顏色、規格",
@@ -134108,7 +134781,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 285,
+          "rowIdx": 286,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "性能測試-水密、氣密規範",
@@ -134120,7 +134793,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 286,
+          "rowIdx": 287,
           "stage": "E地上結構階段",
           "category": "窗類檢討",
           "title": "室內外斷水-企口規劃及塞水路位置",
@@ -134132,7 +134805,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 287,
+          "rowIdx": 288,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "管排及淨高檢討",
@@ -134144,7 +134817,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 288,
+          "rowIdx": 289,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "設備整合",
@@ -134156,7 +134829,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 289,
+          "rowIdx": 290,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "箱體整合",
@@ -134168,7 +134841,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 290,
+          "rowIdx": 291,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "電盤整合",
@@ -134180,7 +134853,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 291,
+          "rowIdx": 292,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "照明整合",
@@ -134192,7 +134865,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 292,
+          "rowIdx": 293,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "弱電整合",
@@ -134204,7 +134877,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 293,
+          "rowIdx": 294,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "消防整合",
@@ -134216,7 +134889,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 294,
+          "rowIdx": 295,
           "stage": "E地上結構階段",
           "category": "梯廳機電檢討",
           "title": "開關整合",
@@ -134228,22 +134901,10 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 295,
-          "stage": "E地上結構階段",
-          "category": "梯廳六向整合檢討",
-          "title": "設備空間檢討",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
           "rowIdx": 296,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
-          "title": "磁磚計畫",
+          "title": "設備空間檢討",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134255,7 +134916,7 @@
           "rowIdx": 297,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
-          "title": "門、窗檢討",
+          "title": "磁磚計畫",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134267,7 +134928,7 @@
           "rowIdx": 298,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
-          "title": "開關、插座、照明、弱電、給排水整合",
+          "title": "門、窗檢討",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134279,7 +134940,7 @@
           "rowIdx": 299,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
-          "title": "公裝整合",
+          "title": "開關、插座、照明、弱電、給排水整合",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134291,7 +134952,7 @@
           "rowIdx": 300,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
-          "title": "異材質介面檢討",
+          "title": "公裝整合",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134303,7 +134964,7 @@
           "rowIdx": 301,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
-          "title": "天花分割及高度檢討",
+          "title": "異材質介面檢討",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134315,7 +134976,7 @@
           "rowIdx": 302,
           "stage": "E地上結構階段",
           "category": "梯廳六向整合檢討",
-          "title": "公裝整合",
+          "title": "天花分割及高度檢討",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134326,8 +134987,8 @@
         {
           "rowIdx": 303,
           "stage": "E地上結構階段",
-          "category": "浴室、廚房六向整合檢討",
-          "title": "設備空間檢討",
+          "category": "梯廳六向整合檢討",
+          "title": "公裝整合",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134339,7 +135000,7 @@
           "rowIdx": 304,
           "stage": "E地上結構階段",
           "category": "浴室、廚房六向整合檢討",
-          "title": "磁磚計畫",
+          "title": "設備空間檢討",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134351,7 +135012,7 @@
           "rowIdx": 305,
           "stage": "E地上結構階段",
           "category": "浴室、廚房六向整合檢討",
-          "title": "門、窗檢討",
+          "title": "磁磚計畫",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134363,7 +135024,7 @@
           "rowIdx": 306,
           "stage": "E地上結構階段",
           "category": "浴室、廚房六向整合檢討",
-          "title": "開關、插座、照明、弱電、給排水整合",
+          "title": "門、窗檢討",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134375,7 +135036,7 @@
           "rowIdx": 307,
           "stage": "E地上結構階段",
           "category": "浴室、廚房六向整合檢討",
-          "title": "防水檢討",
+          "title": "開關、插座、照明、弱電、給排水整合",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134387,7 +135048,7 @@
           "rowIdx": 308,
           "stage": "E地上結構階段",
           "category": "浴室、廚房六向整合檢討",
-          "title": "異材質介面檢討",
+          "title": "防水檢討",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134399,7 +135060,7 @@
           "rowIdx": 309,
           "stage": "E地上結構階段",
           "category": "浴室、廚房六向整合檢討",
-          "title": "天花分割及高度檢討",
+          "title": "異材質介面檢討",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134410,8 +135071,8 @@
         {
           "rowIdx": 310,
           "stage": "E地上結構階段",
-          "category": "浴室、廚房、陽台機電整合",
-          "title": "機能檢討",
+          "category": "浴室、廚房六向整合檢討",
+          "title": "天花分割及高度檢討",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134423,7 +135084,7 @@
           "rowIdx": 311,
           "stage": "E地上結構階段",
           "category": "浴室、廚房、陽台機電整合",
-          "title": "空間檢討",
+          "title": "機能檢討",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134435,7 +135096,7 @@
           "rowIdx": 312,
           "stage": "E地上結構階段",
           "category": "浴室、廚房、陽台機電整合",
-          "title": "使用性檢討",
+          "title": "空間檢討",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134446,8 +135107,8 @@
         {
           "rowIdx": 313,
           "stage": "E地上結構階段",
-          "category": "屋頂層機電整合檢討",
-          "title": "水箱空間",
+          "category": "浴室、廚房、陽台機電整合",
+          "title": "使用性檢討",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134459,7 +135120,7 @@
           "rowIdx": 314,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
-          "title": "設備基座",
+          "title": "水箱空間",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134471,7 +135132,7 @@
           "rowIdx": 315,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
-          "title": "水錶空間",
+          "title": "設備基座",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134483,7 +135144,7 @@
           "rowIdx": 316,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
-          "title": "屋頂管排",
+          "title": "水錶空間",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134495,7 +135156,7 @@
           "rowIdx": 317,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
-          "title": "透氣管、透氣墩座",
+          "title": "屋頂管排",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134507,7 +135168,7 @@
           "rowIdx": 318,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
-          "title": "落水頭、溢水管",
+          "title": "透氣管、透氣墩座",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134519,7 +135180,7 @@
           "rowIdx": 319,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
-          "title": "避雷針",
+          "title": "落水頭、溢水管",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134531,7 +135192,7 @@
           "rowIdx": 320,
           "stage": "E地上結構階段",
           "category": "屋頂層機電整合檢討",
-          "title": "航空指示燈",
+          "title": "避雷針",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134542,8 +135203,8 @@
         {
           "rowIdx": 321,
           "stage": "E地上結構階段",
-          "category": "屋頂層建築整合檢討",
-          "title": "景觀、樹穴、花台\n尺寸、覆土深度、斷根版、綠覆率檢討",
+          "category": "屋頂層機電整合檢討",
+          "title": "航空指示燈",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134555,7 +135216,7 @@
           "rowIdx": 322,
           "stage": "E地上結構階段",
           "category": "屋頂層建築整合檢討",
-          "title": "泳池",
+          "title": "景觀、樹穴、花台\n尺寸、覆土深度、斷根版、綠覆率檢討",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134567,7 +135228,7 @@
           "rowIdx": 323,
           "stage": "E地上結構階段",
           "category": "屋頂層建築整合檢討",
-          "title": "室內外地坪高差",
+          "title": "泳池",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134579,7 +135240,7 @@
           "rowIdx": 324,
           "stage": "E地上結構階段",
           "category": "屋頂層建築整合檢討",
-          "title": "洩水、排水檢討",
+          "title": "室內外地坪高差",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134591,7 +135252,7 @@
           "rowIdx": 325,
           "stage": "E地上結構階段",
           "category": "屋頂層建築整合檢討",
-          "title": "屋突門、窗、百葉",
+          "title": "洩水、排水檢討",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134603,7 +135264,7 @@
           "rowIdx": 326,
           "stage": "E地上結構階段",
           "category": "屋頂層建築整合檢討",
-          "title": "防水及壓層",
+          "title": "屋突門、窗、百葉",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134615,7 +135276,7 @@
           "rowIdx": 327,
           "stage": "E地上結構階段",
           "category": "屋頂層建築整合檢討",
-          "title": "設備基座",
+          "title": "防水及壓層",
           "assignee": "",
           "dueDate": "",
           "actualDate": "",
@@ -134625,6 +135286,18 @@
         },
         {
           "rowIdx": 328,
+          "stage": "E地上結構階段",
+          "category": "屋頂層建築整合檢討",
+          "title": "設備基座",
+          "assignee": "",
+          "dueDate": "",
+          "actualDate": "",
+          "status": "未排定",
+          "progress": "",
+          "deliverable": ""
+        },
+        {
+          "rowIdx": 329,
           "stage": "E地上結構階段",
           "category": "地上層各分項計畫",
           "title": "地上結構工法(施工方式)",
@@ -134636,19 +135309,19 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 329,
+          "rowIdx": 330,
           "stage": "E地上結構階段",
           "category": "地上層各分項計畫",
           "title": "地上結構工序檢討&機具安排規劃",
           "assignee": "施工/規劃",
           "dueDate": "2026-08-05",
-          "actualDate": "",
-          "status": "檢討中",
+          "actualDate": "2026-08-05",
+          "status": "已完成",
           "progress": "",
           "deliverable": ""
         },
         {
-          "rowIdx": 330,
+          "rowIdx": 331,
           "stage": "E地上結構階段",
           "category": "地上層各分項計畫",
           "title": "綠建築取分說明及與契約差異",
@@ -134660,7 +135333,7 @@
           "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\標章取得"
         },
         {
-          "rowIdx": 331,
+          "rowIdx": 332,
           "stage": "E地上結構階段",
           "category": "地上層各分項計畫",
           "title": "施作精準結構建議模板校正、工序整理、工班觀念培養、人員檢核等皆需注意",
@@ -134672,7 +135345,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 332,
+          "rowIdx": 333,
           "stage": "E地上結構階段",
           "category": "地上層各分項計畫",
           "title": "本案結構柱先灌漿，建議需注意搭配搭架，並注意混凝土不可粒料分離",
@@ -134684,7 +135357,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 333,
+          "rowIdx": 334,
           "stage": "E地上結構階段",
           "category": "地上層各分項計畫",
           "title": "樓上層柱梁牆板是否一次澆置獨立柱澆置要避免粒料分離，以及泵送管是否可達到",
@@ -134696,7 +135369,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 334,
+          "rowIdx": 335,
           "stage": "E地上結構階段",
           "category": "地上層各分項計畫",
           "title": "各分項計畫",
@@ -134708,50 +135381,38 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 335,
-          "stage": "E地上結構階段",
-          "category": "外牆施工架檢討",
-          "title": "設備型式",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
-          "progress": "",
-          "deliverable": ""
-        },
-        {
           "rowIdx": 336,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
-          "title": "施工圖及搭設範圍",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
+          "title": "外架設備型式",
+          "assignee": "施工/規劃",
+          "dueDate": "2026-11-11",
+          "actualDate": "2026-10-01",
+          "status": "已完成",
           "progress": "",
-          "deliverable": ""
+          "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\施工架\\外牆施工架"
         },
         {
           "rowIdx": 337,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
-          "title": "防塵網(公司標準)/防墜網",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
+          "title": "外架施工圖及搭設範圍",
+          "assignee": "施工/規劃",
+          "dueDate": "2026-11-11",
+          "actualDate": "2026-10-01",
+          "status": "已完成",
           "progress": "",
-          "deliverable": ""
+          "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\施工架\\外牆施工架"
         },
         {
           "rowIdx": 338,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
-          "title": "上下設備位置",
-          "assignee": "",
-          "dueDate": "",
+          "title": "防塵網(公司標準)/防墜網",
+          "assignee": "施工/規劃",
+          "dueDate": "2026-11-11",
           "actualDate": "",
-          "status": "未排定",
+          "status": "進行中",
           "progress": "",
           "deliverable": ""
         },
@@ -134759,52 +135420,64 @@
           "rowIdx": 339,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
-          "title": "壁拉桿、三角架、斜籬設置",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
+          "title": "上下設備位置",
+          "assignee": "施工/規劃",
+          "dueDate": "2026-11-11",
+          "actualDate": "2026-10-01",
+          "status": "已完成",
           "progress": "",
-          "deliverable": ""
+          "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\施工架\\外牆施工架"
         },
         {
           "rowIdx": 340,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
-          "title": "荷重及樓層標示",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
+          "title": "壁拉桿、三角架、斜籬設置",
+          "assignee": "施工/規劃",
+          "dueDate": "2026-11-11",
+          "actualDate": "2026-10-01",
+          "status": "已完成",
           "progress": "",
-          "deliverable": ""
+          "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\施工架\\外牆施工架"
         },
         {
           "rowIdx": 341,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
-          "title": "結構計算",
-          "assignee": "",
-          "dueDate": "",
-          "actualDate": "",
-          "status": "未排定",
+          "title": "荷重及樓層標示",
+          "assignee": "施工/規劃",
+          "dueDate": "2026-11-11",
+          "actualDate": "2026-10-01",
+          "status": "已完成",
           "progress": "",
-          "deliverable": ""
+          "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\施工架\\外牆施工架"
         },
         {
           "rowIdx": 342,
           "stage": "E地上結構階段",
           "category": "外牆施工架檢討",
+          "title": "結構計算",
+          "assignee": "施工/規劃",
+          "dueDate": "2026-11-11",
+          "actualDate": "2026-10-01",
+          "status": "已完成",
+          "progress": "",
+          "deliverable": "\\\\192.168.1.221\\s5\\1003技術會議資料專區\\1.各專案作業區\\高屏工程處-1.中油綠能\\1.圖說契約進度表(如有新版請更新)\\5.分項施工計畫及圖說(工務所定期更新存放)\\施工架\\外牆施工架"
+        },
+        {
+          "rowIdx": 343,
+          "stage": "E地上結構階段",
+          "category": "外牆施工架檢討",
           "title": "強化材料(防塵網帆布)防焰耐燃檢討",
-          "assignee": "",
-          "dueDate": "",
+          "assignee": "施工/規劃",
+          "dueDate": "2026-11-11",
           "actualDate": "",
-          "status": "未排定",
+          "status": "進行中",
           "progress": "",
           "deliverable": ""
         },
         {
-          "rowIdx": 343,
+          "rowIdx": 344,
           "stage": "E地上結構階段",
           "category": "外飾材整合",
           "title": "外牆磁磚計畫",
@@ -134816,7 +135489,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 344,
+          "rowIdx": 345,
           "stage": "E地上結構階段",
           "category": "外飾材整合",
           "title": "外飾材分割、收頭、交界面",
@@ -134828,7 +135501,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 345,
+          "rowIdx": 346,
           "stage": "E地上結構階段",
           "category": "外飾材整合",
           "title": "窗戶分割",
@@ -134840,10 +135513,10 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 346,
+          "rowIdx": 347,
           "stage": "E地上結構階段",
           "category": "外飾材整合",
-          "title": "帷幕視覺模型",
+          "title": "帷幕視覺模型施工圖",
           "assignee": "規劃",
           "dueDate": "2026-08-25",
           "actualDate": "2026-09-07",
@@ -134852,7 +135525,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 347,
+          "rowIdx": 348,
           "stage": "E地上結構階段",
           "category": "外飾材整合",
           "title": "排氣罩、換氣罩、排煙罩",
@@ -134864,19 +135537,19 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 348,
+          "rowIdx": 349,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "1F鋼筋施工圖(A棟)",
           "assignee": "規劃",
           "dueDate": "2026-09-30",
           "actualDate": "",
-          "status": "檢討中",
+          "status": "已完成",
           "progress": "",
           "deliverable": ""
         },
         {
-          "rowIdx": 349,
+          "rowIdx": 350,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "2F鋼筋施工圖(A棟)",
@@ -134888,7 +135561,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 350,
+          "rowIdx": 351,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "3F鋼筋施工圖(A棟)",
@@ -134900,7 +135573,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 351,
+          "rowIdx": 352,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "4F鋼筋施工圖(A棟)",
@@ -134912,7 +135585,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 352,
+          "rowIdx": 353,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "5F鋼筋施工圖(A棟)",
@@ -134924,7 +135597,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 353,
+          "rowIdx": 354,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "6F鋼筋施工圖(A棟)",
@@ -134936,7 +135609,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 354,
+          "rowIdx": 355,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "7F鋼筋施工圖(A棟)",
@@ -134948,7 +135621,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 355,
+          "rowIdx": 356,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "RF鋼筋施工圖(A棟)",
@@ -134960,7 +135633,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 356,
+          "rowIdx": 357,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "1F鋼筋施工圖(B棟)",
@@ -134972,7 +135645,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 357,
+          "rowIdx": 358,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "2F鋼筋施工圖(B棟)",
@@ -134984,7 +135657,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 358,
+          "rowIdx": 359,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "3F鋼筋施工圖(B棟)",
@@ -134996,7 +135669,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 359,
+          "rowIdx": 360,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "4F鋼筋施工圖(B棟)",
@@ -135008,7 +135681,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 360,
+          "rowIdx": 361,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "RF鋼筋施工圖(A棟)",
@@ -135020,7 +135693,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 361,
+          "rowIdx": 362,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "帷幕風雨試驗圖",
@@ -135032,19 +135705,19 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 362,
+          "rowIdx": 363,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "帷幕施工圖",
           "assignee": "規劃",
-          "dueDate": "2026-10-07",
+          "dueDate": "2026-11-05",
           "actualDate": "",
           "status": "檢討中",
           "progress": "",
           "deliverable": ""
         },
         {
-          "rowIdx": 363,
+          "rowIdx": 364,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "鋁擴張網施工圖",
@@ -135056,7 +135729,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 364,
+          "rowIdx": 365,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "鋁包板施工圖",
@@ -135068,7 +135741,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 365,
+          "rowIdx": 366,
           "stage": "E地上結構階段",
           "category": "土建施工圖",
           "title": "六面整合圖",
@@ -135080,7 +135753,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 366,
+          "rowIdx": 367,
           "stage": "E地上結構階段",
           "category": "一樓外圍門窗檢討",
           "title": "防水檢討",
@@ -135092,7 +135765,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 367,
+          "rowIdx": 368,
           "stage": "E地上結構階段",
           "category": "一樓外圍門窗檢討",
           "title": "室內外斷水",
@@ -135104,7 +135777,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 368,
+          "rowIdx": 369,
           "stage": "E地上結構階段",
           "category": "一樓外圍門窗檢討",
           "title": "分割與裝修介面",
@@ -135116,7 +135789,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 369,
+          "rowIdx": 370,
           "stage": "E地上結構階段",
           "category": "一樓外圍門窗檢討",
           "title": "門窗材質與五金",
@@ -135128,7 +135801,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 370,
+          "rowIdx": 371,
           "stage": "F裝修階段",
           "category": "潛在漏水點檢討",
           "title": "外牆異質建材介面",
@@ -135140,7 +135813,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 371,
+          "rowIdx": 372,
           "stage": "F裝修階段",
           "category": "潛在漏水點檢討",
           "title": "外牆裝修採不填縫",
@@ -135152,7 +135825,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 372,
+          "rowIdx": 373,
           "stage": "F裝修階段",
           "category": "潛在漏水點檢討",
           "title": "外牆通風百葉",
@@ -135164,7 +135837,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 373,
+          "rowIdx": 374,
           "stage": "F裝修階段",
           "category": "潛在漏水點檢討",
           "title": "接地及外牆管",
@@ -135176,7 +135849,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 374,
+          "rowIdx": 375,
           "stage": "F裝修階段",
           "category": "潛在漏水點檢討",
           "title": "給排水管",
@@ -135188,7 +135861,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 375,
+          "rowIdx": 376,
           "stage": "F裝修階段",
           "category": "輕隔間檢討",
           "title": "下槽及止水墩放樣檢討",
@@ -135200,7 +135873,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 376,
+          "rowIdx": 377,
           "stage": "F裝修階段",
           "category": "輕隔間檢討",
           "title": "門窗開口介面及補強檢討",
@@ -135212,7 +135885,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 377,
+          "rowIdx": 378,
           "stage": "F裝修階段",
           "category": "輕隔間檢討",
           "title": "延板檢討",
@@ -135224,7 +135897,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 378,
+          "rowIdx": 379,
           "stage": "F裝修階段",
           "category": "輕隔間檢討",
           "title": "壁掛設備補強檢討",
@@ -135236,7 +135909,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 379,
+          "rowIdx": 380,
           "stage": "F裝修階段",
           "category": "輕隔間檢討",
           "title": "配合貼磚橫向補強料加密及倒板",
@@ -135248,7 +135921,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 380,
+          "rowIdx": 381,
           "stage": "F裝修階段",
           "category": "裝修木作檢討",
           "title": "不燃材料檢討",
@@ -135260,7 +135933,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 381,
+          "rowIdx": 382,
           "stage": "F裝修階段",
           "category": "裝修木作檢討",
           "title": "木皮、美耐板分割檢討",
@@ -135272,7 +135945,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 382,
+          "rowIdx": 383,
           "stage": "F裝修階段",
           "category": "裝修木作檢討",
           "title": "異材質收邊/導角檢討",
@@ -135284,7 +135957,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 383,
+          "rowIdx": 384,
           "stage": "F裝修階段",
           "category": "裝修木作檢討",
           "title": "踢腳介面檢討",
@@ -135296,7 +135969,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 384,
+          "rowIdx": 385,
           "stage": "F裝修階段",
           "category": "搗擺檢討",
           "title": "輕隔間鎖固補強",
@@ -135308,7 +135981,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 385,
+          "rowIdx": 386,
           "stage": "F裝修階段",
           "category": "搗擺檢討",
           "title": "門扇開關.走道淨寬檢討",
@@ -135320,7 +135993,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 386,
+          "rowIdx": 387,
           "stage": "F裝修階段",
           "category": "搗擺檢討",
           "title": "隔間位置與門窗/地板清潔孔衝突檢討",
@@ -135332,7 +136005,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 387,
+          "rowIdx": 388,
           "stage": "F裝修階段",
           "category": "防鏽蝕檢討",
           "title": "戶外與水接觸金屬",
@@ -135344,7 +136017,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 388,
+          "rowIdx": 389,
           "stage": "F裝修階段",
           "category": "防鏽蝕檢討",
           "title": "戶外高鹽分區域",
@@ -135356,7 +136029,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 389,
+          "rowIdx": 390,
           "stage": "F裝修階段",
           "category": "防鏽蝕檢討",
           "title": "室內用水或潮濕區域",
@@ -135368,7 +136041,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 390,
+          "rowIdx": 391,
           "stage": "F裝修階段",
           "category": "防臭味檢討",
           "title": "汙、廢水透氣管系統",
@@ -135380,7 +136053,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 391,
+          "rowIdx": 392,
           "stage": "F裝修階段",
           "category": "防臭味檢討",
           "title": "存水彎設置檢討",
@@ -135392,7 +136065,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 392,
+          "rowIdx": 393,
           "stage": "F裝修階段",
           "category": "防臭味檢討",
           "title": "密封蓋需求檢討",
@@ -135404,7 +136077,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 393,
+          "rowIdx": 394,
           "stage": "F裝修階段",
           "category": "防臭味檢討",
           "title": "補氣系統",
@@ -135416,7 +136089,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 394,
+          "rowIdx": 395,
           "stage": "F裝修階段",
           "category": "防臭味檢討",
           "title": "汙水池進排氣量檢討",
@@ -135428,7 +136101,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 395,
+          "rowIdx": 396,
           "stage": "F裝修階段",
           "category": "防臭味檢討",
           "title": "汙水池蓋密封方式",
@@ -135440,7 +136113,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 396,
+          "rowIdx": 397,
           "stage": "F裝修階段",
           "category": "防污染規劃",
           "title": "外牆汙染垂掛",
@@ -135452,7 +136125,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 397,
+          "rowIdx": 398,
           "stage": "F裝修階段",
           "category": "防污染規劃",
           "title": "懸挑底部滴水",
@@ -135464,7 +136137,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 398,
+          "rowIdx": 399,
           "stage": "F裝修階段",
           "category": "防污染規劃",
           "title": "底部水濺汙染",
@@ -135476,7 +136149,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 399,
+          "rowIdx": 400,
           "stage": "F裝修階段",
           "category": "防污染規劃",
           "title": "材料耐候性",
@@ -135488,7 +136161,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 400,
+          "rowIdx": 401,
           "stage": "F裝修階段",
           "category": "防白華檢討",
           "title": "外牆白華",
@@ -135500,7 +136173,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 401,
+          "rowIdx": 402,
           "stage": "F裝修階段",
           "category": "防白華檢討",
           "title": "戶外地板白華",
@@ -135512,7 +136185,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 402,
+          "rowIdx": 403,
           "stage": "F裝修階段",
           "category": "防白華檢討",
           "title": "戶外樓梯白華",
@@ -135524,7 +136197,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 403,
+          "rowIdx": 404,
           "stage": "F裝修階段",
           "category": "瓦斯管檢討",
           "title": "外牆幹管路徑檢討(含遮煙筏位置選定)",
@@ -135536,7 +136209,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 404,
+          "rowIdx": 405,
           "stage": "F裝修階段",
           "category": "瓦斯管檢討",
           "title": "工作陽台瓦斯錶位置、支管路徑",
@@ -135548,7 +136221,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 405,
+          "rowIdx": 406,
           "stage": "F裝修階段",
           "category": "天花及設備檢討",
           "title": "天花設備整合-燈具、出風口、檢修口、消防設備、指標系統、窗簾盒套繪",
@@ -135560,7 +136233,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 406,
+          "rowIdx": 407,
           "stage": "F裝修階段",
           "category": "天花及設備檢討",
           "title": "天花分割計畫",
@@ -135572,7 +136245,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 407,
+          "rowIdx": 408,
           "stage": "F裝修階段",
           "category": "天花及設備檢討",
           "title": "設備補強檢討",
@@ -135584,7 +136257,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 408,
+          "rowIdx": 409,
           "stage": "F裝修階段",
           "category": "天花及設備檢討",
           "title": "完成面淨高檢討",
@@ -135596,7 +136269,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 409,
+          "rowIdx": 410,
           "stage": "F裝修階段",
           "category": "公設裝修機電檢討",
           "title": "天花板淨高",
@@ -135608,7 +136281,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 410,
+          "rowIdx": 411,
           "stage": "F裝修階段",
           "category": "公設裝修機電檢討",
           "title": "設備空間",
@@ -135620,7 +136293,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 411,
+          "rowIdx": 412,
           "stage": "F裝修階段",
           "category": "公設裝修機電檢討",
           "title": "空調室外機、排水",
@@ -135632,7 +136305,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 412,
+          "rowIdx": 413,
           "stage": "F裝修階段",
           "category": "公設裝修機電檢討",
           "title": "端點檢討",
@@ -135644,19 +136317,19 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 413,
+          "rowIdx": 414,
           "stage": "F裝修階段",
           "category": "土建施工圖",
           "title": "國際會議廳挑高天花板目前採系統支撐架+覆工板，再討論拆裝安全性及效率的施工方式",
           "assignee": "施工/規劃",
-          "dueDate": "2026-10-07",
+          "dueDate": "2026-12-11",
           "actualDate": "",
           "status": "進行中",
           "progress": "",
           "deliverable": ""
         },
         {
-          "rowIdx": 414,
+          "rowIdx": 415,
           "stage": "G景觀階段",
           "category": "植栽",
           "title": "防水及排水",
@@ -135668,7 +136341,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 415,
+          "rowIdx": 416,
           "stage": "G景觀階段",
           "category": "植栽",
           "title": "花台或樹穴尺寸",
@@ -135680,7 +136353,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 416,
+          "rowIdx": 417,
           "stage": "G景觀階段",
           "category": "植栽",
           "title": "覆土深度",
@@ -135692,7 +136365,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 417,
+          "rowIdx": 418,
           "stage": "G景觀階段",
           "category": "植栽",
           "title": "支撐架型式及花床分隔板/斷根板",
@@ -135704,7 +136377,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 418,
+          "rowIdx": 419,
           "stage": "G景觀階段",
           "category": "植栽",
           "title": "照明預留",
@@ -135716,7 +136389,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 419,
+          "rowIdx": 420,
           "stage": "G景觀階段",
           "category": "植栽",
           "title": "噴灌預留",
@@ -135728,7 +136401,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 420,
+          "rowIdx": 421,
           "stage": "G景觀階段",
           "category": "景觀鋪面",
           "title": "高程及斜率檢討",
@@ -135740,7 +136413,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 421,
+          "rowIdx": 422,
           "stage": "G景觀階段",
           "category": "景觀鋪面",
           "title": "鄰地高程順平",
@@ -135752,7 +136425,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 422,
+          "rowIdx": 423,
           "stage": "G景觀階段",
           "category": "景觀鋪面",
           "title": "工法及裝修厚度檢討",
@@ -135764,7 +136437,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 423,
+          "rowIdx": 424,
           "stage": "G景觀階段",
           "category": "景觀鋪面",
           "title": "異材質介面檢討",
@@ -135776,7 +136449,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 424,
+          "rowIdx": 425,
           "stage": "G景觀階段",
           "category": "景觀鋪面",
           "title": "緣石材質及型式",
@@ -135788,7 +136461,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 425,
+          "rowIdx": 426,
           "stage": "G景觀階段",
           "category": "景觀鋪面",
           "title": "防白華檢討",
@@ -135800,7 +136473,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 426,
+          "rowIdx": 427,
           "stage": "G景觀階段",
           "category": "排水",
           "title": "水溝型式-明溝、暗溝、淺溝",
@@ -135812,7 +136485,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 427,
+          "rowIdx": 428,
           "stage": "G景觀階段",
           "category": "排水",
           "title": "排水斷面與斜率",
@@ -135824,7 +136497,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 428,
+          "rowIdx": 429,
           "stage": "G景觀階段",
           "category": "排水",
           "title": "陰井/清潔口尺寸及深度",
@@ -135836,7 +136509,7 @@
           "deliverable": ""
         },
         {
-          "rowIdx": 429,
+          "rowIdx": 430,
           "stage": "G景觀階段",
           "category": "排水",
           "title": "水溝與鋪面、花台、樹穴介面",
