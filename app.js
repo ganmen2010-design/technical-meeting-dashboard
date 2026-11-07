@@ -4917,7 +4917,7 @@ window.renderSPSOverviewGuide = function() {
           <div>
             <h3 style="font-size: 19px; font-weight: 700; color: #f8fafc; margin: 0;">SPS 品保中心技術分享會簡報庫 (${spsList.length} 份)</h3>
             <p style="font-size: 13.5px; color: #94a3b8; margin-top: 3px;">
-              實體連結目錄：<code>C:\Users\ganmen\Desktop\202607AI\分享會簡報</code>
+              實體連結目錄：<code>C:\\Users\\ganmen\\Desktop\\202607AI\\分享會簡報</code>
             </p>
           </div>
         </div>
