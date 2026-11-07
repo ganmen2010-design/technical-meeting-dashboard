@@ -115,12 +115,15 @@ body {
 .app-container {
   position: relative;
   z-index: 10;
-  max-width: 1560px;
-  margin: 0 auto;
-  padding: 20px 24px 60px;
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 10px 16px 16px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
+  min-height: 100vh;
+  box-sizing: border-box;
   transition: filter 0.3s ease;
 }
 
@@ -3285,3 +3288,716 @@ h5 { font-size: 17px !important; }
   color: #fff;
 }
 
+
+
+/* ==========================================================================
+   最新型側邊欄 (Modern Sidebar Master-Detail Layout) - v73.0
+   ========================================================================== */
+
+/* 主工作區兩欄分割佈局 */
+.dashboard-split-layout {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  min-height: calc(100vh - 86px);
+  width: 100%;
+  box-sizing: border-box;
+  align-items: stretch;
+}
+
+/* 左側作業導覽目錄面板 */
+.sidebar-panel {
+  width: 295px;
+  min-width: 295px;
+  max-width: 320px;
+  height: calc(100vh - 86px);
+  background: rgba(10, 16, 30, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 242, 254, 0.25);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 8px 14px;
+  box-sizing: border-box;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  z-index: 20;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 242, 254, 0.08);
+}
+
+.sidebar-panel.collapsed {
+  width: 60px;
+  min-width: 60px;
+  max-width: 60px;
+  padding: 10px 6px;
+}
+
+.sidebar-panel.collapsed .sidebar-title-box span,
+.sidebar-panel.collapsed .group-title,
+.sidebar-panel.collapsed .sidebar-badge-count,
+.sidebar-panel.collapsed .group-arrow,
+.sidebar-panel.collapsed .sidebar-group-content {
+  display: none !important;
+}
+
+.sidebar-panel.collapsed .sidebar-collapse-toggle i {
+  transform: rotate(180deg);
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 8px;
+}
+
+.sidebar-title-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #a5f3fc;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-collapse-toggle {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+}
+
+.sidebar-collapse-toggle:hover {
+  background: rgba(0, 242, 254, 0.2);
+  color: #00f2fe;
+  border-color: rgba(0, 242, 254, 0.4);
+}
+
+/* 側邊欄樹狀清單容器 */
+.sidebar-tree {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-tree::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-tree::-webkit-scrollbar-thumb {
+  background: rgba(0, 242, 254, 0.2);
+  border-radius: 3px;
+}
+.sidebar-tree::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 242, 254, 0.45);
+}
+
+/* 頂層分組 (1.公告 2.專案 3.全域) */
+.sidebar-group {
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.sidebar-group.expanded {
+  background: rgba(255, 255, 255, 0.035);
+  border-color: rgba(0, 242, 254, 0.2);
+}
+
+.sidebar-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 10px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.sidebar-group-header:hover {
+  background: rgba(0, 242, 254, 0.08);
+  color: #00f2fe;
+}
+
+.group-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.group-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.group-arrow {
+  font-size: 11px;
+  color: #64748b;
+  transition: transform 0.2s ease;
+}
+
+.sidebar-group.expanded .group-arrow {
+  transform: rotate(180deg);
+  color: #00f2fe;
+}
+
+.sidebar-badge-count {
+  background: rgba(168, 85, 247, 0.25);
+  color: #d8b4fe;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.sidebar-group-content {
+  display: none;
+  padding: 4px 6px 8px;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sidebar-group.expanded .sidebar-group-content {
+  display: flex;
+}
+
+/* 葉節點項目 (Leaf Item) */
+.sidebar-leaf-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+  position: relative;
+}
+
+.sidebar-leaf-item:hover {
+  background: rgba(0, 242, 254, 0.1);
+  color: #38bdf8;
+  transform: translateX(2px);
+}
+
+.sidebar-leaf-item.active {
+  background: linear-gradient(90deg, rgba(0, 242, 254, 0.22), rgba(79, 172, 254, 0.1));
+  color: #00f2fe;
+  font-weight: 700;
+  border-left: 3px solid #00f2fe;
+  box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.15);
+}
+
+.leaf-ext-icon {
+  margin-left: auto;
+  font-size: 10.5px;
+  opacity: 0.6;
+}
+
+/* 依工程處分類 (Dept Group in Sidebar) */
+.sidebar-dept-item {
+  margin-bottom: 4px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.sidebar-dept-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #94a3b8;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-dept-header:hover {
+  background: rgba(168, 85, 247, 0.12);
+  color: #c084fc;
+}
+
+.sidebar-dept-header.expanded {
+  color: #c084fc;
+}
+
+.sidebar-dept-header .dept-arrow {
+  font-size: 10px;
+  transition: transform 0.2s ease;
+}
+
+.sidebar-dept-header.expanded .dept-arrow {
+  transform: rotate(180deg);
+}
+
+.sidebar-dept-content {
+  display: none;
+  padding: 2px 4px 6px;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sidebar-dept-header.expanded + .sidebar-dept-content {
+  display: flex;
+}
+
+/* 專案卡手風琴 (Project Accordion in Sidebar) */
+.sidebar-proj-item {
+  margin-bottom: 2px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+}
+
+.sidebar-proj-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #e2e8f0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.18s ease;
+}
+
+.sidebar-proj-header:hover {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+}
+
+.sidebar-proj-header.expanded {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+.sidebar-proj-header .proj-arrow {
+  font-size: 9.5px;
+  color: #64748b;
+  transition: transform 0.2s ease;
+}
+
+.sidebar-proj-header.expanded .proj-arrow {
+  transform: rotate(180deg);
+  color: #38bdf8;
+}
+
+.sidebar-proj-content {
+  display: none;
+  padding: 2px 0 4px 10px;
+  flex-direction: column;
+  gap: 2px;
+  border-left: 2px solid rgba(56, 189, 248, 0.2);
+  margin-left: 10px;
+  margin-top: 2px;
+}
+
+.sidebar-proj-header.expanded + .sidebar-proj-content {
+  display: flex;
+}
+
+/* 專案子功能項 (專案待辦事項, 技術議題管控表, 歷次會議紀錄) */
+.sidebar-proj-leaf {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 8px;
+  font-size: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.sidebar-proj-leaf:hover {
+  background: rgba(0, 242, 254, 0.12);
+  color: #a5f3fc;
+}
+
+.sidebar-proj-leaf.active {
+  background: rgba(0, 242, 254, 0.22);
+  color: #00f2fe;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   右側展示區 (Right Main Workspace Area)
+   ========================================================================== */
+.main-workspace-area {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: rgba(10, 16, 30, 0.75);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 242, 254, 0.25);
+  border-radius: 12px;
+  overflow: hidden;
+  height: calc(100vh - 86px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 242, 254, 0.08);
+}
+
+/* 頂部次級工具列 (Top Secondary Toolbar) */
+.workspace-top-bar {
+  min-height: 54px;
+  padding: 8px 18px;
+  background: rgba(6, 11, 22, 0.88);
+  border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  z-index: 10;
+}
+
+.topbar-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.topbar-badge {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 12px;
+  background: rgba(0, 242, 254, 0.15);
+  border: 1px solid rgba(0, 242, 254, 0.4);
+  color: #00f2fe;
+}
+
+.topbar-badge.dept-badge {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: rgba(168, 85, 247, 0.45);
+  color: #d8b4fe;
+}
+
+.topbar-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #f8fafc;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.topbar-sep {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.topbar-sub {
+  color: #38bdf8;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.topbar-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+/* 畫布區 (Canvas Area - 最大化展開與捲動) */
+.workspace-canvas {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 20px 24px;
+  position: relative;
+}
+
+.workspace-canvas::-webkit-scrollbar {
+  width: 6px;
+}
+.workspace-canvas::-webkit-scrollbar-thumb {
+  background: rgba(0, 242, 254, 0.25);
+  border-radius: 4px;
+}
+
+.canvas-view {
+  width: 100%;
+}
+
+.canvas-view.hidden {
+  display: none !important;
+}
+
+/* 專案畫布內表格全寬滿版展開 */
+.project-canvas-body {
+  width: 100%;
+}
+
+.project-canvas-body .table-responsive {
+  max-height: calc(100vh - 170px) !important;
+  border: 1px solid rgba(0, 242, 254, 0.2);
+  border-radius: 8px;
+  background: rgba(8, 14, 26, 0.65);
+}
+
+.project-canvas-body .modern-table {
+  width: 100%;
+}
+
+/* ==========================================================================
+   起始待命卡片與微豐譽 Logo (Micro Feng Yu Logo)
+   ========================================================================== */
+.standby-card {
+  max-width: 680px;
+  margin: 60px auto;
+  padding: 44px 36px;
+  text-align: center;
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(0, 242, 254, 0.12);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.micro-fengyu-logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.micro-fengyu-svg {
+  filter: drop-shadow(0 0 14px rgba(0, 242, 254, 0.4));
+  animation: logoPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes logoPulse {
+  0% { transform: scale(1); filter: drop-shadow(0 0 12px rgba(0, 242, 254, 0.35)); }
+  100% { transform: scale(1.04); filter: drop-shadow(0 0 22px rgba(0, 242, 254, 0.6)); }
+}
+
+.micro-logo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.micro-logo-text .brand-en {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, #00f2fe, #38bdf8, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.micro-logo-text .brand-tw {
+  font-size: 12px;
+  color: #94a3b8;
+  letter-spacing: 1px;
+}
+
+.standby-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: 0.5px;
+}
+
+.standby-desc {
+  font-size: 14.5px;
+  color: #94a3b8;
+  line-height: 1.6;
+  max-width: 520px;
+}
+
+.standby-metrics-pills {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.mini-kpi-pill {
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  font-size: 12.5px;
+  color: #cbd5e1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mini-kpi-pill b {
+  color: #fff;
+}
+
+/* ==========================================================================
+   使用說明書彈窗樣式 (User Manual Modal)
+   ========================================================================== */
+.btn-user-manual-pill {
+  padding: 6px 12px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: rgba(0, 242, 254, 0.12) !important;
+  border: 1px solid rgba(0, 242, 254, 0.4) !important;
+  color: #00f2fe !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-user-manual-pill:hover {
+  background: rgba(0, 242, 254, 0.25) !important;
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.3) !important;
+}
+
+.user-manual-modal-card {
+  width: 90% !important;
+  max-width: 860px !important;
+  max-height: 90vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 24px 28px !important;
+  border: 1px solid rgba(0, 242, 254, 0.4) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 242, 254, 0.15) !important;
+}
+
+.manual-tabs-bar {
+  display: flex;
+  gap: 8px;
+  padding: 10px 0 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+
+.manual-tab-btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.manual-tab-btn:hover {
+  background: rgba(0, 242, 254, 0.12);
+  color: #00f2fe;
+}
+
+.manual-tab-btn.active {
+  background: rgba(0, 242, 254, 0.2);
+  border-color: #00f2fe;
+  color: #00f2fe;
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+}
+
+.manual-content-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #cbd5e1;
+}
+
+.manual-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.manual-page.hidden {
+  display: none !important;
+}
+
+.manual-page h4 {
+  font-size: 16px;
+  color: #f1f5f9;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.manual-box-highlight {
+  background: rgba(0, 242, 254, 0.08);
+  border-left: 3px solid #00f2fe;
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  color: #a5f3fc;
+  font-size: 13.5px;
+}
+
+.manual-content-body ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.manual-content-body li {
+  margin-bottom: 6px;
+}
+
+/* ==========================================================================
+   RWD 調整
+   ========================================================================== */
+@media (max-width: 900px) {
+  .dashboard-split-layout {
+    flex-direction: column;
+  }
+  .sidebar-panel {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 260px;
+  }
+  .main-workspace-area {
+    height: auto;
+    min-height: 500px;
+  }
+}

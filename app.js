@@ -999,6 +999,9 @@ async function loadDashboardData() {
     const spBadge = document.getElementById("badge-sp-count");
     if (spBadge) spBadge.textContent = (appData.sharepointPresentations || []).length;
     renderWorkspaces((appData && appData.projects) ? appData.projects : []);
+    if (typeof buildSidebarProjectsTree === 'function') {
+      buildSidebarProjectsTree();
+    }
 
   } catch (err) {
     console.error("Load dashboard data failed:", err);
@@ -2012,53 +2015,18 @@ function filterProjectsByDept(dept) {
   });
 }
 
-// 專案抽屜詳細展開
+// 專案抽屜詳細展開 (升級為側邊欄主從架構)
 window.openProjectDrawer = function(projectId) {
-  if (!appData || !appData.projects) return;
-  const proj = appData.projects.find(p => p.id === projectId);
-  if (!proj) return;
-
-  currentDrawerProject = proj;
-  currentViewName = `專案作業區：${proj.shortName}`;
-  sendHeartbeatPing();
-
-  const deptEl = document.getElementById("drawer-project-dept");
-  const nameEl = document.getElementById("drawer-project-name");
-  const todoCountEl = document.getElementById("drawer-todo-count");
-  const controlCountEl = document.getElementById("drawer-control-count");
-
-  if (deptEl) deptEl.textContent = proj.dept;
-  if (nameEl) nameEl.textContent = proj.shortName || proj.name;
-
-  const normSite = normalizeSiteName(proj.shortName);
-  const drawerTodos = ((appData && appData.todoItems) ? appData.todoItems : []).filter(t => normalizeSiteName(t.site) === normSite);
-
-  if (todoCountEl) todoCountEl.textContent = drawerTodos.length;
-  const totalCtrlItems = (proj.controlSheetItems || []).length;
-  if (controlCountEl) controlCountEl.textContent = totalCtrlItems;
-
-  // 預設開啟第一個頁籤：歷次會議資料
-  drawerTabs.forEach(b => b.classList.remove("active"));
-  const firstTab = document.querySelector('.drawer-tab-btn[data-drawer-tab="meetings"]');
-  if (firstTab) firstTab.classList.add("active");
-
-  renderDrawerTabContent("meetings");
-  if (projectModal) {
-    projectModal.classList.remove("hidden");
+  if (typeof selectSidebarProjectView === 'function') {
+    selectSidebarProjectView(projectId, 'todos');
   }
 };
 
 // 支援深層跳轉專案抽屜至指定頁籤
 window.openProjectDrawerTab = function(projectId, tabType) {
-  openProjectDrawer(projectId);
-  drawerTabs.forEach(b => {
-    if (b.dataset.drawerTab === tabType) {
-      b.classList.add("active");
-    } else {
-      b.classList.remove("active");
-    }
-  });
-  renderDrawerTabContent(tabType);
+  if (typeof selectSidebarProjectView === 'function') {
+    selectSidebarProjectView(projectId, tabType || 'todos');
+  }
 };
 
 // 渲染抽屜內部頁籤
@@ -2080,25 +2048,27 @@ function renderDrawerTabContent(tabType) {
   // 頁籤 1: 歷次會議資料 (預設為收合模式)
   if (tabType === "meetings") {
     const meetings = proj.meetings || [];
+    const topbarTools = document.getElementById("topbar-tools");
+    if (topbarTools) {
+      topbarTools.innerHTML = `
+        <span style="font-size: 12.5px; color: var(--text-muted); margin-right: 4px;">
+          <i class="fa-solid fa-folder-tree text-cyan"></i> 共 ${meetings.length} 場會議紀錄
+        </span>
+        <button type="button" class="btn-ctrl-action" onclick="reloadProjectMeetingsFromNas()" style="padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8;" title="立即自 NAS 重新掃描並同步本專案最新上傳之會議資料夾與檔案">
+          <i class="fa-solid fa-arrows-rotate"></i> 同步 NAS 最新會議
+        </button>
+        <button type="button" class="btn-table-action" onclick="toggleAllMeetingCards()" style="padding: 5px 12px; font-size: 12px;">
+          <i class="fa-solid fa-arrows-up-down"></i> 全部展開 / 收合
+        </button>
+      `;
+    }
+
     if (meetings.length === 0) {
       content.innerHTML = `<div class="search-empty-prompt"><i class="fa-solid fa-folder-open"></i><p>目前尚無歷次會議上傳檔案</p></div>`;
       return;
     }
 
     content.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-        <span style="font-size: 13px; color: var(--text-muted);">
-          <i class="fa-solid fa-folder-tree text-cyan"></i> 共 ${meetings.length} 場會議紀錄（預設收合，點擊單場標題可展開/收合）
-        </span>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <button type="button" class="btn-ctrl-action" onclick="reloadProjectMeetingsFromNas()" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8;" title="立即自 NAS 重新掃描並同步本專案最新上傳之會議資料夾與檔案">
-            <i class="fa-solid fa-arrows-rotate"></i> 同步 NAS 最新會議
-          </button>
-          <button type="button" class="btn-table-action" onclick="toggleAllMeetingCards()">
-            <i class="fa-solid fa-arrows-up-down"></i> 全部展開 / 收合
-          </button>
-        </div>
-      </div>
 
       <div style="display: flex; flex-direction: column; gap: 14px;">
         ${meetings.map((m, idx) => `
@@ -2289,7 +2259,7 @@ function renderDrawerTabContent(tabType) {
 // 專案待辦事項 (Todos) 頂部狀態列與多狀態篩選
 // ==========================================
 function updateTodoHeaderRibbon() {
-  const headerStatsContainer = document.getElementById("drawer-header-stats-container");
+  const headerStatsContainer = document.getElementById("topbar-tools") || document.getElementById("drawer-header-stats-container");
   if (!headerStatsContainer || !currentDrawerProject) return;
 
   const proj = currentDrawerProject;
@@ -2412,7 +2382,7 @@ function applyTodoFilters() {
 // 技術議題管控表 (Control) 頂部狀態列與多維篩選 (上移橘框至頂部，刪除重複紅框按鈕)
 // ==========================================
 function updateControlHeaderRibbon() {
-  const headerStatsContainer = document.getElementById("drawer-header-stats-container");
+  const headerStatsContainer = document.getElementById("topbar-tools") || document.getElementById("drawer-header-stats-container");
   if (!headerStatsContainer || !currentDrawerProject) return;
 
   const proj = currentDrawerProject;
@@ -4574,3 +4544,303 @@ window.searchInNotionDirect = function() {
 
   window.open(targetUrl, "_blank");
 };
+
+
+// ==============================================================================
+// 最新型側邊欄 (Modern Sidebar Master-Detail Layout) 核心控制系統 - v73.0
+// ==============================================================================
+
+// 系統使用說明書彈窗控制
+window.openUserManualModal = function() {
+  const m = document.getElementById("user-manual-modal");
+  if (m) m.classList.remove("hidden");
+};
+
+window.closeUserManualModal = function() {
+  const m = document.getElementById("user-manual-modal");
+  if (m) m.classList.add("hidden");
+};
+
+window.switchManualTab = function(pageId) {
+  document.querySelectorAll(".manual-tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".manual-page").forEach(p => p.classList.add("hidden"));
+  const btn = document.querySelector(`.manual-tab-btn[onclick*="${pageId}"]`);
+  if (btn) btn.classList.add("active");
+  const page = document.getElementById(`manual-page-${pageId}`);
+  if (page) page.classList.remove("hidden");
+};
+
+// 動態建置各專案作業區手風琴樹 (依 5 大工處分類，休閒事業處徹底排除，專案下拉 3 大功能)
+function buildSidebarProjectsTree() {
+  const container = document.getElementById("sidebar-projects-tree-container");
+  if (!container || !appData || !appData.projects) return;
+
+  const depts = [
+    { name: "北區工程處", code: "north", icon: "fa-building" },
+    { name: "中區工程處", code: "central", icon: "fa-building" },
+    { name: "台南工程處", code: "tainan", icon: "fa-building" },
+    { name: "宜蘭工程處", code: "yilan", icon: "fa-building" },
+    { name: "高屏工程處", code: "south", icon: "fa-building" }
+  ];
+
+  let html = "";
+  depts.forEach((dept, dIdx) => {
+    const deptProjects = appData.projects.filter(p => (p.dept || '').includes(dept.name));
+    if (deptProjects.length === 0) return;
+
+    html += `
+      <div class="sidebar-dept-item" id="dept-group-${dept.code}">
+        <div class="sidebar-dept-header ${dIdx === 0 ? 'expanded' : ''}" id="dept-header-${dept.code}" onclick="toggleSidebarDept('${dept.code}')">
+          <span><i class="fa-solid ${dept.icon}"></i> ${dept.name} (${deptProjects.length})</span>
+          <i class="fa-solid fa-chevron-down dept-arrow"></i>
+        </div>
+        <div class="sidebar-dept-content" id="dept-content-${dept.code}" style="${dIdx === 0 ? 'display: flex;' : 'display: none;'}">
+    `;
+
+    deptProjects.forEach((proj, pIdx) => {
+      const safeId = encodeURIComponent(proj.id).replace(/%/g, '_');
+      const isExpanded = dIdx === 0 && pIdx === 0;
+
+      html += `
+        <div class="sidebar-proj-item" id="proj-item-${safeId}">
+          <div class="sidebar-proj-header ${isExpanded ? 'expanded' : ''}" id="proj-header-${safeId}" onclick="toggleSidebarProj('${safeId}')">
+            <span><i class="fa-solid fa-folder-closed"></i> ${proj.shortName || proj.name}</span>
+            <i class="fa-solid fa-chevron-down proj-arrow"></i>
+          </div>
+          <div class="sidebar-proj-content" id="proj-content-${safeId}" style="${isExpanded ? 'display: flex;' : 'display: none;'}">
+            <div class="sidebar-proj-leaf" data-proj-id="${proj.id}" data-tab="todos" onclick="selectSidebarProjectView('${proj.id}', 'todos')">
+              <i class="fa-solid fa-list-check text-emerald"></i> <span>專案待辦事項</span>
+            </div>
+            <div class="sidebar-proj-leaf" data-proj-id="${proj.id}" data-tab="control" onclick="selectSidebarProjectView('${proj.id}', 'control')">
+              <i class="fa-solid fa-table-list text-cyan"></i> <span>技術議題管控表</span>
+            </div>
+            <div class="sidebar-proj-leaf" data-proj-id="${proj.id}" data-tab="meetings" onclick="selectSidebarProjectView('${proj.id}', 'meetings')">
+              <i class="fa-solid fa-handshake text-purple"></i> <span>歷次會議紀錄</span>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+  const badge = document.getElementById("sidebar-proj-total-badge");
+  if (badge) badge.textContent = appData.projects.length;
+}
+
+// 側邊欄展開/收合切換
+window.toggleSidebarCollapse = function() {
+  const panel = document.getElementById("sidebar-panel");
+  if (panel) panel.classList.toggle("collapsed");
+};
+
+window.toggleSidebarGroup = function(groupId) {
+  const group = document.getElementById(`sidebar-group-${groupId}`);
+  if (group) group.classList.toggle("expanded");
+};
+
+window.toggleSidebarDept = function(deptCode) {
+  const header = document.getElementById(`dept-header-${deptCode}`);
+  const content = document.getElementById(`dept-content-${deptCode}`);
+  if (header && content) {
+    header.classList.toggle("expanded");
+    content.style.display = header.classList.contains("expanded") ? "flex" : "none";
+  }
+};
+
+window.toggleSidebarProj = function(safeId) {
+  const header = document.getElementById(`proj-header-${safeId}`);
+  const content = document.getElementById(`proj-content-${safeId}`);
+  if (header && content) {
+    header.classList.toggle("expanded");
+    content.style.display = header.classList.contains("expanded") ? "flex" : "none";
+  }
+};
+
+// 側邊欄項目選取：公告及指引模組
+window.selectSidebarItem = function(itemKey) {
+  document.querySelectorAll(".sidebar-leaf-item").forEach(el => el.classList.remove("active"));
+  document.querySelectorAll(".sidebar-proj-leaf").forEach(el => el.classList.remove("active"));
+  const activeLeaf = document.getElementById(`leaf-${itemKey}`);
+  if (activeLeaf) activeLeaf.classList.add("active");
+
+  document.querySelectorAll(".canvas-view").forEach(v => v.classList.add("hidden"));
+
+  const topbarTitle = document.getElementById("topbar-title-wrap");
+  const topbarTools = document.getElementById("topbar-tools");
+
+  if (itemKey === "schedule") {
+    const v = document.getElementById("view-schedule");
+    if (v) v.classList.remove("hidden");
+    if (topbarTitle) {
+      topbarTitle.innerHTML = `
+        <span class="topbar-badge dept-badge">公告及指引</span>
+        <span class="topbar-name"><i class="fa-solid fa-calendar-days text-cyan"></i> 每月技術會議行程表</span>
+      `;
+    }
+    if (topbarTools) {
+      topbarTools.innerHTML = `
+        <a href="https://calendar.google.com/calendar/u/0/r/month" target="_blank" rel="noopener noreferrer" class="btn-ctrl-action" style="padding: 6px 14px; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; background: rgba(0,242,254,0.15); border: 1px solid rgba(0,242,254,0.4); color: #00f2fe; border-radius: 6px;">
+          <i class="fa-brands fa-google"></i> 開啟 Google 日曆排程
+        </a>
+      `;
+    }
+  } else if (itemKey === "operations") {
+    const v = document.getElementById("view-operations");
+    if (v) v.classList.remove("hidden");
+    if (appData) {
+      renderHeaderOverview(appData);
+      renderMonthlyReportAnalysis();
+    }
+    if (topbarTitle) {
+      topbarTitle.innerHTML = `
+        <span class="topbar-badge dept-badge">公告及指引</span>
+        <span class="topbar-name"><i class="fa-solid fa-chart-pie text-emerald"></i> 每月技術會議運作概況分析 (P10~P13)</span>
+      `;
+    }
+    if (topbarTools) {
+      topbarTools.innerHTML = `
+        <span class="badge-pill bg-cyan-glow" style="padding: 4px 12px; font-size: 12px; border-radius: 14px;">
+          <i class="fa-solid fa-calendar-check text-cyan"></i> 基準日：${window.currentCutoffDate || '2026-08-24'}
+        </span>
+      `;
+    }
+  } else if (itemKey === "guidelines") {
+    const v = document.getElementById("view-guidelines");
+    if (v) v.classList.remove("hidden");
+    if (appData) {
+      renderGuidelines(appData.guidelines || []);
+    }
+    if (topbarTitle) {
+      topbarTitle.innerHTML = `
+        <span class="topbar-badge dept-badge">公告及指引</span>
+        <span class="topbar-name"><i class="fa-solid fa-book-bookmark text-purple"></i> 技術指引發佈區 (00發布區)</span>
+      `;
+    }
+    if (topbarTools) {
+      topbarTools.innerHTML = `
+        <button type="button" class="btn-table-action" onclick="toggleAllGuidelineCards()" style="padding: 5px 12px; font-size: 12px;">
+          <i class="fa-solid fa-arrows-up-down"></i> 全部展開 / 收合
+        </button>
+      `;
+    }
+  }
+  sendHeartbeatPing();
+};
+
+// 側邊欄專案子功能選取：專案待辦事項 / 技術議題管控表 / 歷次會議紀錄
+window.selectSidebarProjectView = function(projectId, tabType) {
+  if (!appData || !appData.projects) return;
+  const proj = appData.projects.find(p => p.id === projectId || p.shortName === projectId);
+  if (!proj) return;
+
+  currentDrawerProject = proj;
+  currentDrawerTab = tabType;
+  currentViewName = `專案作業區：${proj.shortName} - ${tabType}`;
+
+  document.querySelectorAll(".sidebar-leaf-item").forEach(el => el.classList.remove("active"));
+  document.querySelectorAll(".sidebar-proj-leaf").forEach(el => el.classList.remove("active"));
+  const activeLeaf = document.querySelector(`.sidebar-proj-leaf[data-proj-id="${proj.id}"][data-tab="${tabType}"]`);
+  if (activeLeaf) activeLeaf.classList.add("active");
+
+  // 自動展開所屬專案手風琴
+  const safeId = encodeURIComponent(proj.id).replace(/%/g, '_');
+  const projHeader = document.getElementById(`proj-header-${safeId}`);
+  const projContent = document.getElementById(`proj-content-${safeId}`);
+  if (projHeader && projContent) {
+    projHeader.classList.add("expanded");
+    projContent.style.display = "flex";
+  }
+
+  // 隱藏其他畫布，顯示專案畫布
+  document.querySelectorAll(".canvas-view").forEach(v => v.classList.add("hidden"));
+  const projectCanvas = document.getElementById("view-project-content");
+  if (projectCanvas) projectCanvas.classList.remove("hidden");
+
+  const tabNames = {
+    todos: "專案待辦事項",
+    control: "技術議題管控表",
+    meetings: "歷次會議紀錄"
+  };
+
+  const topbarTitle = document.getElementById("topbar-title-wrap");
+  if (topbarTitle) {
+    topbarTitle.innerHTML = `
+      <span class="topbar-badge dept-badge">${proj.dept}</span>
+      <span class="topbar-name">${proj.shortName || proj.name}</span>
+      <span class="topbar-sep">/</span>
+      <span class="topbar-sub">${tabNames[tabType] || tabType}</span>
+    `;
+  }
+
+  // 渲染對應內容與頂部次級工具列
+  renderDrawerTabContent(tabType);
+  sendHeartbeatPing();
+};
+
+// 側邊欄全域搜尋範疇選取：全部 / 技術議題庫 / SPS品保分享會
+window.selectSidebarSearchScope = function(scope) {
+  document.querySelectorAll(".sidebar-leaf-item").forEach(el => el.classList.remove("active"));
+  document.querySelectorAll(".sidebar-proj-leaf").forEach(el => el.classList.remove("active"));
+  const activeLeaf = document.getElementById(`leaf-search-${scope === 'sharepoint' ? 'sps' : scope}`);
+  if (activeLeaf) activeLeaf.classList.add("active");
+
+  document.querySelectorAll(".canvas-view").forEach(v => v.classList.add("hidden"));
+  const v = document.getElementById("view-search");
+  if (v) v.classList.remove("hidden");
+
+  activeSearchType = scope;
+  document.querySelectorAll(".type-chip").forEach(chip => {
+    if (chip.dataset.type === scope) {
+      chip.classList.add("active");
+    } else {
+      chip.classList.remove("active");
+    }
+  });
+
+  const scopeNames = {
+    all: "全部範疇",
+    issues: "技術議題庫 (169)",
+    sharepoint: "SPS 品保分享會 (816)"
+  };
+
+  const topbarTitle = document.getElementById("topbar-title-wrap");
+  if (topbarTitle) {
+    topbarTitle.innerHTML = `
+      <span class="topbar-badge dept-badge">全域檢索</span>
+      <span class="topbar-name"><i class="fa-solid fa-sparkles text-cyan"></i> Google AI 全域搜尋與技術對話中心</span>
+      <span class="topbar-sep">/</span>
+      <span class="topbar-sub">${scopeNames[scope] || scope}</span>
+    `;
+  }
+
+  const topbarTools = document.getElementById("topbar-tools");
+  if (topbarTools) {
+    topbarTools.innerHTML = `
+      <button type="button" class="btn-table-action" onclick="document.getElementById('global-search-input').value=''; performGlobalSearch();" style="padding: 5px 12px; font-size: 12px;">
+        <i class="fa-solid fa-eraser"></i> 清除檢索
+      </button>
+    `;
+  }
+
+  const searchInp = document.getElementById("global-search-input");
+  if (searchInp) {
+    setTimeout(() => searchInp.focus(), 80);
+    performGlobalSearch();
+  }
+  sendHeartbeatPing();
+};
+
+// 頁面初始化後自動掛載側邊欄手風琴樹
+window.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    if (appData && appData.projects) {
+      buildSidebarProjectsTree();
+    }
+  }, 200);
+});

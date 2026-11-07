@@ -3,36 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>技術會議雲端儀表板 | 企業工程技術決策中心</title>
+  <title>技術會議雲端儀表板 | 豐譽企業技術暨品保處</title>
   <!-- FontAwesome CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=72.0">
+  <link rel="stylesheet" href="style.css?v=73.0">
 </head>
 <body>
-  <!-- 背景發光粒子球體 (玻璃擬態質感) -->
+  <!-- 背景動態光暈球 (極限科技感背景) -->
   <div class="background-decorations">
     <div class="bg-orb orb-1"></div>
     <div class="bg-orb orb-2"></div>
     <div class="bg-orb orb-3"></div>
   </div>
 
-  <!-- 豊譽企業網域專用登入門禁彈窗 (僅允許統一帳號 FU@fengyu.com.tw 登入後自訂個人帳密) -->
+  <!-- 豐譽企業網域專用登入遮罩門禁 (全系統一律先 FU@fengyu.com.tw 登入後自訂個人帳密) -->
   <div id="login-modal" class="modal-overlay hidden">
     <div class="modal-card login-card glass-card">
       <div class="login-header">
         <div class="login-icon" style="background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(168, 85, 247, 0.2)); border: 1px solid rgba(0, 242, 254, 0.4);">
           <i class="fa-solid fa-building-shield text-cyan" style="font-size: 28px;"></i>
         </div>
-        <h2>豊譽企業網域身分驗證</h2>
-        <p class="subtitle">技術會議雲端決策系統 ‧ 僅限 <b>@fengyu.com.tw</b> 網域與 NAS 1003 專區授權人員</p>
+        <h2>豐譽企業網域身分驗證</h2>
+        <p class="subtitle">技術會議雲端戰情系統 ‧ 限 <b>@fengyu.com.tw</b> 網域及 NAS 1003 專區授權人員</p>
       </div>
 
-      <!-- 企業內網與 VPN 狀態監測燈號 -->
+      <!-- 豐譽內網與 VPN 連線狀態偵測條 -->
       <div class="fengyu-net-status" style="margin-bottom: 16px; padding: 10px 14px; background: rgba(0, 0, 0, 0.35); border-radius: 8px; border: 1px solid rgba(0, 242, 254, 0.2); display: flex; align-items: center; gap: 10px; font-size: 13px;">
         <span class="pulse-dot" style="background: #10b981; box-shadow: 0 0 10px #10b981;"></span>
-        <span style="color: #cbd5e1;" id="net-status-text">企業內網 / SSL-VPN 連線正常 (<code>\\192.168.1.221</code>)</span>
+        <span style="color: #cbd5e1;" id="net-status-text">豐譽內網 / SSL-VPN 連線正常 (<code>\\192.168.1.221</code>)</span>
         <span style="margin-left: auto; font-size: 11px; padding: 2px 8px; background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-radius: 10px; border: 1px solid rgba(16, 185, 129, 0.4);">fengyu.com.tw</span>
       </div>
 
@@ -44,7 +44,7 @@
 
       <form id="login-form" class="login-form">
         <div class="form-group">
-          <label for="login-username"><i class="fa-solid fa-envelope text-cyan"></i> 企業信箱 / 網域帳號</label>
+          <label for="login-username"><i class="fa-solid fa-envelope text-cyan"></i> 豐譽信箱 / 網域帳號</label>
           <input type="text" id="login-username" value="FU@fengyu.com.tw" placeholder="請輸入企業信箱 (如 FU@fengyu.com.tw 或個人信箱)" autocomplete="username" required>
         </div>
 
@@ -68,21 +68,21 @@
 
   <!-- 主應用介面容器 (登入後解鎖顯示) -->
   <div id="app-container" class="app-container">
-    <!-- 頂部導覽列 (Header Bar) -->
+    <!-- 頂部第一列導覽列 (Header Bar: 標題、基準日、即時連線、使用說明與個人設定) -->
     <header class="glass-card header-bar">
       <div class="header-brand">
-        <div class="logo-badge">
-          <i class="fa-solid fa-network-wired"></i>
+        <div class="logo-badge" title="豐譽企業技術戰情中心">
+          <i class="fa-solid fa-cube text-cyan"></i>
         </div>
         <div class="brand-text">
           <h1>技術會議雲端儀表板</h1>
-          <span class="brand-sub"><i class="fa-solid fa-folder-tree"></i> 1003技術會議資料專區 ‧ 13大工程處專案即時戰情</span>
+          <span class="brand-sub"><i class="fa-solid fa-folder-tree"></i> 1003技術會議資料專區 ‧ 9大專案即時戰情</span>
         </div>
       </div>
 
-      <!-- 即時上線狀況指標 (不斷線 Heartbeat Monitor) 與全域統計基準日 -->
+      <!-- 即時上線狀況指標 (不斷線 Heartbeat Monitor)、全域統計基準日與操作入口設定 -->
       <div class="header-presence">
-        <!-- 統計基準日機動設定與即時更新工具列 (置於即時連線中左側) -->
+        <!-- 統計基準日機動設定與即時更新工具列 -->
         <div class="header-cutoff-selector" id="header-cutoff-container" title="全域統計基準日：調整後點擊更新可即時全量計算月報概況與專案應辦">
           <div class="header-cutoff-group">
             <label for="cutoff-date-input"><i class="fa-solid fa-calendar-check text-cyan"></i> <span>基準日:</span></label>
@@ -104,6 +104,11 @@
           <i class="fa-solid fa-server"></i> 切換本機伺服器 (可寫入 NAS)
         </a>
 
+        <!-- 【重大升級】使用說明併入第一列入口設定 -->
+        <button type="button" class="btn-tool-pill btn-user-manual-pill" id="btn-open-user-manual" onclick="openUserManualModal()" title="系統使用說明書與工作指引">
+          <i class="fa-solid fa-book-open"></i> <span>使用說明</span>
+        </button>
+
         <div class="user-profile-widget" id="user-profile-widget" title="點擊切換/修改豐譽個人帳密">
           <div class="user-avatar" id="user-avatar-icon">
             <i class="fa-solid fa-user-shield"></i>
@@ -123,7 +128,7 @@
     </header>
 
     <!-- 統一初始帳號修改引導 Banner -->
-    <div id="unified-account-banner" class="glass-card hidden" style="margin: 0 0 12px 0; padding: 10px 18px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(0, 242, 254, 0.12)); border: 1px solid rgba(245, 158, 11, 0.45); display: flex; align-items: center; justify-content: space-between; border-radius: 10px; gap: 10px;">
+    <div id="unified-account-banner" class="glass-card hidden" style="margin: 0; padding: 10px 18px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(0, 242, 254, 0.12)); border: 1px solid rgba(245, 158, 11, 0.45); display: flex; align-items: center; justify-content: space-between; border-radius: 10px; gap: 10px;">
       <div style="display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: #fde68a;">
         <i class="fa-solid fa-triangle-exclamation text-amber" style="font-size: 16px;"></i>
         <span>您目前使用統一初始帳號 (<b>FU@fengyu.com.tw</b>) 登入，建議修改為您的豐譽個人帳密。</span>
@@ -133,280 +138,372 @@
       </button>
     </div>
 
-    <!-- 主頁籤導覽列 (Main Tabs Navigation) -->
-    <nav class="glass-card main-nav">
-      <button type="button" class="nav-tab" data-tab="announcements">
-        <i class="fa-solid fa-bullhorn"></i> 1. 公告與指引中心
-      </button>
-      <button type="button" class="nav-tab" data-tab="workspaces">
-        <i class="fa-solid fa-diagram-project"></i> 2. 各專案作業區 <span class="badge-count" id="badge-proj-count">9</span>
-      </button>
-      <button type="button" class="nav-tab" data-tab="search">
-        <i class="fa-solid fa-magnifying-glass-chart"></i> 3. 全域資料搜尋
-      </button>
-    </nav>
-
-    <!-- 內容區域 (Content Area) -->
-    <main class="main-content">
-      <!-- 預設待命提示卡片 (點選主頁籤後隱藏) -->
-      <div id="tab-standby-prompt" class="glass-card standby-card">
-        <div class="standby-icon-box">
-          <i class="fa-solid fa-layer-group text-cyan"></i>
-        </div>
-        <h3>歡迎使用 豐譽技術會議雲端儀表板</h3>
-        <p>請點選（或點擊兩下）上方 <b>1. 公告與指引中心</b>、<b>2. 各專案作業區</b> 或 <b>3. 全域資料搜尋</b> 主頁籤，展開查看各模組內容及次頁籤。</p>
-      </div>
-
-      <!-- 模組 1：公告欄 (Announcements & Guidelines) -->
-      <section id="tab-announcements" class="tab-pane hidden">
-        <!-- 公告欄子選單 (精簡為 3 大核心頁籤) -->
-        <div class="subnav-bar">
-          <a href="https://calendar.google.com/calendar/u/0/r/month" target="_blank" rel="noopener noreferrer" class="subnav-btn" id="btn-schedule-gcal" title="在新分頁直接開啟 Google 日曆 (技術會議專用排程)" style="text-decoration: none;">
-            <i class="fa-solid fa-calendar-days text-cyan"></i> 每月技術會議行程表 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px; margin-left: 2px; opacity: 0.75;"></i>
-          </a>
-          <button type="button" class="subnav-btn active" data-sub="operations">
-            <i class="fa-solid fa-chart-pie"></i> 每月技術會議運作概況
-          </button>
-          <button type="button" class="subnav-btn" data-sub="guidelines">
-            <i class="fa-solid fa-book-bookmark"></i> 發布技術指引 (00發布區)
+    <!-- 主工作區分割佈局 (Dashboard Split Layout: 左側新型側邊欄 + 右側展示區) -->
+    <div class="dashboard-split-layout">
+      <!-- 左側新型側邊欄 (Sidebar Accordion Navigation) -->
+      <aside class="sidebar-panel glass-card" id="sidebar-panel">
+        <div class="sidebar-header">
+          <div class="sidebar-title-box">
+            <i class="fa-solid fa-bars-staggered text-cyan"></i>
+            <span>作業導覽目錄</span>
+          </div>
+          <button type="button" class="sidebar-collapse-toggle" id="btn-toggle-sidebar" onclick="toggleSidebarCollapse()" title="展開/收合側邊欄">
+            <i class="fa-solid fa-angles-left"></i>
           </button>
         </div>
 
-        <!-- 1.2 運作概況 (依 PPTX P10-P13 自動更新，不顯示運作規範簡報清單) -->
-        <div id="sub-operations" class="subpane active">
-          <!-- 統計 KPI 指標卡片 -->
-          <div class="kpi-grid">
-            <div class="glass-card kpi-card">
-              <div class="kpi-icon text-cyan"><i class="fa-solid fa-city"></i></div>
-              <div class="kpi-info">
-                <span class="kpi-title">納管專案工地</span>
-                <span class="kpi-val" id="kpi-projects-count">13 案</span>
-                <span class="kpi-sub">涵蓋 6 大工程處</span>
+        <nav class="sidebar-tree" id="sidebar-tree">
+          <!-- 節點 1：公告及指引中心 -->
+          <div class="sidebar-group expanded" id="sidebar-group-announcements">
+            <div class="sidebar-group-header" onclick="toggleSidebarGroup('announcements')">
+              <div class="group-header-left">
+                <i class="fa-solid fa-bullhorn text-cyan"></i>
+                <span class="group-title">1. 公告及指引中心</span>
               </div>
+              <i class="fa-solid fa-chevron-down group-arrow"></i>
             </div>
-
-            <div class="glass-card kpi-card">
-              <div class="kpi-icon text-emerald"><i class="fa-solid fa-list-check"></i></div>
-              <div class="kpi-info">
-                <span class="kpi-title">累計追蹤待辦事項</span>
-                <span class="kpi-val" id="kpi-todos-count">353 筆</span>
-                <span class="kpi-sub" id="kpi-todos-sub">共用區彙整追蹤 (應辦 315 / 後續 38)</span>
+            <div class="sidebar-group-content" id="subitems-announcements">
+              <div class="sidebar-leaf-item" id="leaf-schedule" onclick="selectSidebarItem('schedule')">
+                <i class="fa-solid fa-calendar-days text-cyan"></i>
+                <span>每月技術會議行程表</span>
+                <i class="fa-solid fa-arrow-up-right-from-square leaf-ext-icon"></i>
               </div>
-            </div>
-
-            <div class="glass-card kpi-card">
-              <div class="kpi-icon text-purple"><i class="fa-solid fa-lightbulb"></i></div>
-              <div class="kpi-info">
-                <span class="kpi-title">歷次會議技術議題庫</span>
-                <span class="kpi-val" id="kpi-issues-count">169 案</span>
-                <span class="kpi-sub">跨專案技術結晶</span>
+              <div class="sidebar-leaf-item" id="leaf-operations" onclick="selectSidebarItem('operations')">
+                <i class="fa-solid fa-chart-pie text-emerald"></i>
+                <span>每月技術會議運作概況</span>
               </div>
-            </div>
-
-            <div class="glass-card kpi-card">
-              <div class="kpi-icon text-amber"><i class="fa-solid fa-trophy"></i></div>
-              <div class="kpi-info">
-                <span class="kpi-title">全公司待辦完成率</span>
-                <span class="kpi-val" id="kpi-avg-rate">--%</span>
-                <span class="kpi-sub" id="kpi-light-status">🟢 運作良好</span>
+              <div class="sidebar-leaf-item" id="leaf-guidelines" onclick="selectSidebarItem('guidelines')">
+                <i class="fa-solid fa-book-bookmark text-purple"></i>
+                <span>技術指引發佈區 (00發布區)</span>
               </div>
             </div>
           </div>
 
-
-
-          <!-- 每月技術會議運作概況 (依 PPTX P10~13 自動抽取呈現) -->
-          <div class="glass-card section-card" id="monthly-report-analysis-card">
-            <div class="card-header">
-              <div>
-                <h3><i class="fa-solid fa-chart-line text-cyan"></i> 每月技術會議運作概況分析 (一頁式全量下拉展示)</h3>
-                <span class="header-note" id="report-source-label"><i class="fa-solid fa-file-powerpoint text-orange"></i> 自動同步自 NAS 最新月報 PPTX (P10~P13) ｜ P12 工處與 P11 工地 2 欄併排 ｜ 連動基準日</span>
+          <!-- 節點 2：各專案作業區 (9 專案，先依工處分類、休閒事業處刪除) -->
+          <div class="sidebar-group expanded" id="sidebar-group-workspaces">
+            <div class="sidebar-group-header" onclick="toggleSidebarGroup('workspaces')">
+              <div class="group-header-left">
+                <i class="fa-solid fa-diagram-project text-purple"></i>
+                <span class="group-title">2. 各專案作業區</span>
+                <span class="sidebar-badge-count" id="sidebar-proj-total-badge">9</span>
               </div>
-              <div class="header-right-badges">
-                <span class="badge-pill bg-cyan-glow" style="padding: 6px 14px; font-size: 13px; font-weight: 600; border-radius: 20px;">
-                  <i class="fa-solid fa-layer-group text-cyan"></i> 全量一頁式下拉視圖
-                </span>
+              <i class="fa-solid fa-chevron-down group-arrow"></i>
+            </div>
+            <div class="sidebar-group-content" id="subitems-workspaces">
+              <div id="sidebar-projects-tree-container">
+                <!-- 由 JS 動態注入 5 大工程處 -> 9 大專案 -> 3 大功能 (專案待辦事項, 技術議題管控表, 歷次會議紀錄) -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 節點 3：全域資料搜索 (收尋範圍：全部、技術議題庫、SPS) -->
+          <div class="sidebar-group expanded" id="sidebar-group-search">
+            <div class="sidebar-group-header" onclick="toggleSidebarGroup('search')">
+              <div class="group-header-left">
+                <i class="fa-solid fa-magnifying-glass-chart text-amber"></i>
+                <span class="group-title">3. 全域資料搜索</span>
+              </div>
+              <i class="fa-solid fa-chevron-down group-arrow"></i>
+            </div>
+            <div class="sidebar-group-content" id="subitems-search">
+              <div class="sidebar-leaf-item" id="leaf-search-all" onclick="selectSidebarSearchScope('all')">
+                <i class="fa-solid fa-globe text-cyan"></i>
+                <span>全部</span>
+              </div>
+              <div class="sidebar-leaf-item" id="leaf-search-issues" onclick="selectSidebarSearchScope('issues')">
+                <i class="fa-solid fa-lightbulb text-purple"></i>
+                <span>技術議題庫 (169)</span>
+              </div>
+              <div class="sidebar-leaf-item" id="leaf-search-sps" onclick="selectSidebarSearchScope('sharepoint')">
+                <i class="fa-solid fa-graduation-cap text-amber"></i>
+                <span>SPS 品保分享會</span>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- 右側展示區 (Main Workspace Area) -->
+      <main class="main-workspace-area" id="main-workspace-area">
+        <!-- 頂部次級工具列 (Top Secondary Action Bar) -->
+        <div class="workspace-top-bar" id="workspace-top-bar">
+          <!-- 預設待命次級工具列 -->
+          <div class="topbar-title-wrap" id="topbar-title-wrap">
+            <span class="topbar-badge active-badge" id="topbar-badge">技術戰情</span>
+            <span class="topbar-name" id="topbar-name">歡迎使用 豐譽技術會議雲端儀表板</span>
+          </div>
+          <div class="topbar-tools" id="topbar-tools">
+            <!-- 動態注入各頁籤專屬次級功能鍵 -->
+          </div>
+        </div>
+
+        <!-- 畫布區 (Canvas Area - 最大化展開) -->
+        <div class="workspace-canvas" id="workspace-canvas">
+          <!-- 1. 待命起始畫面 (簡化保留第三列圖示改成微豐譽 logo) -->
+          <div id="view-standby" class="canvas-view active">
+            <div class="standby-card glass-card">
+              <div class="micro-fengyu-logo-container">
+                <!-- 微豐譽科技 Logo SVG (精密幾何六角邊框與科技微線條) -->
+                <svg class="micro-fengyu-svg" viewBox="0 0 120 120" width="88" height="88">
+                  <defs>
+                    <linearGradient id="fyGlowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#00f2fe" />
+                      <stop offset="50%" stop-color="#38bdf8" />
+                      <stop offset="100%" stop-color="#818cf8" />
+                    </linearGradient>
+                    <filter id="neonFilter" x="-20%" y="-20%" width="140%" height="140%">
+                      <feGaussianBlur stdDeviation="3.5" result="blur" />
+                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                  </defs>
+                  <!-- 幾何六角盾牌邊界 -->
+                  <polygon points="60,6 108,33 108,87 60,114 12,87 12,33" fill="rgba(10, 18, 36, 0.85)" stroke="url(#fyGlowGrad)" stroke-width="2.6" filter="url(#neonFilter)"/>
+                  <polygon points="60,16 98,38 98,82 60,104 22,82 22,38" fill="none" stroke="rgba(0, 242, 254, 0.3)" stroke-width="1.2" stroke-dasharray="4 2"/>
+                  <!-- 豐譽建築「豐」字幾何科技梁柱構架 -->
+                  <path d="M38 38 L82 38" stroke="#00f2fe" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M46 54 L74 54" stroke="#38bdf8" stroke-width="2.6" stroke-linecap="round"/>
+                  <path d="M34 70 L86 70" stroke="#00f2fe" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M60 28 L60 92" stroke="url(#fyGlowGrad)" stroke-width="3.5" stroke-linecap="round"/>
+                  <!-- 科技微核心節點 -->
+                  <circle cx="60" cy="28" r="3.5" fill="#00f2fe" />
+                  <circle cx="60" cy="92" r="3.5" fill="#818cf8" />
+                  <circle cx="38" cy="38" r="2.8" fill="#38bdf8" />
+                  <circle cx="82" cy="38" r="2.8" fill="#38bdf8" />
+                  <circle cx="34" cy="70" r="2.8" fill="#00f2fe" />
+                  <circle cx="86" cy="70" r="2.8" fill="#00f2fe" />
+                </svg>
+                <div class="micro-logo-text">
+                  <span class="brand-en">FENG YU ENGINEERING</span>
+                  <span class="brand-tw">豐譽企業 · 技術暨品保處</span>
+                </div>
+              </div>
+
+              <h2 class="standby-title">技術會議雲端儀表板</h2>
+              <p class="standby-desc">請由左側導覽目錄選取專案作業區、待辦事項、技術管控表或全域技術搜尋。</p>
+
+              <div class="standby-metrics-pills">
+                <div class="mini-kpi-pill"><i class="fa-solid fa-city text-cyan"></i> 納管專案 <b>9 案</b></div>
+                <div class="mini-kpi-pill"><i class="fa-solid fa-list-check text-emerald"></i> 累計待辦 <b>353 筆</b></div>
+                <div class="mini-kpi-pill"><i class="fa-solid fa-lightbulb text-purple"></i> 技術議題 <b>169 案</b></div>
+                <div class="mini-kpi-pill"><i class="fa-solid fa-shield-halved text-amber"></i> 內部 NAS <b>實體連線</b></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. 專案作業區展示畫布 (待辦事項 / 管控表 / 歷次會議) -->
+          <div id="view-project-content" class="canvas-view hidden">
+            <!-- 專案頂部標記容器 (用於動態渲染專案指標、篩選或快捷鍵) -->
+            <div id="drawer-header-stats-container" style="display: none;"></div>
+            <!-- 專案核心內容渲染容器 (原抽屜本體，直接在畫布全寬展示) -->
+            <div id="drawer-body-content" class="project-canvas-body">
+              <!-- JS 動態渲染待辦、管控或會議 -->
+            </div>
+          </div>
+
+          <!-- 3. 公告欄模組：每月技術會議運作概況 (P10~P13 分析) -->
+          <div id="view-operations" class="canvas-view hidden">
+            <!-- 統計 KPI 指標卡片 -->
+            <div class="kpi-grid">
+              <div class="glass-card kpi-card">
+                <div class="kpi-icon text-cyan"><i class="fa-solid fa-city"></i></div>
+                <div class="kpi-info">
+                  <span class="kpi-title">納管專案工地</span>
+                  <span class="kpi-val" id="kpi-projects-count">9 案</span>
+                  <span class="kpi-sub">涵蓋 5 大工程處</span>
+                </div>
+              </div>
+
+              <div class="glass-card kpi-card">
+                <div class="kpi-icon text-emerald"><i class="fa-solid fa-list-check"></i></div>
+                <div class="kpi-info">
+                  <span class="kpi-title">累計追蹤待辦事項</span>
+                  <span class="kpi-val" id="kpi-todos-count">353 筆</span>
+                  <span class="kpi-sub" id="kpi-todos-sub">共用區彙整追蹤 (應辦 315 / 後續 38)</span>
+                </div>
+              </div>
+
+              <div class="glass-card kpi-card">
+                <div class="kpi-icon text-purple"><i class="fa-solid fa-lightbulb"></i></div>
+                <div class="kpi-info">
+                  <span class="kpi-title">歷次會議技術議題庫</span>
+                  <span class="kpi-val" id="kpi-issues-count">169 案</span>
+                  <span class="kpi-sub">跨專案技術結晶</span>
+                </div>
+              </div>
+
+              <div class="glass-card kpi-card">
+                <div class="kpi-icon text-amber"><i class="fa-solid fa-trophy"></i></div>
+                <div class="kpi-info">
+                  <span class="kpi-title">全公司待辦完成率</span>
+                  <span class="kpi-val" id="kpi-avg-rate">--%</span>
+                  <span class="kpi-sub" id="kpi-light-status">🟢 運作良好</span>
+                </div>
               </div>
             </div>
 
-            <!-- 月報分析內容動態展示容器 -->
-            <div id="monthly-report-dynamic-content">
-              <!-- JS Dynamic Render P10~P13 Content -->
+            <!-- 每月技術會議運作概況分析 (一頁式全量下拉展示) -->
+            <div class="glass-card section-card" id="monthly-report-analysis-card">
+              <div class="card-header">
+                <div>
+                  <h3><i class="fa-solid fa-chart-line text-cyan"></i> 每月技術會議運作概況分析 (一頁式全量下拉展示)</h3>
+                  <span class="header-note" id="report-source-label"><i class="fa-solid fa-file-powerpoint text-orange"></i> 自動同步自 NAS 最新月報 PPTX (P10~P13) ｜ P12 工處與 P11 工地 2 欄併排 ｜ 連動基準日</span>
+                </div>
+                <div class="header-right-badges">
+                  <span class="badge-pill bg-cyan-glow" style="padding: 6px 14px; font-size: 13px; font-weight: 600; border-radius: 20px;">
+                    <i class="fa-solid fa-layer-group text-cyan"></i> 全量一頁式下拉視圖
+                  </span>
+                </div>
+              </div>
+
+              <!-- 月報分析動態內容容器 -->
+              <div id="monthly-report-dynamic-content">
+                <!-- JS Dynamic Render P10~P13 Content -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. 公告欄模組：發布技術指引 (00發布區) -->
+          <div id="view-guidelines" class="canvas-view hidden">
+            <div id="guidelines-list">
+              <!-- JS Dynamic Render -->
+            </div>
+          </div>
+
+          <!-- 5. 全域資料搜尋 (Google AI 企業技術對話中心) -->
+          <div id="view-search" class="canvas-view hidden">
+            <div class="glass-card search-hero-card google-ai-dialog-panel" style="padding: 24px 28px;">
+              <div class="search-dialog-top">
+                <h2><i class="fa-solid fa-sparkles text-cyan"></i> Google AI 企業技術對話與全域搜尋中心</h2>
+                <p class="search-desc">即時跨 9 大專案作業區、169 筆技術議題庫與 SPS 品保分享會進行即時全域 AI 對話綜整！</p>
+              </div>
+              
+              <div class="search-input-wrapper">
+                <i class="fa-solid fa-search search-main-icon"></i>
+                <input type="text" id="global-search-input" placeholder="請輸入技術關鍵字 (例如：模板、連續壁、地質改良、FS版、防水、BIM、安全支撐、鋼筋…)">
+                <button type="button" class="btn-clear-search" id="btn-clear-search" title="清除關鍵字">&times;</button>
+              </div>
+
+              <div class="search-type-chips">
+                <span class="type-label">搜尋範疇：</span>
+                <button type="button" class="type-chip active" data-type="all">全部範疇</button>
+                <button type="button" class="type-chip" data-type="issues">技術議題庫 (169)</button>
+                <button type="button" class="type-chip" data-type="sharepoint"><i class="fa-solid fa-graduation-cap"></i> SPS品保分享會 (816)</button>
+              </div>
+
+              <!-- 對話框內直接呈現 AI 模式綜整與出處引述 -->
+              <div class="ai-dialog-response-area" id="search-results-list" style="margin-top: 20px;">
+                <div class="search-empty-prompt" style="padding: 20px 0 10px;">
+                  <i class="fa-solid fa-sparkles text-cyan" style="font-size: 28px;"></i>
+                  <p style="font-size: 16.5px; color: var(--text-dim); margin-top: 10px;">請於上方輸入框輸入關鍵字，Google AI 即刻在對話框內為您綜整技術重點並引述出處。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. 行程表引導視圖 (Google 日曆直通) -->
+          <div id="view-schedule" class="canvas-view hidden">
+            <div class="glass-card section-card" style="padding: 32px 36px; text-align: center;">
+              <div style="width: 72px; height: 72px; margin: 0 auto 18px; border-radius: 50%; background: rgba(0, 242, 254, 0.15); border: 1px solid rgba(0, 242, 254, 0.4); display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-calendar-days text-cyan" style="font-size: 32px;"></i>
+              </div>
+              <h3 style="font-size: 22px; margin-bottom: 12px; color: #a5f3fc;">每月技術會議行程排程中心</h3>
+              <p style="font-size: 15px; color: #94a3b8; max-width: 640px; margin: 0 auto 24px; line-height: 1.7;">
+                本系統已全面整合企業 Google 日曆，提供即時動態排程、各工區技術會議排程通知與跨裝置行事曆推播。
+              </p>
+              <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+                <a href="https://calendar.google.com/calendar/u/0/r/month" target="_blank" rel="noopener noreferrer" class="btn-login" style="margin: 0; padding: 12px 28px; font-size: 15px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                  <i class="fa-brands fa-google"></i> 在新分頁開啟 Google 日曆排程中心 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i>
+                </a>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- 1.3 發布技術指引 -->
-        <div id="sub-guidelines" class="subpane hidden">
-          <div id="guidelines-list">
-            <!-- JS Dynamic Render -->
-          </div>
-        </div>
-      </section>
-
-      <!-- 模組 2：各專案作業區 (Workspaces) -->
-      <section id="tab-workspaces" class="tab-pane hidden">
-        <div class="workspaces-toolbar">
-          <div class="dept-filters" id="dept-filter-buttons">
-            <button type="button" class="filter-chip active" data-dept="all">全部工程處 (13)</button>
-            <button type="button" class="filter-chip" data-dept="北區工程處">北區 (3)</button>
-            <button type="button" class="filter-chip" data-dept="中區工程處">中區 (2)</button>
-            <button type="button" class="filter-chip" data-dept="台南工程處">台南 (3)</button>
-            <button type="button" class="filter-chip" data-dept="宜蘭工程處">宜蘭 (2)</button>
-            <button type="button" class="filter-chip" data-dept="高屏工程處">高屏 (2)</button>
-            <button type="button" class="filter-chip" data-dept="休閒事業處">休閒 (1)</button>
-          </div>
-          <div class="search-box-compact">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="project-quick-search" placeholder="篩選專案名稱…">
-          </div>
-        </div>
-
-        <!-- 13 個專案卡片矩陣 -->
-        <div class="projects-grid" id="projects-grid">
-          <!-- JS Dynamic Render -->
-        </div>
-      </section>
-
-      <!-- 模組 3：全域資料搜尋 (Global Search - Google AI 對話框一體化) -->
-      <section id="tab-search" class="tab-pane hidden">
-        <div class="glass-card search-hero-card google-ai-dialog-panel" style="padding: 24px 28px;">
-          <div class="search-dialog-top">
-            <h2><i class="fa-solid fa-sparkles text-cyan"></i> Google AI 企業技術對話與全域搜尋中心</h2>
-            <p class="search-desc">即時跨 9 大專案作業區、155 筆技術議題庫、專案簡報與技術指引進行即時全域 AI 對話綜整！</p>
-          </div>
-          
-          <div class="search-input-wrapper">
-            <i class="fa-solid fa-search search-main-icon"></i>
-            <input type="text" id="global-search-input" placeholder="請輸入技術關鍵字 (例如：模板、連續壁、地質改良、FS版、防水、BIM、安全支撐、鋼筋…)">
-            <button type="button" class="btn-clear-search" id="btn-clear-search" title="清除關鍵字">&times;</button>
-          </div>
-
-          <div class="search-type-chips">
-            <span class="type-label">搜尋範疇：</span>
-            <button type="button" class="type-chip active" data-type="all">全部範疇</button>
-            <button type="button" class="type-chip" data-type="issues">技術議題庫 (155)</button>
-            <button type="button" class="type-chip" data-type="sharepoint"><i class="fa-solid fa-graduation-cap"></i> SPS品保分享會 (816)</button>
-            <button type="button" class="type-chip" data-type="files">專案會議簡報</button>
-            <button type="button" class="type-chip" data-type="guides">技術指引與模板</button>
-          </div>
-
-          <!-- 對話框內直接呈現 AI 模式綜整與出處引述 -->
-          <div class="ai-dialog-response-area" id="search-results-list" style="margin-top: 20px;">
-            <div class="search-empty-prompt" style="padding: 20px 0 10px;">
-              <i class="fa-solid fa-sparkles text-cyan" style="font-size: 28px;"></i>
-              <p style="font-size: 16.5px; color: var(--text-dim); margin-top: 10px;">請於上方輸入框輸入關鍵字，Google AI 即刻在對話框內為您綜整技術重點並引述出處。</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      
-    </main>
-  </div>
-
-  <!-- 專案作業區詳細資料檢視抽屜 / 彈窗 (Project Details Drawer) -->
-  <div id="project-modal" class="modal-overlay hidden">
-    <div class="modal-card project-drawer-card glass-card">
-      <div class="drawer-header">
-        <div class="drawer-title-group">
-          <span class="dept-badge" id="drawer-project-dept">工程處</span>
-          <h2 id="drawer-project-name">專案名稱</h2>
-          <div id="drawer-header-stats-container"></div>
-        </div>
-        <button type="button" class="drawer-close-btn" id="drawer-close-btn">&times;</button>
-      </div>
-
-      <div class="drawer-tabs-bar">
-        <button type="button" class="drawer-tab-btn active" data-drawer-tab="meetings">
-          <i class="fa-solid fa-handshake"></i> 歷次會議資料 (簡報與紀錄)
-        </button>
-        <button type="button" class="drawer-tab-btn" data-drawer-tab="control">
-          <i class="fa-solid fa-table-list"></i> 技術議題管控表 (<span id="drawer-control-count">0</span>)
-        </button>
-        <button type="button" class="drawer-tab-btn" data-drawer-tab="drawings">
-          <i class="fa-solid fa-compass-drafting"></i> 圖說契約進度表
-        </button>
-        <button type="button" class="drawer-tab-btn" data-drawer-tab="todos">
-          <i class="fa-solid fa-list-check"></i> 專案待辦事項 (<span id="drawer-todo-count">0</span>)
-        </button>
-      </div>
-
-      <div class="drawer-body" id="drawer-body-content">
-        <!-- JS Dynamic Content -->
-      </div>
+      </main>
     </div>
   </div>
 
-  <!-- 豐譽個人帳密與資料修改彈窗 -->
-  <div id="edit-profile-modal" class="modal-overlay hidden">
-    <div class="modal-card glass-card" style="max-width: 480px; padding: 24px; border: 1px solid rgba(0, 242, 254, 0.35);">
-      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-        <h3 style="font-size: 18px; color: #a5f3fc; display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-user-pen text-cyan"></i> 修改為豐譽個人帳號與密碼
+  <!-- 【重大升級】系統完整使用說明書彈窗 (User Operations Manual Modal) -->
+  <div id="user-manual-modal" class="modal-overlay hidden">
+    <div class="modal-card user-manual-modal-card glass-card">
+      <div class="modal-header">
+        <h3 style="font-size: 20px; color: #a5f3fc; display: flex; align-items: center; gap: 10px; margin: 0;">
+          <i class="fa-solid fa-book-open text-cyan"></i> 技術會議雲端儀表板使用說明書 (Work Package)
         </h3>
-        <button type="button" class="close-btn" onclick="closeEditProfileModal()">&times;</button>
+        <button type="button" class="close-btn" onclick="closeUserManualModal()">&times;</button>
       </div>
 
-      <p style="font-size: 13px; color: #94a3b8; line-height: 1.6; margin-bottom: 16px;">
-        請設定您的個人姓名、豐譽專屬信箱與自訂密碼。設定完成後，未來即可直接使用個人帳密登入系統。
-      </p>
+      <div class="manual-tabs-bar">
+        <button type="button" class="manual-tab-btn active" onclick="switchManualTab('intro')">
+          <i class="fa-solid fa-door-open text-cyan"></i> 1. 入口登入與個人化設定
+        </button>
+        <button type="button" class="manual-tab-btn" onclick="switchManualTab('sidebar')">
+          <i class="fa-solid fa-bars-staggered text-purple"></i> 2. 新型側邊欄架構
+        </button>
+        <button type="button" class="manual-tab-btn" onclick="switchManualTab('control-todo')">
+          <i class="fa-solid fa-pen-to-square text-emerald"></i> 3. 管控表與待辦雙向寫入
+        </button>
+        <button type="button" class="manual-tab-btn" onclick="switchManualTab('nas-sync')">
+          <i class="fa-solid fa-server text-amber"></i> 4. 實體 NAS 串接與切換本機
+        </button>
+      </div>
 
-      <form id="edit-profile-form" onsubmit="handleSaveProfile(event)" style="display: flex; flex-direction: column; gap: 14px;">
-        <div class="form-group">
-          <label for="prof-name" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
-            <i class="fa-solid fa-id-card text-cyan"></i> 您的姓名 / 稱謂
-          </label>
-          <input type="text" id="prof-name" placeholder="例如：陳大明 工程師 / 張處長" required style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+      <div class="manual-content-body" id="manual-content-body">
+        <!-- 說明書第 1 頁 -->
+        <div id="manual-page-intro" class="manual-page active">
+          <h4><i class="fa-solid fa-key text-cyan"></i> 企業網域安全門禁與個人帳密建檔</h4>
+          <p>本系統服務於豐譽企業內部技術會議管制，登入帳號需為 <code>@fengyu.com.tw</code> 網域同仁。</p>
+          <div class="manual-box-highlight">
+            <b>🔑 首次登入步驟：</b><br>
+            1. 登入視窗預設帳號：<code>FU@fengyu.com.tw</code>，密碼：<code>Aa34561297+b</code>。<br>
+            2. 成功登入後，頂部第一列會出現黃色提示條，或點擊右上角個人稱謂旁邊的 <i class="fa-solid fa-user-pen"></i> 按鈕。<br>
+            3. 輸入您的真實姓名、個人企業信箱與自訂專屬密碼。<br>
+            4. 儲存後將永久建檔於瀏覽器快取中，下次開啟自動登入，免除反覆輸入困擾。
+          </div>
+          <h4><i class="fa-solid fa-calendar-check text-cyan"></i> 全域統計基準日工具列</h4>
+          <p>表首 Header（連線燈號左側）常駐<b>基準日選擇器</b>，可自選評估日期並點擊「<b>更新計算數據</b>」：</p>
+          <ul>
+            <li>即刻動態重算 P10~P13 月報運作概況各工處與工地的待辦完成率與應辦項目數。</li>
+            <li>即刻動態重算專案作業區管控表中「基準日前應辦」項目數。</li>
+          </ul>
         </div>
 
-        <div class="form-group">
-          <label for="prof-email" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
-            <i class="fa-solid fa-envelope text-cyan"></i> 豐譽個人企業信箱
-          </label>
-          <input type="email" id="prof-email" placeholder="例如：daming@fengyu.com.tw" required style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
-          <small style="color: #64748b; font-size: 11.5px; margin-top: 4px; display: block;">必須以 <code>@fengyu.com.tw</code> 結尾</small>
+        <!-- 說明書第 2 頁 -->
+        <div id="manual-page-sidebar" class="manual-page hidden">
+          <h4><i class="fa-solid fa-bars-staggered text-purple"></i> 新型三階側邊欄導覽與右側畫布</h4>
+          <p>系統全面升級為最新型側邊欄 Master-Detail 工作台：</p>
+          <div class="manual-box-highlight">
+            <b>📂 左側作業導覽目錄：</b><br>
+            1. <b>公告及指引中心</b>：展開每月行程表 (Google 日曆)、運作概況分析 (P10~P13)、技術指引發佈區 (00發布區正式檔)。<br>
+            2. <b>各專案作業區</b>：依 5 大工程處分類列出 9 大專案，點開任一專案直接展開「<b>專案待辦事項</b>」、「<b>技術議題管控表</b>」、「<b>歷次會議紀錄</b>」三大功能。<br>
+            3. <b>全域資料搜索</b>：點開即時切換搜尋範圍（全部、技術議題庫 169 案、SPS 品保分享會 816 講）。
+          </div>
+          <p><b>🖥️ 右側展示區極大化：</b>最頂部僅保留選取功能之次級工具列（篩選、狀態快捷鍵、新增與同步按鈕），下方畫布完全展開，大螢幕橫向舒展無水平捲軸！</p>
         </div>
 
-        <div class="form-group">
-          <label for="prof-dept" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
-            <i class="fa-solid fa-building text-purple"></i> 所屬工程處 / 單位
-          </label>
-          <select id="prof-dept" style="width: 100%; padding: 10px 12px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
-            <option value="技術暨品保處">技術暨品保處</option>
-            <option value="北區工程處">北區工程處</option>
-            <option value="中區工程處">中區工程處</option>
-            <option value="台南工程處">台南工程處</option>
-            <option value="宜蘭工程處">宜蘭工程處</option>
-            <option value="高屏工程處">高屏工程處</option>
-          </select>
+        <!-- 說明書第 3 頁 -->
+        <div id="manual-page-control-todo" class="manual-page hidden">
+          <h4><i class="fa-solid fa-pen-to-square text-emerald"></i> 技術議題管控表與待辦事項雙向編輯</h4>
+          <p>專案作業區提供與 Excel 實體完全一致的互動操作：</p>
+          <ul>
+            <li><b>表格列雙擊修改</b>：在技術議題管控表或待辦事項表格中，任一列<b>雙擊 (Double Click)</b> 即可直接喚起修改彈窗！</li>
+            <li><b>全寬大字體待辦彈窗</b>：待辦修改彈窗滿版展開，決議內容輸入框字體放大至 19px，排版大氣易讀。</li>
+            <li><b>多維度精準篩選</b>：管控表支援「工程階段」、「工程類別」、「辦理狀態」與全文即時檢索（支援中文注音輸入法保護）。</li>
+            <li><b>新增管控項目</b>：點擊工具列「新增管控項目」，輸入資料即可同步排入該專案管控清單。</li>
+          </ul>
         </div>
 
-        <div class="form-group">
-          <label for="prof-new-password" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
-            <i class="fa-solid fa-key text-amber"></i> 自訂新密碼 / NAS 存取碼
-          </label>
-          <input type="password" id="prof-new-password" placeholder="請設定自訂密碼" required style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+        <!-- 說明書第 4 頁 -->
+        <div id="manual-page-nas-sync" class="manual-page hidden">
+          <h4><i class="fa-solid fa-server text-amber"></i> NAS 實體串接與本機伺服器模式</h4>
+          <p>系統完整支援企業內部 NAS <code>\\192.168.1.221\s5\1003技術會議資料專區</code>：</p>
+          <div class="manual-box-highlight">
+            <b>💡 雲端 Pages vs 本機 Localhost 雙軌運作：</b><br>
+            • <b>公網 GitHub Pages 環境</b>：所有同仁可隨時於外部手機、筆電查看最新簡報、月報概況與搜尋議題，修改內容儲存於瀏覽器本機快取。<br>
+            • <b>本機伺服器環境 (http://localhost:8090)</b>：在工務所或總部開機常駐執行，點擊儲存可<b>實體雙向寫入共用區 Excel 與各工區管制表</b>，並支援檔案秒級熱掃描！<br>
+            • 表首頂部提供「<b>切換本機伺服器</b>」直達按鈕，隨時一鍵無縫跳轉。
+          </div>
         </div>
-
-        <div class="form-group">
-          <label for="prof-confirm-password" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
-            <i class="fa-solid fa-check-double text-emerald"></i> 確認新密碼
-          </label>
-          <input type="password" id="prof-confirm-password" placeholder="請再次輸入新密碼" required style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
-        </div>
-
-        <div id="prof-error-msg" class="login-error hidden" style="margin-top: 4px;"></div>
-
-        <div style="display: flex; gap: 10px; margin-top: 10px;">
-          <button type="button" class="btn-table-action" onclick="closeEditProfileModal()" style="flex: 1; padding: 10px; border-radius: 6px; background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15);">
-            取消
-          </button>
-          <button type="submit" class="btn-login" style="flex: 2; margin: 0; padding: 10px; border-radius: 6px; background: linear-gradient(135deg, #00f2fe, #4facfe); color: #000; font-weight: 700;">
-            <i class="fa-solid fa-floppy-disk"></i> 儲存並切換為個人帳密
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 
@@ -422,7 +519,6 @@
       </div>
     </div>
   </div>
-
 
   <!-- 技術議題管控項目新增與編輯彈窗 (支援寫入管控表與本機/伺服器持久化) -->
   <div id="edit-control-modal" class="modal-overlay hidden">
@@ -530,7 +626,7 @@
     </div>
   </div>
 
-  <!-- 專案待辦事項修改彈窗 (支援雙向寫入共用區待辦追蹤彙整表與雲端持久化) -->
+  <!-- 專案待辦事項修改全寬彈窗 (支援雙向寫入共用區待辦追蹤彙整表與雲端持久化) -->
   <div id="edit-todo-modal" class="modal-overlay hidden">
     <div class="modal-card todo-edit-modal-card glass-card" style="width: calc(100vw - 48px); max-width: calc(100vw - 48px); padding: 28px 36px; border: 1px solid rgba(56, 189, 248, 0.45); box-shadow: 0 16px 50px rgba(0,0,0,0.8), 0 0 30px rgba(56, 189, 248, 0.2); max-height: 94vh; overflow-y: auto;">
       <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid rgba(56, 189, 248, 0.25);">
@@ -624,6 +720,78 @@
     </div>
   </div>
 
-  <script src="app.js?v=72.0"></script>
+  <!-- 豐譽個人帳密修改彈窗 -->
+  <div id="edit-profile-modal" class="modal-overlay hidden">
+    <div class="modal-card glass-card" style="max-width: 480px; padding: 24px; border: 1px solid rgba(0, 242, 254, 0.35);">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-size: 18px; color: #a5f3fc; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-user-pen text-cyan"></i> 修改為豐譽個人帳號與密碼
+        </h3>
+        <button type="button" class="close-btn" onclick="closeEditProfileModal()">&times;</button>
+      </div>
+
+      <p style="font-size: 13px; color: #94a3b8; line-height: 1.6; margin-bottom: 16px;">
+        請設定您的個人姓名、豐譽專屬信箱與自訂密碼。設定完成後，未來即可直接使用個人帳密登入系統。
+      </p>
+
+      <form id="edit-profile-form" onsubmit="handleSaveProfile(event)" style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="form-group">
+          <label for="prof-name" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
+            <i class="fa-solid fa-id-card text-cyan"></i> 您的姓名 / 稱謂
+          </label>
+          <input type="text" id="prof-name" placeholder="例如：陳大明 工程師 / 張處長" required style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+        </div>
+
+        <div class="form-group">
+          <label for="prof-email" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
+            <i class="fa-solid fa-envelope text-cyan"></i> 豐譽個人企業信箱
+          </label>
+          <input type="email" id="prof-email" placeholder="例如：daming@fengyu.com.tw" required style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+          <small style="color: #64748b; font-size: 11.5px; margin-top: 4px; display: block;">必須以 <code>@fengyu.com.tw</code> 結尾</small>
+        </div>
+
+        <div class="form-group">
+          <label for="prof-dept" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
+            <i class="fa-solid fa-building text-purple"></i> 所屬工程處 / 單位
+          </label>
+          <select id="prof-dept" style="width: 100%; padding: 10px 12px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+            <option value="技術暨品保處">技術暨品保處</option>
+            <option value="北區工程處">北區工程處</option>
+            <option value="中區工程處">中區工程處</option>
+            <option value="台南工程處">台南工程處</option>
+            <option value="宜蘭工程處">宜蘭工程處</option>
+            <option value="高屏工程處">高屏工程處</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="prof-new-password" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
+            <i class="fa-solid fa-key text-amber"></i> 自訂新密碼 / NAS 存取碼
+          </label>
+          <input type="password" id="prof-new-password" placeholder="請設定自訂密碼" required style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+        </div>
+
+        <div class="form-group">
+          <label for="prof-confirm-password" style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; display: block;">
+            <i class="fa-solid fa-check-double text-emerald"></i> 確認新密碼
+          </label>
+          <input type="password" id="prof-confirm-password" placeholder="請再次輸入新密碼" required style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;">
+        </div>
+
+        <div id="prof-error-msg" class="login-error hidden" style="margin-top: 4px;"></div>
+
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+          <button type="button" class="btn-table-action" onclick="closeEditProfileModal()" style="flex: 1; padding: 10px; border-radius: 6px; background: rgba(255,255,255,0.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15);">
+            取消
+          </button>
+          <button type="submit" class="btn-login" style="flex: 2; margin: 0; padding: 10px; border-radius: 6px; background: linear-gradient(135deg, #00f2fe, #4facfe); color: #000; font-weight: 700;">
+            <i class="fa-solid fa-floppy-disk"></i> 儲存並切換為個人帳密
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js?v=73.0"></script>
 </body>
 </html>
