@@ -4093,7 +4093,6 @@ function performGlobalSearch() {
             <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('planning')"><i class="fa-solid fa-compass-drafting"></i> 規劃重點</button>
             <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('construction')"><i class="fa-solid fa-helmet-safety"></i> 施工注意事項</button>
             <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('pitfalls')"><i class="fa-solid fa-shield-virus"></i> 缺失防範矩陣</button>
-            <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('sps')"><i class="fa-solid fa-graduation-cap"></i> SPS品保簡報 (${distilled.cleanedSpsList.length})</button>
             <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('citations')"><i class="fa-solid fa-quote-left"></i> 出處直達 (${allHits.length})</button>
           </div>
         </div>
@@ -4132,22 +4131,10 @@ function performGlobalSearch() {
           </div>
         </div>
 
-        <!-- 四、SPS 品保分享會精選簡報 -->
-        ${(distilled.cleanedSpsList || []).length > 0 ? `
-          <div class="ai-section-card sps" id="ai-section-sps">
-            <div class="ai-section-title text-purple">
-              <i class="fa-solid fa-graduation-cap"></i> <b>四、SPS 品保中心分享會精選簡報推薦 (點擊複製 NAS 路徑/直達)</b>
-            </div>
-            <div class="ai-sps-rec-grid">
-              ${spsCardsHtml}
-            </div>
-          </div>
-        ` : ''}
-
-        <!-- 五、技術出處引述 -->
+        <!-- 四、技術出處引述 -->
         <div class="ai-section-card" id="ai-section-citations" style="background: rgba(0,0,0,0.35); border-left: 4px solid #a855f7;">
           <div class="ai-section-title text-purple" style="font-size: 15px;">
-            <i class="fa-solid fa-quote-left text-amber"></i> <b>五、技術出處引述 (共 ${allHits.length} 筆，點擊直達檔案/議題/外部資料庫)：</b>
+            <i class="fa-solid fa-quote-left text-amber"></i> <b>四、技術出處引述 (共 ${allHits.length} 筆，點擊直達檔案/議題/外部資料庫)：</b>
           </div>
           <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px;">
             ${allCitedSources}
@@ -4181,10 +4168,9 @@ window.switchAIDistillTab = function(tabKey) {
   const secPlanning = document.getElementById("ai-section-planning");
   const secConstruction = document.getElementById("ai-section-construction");
   const secPitfalls = document.getElementById("ai-section-pitfalls");
-  const secSps = document.getElementById("ai-section-sps");
   const secCitations = document.getElementById("ai-section-citations");
 
-  const allSections = [secPlanning, secConstruction, secPitfalls, secSps, secCitations].filter(Boolean);
+  const allSections = [secPlanning, secConstruction, secPitfalls, secCitations].filter(Boolean);
 
   if (tabKey === "all") {
     allSections.forEach(s => s.style.display = "block");
@@ -4193,7 +4179,6 @@ window.switchAIDistillTab = function(tabKey) {
     if (tabKey === "planning" && secPlanning) secPlanning.style.display = "block";
     if (tabKey === "construction" && secConstruction) secConstruction.style.display = "block";
     if (tabKey === "pitfalls" && secPitfalls) secPitfalls.style.display = "block";
-    if (tabKey === "sps" && secSps) secSps.style.display = "block";
     if (tabKey === "citations" && secCitations) secCitations.style.display = "block";
   }
 };
@@ -4319,12 +4304,12 @@ window.openMeetingFileModal = function(encodedFile) {
 
     titleEl.innerHTML = `<i class="fa-solid ${getFileIcon(f.ext)}"></i> ${f.name}`;
     const fullPath = f.fullPath || "";
-    const ext = (f.ext || "").toLowerCase();
-    const isPdf = ext === ".pdf";
-    const isPpt = ext === ".pptx" || ext === ".ppt";
-    const isWord = ext === ".docx" || ext === ".doc";
-    const isExcel = ext === ".xlsx" || ext === ".xls" || ext === ".csv";
-    const isImg = [".png", ".jpg", ".jpeg", ".gif", ".webp"].includes(ext);
+    const cleanExt = (f.ext || "").toLowerCase().replace(/^\./, '');
+    const isPdf = cleanExt === "pdf";
+    const isPpt = cleanExt === "pptx" || cleanExt === "ppt";
+    const isWord = cleanExt === "docx" || cleanExt === "doc";
+    const isExcel = cleanExt === "xlsx" || cleanExt === "xls" || cleanExt === "csv";
+    const isImg = ["png", "jpg", "jpeg", "gif", "webp"].includes(cleanExt);
 
     bodyEl.innerHTML = `
       <div class="viewer-meta-box">
@@ -4360,76 +4345,9 @@ window.openMeetingFileModal = function(encodedFile) {
         </div>
       ` : ''}
 
-      ${isPpt ? `
-        <div style="margin-top: 18px; border: 1px dashed rgba(244, 63, 94, 0.45); border-radius: 12px; padding: 26px 20px; background: rgba(244, 63, 94, 0.05); text-align: center;">
-          <div style="font-size: 42px; color: #f43f5e; margin-bottom: 12px;"><i class="fa-solid fa-file-powerpoint"></i></div>
-          <h4 style="font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px;">PowerPoint 簡報檔案 (.pptx)</h4>
-          <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; max-width: 580px; margin: 0 auto 18px auto;">
-            💡 <b>為何瀏覽器未直接顯示投影片？</b><br>
-            瀏覽器原生僅支援 PDF 與圖片預覽；PowerPoint 簡報包含專有動畫與母片排版，網頁無法直接解碼。<br>
-            請點選上方或下方<b>「下載此簡報檔」</b>存至本機播放，或點選<b>「複製 NAS 完整實體路徑」</b>貼入檔案總管開啟。
-          </p>
-          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14px; font-weight: 600; text-decoration: none; color: #fff; background: linear-gradient(135deg, #f43f5e, #e11d48); border: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3); cursor: pointer;" onclick="downloadMeetingFile('${encodeURIComponent(fullPath)}', '${encodeURIComponent(f.name)}')">
-              <i class="fa-solid fa-download"></i> 下載此簡報檔
-            </button>
-          </div>
-        </div>
-      ` : ''}
-
-      ${isWord ? `
-        <div style="margin-top: 18px; border: 1px dashed rgba(59, 130, 246, 0.45); border-radius: 12px; padding: 26px 20px; background: rgba(59, 130, 246, 0.05); text-align: center;">
-          <div style="font-size: 42px; color: #3b82f6; margin-bottom: 12px;"><i class="fa-solid fa-file-word"></i></div>
-          <h4 style="font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px;">Word 紀錄文件 (.docx)</h4>
-          <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; max-width: 580px; margin: 0 auto 18px auto;">
-            💡 <b>為何瀏覽器未直接顯示？</b><br>
-            Word 檔為專用排版文件，瀏覽器無法直接內嵌預覽。<br>
-            請點選上方或下方<b>「下載此文件」</b>存至本機查閱與編輯，或點選<b>「複製 NAS 完整實體路徑」</b>貼入檔案總管開啟。
-          </p>
-          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14px; font-weight: 600; text-decoration: none; color: #fff; background: linear-gradient(135deg, #2563eb, #3b82f6); border: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); cursor: pointer;" onclick="downloadMeetingFile('${encodeURIComponent(fullPath)}', '${encodeURIComponent(f.name)}')">
-              <i class="fa-solid fa-download"></i> 下載此文件
-            </button>
-          </div>
-        </div>
-      ` : ''}
-
-      ${isExcel ? `
-        <div style="margin-top: 18px; border: 1px dashed rgba(16, 185, 129, 0.45); border-radius: 12px; padding: 26px 20px; background: rgba(16, 185, 129, 0.05); text-align: center;">
-          <div style="font-size: 42px; color: #10b981; margin-bottom: 12px;"><i class="fa-solid fa-file-excel"></i></div>
-          <h4 style="font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px;">Excel 試算表 (.xlsx)</h4>
-          <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; max-width: 580px; margin: 0 auto 18px auto;">
-            💡 <b>為何瀏覽器未直接顯示？</b><br>
-            試算表包含多工作表與公式計算，瀏覽器無法直接內嵌預覽。<br>
-            請點選上方或下方<b>「下載此文件」</b>存至本機查閱，或點選<b>「複製 NAS 完整實體路徑」</b>貼入檔案總管開啟。
-          </p>
-          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14px; font-weight: 600; text-decoration: none; color: #fff; background: linear-gradient(135deg, #059669, #10b981); border: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); cursor: pointer;" onclick="downloadMeetingFile('${encodeURIComponent(fullPath)}', '${encodeURIComponent(f.name)}')">
-              <i class="fa-solid fa-download"></i> 下載此文件
-            </button>
-          </div>
-        </div>
-      ` : ''}
-
       ${isImg ? `
         <div style="margin-top: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 12px; background: #0b1120;">
           <img src="/api/view-file?path=${encodeURIComponent(fullPath)}" style="max-width: 100%; max-height: 500px; border-radius: 6px;">
-        </div>
-      ` : ''}
-
-      ${(!isPdf && !isPpt && !isWord && !isExcel && !isImg) ? `
-        <div style="margin-top: 18px; border: 1px dashed rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 26px 20px; background: rgba(255, 255, 255, 0.03); text-align: center;">
-          <div style="font-size: 42px; color: #94a3b8; margin-bottom: 12px;"><i class="fa-solid fa-file-lines"></i></div>
-          <h4 style="font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px;">${f.name}</h4>
-          <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; max-width: 580px; margin: 0 auto 18px auto;">
-            此檔案類型（${f.ext || '未知'}）需使用對應之專用軟體開啟。<br>
-            請點選上方或下方<b>「下載此文件」</b>下載至本機，或點選<b>「複製 NAS 完整實體路徑」</b>貼入檔案總管開啟。
-          </p>
-          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="btn-file-view" style="padding: 10px 22px; font-size: 14px; font-weight: 600; text-decoration: none; color: #fff; background: linear-gradient(135deg, #2563eb, #3b82f6); border: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); cursor: pointer;" onclick="downloadMeetingFile('${encodeURIComponent(fullPath)}', '${encodeURIComponent(f.name)}')">
-              <i class="fa-solid fa-download"></i> 下載此文件
-            </button>
-          </div>
         </div>
       ` : ''}
     `;
