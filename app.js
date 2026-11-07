@@ -4817,18 +4817,64 @@ window.selectSidebarSearchScope = function(scope) {
   const topbarTools = document.getElementById("topbar-tools");
   if (topbarTools) {
     topbarTools.innerHTML = `
-      <button type="button" class="btn-table-action" onclick="document.getElementById('global-search-input').value=''; performGlobalSearch();" style="padding: 5px 12px; font-size: 12px;">
-        <i class="fa-solid fa-eraser"></i> 清除檢索
-      </button>
+      <div class="topbar-search-box-wrap">
+        <div class="topbar-search-box">
+          <i class="fa-solid fa-magnifying-glass search-top-icon"></i>
+          <input type="text" id="global-search-input" placeholder="搜尋技術關鍵字 (例: 模板、連續壁...)" value="${window.currentGlobalSearchQuery || ''}">
+          <button type="button" id="btn-clear-search" onclick="clearGlobalSearchInput()" title="清除關鍵字">&times;</button>
+        </div>
+        <button type="button" class="btn-table-action" onclick="clearGlobalSearchInput()" style="padding: 6px 13px; font-size: 12.5px; white-space: nowrap;">
+          <i class="fa-solid fa-eraser"></i> 清除檢索
+        </button>
+      </div>
     `;
+    bindGlobalSearchInputEvents();
   }
 
-  const searchInp = document.getElementById("global-search-input");
-  if (searchInp) {
-    setTimeout(() => searchInp.focus(), 80);
+  if (window.currentGlobalSearchQuery) {
     performGlobalSearch();
   }
   sendHeartbeatPing();
+};
+
+// 綁定置頂搜尋輸入框事件 (支援 IME 中文注音保護)
+function bindGlobalSearchInputEvents() {
+  const searchInp = document.getElementById("global-search-input");
+  if (!searchInp) return;
+  let timer = null;
+  let isComposing = false;
+
+  searchInp.addEventListener("compositionstart", () => { isComposing = true; });
+  searchInp.addEventListener("compositionend", () => {
+    isComposing = false;
+    window.currentGlobalSearchQuery = searchInp.value;
+    clearTimeout(timer);
+    timer = setTimeout(performGlobalSearch, 150);
+  });
+
+  searchInp.addEventListener("input", (e) => {
+    window.currentGlobalSearchQuery = e.target.value;
+    if (isComposing) return;
+    clearTimeout(timer);
+    timer = setTimeout(performGlobalSearch, 200);
+  });
+
+  searchInp.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      clearTimeout(timer);
+      performGlobalSearch();
+    }
+  });
+
+  setTimeout(() => searchInp.focus(), 80);
+}
+
+window.clearGlobalSearchInput = function() {
+  window.currentGlobalSearchQuery = "";
+  const inp = document.getElementById("global-search-input");
+  if (inp) inp.value = "";
+  performGlobalSearch();
+  if (inp) inp.focus();
 };
 
 // 頁面初始化後自動掛載側邊欄手風琴樹
