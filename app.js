@@ -4089,7 +4089,7 @@ function performGlobalSearch() {
         <!-- 導航工具列（保留第一排 6 個分類頁籤，依指示徹底刪除「智慧清洗 ‧ 歸納 ‧ 總結」與第二排 4 個按鈕） -->
         <div class="ai-distill-toolbar" style="border-bottom: none; padding-bottom: 0;">
           <div class="ai-distill-tabs">
-            <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('planning')"><i class="fa-solid fa-compass-drafting"></i> 規劃重點</button>
+            <button type="button" class="ai-distill-tab active" onclick="switchAIDistillTab('planning')"><i class="fa-solid fa-compass-drafting"></i> 規劃重點</button>
             <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('construction')"><i class="fa-solid fa-helmet-safety"></i> 施工注意事項</button>
             <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('pitfalls')"><i class="fa-solid fa-shield-virus"></i> 缺失防範矩陣</button>
             <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('citations')"><i class="fa-solid fa-quote-left"></i> 出處直達 (${allHits.length})</button>
@@ -4100,8 +4100,8 @@ function performGlobalSearch() {
       <!-- 核心萃取內容展示區塊 -->
       <div class="ai-distill-container" id="ai-distill-content-area" style="padding-top: 8px;">
         
-        <!-- 一、規劃設計與前置作業重點 -->
-        <div class="ai-section-card planning" id="ai-section-planning">
+        <!-- 一、規劃設計與前置作業重點 (預設顯示) -->
+        <div class="ai-section-card planning" id="ai-section-planning" style="display: block;">
           <div class="ai-section-title text-cyan">
             <i class="fa-solid fa-compass-drafting"></i> <b>一、前期規劃設計與介面檢討重點</b>
           </div>
@@ -4111,7 +4111,7 @@ function performGlobalSearch() {
         </div>
 
         <!-- 二、核心施工步驟與關鍵注意事項 -->
-        <div class="ai-section-card construction" id="ai-section-construction">
+        <div class="ai-section-card construction" id="ai-section-construction" style="display: none;">
           <div class="ai-section-title text-emerald">
             <i class="fa-solid fa-helmet-safety"></i> <b>二、核心施工步驟與關鍵管控注意事項</b>
           </div>
@@ -4121,7 +4121,7 @@ function performGlobalSearch() {
         </div>
 
         <!-- 三、品質抽驗核心與常見缺失防範對策 -->
-        <div class="ai-section-card pitfalls" id="ai-section-pitfalls">
+        <div class="ai-section-card pitfalls" id="ai-section-pitfalls" style="display: none;">
           <div class="ai-section-title text-amber">
             <i class="fa-solid fa-triangle-exclamation"></i> <b>三、品質抽驗核心與常見缺失防範對策矩陣</b>
           </div>
@@ -4131,7 +4131,7 @@ function performGlobalSearch() {
         </div>
 
         <!-- 四、技術出處引述 -->
-        <div class="ai-section-card" id="ai-section-citations" style="background: rgba(0,0,0,0.35); border-left: 4px solid #a855f7;">
+        <div class="ai-section-card" id="ai-section-citations" style="display: none; background: rgba(0,0,0,0.35); border-left: 4px solid #a855f7;">
           <div class="ai-section-title text-purple" style="font-size: 15px;">
             <i class="fa-solid fa-quote-left text-amber"></i> <b>四、技術出處引述 (共 ${allHits.length} 筆，點擊直達檔案/議題/外部資料庫)：</b>
           </div>
@@ -4155,7 +4155,7 @@ function performGlobalSearch() {
   resultsList.innerHTML = summaryHtml;
 }
 
-// 章節快速導航 (平滑滾動直達)
+// 切換 AI 萃取總結分頁 (精準對齊置頂展示)
 window.switchAIDistillTab = function(tabKey) {
   const tabs = document.querySelectorAll(".ai-distill-tab");
   tabs.forEach(t => t.classList.remove("active"));
@@ -4163,16 +4163,20 @@ window.switchAIDistillTab = function(tabKey) {
   const activeBtn = Array.from(tabs).find(t => t.getAttribute("onclick")?.includes(tabKey));
   if (activeBtn) activeBtn.classList.add("active");
 
-  const targetMap = {
-    planning: document.getElementById("ai-section-planning"),
-    construction: document.getElementById("ai-section-construction"),
-    pitfalls: document.getElementById("ai-section-pitfalls"),
-    citations: document.getElementById("ai-section-citations")
-  };
+  const secPlanning = document.getElementById("ai-section-planning");
+  const secConstruction = document.getElementById("ai-section-construction");
+  const secPitfalls = document.getElementById("ai-section-pitfalls");
+  const secCitations = document.getElementById("ai-section-citations");
 
-  const targetEl = targetMap[tabKey];
-  if (targetEl) {
-    targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (secPlanning) secPlanning.style.display = (tabKey === "planning") ? "block" : "none";
+  if (secConstruction) secConstruction.style.display = (tabKey === "construction") ? "block" : "none";
+  if (secPitfalls) secPitfalls.style.display = (tabKey === "pitfalls") ? "block" : "none";
+  if (secCitations) secCitations.style.display = (tabKey === "citations") ? "block" : "none";
+
+  // 將捲軸重置至最頂部，確保所選內容永遠精準對齊在最前方
+  const canvas = document.querySelector(".workspace-canvas");
+  if (canvas) {
+    canvas.scrollTop = 0;
   }
 };
 
