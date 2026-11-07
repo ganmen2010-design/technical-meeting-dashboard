@@ -3851,6 +3851,10 @@ function performGlobalSearch() {
   const query = rawQuery.toLowerCase();
 
   if (!query) {
+    if (activeSearchType === "sharepoint") {
+      renderSPSOverviewGuide();
+      return;
+    }
     resultsList.innerHTML = "";
     if (countEl) countEl.textContent = "0";
     return;
@@ -3942,7 +3946,7 @@ function performGlobalSearch() {
     });
   }
 
-  // C. 搜尋 SPS 品保中心分享會簡報庫 (816 份專業簡報)
+  // C. 搜尋 SPS 品保中心分享會簡報庫 (${((appData && appData.sharepointPresentations) ? appData.sharepointPresentations.length : 392)} 份專業簡報)
   if (activeSearchType === "all" || activeSearchType === "sharepoint") {
     (appData.sharepointPresentations || []).forEach(sp => {
       const matchText = `${sp.category} ${sp.subFolder || ''} ${sp.title} ${sp.name}`.toLowerCase();
@@ -4067,47 +4071,36 @@ function performGlobalSearch() {
 
   const summaryHtml = `
     <div class="google-ai-card-inline">
-      <!-- 頂部標題與核心資訊 -->
-      <div class="search-summary-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <i class="fa-solid fa-microchip text-cyan" style="font-size: 26px;"></i>
-          <div>
-            <span style="font-size: 20px; font-weight: 700; color: #a5f3fc;">Google AI 模式 ‧ 深度技術結晶萃取報告</span>
-            <div style="font-size: 13.5px; color: #94a3b8; margin-top: 2px;">
-              主題：<b class="text-amber">${distilled.topic}</b> ‧ 涵蓋工區：<b class="text-cyan">${distilled.uniqueSites.slice(0, 6).join('、') || '各工程處'}</b>
+      <!-- 頂部固定表頭容器 (Sticky Header：滾動時永遠置頂) -->
+      <div class="ai-distill-sticky-header">
+        <!-- 頂部標題與核心資訊 -->
+        <div class="search-summary-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-microchip text-cyan" style="font-size: 24px;"></i>
+            <div>
+              <span style="font-size: 19px; font-weight: 700; color: #a5f3fc;">Google AI 模式 ‧ 深度技術結晶萃取報告</span>
+              <div style="font-size: 13.5px; color: #94a3b8; margin-top: 2px;">
+                主題：<b class="text-amber">${distilled.topic}</b> ‧ 涵蓋工區：<b class="text-cyan">${distilled.uniqueSites.slice(0, 6).join('、') || '各工程處'}</b>
+              </div>
             </div>
           </div>
         </div>
-        <div style="display: flex; gap: 8px; align-items: center;">
-          <span class="ai-mode-badge"><i class="fa-solid fa-brain"></i> 智慧清洗 ‧ 歸納 ‧ 總結</span>
-        </div>
-      </div>
 
-      <!-- 導航工具列與快捷按鈕 -->
-      <div class="ai-distill-toolbar">
-        <div class="ai-distill-tabs">
-          <button type="button" class="ai-distill-tab active" onclick="switchAIDistillTab('all')"><i class="fa-solid fa-list-check"></i> 全覽總結</button>
-          <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('planning')"><i class="fa-solid fa-compass-drafting"></i> 規劃重點</button>
-          <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('construction')"><i class="fa-solid fa-helmet-safety"></i> 施工注意事項</button>
-          <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('pitfalls')"><i class="fa-solid fa-shield-virus"></i> 缺失防範矩陣</button>
-          <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('sps')"><i class="fa-solid fa-graduation-cap"></i> SPS品保簡報 (${distilled.cleanedSpsList.length})</button>
-          <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('citations')"><i class="fa-solid fa-quote-left"></i> 出處直達 (${allHits.length})</button>
-        </div>
-
-        <div class="ai-action-buttons">
-          <button type="button" class="btn-ai-tool primary" onclick="copyAIDistillSummary()" title="複製完整 Markdown 格式技術總結"><i class="fa-regular fa-copy"></i> 複製技術總結</button>
-          <button type="button" class="btn-ai-tool" onclick="window.print()" title="列印或另存 PDF"><i class="fa-solid fa-print"></i> 列印摘要</button>
-          <a href="https://app.notion.com/p/3aa1a56b88108148bf83e40fc03dad3b?v=3aa1a56b88108190916e000c1bb69a93${rawQuery ? `&query=${encodeURIComponent(rawQuery)}` : ''}" target="_blank" rel="noopener noreferrer" class="btn-ai-tool" title="在 Notion 知識庫深度檢索">
-            <i class="fa-solid fa-note-sticky text-amber"></i> Notion
-          </a>
-          <a href="https://ncaio.fengyu.com.tw/f/8988" target="_blank" rel="noopener noreferrer" class="btn-ai-tool" title="前往豊譽企業雲端分享專區">
-            <i class="fa-solid fa-cloud text-cyan"></i> 企業雲
-          </a>
+        <!-- 導航工具列（保留第一排 6 個分類頁籤，依指示徹底刪除「智慧清洗 ‧ 歸納 ‧ 總結」與第二排 4 個按鈕） -->
+        <div class="ai-distill-toolbar" style="border-bottom: none; padding-bottom: 0;">
+          <div class="ai-distill-tabs">
+            <button type="button" class="ai-distill-tab active" onclick="switchAIDistillTab('all')"><i class="fa-solid fa-list-check"></i> 全覽總結</button>
+            <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('planning')"><i class="fa-solid fa-compass-drafting"></i> 規劃重點</button>
+            <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('construction')"><i class="fa-solid fa-helmet-safety"></i> 施工注意事項</button>
+            <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('pitfalls')"><i class="fa-solid fa-shield-virus"></i> 缺失防範矩陣</button>
+            <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('sps')"><i class="fa-solid fa-graduation-cap"></i> SPS品保簡報 (${distilled.cleanedSpsList.length})</button>
+            <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('citations')"><i class="fa-solid fa-quote-left"></i> 出處直達 (${allHits.length})</button>
+          </div>
         </div>
       </div>
 
       <!-- 核心萃取內容展示區塊 -->
-      <div class="ai-distill-container" id="ai-distill-content-area">
+      <div class="ai-distill-container" id="ai-distill-content-area" style="padding-top: 8px;">
         
         <!-- 一、規劃設計與前置作業重點 -->
         <div class="ai-section-card planning" id="ai-section-planning">
@@ -4801,7 +4794,7 @@ window.selectSidebarSearchScope = function(scope) {
   const scopeNames = {
     all: "全部範疇",
     issues: "技術議題庫 (169)",
-    sharepoint: "SPS 品保分享會 (816)"
+    sharepoint: `SPS 品保分享會 (${(appData && appData.sharepointPresentations) ? appData.sharepointPresentations.length : 392})`
   };
 
   const topbarTitle = document.getElementById("topbar-title-wrap");
@@ -4885,3 +4878,66 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }, 200);
 });
+
+// 渲染 SPS 品保分享會分類導覽引導卡 (未輸入關鍵字時預設展示)
+window.renderSPSOverviewGuide = function() {
+  const resultsList = document.getElementById("search-results-list");
+  const countEl = document.getElementById("search-result-count");
+  if (!resultsList || !appData) return;
+
+  const spsList = appData.sharepointPresentations || [];
+  if (countEl) countEl.textContent = spsList.length;
+
+  // 統計各分類筆數
+  const catCounts = {};
+  spsList.forEach(sp => {
+    const cat = sp.category || '未分類';
+    catCounts[cat] = (catCounts[cat] || 0) + 1;
+  });
+
+  const catEntries = Object.entries(catCounts).sort((a, b) => b[1] - a[1]);
+
+  const cardsHtml = catEntries.map(([cat, count]) => `
+    <button type="button" class="sps-cat-pill" onclick="triggerSPSCategorySearch('${cat}')" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 10px; color: #f8fafc; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; text-align: left;">
+      <span style="display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-folder-open text-amber"></i>
+        <span>${cat}</span>
+      </span>
+      <span style="font-size: 12px; background: rgba(245, 158, 11, 0.15); color: #fbbf24; padding: 2px 8px; border-radius: 12px; font-weight: 700;">${count} 份</span>
+    </button>
+  `).join("");
+
+  resultsList.innerHTML = `
+    <div class="google-ai-card-inline" style="padding: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(245, 158, 11, 0.3);">
+            <i class="fa-solid fa-graduation-cap text-amber" style="font-size: 24px;"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 19px; font-weight: 700; color: #f8fafc; margin: 0;">SPS 品保中心技術分享會簡報庫 (${spsList.length} 份)</h3>
+            <p style="font-size: 13.5px; color: #94a3b8; margin-top: 3px;">
+              實體連結目錄：<code>C:\Users\ganmen\Desktop\202607AI\分享會簡報</code>
+            </p>
+          </div>
+        </div>
+        <div style="font-size: 13px; color: #38bdf8; background: rgba(56, 189, 248, 0.1); padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(56, 189, 248, 0.3);">
+          <i class="fa-solid fa-lightbulb"></i> 點選下方工程分類或於置頂搜尋框輸入關鍵字開始檢索
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px;">
+        ${cardsHtml}
+      </div>
+    </div>
+  `;
+};
+
+window.triggerSPSCategorySearch = function(catName) {
+  const searchInput = document.getElementById("global-search-input");
+  if (searchInput) {
+    searchInput.value = catName;
+    window.currentGlobalSearchQuery = catName;
+    performGlobalSearch();
+  }
+};

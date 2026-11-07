@@ -2843,7 +2843,7 @@ h5 { font-size: 17px !important; }
   border-radius: var(--radius-md);
   padding: 20px 22px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .google-ai-card-inline::before {
@@ -2854,6 +2854,27 @@ h5 { font-size: 17px !important; }
   right: 0;
   height: 3px;
   background: linear-gradient(90deg, #00f2fe, #4facfe, #a855f7, #ec4899);
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+  z-index: 55;
+}
+
+/* ==============================================================================
+ * Google AI Overview 萃取報告固定表頭 (Sticky Header)
+ * ============================================================================== */
+.ai-distill-sticky-header {
+  position: sticky;
+  top: -16px;
+  z-index: 45;
+  background: rgba(10, 16, 30, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 16px 22px 12px 22px;
+  margin: -20px -22px 14px -22px;
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+  border-bottom: 1px solid rgba(0, 242, 254, 0.25);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
 }
 
 
