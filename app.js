@@ -4089,7 +4089,6 @@ function performGlobalSearch() {
         <!-- 導航工具列（保留第一排 6 個分類頁籤，依指示徹底刪除「智慧清洗 ‧ 歸納 ‧ 總結」與第二排 4 個按鈕） -->
         <div class="ai-distill-toolbar" style="border-bottom: none; padding-bottom: 0;">
           <div class="ai-distill-tabs">
-            <button type="button" class="ai-distill-tab active" onclick="switchAIDistillTab('all')"><i class="fa-solid fa-list-check"></i> 全覽總結</button>
             <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('planning')"><i class="fa-solid fa-compass-drafting"></i> 規劃重點</button>
             <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('construction')"><i class="fa-solid fa-helmet-safety"></i> 施工注意事項</button>
             <button type="button" class="ai-distill-tab" onclick="switchAIDistillTab('pitfalls')"><i class="fa-solid fa-shield-virus"></i> 缺失防範矩陣</button>
@@ -4156,30 +4155,24 @@ function performGlobalSearch() {
   resultsList.innerHTML = summaryHtml;
 }
 
-// 切換 AI 萃取總結分頁
+// 章節快速導航 (平滑滾動直達)
 window.switchAIDistillTab = function(tabKey) {
   const tabs = document.querySelectorAll(".ai-distill-tab");
   tabs.forEach(t => t.classList.remove("active"));
   
-  // 設置當前 Tab active
   const activeBtn = Array.from(tabs).find(t => t.getAttribute("onclick")?.includes(tabKey));
   if (activeBtn) activeBtn.classList.add("active");
 
-  const secPlanning = document.getElementById("ai-section-planning");
-  const secConstruction = document.getElementById("ai-section-construction");
-  const secPitfalls = document.getElementById("ai-section-pitfalls");
-  const secCitations = document.getElementById("ai-section-citations");
+  const targetMap = {
+    planning: document.getElementById("ai-section-planning"),
+    construction: document.getElementById("ai-section-construction"),
+    pitfalls: document.getElementById("ai-section-pitfalls"),
+    citations: document.getElementById("ai-section-citations")
+  };
 
-  const allSections = [secPlanning, secConstruction, secPitfalls, secCitations].filter(Boolean);
-
-  if (tabKey === "all") {
-    allSections.forEach(s => s.style.display = "block");
-  } else {
-    allSections.forEach(s => s.style.display = "none");
-    if (tabKey === "planning" && secPlanning) secPlanning.style.display = "block";
-    if (tabKey === "construction" && secConstruction) secConstruction.style.display = "block";
-    if (tabKey === "pitfalls" && secPitfalls) secPitfalls.style.display = "block";
-    if (tabKey === "citations" && secCitations) secCitations.style.display = "block";
+  const targetEl = targetMap[tabKey];
+  if (targetEl) {
+    targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 };
 
