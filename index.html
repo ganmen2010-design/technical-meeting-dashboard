@@ -369,35 +369,18 @@
             </div>
           </div>
 
-          <!-- 5. 全域資料搜尋 (Google AI 企業技術對話中心) -->
+          <!-- 5. 全域資料搜尋 (僅保留對話框置頂，其餘全部刪除) -->
           <div id="view-search" class="canvas-view hidden">
-            <div class="glass-card search-hero-card google-ai-dialog-panel" style="padding: 24px 28px;">
-              <div class="search-dialog-top">
-                <h2><i class="fa-solid fa-sparkles text-cyan"></i> Google AI 企業技術對話與全域搜尋中心</h2>
-                <p class="search-desc">即時跨 9 大專案作業區、169 筆技術議題庫與 SPS 品保分享會進行即時全域 AI 對話綜整！</p>
-              </div>
-              
+            <div class="search-top-pinned-box">
               <div class="search-input-wrapper">
                 <i class="fa-solid fa-search search-main-icon"></i>
                 <input type="text" id="global-search-input" placeholder="請輸入技術關鍵字 (例如：模板、連續壁、地質改良、FS版、防水、BIM、安全支撐、鋼筋…)">
                 <button type="button" class="btn-clear-search" id="btn-clear-search" title="清除關鍵字">&times;</button>
               </div>
-
-              <div class="search-type-chips">
-                <span class="type-label">搜尋範疇：</span>
-                <button type="button" class="type-chip active" data-type="all">全部範疇</button>
-                <button type="button" class="type-chip" data-type="issues">技術議題庫 (169)</button>
-                <button type="button" class="type-chip" data-type="sharepoint"><i class="fa-solid fa-graduation-cap"></i> SPS品保分享會 (816)</button>
-              </div>
-
-              <!-- 對話框內直接呈現 AI 模式綜整與出處引述 -->
-              <div class="ai-dialog-response-area" id="search-results-list" style="margin-top: 20px;">
-                <div class="search-empty-prompt" style="padding: 20px 0 10px;">
-                  <i class="fa-solid fa-sparkles text-cyan" style="font-size: 28px;"></i>
-                  <p style="font-size: 16.5px; color: var(--text-dim); margin-top: 10px;">請於上方輸入框輸入關鍵字，Google AI 即刻在對話框內為您綜整技術重點並引述出處。</p>
-                </div>
-              </div>
             </div>
+
+            <!-- 對話框下方直接呈現 AI 模式綜整與出處引述 -->
+            <div class="ai-dialog-response-area" id="search-results-list"></div>
           </div>
 
           <!-- 6. 行程表引導視圖 (Google 日曆直通) -->

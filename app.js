@@ -3851,12 +3851,7 @@ function performGlobalSearch() {
   const query = rawQuery.toLowerCase();
 
   if (!query) {
-    resultsList.innerHTML = `
-      <div class="search-empty-prompt">
-        <i class="fa-solid fa-keyboard"></i>
-        <p>請於上方搜尋框輸入關鍵字開始查詢（聚焦技術議題庫、專案會議簡報、SPS品保分享會與各類技術指引）</p>
-      </div>
-    `;
+    resultsList.innerHTML = "";
     if (countEl) countEl.textContent = "0";
     return;
   }

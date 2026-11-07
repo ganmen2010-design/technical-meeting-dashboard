@@ -4001,3 +4001,38 @@ h5 { font-size: 17px !important; }
     min-height: 500px;
   }
 }
+
+
+/* 全域資料搜尋置頂對話框 (Top-pinned Search Dialog Box) */
+.search-top-pinned-box {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 4px 0 16px;
+  background: transparent;
+  width: 100%;
+}
+
+.search-top-pinned-box .search-input-wrapper {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.search-top-pinned-box .search-input-wrapper input {
+  width: 100%;
+  background: rgba(8, 14, 26, 0.95);
+  border: 2px solid rgba(0, 242, 254, 0.45);
+  border-radius: 40px;
+  padding: 16px 50px 16px 54px;
+  font-size: 16px;
+  color: #fff;
+  outline: none;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 242, 254, 0.2);
+  transition: all 0.25s ease;
+}
+
+.search-top-pinned-box .search-input-wrapper input:focus {
+  border-color: #00f2fe;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.8), 0 0 32px rgba(0, 242, 254, 0.4);
+}
