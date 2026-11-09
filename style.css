@@ -4152,8 +4152,8 @@ h5 { font-size: 17px !important; }
  * 左上角技術會議自訂圖示與豐譽公司雙 LOGO 並排樣式 (v75.0)
  * ============================================================================== */
 .logo-badge-custom {
-  width: 48px;
-  height: 48px;
+  width: 96px;
+  height: 96px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4161,18 +4161,18 @@ h5 { font-size: 17px !important; }
 }
 
 .header-logo-img {
-  width: 48px;
-  height: 48px;
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 0 16px rgba(0, 242, 254, 0.45);
-  border: 1.5px solid rgba(0, 242, 254, 0.55);
+  box-shadow: 0 0 24px rgba(0, 242, 254, 0.5);
+  border: 2px solid rgba(0, 242, 254, 0.65);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .header-logo-img:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 24px rgba(0, 242, 254, 0.7);
+  transform: scale(1.06);
+  box-shadow: 0 0 32px rgba(0, 242, 254, 0.8);
   border-color: #00f2fe;
 }
 
@@ -4185,8 +4185,8 @@ h5 { font-size: 17px !important; }
 }
 
 .fengyu-logo-box {
-  width: 76px;
-  height: 76px;
+  width: 84px;
+  height: 84px;
   border-radius: 18px;
   background: rgba(13, 22, 42, 0.75);
   border: 1.5px solid rgba(0, 242, 254, 0.35);

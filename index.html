@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=75.0">
+  <link rel="stylesheet" href="style.css?v=75.1">
 </head>
 <body>
   <!-- 背景動態光暈球 (極限科技感背景) -->
@@ -71,12 +71,13 @@
     <!-- 頂部第一列導覽列 (Header Bar: 標題、基準日、即時連線、使用說明與個人設定) -->
     <header class="glass-card header-bar">
       <div class="header-brand">
-        <div class="logo-badge-custom" title="技術會議雲端儀表板">
+        <div class="logo-badge-custom" title="技術會議資料專區">
           <img src="assets/tech-meeting-icon.png" alt="技術會議圖示" class="header-logo-img">
         </div>
         <div class="brand-text">
-          <h1>技術會議雲端儀表板</h1>
-          <span class="brand-sub"><i class="fa-solid fa-folder-tree"></i> 1003技術會議資料專區 ‧ 9大專案即時戰情</span>
+          <span class="brand-sub" style="font-size: 13.5px; font-weight: 600; color: #a5f3fc; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-folder-tree text-cyan"></i> 1003技術會議資料專區 ‧ 9大專案即時戰情
+          </span>
         </div>
       </div>
 
@@ -243,13 +244,10 @@
           <div id="view-standby" class="canvas-view active">
             <div class="standby-card glass-card">
               <div class="micro-fengyu-logo-container">
-                <!-- 豐譽公司 LOGO (2個並排：彩色經典版 + 藍白現代版) -->
+                <!-- 豐譽公司 LOGO (單一彩色經典版置中) -->
                 <div class="micro-fengyu-dual-logos">
-                  <div class="fengyu-logo-box" title="豐譽公司 LOGO (彩色版)">
-                    <img src="assets/fengyu-logo-color.png" alt="豐譽公司 LOGO 彩色版" class="fengyu-logo-img">
-                  </div>
-                  <div class="fengyu-logo-box" title="豐譽公司 LOGO (藍白版)">
-                    <img src="assets/fengyu-logo-blue.png" alt="豐譽公司 LOGO 藍白版" class="fengyu-logo-img">
+                  <div class="fengyu-logo-box" title="豐譽公司 LOGO">
+                    <img src="assets/fengyu-logo-color.png" alt="豐譽公司 LOGO" class="fengyu-logo-img">
                   </div>
                 </div>
                 <div class="micro-logo-text">
@@ -747,6 +745,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=75.0"></script>
+  <script src="app.js?v=75.1"></script>
 </body>
 </html>
