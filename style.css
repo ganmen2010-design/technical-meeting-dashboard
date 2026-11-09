@@ -4147,3 +4147,68 @@ h5 { font-size: 17px !important; }
 .topbar-search-box #btn-clear-search:hover {
   color: #f43f5e;
 }
+
+/* ==============================================================================
+ * 左上角技術會議自訂圖示與豐譽公司雙 LOGO 並排樣式 (v75.0)
+ * ============================================================================== */
+.logo-badge-custom {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.header-logo-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 16px rgba(0, 242, 254, 0.45);
+  border: 1.5px solid rgba(0, 242, 254, 0.55);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.header-logo-img:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 24px rgba(0, 242, 254, 0.7);
+  border-color: #00f2fe;
+}
+
+.micro-fengyu-dual-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 6px;
+}
+
+.fengyu-logo-box {
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  background: rgba(13, 22, 42, 0.75);
+  border: 1.5px solid rgba(0, 242, 254, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 18px rgba(0, 242, 254, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.fengyu-logo-box:hover {
+  transform: translateY(-4px) scale(1.06);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55), 0 0 26px rgba(0, 242, 254, 0.45);
+  border-color: rgba(0, 242, 254, 0.75);
+}
+
+.fengyu-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+}
