@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=75.4">
+  <link rel="stylesheet" href="style.css?v=76.0">
 </head>
 <body>
   <!-- 背景動態光暈球 (極限科技感背景) -->
@@ -214,6 +214,28 @@
                 <i class="fa-solid fa-graduation-cap text-amber"></i>
                 <span>SPS 品保分享會 (392)</span>
               </div>
+            </div>
+          </div>
+          <!-- 節點 4：BIM作業區 (ACC / Trimble Connect) -->
+          <div class="sidebar-group" id="sidebar-group-bim">
+            <div class="sidebar-group-header" onclick="toggleSidebarGroup('bim')">
+              <div class="group-header-left">
+                <i class="fa-solid fa-cube text-emerald"></i>
+                <span class="group-title">4. BIM作業區</span>
+              </div>
+              <i class="fa-solid fa-chevron-down group-arrow"></i>
+            </div>
+            <div class="sidebar-group-content" id="subitems-bim">
+              <a href="https://acc.autodesk.com/home" target="_blank" rel="noopener noreferrer" class="sidebar-leaf-item" id="leaf-bim-acc" style="text-decoration: none; color: inherit;">
+                <i class="fa-solid fa-cloud text-cyan"></i>
+                <span>Autodesk Construction Cloud (ACC)</span>
+                <i class="fa-solid fa-arrow-up-right-from-square leaf-ext-icon"></i>
+              </a>
+              <a href="https://web.connect.trimble.com/projects" target="_blank" rel="noopener noreferrer" class="sidebar-leaf-item" id="leaf-bim-trimble" style="text-decoration: none; color: inherit;">
+                <i class="fa-solid fa-network-wired text-amber"></i>
+                <span>Trimble Connect</span>
+                <i class="fa-solid fa-arrow-up-right-from-square leaf-ext-icon"></i>
+              </a>
             </div>
           </div>
         </nav>
@@ -734,6 +756,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=75.4"></script>
+  <script src="app.js?v=76.0"></script>
 </body>
 </html>
