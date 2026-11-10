@@ -4589,8 +4589,8 @@ window.selectSidebarItem = function(itemKey) {
     }
     if (topbarTools) {
       topbarTools.innerHTML = `
-        <a href="https://calendar.google.com/calendar/u/0/r/month" target="_blank" rel="noopener noreferrer" class="btn-ctrl-action" style="padding: 6px 14px; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; background: rgba(0,242,254,0.15); border: 1px solid rgba(0,242,254,0.4); color: #00f2fe; border-radius: 6px;">
-          <i class="fa-brands fa-google"></i> 開啟 Google 日曆排程
+        <a href="https://calendar.google.com/calendar/embed?src=1eb98d5a72df5d9d1de540ba36709ec7c1c97f1fb8a42c46a0c247564ebbdb59%40group.calendar.google.com&ctz=Asia%2FTaipei&wkst=2&hl=zh_TW" target="_blank" rel="noopener noreferrer" class="btn-ctrl-action" style="padding: 6px 14px; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; background: rgba(0,242,254,0.15); border: 1px solid rgba(0,242,254,0.4); color: #00f2fe; border-radius: 6px;">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> 在新分頁獨立開啟技術會議日曆
         </a>
       `;
     }

@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=76.0">
+  <link rel="stylesheet" href="style.css?v=76.1">
 </head>
 <body>
   <!-- 背景動態光暈球 (極限科技感背景) -->
@@ -364,20 +364,32 @@
             <div class="ai-dialog-response-area" id="search-results-list"></div>
           </div>
 
-          <!-- 6. 行程表引導視圖 (Google 日曆直通) -->
+          <!-- 6. 行程表視圖 (Google 日曆技術會議專屬內嵌) -->
           <div id="view-schedule" class="canvas-view hidden">
-            <div class="glass-card section-card" style="padding: 32px 36px; text-align: center;">
-              <div style="width: 72px; height: 72px; margin: 0 auto 18px; border-radius: 50%; background: rgba(0, 242, 254, 0.15); border: 1px solid rgba(0, 242, 254, 0.4); display: flex; align-items: center; justify-content: center;">
-                <i class="fa-solid fa-calendar-days text-cyan" style="font-size: 32px;"></i>
+            <div class="calendar-embed-container glass-card" style="padding: 16px; border-radius: 12px; background: rgba(18, 26, 43, 0.85); border: 1px solid rgba(0, 242, 254, 0.25); display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 8px; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span class="badge-pill bg-cyan-glow" style="padding: 4px 14px; font-size: 13px; font-weight: 700; border-radius: 14px;">
+                    <i class="fa-solid fa-calendar-check text-cyan"></i> 技術會議專屬排程中心
+                  </span>
+                  <span style="font-size: 13px; color: #94a3b8;">
+                    （僅顯示技術會議日曆，自動同步各工區最新排定議程）
+                  </span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <a href="https://calendar.google.com/calendar/embed?src=1eb98d5a72df5d9d1de540ba36709ec7c1c97f1fb8a42c46a0c247564ebbdb59%40group.calendar.google.com&ctz=Asia%2FTaipei&wkst=2&hl=zh_TW" target="_blank" rel="noopener noreferrer" class="btn-ctrl-action" style="padding: 6px 14px; font-size: 12.5px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; background: rgba(0,242,254,0.12); border: 1px solid rgba(0,242,254,0.35); color: #00f2fe; border-radius: 6px;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> 在新分頁獨立開啟
+                  </a>
+                </div>
               </div>
-              <h3 style="font-size: 22px; margin-bottom: 12px; color: #a5f3fc;">每月技術會議行程排程中心</h3>
-              <p style="font-size: 15px; color: #94a3b8; max-width: 640px; margin: 0 auto 24px; line-height: 1.7;">
-                本系統已全面整合企業 Google 日曆，提供即時動態排程、各工區技術會議排程通知與跨裝置行事曆推播。
-              </p>
-              <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
-                <a href="https://calendar.google.com/calendar/u/0/r/month" target="_blank" rel="noopener noreferrer" class="btn-login" style="margin: 0; padding: 12px 28px; font-size: 15px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
-                  <i class="fa-brands fa-google"></i> 在新分頁開啟 Google 日曆排程中心 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i>
-                </a>
+              <div class="calendar-iframe-wrapper" style="width: 100%; height: 760px; border-radius: 8px; overflow: hidden; background: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+                <iframe 
+                  id="google-calendar-iframe"
+                  src="https://calendar.google.com/calendar/embed?src=1eb98d5a72df5d9d1de540ba36709ec7c1c97f1fb8a42c46a0c247564ebbdb59%40group.calendar.google.com&ctz=Asia%2FTaipei&wkst=2&hl=zh_TW" 
+                  style="border: 0; width: 100%; height: 100%;" 
+                  frameborder="0" 
+                  scrolling="no">
+                </iframe>
               </div>
             </div>
           </div>
@@ -756,6 +768,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=76.0"></script>
+  <script src="app.js?v=76.1"></script>
 </body>
 </html>
