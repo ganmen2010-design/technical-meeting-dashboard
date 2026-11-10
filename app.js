@@ -4573,6 +4573,7 @@ window.selectSidebarItem = function(itemKey) {
   if (activeLeaf) activeLeaf.classList.add("active");
 
   document.querySelectorAll(".canvas-view").forEach(v => v.classList.add("hidden"));
+  const topbar = document.getElementById("workspace-top-bar"); if (topbar) topbar.style.display = "flex";
 
   const topbarTitle = document.getElementById("topbar-title-wrap");
   const topbarTools = document.getElementById("topbar-tools");
@@ -4664,6 +4665,7 @@ window.selectSidebarProjectView = function(projectId, tabType) {
   document.querySelectorAll(".canvas-view").forEach(v => v.classList.add("hidden"));
   const projectCanvas = document.getElementById("view-project-content");
   if (projectCanvas) projectCanvas.classList.remove("hidden");
+  const topbar = document.getElementById("workspace-top-bar"); if (topbar) topbar.style.display = "flex";
 
   const tabNames = {
     todos: "專案待辦事項",
@@ -4696,6 +4698,7 @@ window.selectSidebarSearchScope = function(scope) {
   document.querySelectorAll(".canvas-view").forEach(v => v.classList.add("hidden"));
   const v = document.getElementById("view-search");
   if (v) v.classList.remove("hidden");
+  const topbar = document.getElementById("workspace-top-bar"); if (topbar) topbar.style.display = "flex";
 
   activeSearchType = scope;
   document.querySelectorAll(".type-chip").forEach(chip => {

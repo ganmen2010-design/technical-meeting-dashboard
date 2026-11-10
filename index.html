@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=75.3">
+  <link rel="stylesheet" href="style.css?v=75.4">
 </head>
 <body>
   <!-- 背景動態光暈球 (極限科技感背景) -->
@@ -222,17 +222,11 @@
       <!-- 右側展示區 (Main Workspace Area) -->
       <main class="main-workspace-area" id="main-workspace-area">
         <!-- 頂部次級工具列 (Top Secondary Action Bar) -->
-        <div class="workspace-top-bar" id="workspace-top-bar">
-          <!-- 預設待命次級工具列 -->
-          <div class="topbar-title-wrap" id="topbar-title-wrap">
-            <span class="topbar-badge active-badge" id="topbar-badge">技術戰情</span>
-            <span class="topbar-name" id="topbar-name">歡迎使用 豐譽技術會議雲端儀表板</span>
-          </div>
-          <div class="topbar-tools" id="topbar-tools">
-            <!-- 動態注入各頁籤專屬次級功能鍵 -->
-          </div>
+        <!-- 次級工具列 (Top Secondary Action Bar - 點選功能時才展開) -->
+        <div class="workspace-top-bar" id="workspace-top-bar" style="display: none;">
+          <div class="topbar-title-wrap" id="topbar-title-wrap"></div>
+          <div class="topbar-tools" id="topbar-tools"></div>
         </div>
-
         <!-- 畫布區 (Canvas Area - 最大化展開) -->
         <div class="workspace-canvas" id="workspace-canvas">
           <!-- 1. 待命起始畫面 (簡化保留第三列圖示改成微豐譽 logo) -->
@@ -740,6 +734,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=75.3"></script>
+  <script src="app.js?v=75.4"></script>
 </body>
 </html>

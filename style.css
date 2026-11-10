@@ -3797,7 +3797,7 @@ h5 { font-size: 17px !important; }
    ========================================================================== */
 .standby-card {
   max-width: 680px;
-  margin: 60px auto;
+  margin: 18px auto 36px auto;
   padding: 44px 36px;
   text-align: center;
   border: 1px solid rgba(0, 242, 254, 0.3);
