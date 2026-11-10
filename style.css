@@ -4185,25 +4185,25 @@ h5 { font-size: 17px !important; }
 }
 
 .fengyu-logo-box {
-  width: 84px;
-  height: 84px;
-  border-radius: 18px;
-  background: rgba(13, 22, 42, 0.75);
-  border: 1.5px solid rgba(0, 242, 254, 0.35);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 18px rgba(0, 242, 254, 0.18);
+  width: 168px;
+  height: 168px;
+  border-radius: 28px;
+  background: rgba(13, 22, 42, 0.85);
+  border: 2px solid rgba(0, 242, 254, 0.45);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55), 0 0 30px rgba(0, 242, 254, 0.28);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  padding: 20px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .fengyu-logo-box:hover {
-  transform: translateY(-4px) scale(1.06);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55), 0 0 26px rgba(0, 242, 254, 0.45);
-  border-color: rgba(0, 242, 254, 0.75);
+  transform: translateY(-5px) scale(1.04);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.65), 0 0 42px rgba(0, 242, 254, 0.5);
+  border-color: rgba(0, 242, 254, 0.85);
 }
 
 .fengyu-logo-img {
@@ -4211,4 +4211,20 @@ h5 { font-size: 17px !important; }
   height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+}
+
+/* 左上角 1003 資料專區副標單行防折行膠囊樣式 */
+.header-sub-pill {
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  color: #a5f3fc !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  white-space: nowrap !important;
+  background: rgba(0, 242, 254, 0.08);
+  border: 1px solid rgba(0, 242, 254, 0.28);
+  padding: 6px 14px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
 }

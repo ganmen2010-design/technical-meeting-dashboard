@@ -4493,11 +4493,11 @@ function buildSidebarProjectsTree() {
 
     html += `
       <div class="sidebar-dept-item" id="dept-group-${dept.code}">
-        <div class="sidebar-dept-header ${dIdx === 0 ? 'expanded' : ''}" id="dept-header-${dept.code}" onclick="toggleSidebarDept('${dept.code}')">
+        <div class="sidebar-dept-header" id="dept-header-${dept.code}" onclick="toggleSidebarDept('${dept.code}')">
           <span><i class="fa-solid ${dept.icon}"></i> ${dept.name} (${deptProjects.length})</span>
           <i class="fa-solid fa-chevron-down dept-arrow"></i>
         </div>
-        <div class="sidebar-dept-content" id="dept-content-${dept.code}" style="${dIdx === 0 ? 'display: flex;' : 'display: none;'}">
+        <div class="sidebar-dept-content" id="dept-content-${dept.code}" style="display: none;">
     `;
 
     deptProjects.forEach((proj, pIdx) => {
@@ -4506,11 +4506,11 @@ function buildSidebarProjectsTree() {
 
       html += `
         <div class="sidebar-proj-item" id="proj-item-${safeId}">
-          <div class="sidebar-proj-header ${isExpanded ? 'expanded' : ''}" id="proj-header-${safeId}" onclick="toggleSidebarProj('${safeId}')">
+          <div class="sidebar-proj-header" id="proj-header-${safeId}" onclick="toggleSidebarProj('${safeId}')">
             <span><i class="fa-solid fa-folder-closed"></i> ${proj.shortName || proj.name}</span>
             <i class="fa-solid fa-chevron-down proj-arrow"></i>
           </div>
-          <div class="sidebar-proj-content" id="proj-content-${safeId}" style="${isExpanded ? 'display: flex;' : 'display: none;'}">
+          <div class="sidebar-proj-content" id="proj-content-${safeId}" style="display: none;">
             <div class="sidebar-proj-leaf" data-proj-id="${proj.id}" data-tab="todos" onclick="selectSidebarProjectView('${proj.id}', 'todos')">
               <i class="fa-solid fa-list-check text-emerald"></i> <span>專案待辦事項</span>
             </div>
