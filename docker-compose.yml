@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  technical-meeting-dashboard:
+    build: .
+    container_name: fengyu-tech-dashboard
+    restart: always
+    ports:
+      - "8090:8090"
+    environment:
+      - PORT=8090
+      - NODE_ENV=production
+      # 若 NAS 目錄掛載於主機，可於 volumes 映射至容器內
+    volumes:
+      - ./data:/app/data
+      # 範例：將實體 NAS 透過 CIFS/NFS 掛載到容器
+      # - /mnt/nas_1003:/app/nas_mount
