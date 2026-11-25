@@ -2055,7 +2055,38 @@ function renderDrawerTabContent(tabType) {
 
   // 頁籤 1: 歷次會議資料 (預設為收合模式)
   if (tabType === "meetings") {
-    const meetings = proj.meetings || [];
+    let meetings = proj.meetings || [];
+
+    // 【智能容錯降級】若 meetings 陣列為空，但 categories 中存有歷次會議檔案，自動按會議資料夾分組重建
+    if (meetings.length === 0 && proj.categories) {
+      const c3Files = proj.categories["3.歷次會議資料(每月更新)"] || proj.categories["3.歷次會議資料"] || [];
+      if (Array.isArray(c3Files) && c3Files.length > 0) {
+        const mGroups = {};
+        c3Files.forEach(fi => {
+          const rel = (fi.relPath || "").replace(/\\/g, "/");
+          const parts = rel.split("/");
+          let mName = parts.length >= 2 ? parts[1] : "共用會議文件";
+          if (!mName || mName === fi.name) mName = "共用會議文件";
+          if (!mGroups[mName]) mGroups[mName] = [];
+          mGroups[mName].push(fi);
+        });
+
+        const sortedGroups = Object.keys(mGroups).sort((a, b) => {
+          const getScore = (name) => {
+            const m = name.match(/(\d{6,8})/);
+            return m ? parseInt(m[1], 10) : 0;
+          };
+          return getScore(b) - getScore(a);
+        });
+
+        meetings = sortedGroups.map(name => ({
+          meetingName: name,
+          fileCount: mGroups[name].length,
+          files: mGroups[name]
+        }));
+        proj.meetings = meetings;
+      }
+    }
     const topbarTools = document.getElementById("topbar-tools");
     if (topbarTools) {
       topbarTools.innerHTML = `
