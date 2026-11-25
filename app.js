@@ -2272,7 +2272,7 @@ function updateTodoHeaderRibbon() {
   const noResultTodos = completedTodos.filter(t => !t.result || t.result.trim() === '' || t.result.trim() === '-' || t.result.trim() === '待補');
   const inProgressTodos = projTodos.filter(t => {
     const st = (t.status || '').trim();
-    return st === '進行中' || st === '辦理中' || (st !== '已完成' && st !== '後續辦理');
+    return st === '進行中' || st === '檢討中' || st === '辦理中' || (st !== '已完成' && st !== '後續辦理');
   });
 
   const rateVal = activeTodos.length > 0 ? ((completedTodos.length / activeTodos.length) * 100).toFixed(1) : 0;
@@ -2296,8 +2296,8 @@ function updateTodoHeaderRibbon() {
       <button type="button" class="kpi-mini-pill kpi-rose ${currentTodoFilterMode === 'no_result' ? 'active' : ''}" onclick="setTodoFilter('no_result')" title="篩選：已完成但成果說明未填寫之項目 (${noResultTodos.length})">
         <i class="fa-solid fa-link-slash"></i> 成果未填(${noResultTodos.length})
       </button>
-      <button type="button" class="kpi-mini-pill kpi-cyan ${currentTodoFilterMode === 'in_progress' ? 'active' : ''}" onclick="setTodoFilter('in_progress')" title="篩選：進行中/辦理中之待辦事項 (${inProgressTodos.length})">
-        <i class="fa-solid fa-spinner fa-spin-pulse"></i> 進行中(${inProgressTodos.length})
+      <button type="button" class="kpi-mini-pill kpi-cyan ${currentTodoFilterMode === 'in_progress' ? 'active' : ''}" onclick="setTodoFilter('in_progress')" title="篩選：進行中/檢討中/辦理中之待辦事項 (${inProgressTodos.length})">
+        <i class="fa-solid fa-spinner fa-spin-pulse"></i> 進行中/檢討中(${inProgressTodos.length})
       </button>
       <button type="button" class="btn-ctrl-action" onclick="reloadSharedTodoFromNas()" style="padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; margin-left: auto;" title="清除暫存並秒級重新自 NAS 共用區讀取最新待辦彙整表">
         <i class="fa-solid fa-arrows-rotate"></i> 同步共用區待辦
@@ -2326,7 +2326,7 @@ function applyTodoFilters() {
     const st = (t.status || '').trim();
     if (currentTodoFilterMode === 'completed') return st === '已完成';
     if (currentTodoFilterMode === 'postponed') return st === '後續辦理';
-    if (currentTodoFilterMode === 'in_progress') return st === '進行中' || st === '辦理中' || (st !== '已完成' && st !== '後續辦理');
+    if (currentTodoFilterMode === 'in_progress') return st === '進行中' || st === '檢討中' || st === '辦理中' || (st !== '已完成' && st !== '後續辦理');
     if (currentTodoFilterMode === 'no_result') {
       const isDone = st === '已完成';
       const noRes = !t.result || t.result.trim() === '' || t.result.trim() === '-' || t.result.trim() === '待補';
@@ -2398,7 +2398,36 @@ function updateControlHeaderRibbon() {
     const st = (it.status || '').trim() || '未排定';
     statusCountMap[st] = (statusCountMap[st] || 0) + 1;
   });
-  const allStatuses = Object.keys(statusCountMap);
+
+  // 【重大優化】如果同時有「進行中」及「檢討中」，改為合併篩選「進行中/檢討中」
+  const hasInProgress = !!statusCountMap['進行中'];
+  const hasReviewing = !!statusCountMap['檢討中'];
+  let displayStatuses = [];
+  const displayStatusCountMap = { ...statusCountMap };
+
+  if (hasInProgress && hasReviewing) {
+    const mergedKey = '進行中/檢討中';
+    const mergedCount = (statusCountMap['進行中'] || 0) + (statusCountMap['檢討中'] || 0);
+    displayStatusCountMap[mergedKey] = mergedCount;
+
+    let mergedInserted = false;
+    Object.keys(statusCountMap).forEach(st => {
+      if (st === '進行中' || st === '檢討中') {
+        if (!mergedInserted) {
+          displayStatuses.push(mergedKey);
+          mergedInserted = true;
+        }
+      } else {
+        displayStatuses.push(st);
+      }
+    });
+
+    if (currentControlStatusFilter === '進行中' || currentControlStatusFilter === '檢討中') {
+      currentControlStatusFilter = mergedKey;
+    }
+  } else {
+    displayStatuses = Object.keys(statusCountMap);
+  }
 
   headerStatsContainer.innerHTML = `
     <div class="control-header-search-ribbon" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
@@ -2416,7 +2445,7 @@ function updateControlHeaderRibbon() {
 
       <select id="control-status-filter" class="control-select-filter" style="padding: 4px 10px; font-size: 12px; height: 34px;">
         <option value="all" ${currentControlStatusFilter === 'all' ? 'selected' : ''}>⚡ 全部狀態 (${rawItems.length})</option>
-        ${allStatuses.map(st => `<option value="${st}" ${currentControlStatusFilter === st ? 'selected' : ''}>${st} (${statusCountMap[st]})</option>`).join('')}
+        ${displayStatuses.map(st => `<option value="${st}" ${currentControlStatusFilter === st ? 'selected' : ''}>${st} (${displayStatusCountMap[st]})</option>`).join('')}
       </select>
     </div>
   `;
@@ -2533,9 +2562,16 @@ function applyControlFilters() {
     filtered = filtered.filter(it => (it.category || '').trim() === currentControlCategoryFilter);
   }
 
-  // 4. 下拉選單：狀態篩選
+  // 4. 下拉選單：狀態篩選 (支援進行中與檢討中合併篩選)
   if (currentControlStatusFilter && currentControlStatusFilter !== "all") {
-    filtered = filtered.filter(it => (it.status || '').trim() === currentControlStatusFilter);
+    if (currentControlStatusFilter === "進行中/檢討中" || currentControlStatusFilter === "進行中 / 檢討中" || currentControlStatusFilter === "進行中及檢討中") {
+      filtered = filtered.filter(it => {
+        const st = (it.status || '').trim();
+        return st === '進行中' || st === '檢討中';
+      });
+    } else {
+      filtered = filtered.filter(it => (it.status || '').trim() === currentControlStatusFilter);
+    }
   }
 
   // 5. 快速關鍵字全文檢索
