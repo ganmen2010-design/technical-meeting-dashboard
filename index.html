@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css?v=76.2">
+  <link rel="stylesheet" href="style.css?v=76.3">
 </head>
 <body>
   <!-- 背景動態光暈球 (極限科技感背景) -->
@@ -270,11 +270,11 @@
               <h2 class="standby-title">技術會議雲端儀表板</h2>
               <p class="standby-desc">請由左側導覽目錄選取專案作業區、待辦事項、技術管控表或全域技術搜尋。</p>
 
-              <div class="standby-metrics-pills">
-                <div class="mini-kpi-pill"><i class="fa-solid fa-city text-cyan"></i> 納管專案 <b>9 案</b></div>
-                <div class="mini-kpi-pill"><i class="fa-solid fa-list-check text-emerald"></i> 累計待辦 <b>353 筆</b></div>
-                <div class="mini-kpi-pill"><i class="fa-solid fa-lightbulb text-purple"></i> 技術議題 <b>169 案</b></div>
-                <div class="mini-kpi-pill"><i class="fa-solid fa-shield-halved text-amber"></i> 內部 NAS <b>實體連線</b></div>
+              <div class="standby-metrics-pills" id="standby-metrics-pills">
+                <div class="mini-kpi-pill"><i class="fa-solid fa-city text-cyan"></i> 納管專案 <b id="standby-stat-projects">9 案</b></div>
+                <div class="mini-kpi-pill"><i class="fa-solid fa-list-check text-emerald"></i> 累計待辦 <b id="standby-stat-todos">425 筆</b></div>
+                <div class="mini-kpi-pill"><i class="fa-solid fa-lightbulb text-purple"></i> 技術議題 <b id="standby-stat-issues">174 案</b></div>
+                <div class="mini-kpi-pill"><i class="fa-solid fa-shield-halved text-amber"></i> <span id="standby-stat-nas">內部 NAS <b>實體連線</b></span></div>
               </div>
             </div>
           </div>
@@ -768,6 +768,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=76.2"></script>
+  <script src="app.js?v=76.3"></script>
 </body>
 </html>

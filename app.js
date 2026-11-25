@@ -1048,6 +1048,14 @@ function renderHeaderOverview(data) {
   if (issueCount) issueCount.textContent = numIssues;
   if (kpiIssue) kpiIssue.textContent = `${numIssues} 案`;
 
+  // 【重大優化】同步更新待命起始畫面正下方之動態指標膠囊，保證與概況分析 100% 吻合
+  const standbyProj = document.getElementById("standby-stat-projects");
+  const standbyTodo = document.getElementById("standby-stat-todos");
+  const standbyIssue = document.getElementById("standby-stat-issues");
+  if (standbyProj) standbyProj.textContent = `${numProjects} 案`;
+  if (standbyTodo) standbyTodo.textContent = `${totalCount} 筆`;
+  if (standbyIssue) standbyIssue.textContent = `${numIssues} 案`;
+
   const overallRate = numActive > 0 ? ((compTodos.length / numActive) * 100).toFixed(1) : "69.2";
   if (compRate) compRate.textContent = `${overallRate}%`;
   if (kpiRate) kpiRate.textContent = `${overallRate}%`;
